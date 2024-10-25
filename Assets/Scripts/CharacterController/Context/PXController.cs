@@ -185,7 +185,6 @@ public class PXController : MonoBehaviour {
         InitializeActions();
         InitializePowerUps();
         SubscribeCallbacks();
-
     }
 
     // Update is called once per frame
@@ -246,11 +245,6 @@ public class PXController : MonoBehaviour {
     public void OnMove(InputAction.CallbackContext input) {
         moveInput = input.ReadValue<Vector2>();
     } 
-    public void OnConfirm(InputAction.CallbackContext input) {
-        if (input.ReadValue<float>() == 0f) { return; }
-
-        DialogConfirm();
-    }
     public void OnInteract(InputAction.CallbackContext input) {
         if (!onInteract) { return; }
 
@@ -259,8 +253,15 @@ public class PXController : MonoBehaviour {
         InteractController ctx = _interactionCollider.GetComponent<InteractController>();
         ctx.OnInteract();
 
-        DialogEnter(ctx.PlayerTarget.transform, ctx.FocusTarget.transform, ctx.VCam);
     }
+    public void OnConfirm(InputAction.CallbackContext input) {
+        if (input.ReadValue<float>() == 0f) { return; }
+        
+        InteractController ctx = _interactionCollider.GetComponent<InteractController>();
+        ctx.OnInteract();
+        
+    }
+
     private void SubscribeCallbacks() {
         _jumpAction.started += OnJump;
         _jumpAction.performed += OnJump;
@@ -283,14 +284,11 @@ public class PXController : MonoBehaviour {
         _lookAction.canceled += OnLook;
         
         _confirmAction.started += OnConfirm;
-        _confirmAction.performed += OnConfirm;
         _confirmAction.canceled += OnConfirm;
 
         _interactAction.started += OnInteract;
-        _interactAction.performed += OnInteract;
         _interactAction.canceled += OnInteract;
     }
-
     private void UnsubscribeCallbacks() {
         _jumpAction.started -= OnJump;
         _jumpAction.performed -= OnJump;
@@ -313,14 +311,11 @@ public class PXController : MonoBehaviour {
         _lookAction.canceled -= OnLook;
         
         _confirmAction.started -= OnConfirm;
-        _confirmAction.performed -= OnConfirm;
         _confirmAction.canceled -= OnConfirm;
         
         _interactAction.started -= OnInteract;
-        _interactAction.performed -= OnInteract;
         _interactAction.canceled -= OnInteract;
     }
-
     private void InitializeActions() {
         _moveAction = InputManager.Instance.GetPlayerInput().actions["Move"];
         _jumpAction = InputManager.Instance.GetPlayerInput().actions["Jump"];
@@ -339,14 +334,9 @@ public class PXController : MonoBehaviour {
         InputManager.Instance.SetActionMap("Dialog");
         StartCoroutine(DialogRoutine(playerPos, cameraFocus, _vcam));
     }
-
     public void DialogExit() {
         onDialog = false;
-    }
-
-    private void DialogConfirm() {
-        DialogExit();
-    }
+    }    
 
     //Collision Callbacks
     private void OnTriggerEnter(Collider other) {
@@ -514,7 +504,6 @@ public class PXController : MonoBehaviour {
 
         return distance;
     }
-
     private Vector3 ComputeForward2D(Transform _a, Transform _b) {
         Vector2 a = new Vector2(_a.position.x, _a.position.z);
         Vector2 b = new Vector2(_b.position.x, _b.position.z);

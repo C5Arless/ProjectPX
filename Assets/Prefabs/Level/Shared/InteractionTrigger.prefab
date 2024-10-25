@@ -308,6 +308,7 @@ MonoBehaviour:
   _playerTarget: {fileID: 2139227359580631516}
   _companionTarget: {fileID: 1992451983884278140}
   _popUp: {fileID: 5196622775523395601}
+  pages: 0
 --- !u!65 &3662903794212247453
 BoxCollider:
   m_ObjectHideFlags: 0
