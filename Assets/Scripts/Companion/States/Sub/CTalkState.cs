@@ -3,6 +3,7 @@ public class CTalkState : CBaseState {
     public override void EnterState() {
         //Enter logic
         Ctx.VisionEnterTalkBehaviour();
+        Ctx.TravelEnterTalkBehaviour();
 
         InitializeContext();
     }
@@ -14,6 +15,7 @@ public class CTalkState : CBaseState {
     public override void ExitState() {
         //Exit logic
         Ctx.VisionExitBehaviour();
+        Ctx.TravelExitBehaviour();
     }
     public override void CheckSwitchStates() {
         //Switch logic
@@ -33,6 +35,6 @@ public class CTalkState : CBaseState {
         Ctx.IsIdle = false;
         Ctx.IsUnstucking = false;
 
-        Ctx.CurrentVelocity = 0f;
+        //Ctx.CurrentVelocity = 0f;
     }    
 }

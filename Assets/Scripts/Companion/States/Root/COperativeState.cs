@@ -21,7 +21,7 @@ public class COperativeState : CBaseState {
             Ctx.IsIdle = true;            
         }
 
-        if (Ctx.PlayerDistance > Ctx.LimitDistanceMax && !Ctx.IsStuck) {
+        if (Ctx.PlayerDistance > Ctx.LimitDistanceMax && !Ctx.IsStuck && !Ctx.IsTalking) {
             Ctx.IsMoving = true;
         }
 

@@ -28,7 +28,6 @@ public class InteractController : MonoBehaviour {
         if (other.tag == "Player") {
             _popUp.SetActive(true);
             _playerCollider = other;
-
         }
     }
 
@@ -47,7 +46,7 @@ public class InteractController : MonoBehaviour {
         } else {
             Enter();  
         }
-    }
+    }   
 
     private void Enter() {
         pageNumber = pages;
@@ -60,6 +59,9 @@ public class InteractController : MonoBehaviour {
 
         PXController _ctx = _playerCollider.GetComponent<PXController>();
         _ctx.DialogEnter(_playerTarget.transform, _focusTarget.transform, _vcam);
+
+        CompanionController _comp = GameObject.FindGameObjectWithTag("Companion").GetComponent<CompanionController>();
+        _comp.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
     }
 
     private void Continue() {
@@ -70,8 +72,7 @@ public class InteractController : MonoBehaviour {
         }
     }
 
-    private void SwitchPage() {
-        //SwitchLogic
+    private void SwitchPage() {        
         StartCoroutine(IteratePage());
     }
 
@@ -80,6 +81,9 @@ public class InteractController : MonoBehaviour {
 
         PXController _ctx = _playerCollider.GetComponent<PXController>();
         _ctx.DialogExit();
+
+        CompanionController _comp = GameObject.FindGameObjectWithTag("Companion").GetComponent<CompanionController>();
+        _comp.ExitTalkState();
     }
 
     private IEnumerator IteratePage() {

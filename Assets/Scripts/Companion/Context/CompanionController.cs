@@ -154,6 +154,10 @@ public class CompanionController : MonoBehaviour {
         return _playerHead.position + travelDestinations[rngToken - 1];
     }
 
+    public void ExitTalkState() {
+        IsTalking = false;
+    }
+
     public void StorePlayerDistance() {
         playerDistance = Mathf.Abs(Vector3.Distance(transform.position, _playerHead.position));
     }        
@@ -194,6 +198,16 @@ public class CompanionController : MonoBehaviour {
         travelLocked = true;
         UpdateRNGToken();
         StartCoroutine("TravelPredictRoutine");
+        StartCoroutine("TravelMoveRoutine");
+    }
+
+    public void TravelSetUpTalkBehaviour(Vector3 position) {
+        travelPosition = position;
+        IsTalking = true;
+    }
+
+    public void TravelEnterTalkBehaviour() {
+        travelLocked = true;        
         StartCoroutine("TravelMoveRoutine");
     }
 
@@ -471,7 +485,7 @@ public class CompanionController : MonoBehaviour {
         if (Physics.Raycast(transform.position, (_playerHead.position - transform.position).normalized, out RaycastHit hitInfo, playerDistance + horizontalOffset)) {
             yield return null;
 
-            if (hitInfo.collider.tag != "Player" && hitInfo.collider.tag != "PlayerAttacks") {
+            if (hitInfo.collider.tag != "Player" && hitInfo.collider.tag != "PlayerAttacks" && hitInfo.collider.tag != "Interact") {
                 isStuck = true;
             }
             

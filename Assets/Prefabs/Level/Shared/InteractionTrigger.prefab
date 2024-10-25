@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 4138269242722844265}
   - component: {fileID: 5605735976155315341}
   - component: {fileID: 3662903794212247453}
-  m_Layer: 0
+  m_Layer: 1
   m_Name: InteractionTrigger
   m_TagString: Interact
   m_Icon: {fileID: 0}
@@ -308,7 +308,7 @@ MonoBehaviour:
   _playerTarget: {fileID: 2139227359580631516}
   _companionTarget: {fileID: 1992451983884278140}
   _popUp: {fileID: 5196622775523395601}
-  pages: 0
+  pages: 1
 --- !u!65 &3662903794212247453
 BoxCollider:
   m_ObjectHideFlags: 0
