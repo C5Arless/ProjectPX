@@ -11,7 +11,7 @@ public class Stucked : MonoBehaviour {
             _ctx.IsOperative = false;
         }
 
-        /*
+        /* OLD
         if (other.tag != "PlayerAttacks" && _ctx.IsOperative && !_ctx.IsMoving && !_ctx.IsTalking) {
             _ctx.IsStuck = true;
             _ctx.IsOperative = false;
@@ -27,7 +27,7 @@ public class Stucked : MonoBehaviour {
             _ctx.IsOperative = false;
         }
 
-        /*
+        /* OLD
         if (other.tag != "PlayerAttacks" && _ctx.IsOperative && !_ctx.IsMoving && !_ctx.IsTalking) {
             _ctx.IsStuck = true;
             _ctx.IsOperative = false;
@@ -49,7 +49,7 @@ public class Stucked : MonoBehaviour {
             _ctx.IsOperative = true;
         }
 
-        /*
+        /* OLD
         if (other.tag != "PlayerAttacks" && _ctx.IsStuck && !_ctx.IsMoving) {
             _ctx.IsUnstucking = false;
             _ctx.IsStuck = false;

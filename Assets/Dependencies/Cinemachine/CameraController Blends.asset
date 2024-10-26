@@ -38,8 +38,8 @@ MonoBehaviour:
   - m_From: PlayerVCamera
     m_To: DialogVCamera
     m_Blend:
-      m_Style: 0
-      m_Time: 2
+      m_Style: 2
+      m_Time: 0.1
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []

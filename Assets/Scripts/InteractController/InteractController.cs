@@ -14,9 +14,9 @@ public class InteractController : MonoBehaviour {
 
     private Collider _playerCollider;
 
-    private bool isInteracting;
     private int pageNumber;
 
+    private bool isInteracting;
     private bool isBusy;
 
     public GameObject VCam { get { return _vcam; } set { _vcam = value; } }

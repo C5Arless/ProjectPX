@@ -29,7 +29,7 @@ public class COperativeState : CBaseState {
     }
     public override void ExitState() {
         //Exit logic
-        //Ctx.CancelInvoke("CheckStuckBehaviour");
+        Ctx.CancelInvoke("CheckStuckBehaviour");
     }
     public override void CheckSwitchStates() {
         //Switch logic

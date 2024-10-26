@@ -377,7 +377,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.15
     FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
@@ -407,7 +407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CollideAgainst:
     serializedVersion: 2
-    m_Bits: 173385
+    m_Bits: 9281
   m_IgnoreTag: 
   m_TransparentLayers:
     serializedVersion: 2
@@ -416,12 +416,12 @@ MonoBehaviour:
   m_AvoidObstacles: 1
   m_DistanceLimit: 0
   m_MinimumOcclusionTime: 0
-  m_CameraRadius: 0.1
+  m_CameraRadius: 0.05
   m_Strategy: 0
   m_MaximumEffort: 4
   m_SmoothingTime: 0
-  m_Damping: 0
-  m_DampingWhenOccluded: 0
+  m_Damping: 1
+  m_DampingWhenOccluded: 1
   m_OptimalTargetDistance: 0
 --- !u!1 &7366177649137618601
 GameObject:
@@ -634,6 +634,7 @@ MonoBehaviour:
   _player: {fileID: 7894794411539438057}
   _asset: {fileID: 8975385871628143155}
   _cam: {fileID: 654524014220426982}
+  _virtualCamera: {fileID: 6323615956022173221}
   _forward: {fileID: 8730485733791130369}
   _playerparent: {fileID: 7584392840918931769}
   _dashPoint: {fileID: 8975385871628143155}
