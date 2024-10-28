@@ -70,6 +70,7 @@ public class PXController : MonoBehaviour {
     private bool canDash;
     private bool canAttack = true;
     private bool canJump = true;
+    private bool canFreeLook;
     private int dashCount = 1;
     private int attackCount = 1; //Per eventuale sistema di combo
     private int jumpCount = 2;
@@ -164,7 +165,8 @@ public class PXController : MonoBehaviour {
     
     // Awake is called before the Start 
     void Awake() {
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;        
+
         _currentSens = _sens;
 
         _animator = _asset.GetComponentInChildren<Animator>();
@@ -185,6 +187,8 @@ public class PXController : MonoBehaviour {
         InitializeActions();
         InitializePowerUps();
         SubscribeCallbacks();
+
+        CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
     }
 
     // Update is called once per frame
@@ -192,7 +196,7 @@ public class PXController : MonoBehaviour {
         EvaluateHealth();
         
         if (!isDead && !onDialog) {
-            UpdateCamera(_cam, _player, _forward, camInput, _currentSens);
+            UpdateCamera(_cam, _forward, camInput, _currentSens);
         }
         
     }
@@ -516,9 +520,8 @@ public class PXController : MonoBehaviour {
     }
 
     //Camera Methods
-    private void UpdateCamera(GameObject cam, GameObject player, GameObject forward, Vector2 mouseInput, float sens) {
+    private void UpdateCamera(GameObject cam, GameObject forward, Vector2 mouseInput, float sens) {
         CalculateCamMotion(mouseInput, sens);
-
         CamRotation(cam, forward);
     }
     private void CalculateCamMotion(Vector2 mouseInput, float sens) {
@@ -529,17 +532,6 @@ public class PXController : MonoBehaviour {
     private void CamRotation(GameObject cam, GameObject forward) {
         cam.transform.rotation = Quaternion.Euler(xaxis, yaxis, 0f);
         forward.transform.rotation = Quaternion.Euler(0f, yaxis, 0f);
-    }
-    private void VerticalSmoothCam(GameObject cam, GameObject player) {
-        camycurrent = cam.transform.position.y;
-        camytarget = player.transform.position.y;
-        float camylerp = Mathf.Lerp(camycurrent, camytarget, .025f);
-        if (camycurrent < camytarget) {
-            cam.transform.position = new Vector3(player.transform.position.x, camylerp, player.transform.position.z);
-        }
-        else {
-            cam.transform.position = player.transform.position;
-        }
     }
 
     //Coroutine
@@ -599,7 +591,7 @@ public class PXController : MonoBehaviour {
     }
     
     private IEnumerator DialogRoutine(Transform playerTarget, Transform cameraTarget, GameObject _vcam) {
-        CameraManager.Instance.SwitchVirtualCamera(_virtualCamera, _vcam);
+        CameraManager.Instance.SwitchGameVCamera(_vcam);
 
         yield return null;
 
@@ -655,7 +647,7 @@ public class PXController : MonoBehaviour {
 
         yield return new WaitForSeconds(.2f);
 
-        CameraManager.Instance.SwitchVirtualCamera(_vcam, _virtualCamera);
+        CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
         InputManager.Instance.SetActionMap("Player");
 
         yield break;

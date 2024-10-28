@@ -1,14 +1,21 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractController : MonoBehaviour {
-    [SerializeField] GameObject _vcam;
+[System.Serializable]
+public struct InteractionVCameras {
+    public GameObject vcamera;
+    public int pageIdx;
+}
+
+public class InteractController : MonoBehaviour {    
     [SerializeField] GameObject _focusTarget;
     [SerializeField] GameObject _playerTarget;
     [SerializeField] GameObject _companionTarget;
     [SerializeField] GameObject _popUp;
 
     [SerializeField] int pages;
+    [SerializeField] InteractionVCameras[] interactionCams;
 
     private InteractionMode mode;
 
@@ -19,10 +26,13 @@ public class InteractController : MonoBehaviour {
     private bool isInteracting;
     private bool isBusy;
 
-    public GameObject VCam { get { return _vcam; } set { _vcam = value; } }
     public GameObject FocusTarget { get { return _focusTarget; } set { _focusTarget = value; } }
     public GameObject PlayerTarget { get { return _playerTarget; } set { _playerTarget = value; } }
-    public GameObject CompanionTarget { get { return _companionTarget; } set { _companionTarget = value; } }   
+    public GameObject CompanionTarget { get { return _companionTarget; } set { _companionTarget = value; } }
+
+    private void Start() {
+        
+    }
 
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "Player") {
@@ -49,7 +59,7 @@ public class InteractController : MonoBehaviour {
     }   
 
     private void Enter() {
-        pageNumber = pages;
+        pageNumber = 1;
         
         _popUp.SetActive(false);
         isInteracting = true;
@@ -58,14 +68,14 @@ public class InteractController : MonoBehaviour {
         Debug.Log("Page number: " + pageNumber);
 
         PXController _ctx = _playerCollider.GetComponent<PXController>();
-        _ctx.DialogEnter(_playerTarget.transform, _focusTarget.transform, _vcam);
+        _ctx.DialogEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
 
         CompanionController _comp = GameObject.FindGameObjectWithTag("Companion").GetComponent<CompanionController>();
         _comp.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
     }
 
     private void Continue() {
-        if (pageNumber <= 1) {
+        if (pageNumber >= pages) {
             Exit();
         } else {
             SwitchPage();
@@ -90,11 +100,18 @@ public class InteractController : MonoBehaviour {
         isBusy = true;
         yield return null;
 
-        pageNumber--;
+        pageNumber++;
         Debug.Log("Page number: " + pageNumber);
         yield return null;
+
+        foreach (InteractionVCameras _ivcam in interactionCams) {
+            if (_ivcam.pageIdx == pageNumber) {
+                CameraManager.Instance.SwitchGameVCamera(_ivcam.vcamera);
+            }
+        }
 
         isBusy = false;
         yield break;
     }
+
 }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7735460152291301820}
   - component: {fileID: 691686927432606131}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5605893457636047126}
   - component: {fileID: 410473038972051255}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DialogVCamera (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -219,13 +219,13 @@ GameObject:
   m_Component:
   - component: {fileID: 3939595914283647180}
   - component: {fileID: 4279733953222391686}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DialogVCamera (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3939595914283647180
 Transform:
   m_ObjectHideFlags: 0
@@ -291,7 +291,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7567705836584516989}
   - component: {fileID: 2158044286584738824}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,12 +375,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d2b39a9c8b5278409ece2ee7c7865fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _vcam: {fileID: 2705935786749328741}
   _focusTarget: {fileID: 1819441608510170338}
   _playerTarget: {fileID: 2139227359580631516}
   _companionTarget: {fileID: 1992451983884278140}
   _popUp: {fileID: 5196622775523395601}
   pages: 1
+  interactionCams:
+  - vcamera: {fileID: 2705935786749328741}
+    pageIdx: 1
+  - vcamera: {fileID: 7083700290993392535}
+    pageIdx: 0
+  - vcamera: {fileID: 5504216385706364483}
+    pageIdx: 0
+  - vcamera: {fileID: 2421662029576850367}
+    pageIdx: 0
+  - vcamera: {fileID: 8869245936090069257}
+    pageIdx: 0
 --- !u!65 &3662903794212247453
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -412,7 +422,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3372766299799829295}
   - component: {fileID: 653062394120579673}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,7 +637,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7806928910563986506}
   - component: {fileID: 8061560477283740323}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DialogVCamera (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -699,7 +709,7 @@ GameObject:
   m_Component:
   - component: {fileID: 547634800021617012}
   - component: {fileID: 2697513563500977905}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -743,7 +753,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3168453683639868891}
   - component: {fileID: 2062673810187945046}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DialogVCamera (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -815,7 +825,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3515207399974622152}
   - component: {fileID: 216009339542800332}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -859,7 +869,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9215982443015042275}
   - component: {fileID: 5207752383815200451}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DialogVCamera (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

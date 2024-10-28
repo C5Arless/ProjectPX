@@ -36,7 +36,7 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 0
   - m_From: PlayerVCamera
-    m_To: DialogVCamera
+    m_To: DialogVCamera (1)
     m_Blend:
       m_Style: 2
       m_Time: 0.1

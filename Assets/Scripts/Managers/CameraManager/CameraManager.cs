@@ -11,7 +11,9 @@ public class CameraManager : MonoBehaviour {
     private GameObject currentBrain;
 
     private List<GameObject> menuVCameras = new List<GameObject>();
-    private GameObject currentVCamera;
+    private GameObject currentMenuVCamera;
+
+    private GameObject currentGameVCamera;
 
     private VCameraMode mode;
 
@@ -24,7 +26,9 @@ public class CameraManager : MonoBehaviour {
     }
 
     private void Start() {
-        SetInitialState();
+        //SetInitialState();
+
+        currentBrain = gameBrain;       
     }
 
     public void OnPauseCamera(InputAction.CallbackContext input) {
@@ -63,7 +67,7 @@ public class CameraManager : MonoBehaviour {
         if (target == VCameraMode.MenuVCameras) {
             SwitchBrain(menuBrain);
         } else {
-            currentVCamera.gameObject.SetActive(false);
+            currentMenuVCamera.gameObject.SetActive(false);
             SwitchBrain(gameBrain);
         }
 
@@ -71,25 +75,32 @@ public class CameraManager : MonoBehaviour {
     }
 
     public void MenuToSlot() {
-        if (currentVCamera == menuVCameras[(int)MenuVCameras.Menu]) {
+        if (currentMenuVCamera == menuVCameras[(int)MenuVCameras.Menu]) {
             SwitchMenuVCamera(MenuVCameras.Slots);
         } else {
             SwitchMenuVCamera(MenuVCameras.Menu);
         }       
-    }
+    }    
 
-    public void SwitchVirtualCamera(GameObject current, GameObject target) {
-        if (current != target) {
+    public void SwitchGameVCamera(GameObject target) {
+        if (currentGameVCamera != target) {
             target.SetActive(true);
-            current.SetActive(false);
+
+            try {
+                currentGameVCamera.SetActive(false);
+            } catch {
+                //
+            }
+
+            currentGameVCamera = target;
         }
     }
 
     private void SwitchMenuVCamera(MenuVCameras target) {
-        if (currentVCamera != menuVCameras[(int)target]) {
+        if (currentMenuVCamera != menuVCameras[(int)target]) {
             menuVCameras[(int)target].gameObject.SetActive(true);
-            currentVCamera.gameObject.SetActive(false);
-            currentVCamera = menuVCameras[(int)target].gameObject;
+            currentMenuVCamera.gameObject.SetActive(false);
+            currentMenuVCamera = menuVCameras[(int)target].gameObject;
         }
     }
 
@@ -103,8 +114,8 @@ public class CameraManager : MonoBehaviour {
 
     private void SetInitialState() {
         try {
-            currentVCamera = menuVCameras[(int)MenuVCameras.MainScreen].gameObject;
-            currentVCamera.SetActive(true);
+            currentMenuVCamera = menuVCameras[(int)MenuVCameras.MainScreen].gameObject;
+            currentMenuVCamera.SetActive(true);
 
             currentBrain = menuBrain;
             currentBrain.SetActive(true);
@@ -122,7 +133,7 @@ public class CameraManager : MonoBehaviour {
 
         if (!menuVCameras[(int)MenuVCameras.PauseStart].gameObject.activeSelf) {
             menuVCameras[(int)MenuVCameras.PauseStart].gameObject.SetActive(true);
-            currentVCamera = menuVCameras[(int)MenuVCameras.PauseStart].gameObject;
+            currentMenuVCamera = menuVCameras[(int)MenuVCameras.PauseStart].gameObject;
         }
 
         SwitchBrain(menuBrain);
@@ -130,7 +141,7 @@ public class CameraManager : MonoBehaviour {
 
         menuVCameras[(int)MenuVCameras.PauseEnd].gameObject.SetActive(true);
         menuVCameras[(int)MenuVCameras.PauseStart].gameObject.SetActive(false);
-        currentVCamera = menuVCameras[(int)MenuVCameras.PauseEnd].gameObject;
+        currentMenuVCamera = menuVCameras[(int)MenuVCameras.PauseEnd].gameObject;
 
         yield break;
     }
@@ -138,7 +149,7 @@ public class CameraManager : MonoBehaviour {
     private IEnumerator PauseCameraIn() {
         menuVCameras[(int)MenuVCameras.PauseStart].gameObject.SetActive(true);
         menuVCameras[(int)MenuVCameras.PauseEnd].gameObject.SetActive(false);
-        currentVCamera = menuVCameras[(int)MenuVCameras.PauseStart].gameObject;
+        currentMenuVCamera = menuVCameras[(int)MenuVCameras.PauseStart].gameObject;
         yield return new WaitForSecondsRealtime(.25f);
 
         SwitchBrain(gameBrain);
