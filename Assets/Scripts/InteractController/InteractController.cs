@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -17,8 +16,6 @@ public class InteractController : MonoBehaviour {
     [SerializeField] int pages;
     [SerializeField] InteractionVCameras[] interactionCams;
 
-    private InteractionMode mode;
-
     private Collider _playerCollider;
 
     private int pageNumber;
@@ -29,10 +26,6 @@ public class InteractController : MonoBehaviour {
     public GameObject FocusTarget { get { return _focusTarget; } set { _focusTarget = value; } }
     public GameObject PlayerTarget { get { return _playerTarget; } set { _playerTarget = value; } }
     public GameObject CompanionTarget { get { return _companionTarget; } set { _companionTarget = value; } }
-
-    private void Start() {
-        
-    }
 
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "Player") {

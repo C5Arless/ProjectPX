@@ -74,9 +74,7 @@ public class PXController : MonoBehaviour {
     private int dashCount = 1;
     private int attackCount = 1; //Per eventuale sistema di combo
     private int jumpCount = 2;
-    private float moveSpeed = 1760f;    
-    private float camycurrent;
-    private float camytarget;
+    private float moveSpeed = 1760f;
 
     private float xaxis;
     private float yaxis;

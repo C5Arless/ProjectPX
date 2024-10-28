@@ -71,7 +71,3 @@ public enum MenuVCameras {
     Record
 }
 
-public enum InteractionMode {
-    Dialogue,
-    Cinematic
-}
