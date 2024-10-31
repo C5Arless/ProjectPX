@@ -173,8 +173,18 @@ public class CompanionController : MonoBehaviour {
     }
 
     public void VisionEnterTalkBehaviour() {
+        VisionExitBehaviour();
+
         visionLocked = true;
         visionDiscoveryTransform = _playerHead;
+        StartCoroutine("VisionFocusRoutine");
+    }
+
+    public void VisionEnterTalkBehaviour(GameObject focusTarget) {
+        VisionExitBehaviour();
+
+        visionLocked = true;
+        visionDiscoveryTransform = focusTarget.transform;
         StartCoroutine("VisionFocusRoutine");
     }
 

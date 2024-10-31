@@ -186,6 +186,7 @@ public class PXController : MonoBehaviour {
         InitializePowerUps();
         SubscribeCallbacks();
 
+        //DA RIMUOVERE - Per settare la currentgamevcamera al camera manager
         CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
     }
 
