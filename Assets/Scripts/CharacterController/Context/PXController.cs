@@ -588,7 +588,6 @@ public class PXController : MonoBehaviour {
         canDMG = true;
         yield break;
     }
-    
     private IEnumerator DialogRoutine(Transform playerTarget, Transform cameraTarget, GameObject _vcam) {
         CameraManager.Instance.SwitchGameVCamera(_vcam);
 

@@ -110,7 +110,6 @@ public class CompanionController : MonoBehaviour {
         
     }
 
-    // Update is called once per frame
     void Update() {
         EvaluateHealth();
 
@@ -119,6 +118,21 @@ public class CompanionController : MonoBehaviour {
 
     }
 
+    //EXTERNAL CALLS
+    public void VisionSetUpTalkBehaviour(GameObject focusTarget) {
+        VisionExitBehaviour();
+
+        visionLocked = true;
+        visionDiscoveryTransform = focusTarget.transform;
+        StartCoroutine("VisionFocusRoutine");
+    }
+
+    public void TravelSetUpTalkBehaviour(Vector3 position) {
+        travelPosition = position;
+        IsTalking = true;
+    }
+
+    //PRIVATE METHODS
     private void InitializeTravelDestinations() {
         travelDestinations[0] = new Vector3(horizontalOffset, verticalOffset, -horizontalOffset);
         travelDestinations[1] = new Vector3(0f, verticalOffset, -horizontalOffset);
@@ -173,18 +187,8 @@ public class CompanionController : MonoBehaviour {
     }
 
     public void VisionEnterTalkBehaviour() {
-        VisionExitBehaviour();
-
         visionLocked = true;
         visionDiscoveryTransform = _playerHead;
-        StartCoroutine("VisionFocusRoutine");
-    }
-
-    public void VisionEnterTalkBehaviour(GameObject focusTarget) {
-        VisionExitBehaviour();
-
-        visionLocked = true;
-        visionDiscoveryTransform = focusTarget.transform;
         StartCoroutine("VisionFocusRoutine");
     }
 
@@ -209,11 +213,6 @@ public class CompanionController : MonoBehaviour {
         UpdateRNGToken();
         StartCoroutine("TravelPredictRoutine");
         StartCoroutine("TravelMoveRoutine");
-    }
-
-    public void TravelSetUpTalkBehaviour(Vector3 position) {
-        travelPosition = position;
-        IsTalking = true;
     }
 
     public void TravelEnterTalkBehaviour() {

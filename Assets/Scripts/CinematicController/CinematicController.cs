@@ -1,24 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-/*
-[System.Serializable]
-public struct InteractionVCameras {
-    public GameObject vcamera;
-    public int pageIdx;
-}
-*/
 
 public class CinematicController : MonoBehaviour {
     [SerializeField] int shots;
-    [SerializeField] InteractionVCameras[] cinematicCams;
+    [SerializeField] CinematicVCameras[] cinematicCams;
     [SerializeField] GameObject[] _focusTargetDrawer;
     [SerializeField] GameObject[] _playerTargetDrawer;
     [SerializeField] GameObject[] _companionTargetDrawer;
     [SerializeField] GameObject[] _dollyTracksDrawer;
 
-    private Collider _playerCollider;
+    private PXController _playerCtx;
+    private CompanionController _companionCtx;
 
     private int shotNumber;
 
@@ -27,13 +19,20 @@ public class CinematicController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "Player") {            
-            _playerCollider = other;
-        }
+            _playerCtx = other.GetComponent<PXController>();
+            
+            try {
+                _companionCtx = GameObject.FindGameObjectWithTag("Companion").GetComponent<CompanionController>();
+            } catch {
+                Debug.Log("Companion not found");
+            }
+        }        
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.tag == "Player") {
-            _playerCollider = null;
+            _playerCtx = null;
+            _companionCtx = null;
         }
     }
 
@@ -56,11 +55,9 @@ public class CinematicController : MonoBehaviour {
         Debug.Log("Current pages: " + shots);
         Debug.Log("Page number: " + shotNumber);
 
-        PXController _ctx = _playerCollider.GetComponent<PXController>();
-        _ctx.DialogEnter(_playerTargetDrawer[0].transform, _focusTargetDrawer[0].transform, cinematicCams[0].vcamera);
+        _playerCtx.DialogEnter(_playerTargetDrawer[0].transform, _focusTargetDrawer[0].transform, cinematicCams[0].vcamera);
 
-        CompanionController _comp = GameObject.FindGameObjectWithTag("Companion").GetComponent<CompanionController>();
-        _comp.TravelSetUpTalkBehaviour(_companionTargetDrawer[0].transform.position);
+        _companionCtx.TravelSetUpTalkBehaviour(_companionTargetDrawer[0].transform.position);
     }
 
     private void Continue() {
@@ -79,11 +76,9 @@ public class CinematicController : MonoBehaviour {
     private void Exit() {
         isInteracting = false;
 
-        PXController _ctx = _playerCollider.GetComponent<PXController>();
-        _ctx.DialogExit();
+        _playerCtx.DialogExit();
 
-        CompanionController _comp = GameObject.FindGameObjectWithTag("Companion").GetComponent<CompanionController>();
-        _comp.ExitTalkState();
+        _companionCtx.ExitTalkState();
     }
 
     private IEnumerator IteratePage() {
@@ -94,9 +89,9 @@ public class CinematicController : MonoBehaviour {
         Debug.Log("Page number: " + shotNumber);
         yield return null;
 
-        foreach (InteractionVCameras _ivcam in cinematicCams) {
-            if (_ivcam.pageIdx == shotNumber) {
-                CameraManager.Instance.SwitchGameVCamera(_ivcam.vcamera);
+        foreach (CinematicVCameras _cinematicCam in cinematicCams) {
+            if (_cinematicCam.shotIdx == shotNumber) {
+                CameraManager.Instance.SwitchGameVCamera(_cinematicCam.vcamera);
             }
         }
 

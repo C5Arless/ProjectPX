@@ -1,12 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-[System.Serializable]
-public struct InteractionVCameras {
-    public GameObject vcamera;
-    public int pageIdx;
-}
-
 public class InteractController : MonoBehaviour {    
     [SerializeField] GameObject _focusTarget;
     [SerializeField] GameObject _playerTarget;
@@ -22,10 +16,6 @@ public class InteractController : MonoBehaviour {
 
     private bool isInteracting;
     private bool isBusy;
-
-    public GameObject FocusTarget { get { return _focusTarget; } set { _focusTarget = value; } }
-    public GameObject PlayerTarget { get { return _playerTarget; } set { _playerTarget = value; } }
-    public GameObject CompanionTarget { get { return _companionTarget; } set { _companionTarget = value; } }
 
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "Player") {
