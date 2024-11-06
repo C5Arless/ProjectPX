@@ -3,11 +3,7 @@ using UnityEngine;
 
 public class CinematicController : MonoBehaviour {
     [SerializeField] int shots;
-    [SerializeField] CinematicVCameras[] cinematicCams;
-    [SerializeField] GameObject[] _focusTargetDrawer;
-    [SerializeField] GameObject[] _playerTargetDrawer;
-    [SerializeField] GameObject[] _companionTargetDrawer;
-    [SerializeField] GameObject[] _dollyTracksDrawer;
+    [SerializeField] CinematicShot[] _cinematicShots;
 
     private PXController _playerCtx;
     private CompanionController _companionCtx;
@@ -16,6 +12,9 @@ public class CinematicController : MonoBehaviour {
 
     private bool isInteracting;
     private bool isBusy;
+
+    public PXController PlayerCtx { get { return _playerCtx; } }
+    public CompanionController CompanionCtx { get { return _companionCtx; } }
 
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "Player") {            
@@ -26,6 +25,8 @@ public class CinematicController : MonoBehaviour {
             } catch {
                 Debug.Log("Companion not found");
             }
+
+            Enter();
         }        
     }
 
@@ -36,7 +37,7 @@ public class CinematicController : MonoBehaviour {
         }
     }
 
-    public void OnInteract() {
+    private void OnInteract() {
         if (isBusy) { return; }
 
         if (isInteracting) {
@@ -55,9 +56,12 @@ public class CinematicController : MonoBehaviour {
         Debug.Log("Current pages: " + shots);
         Debug.Log("Page number: " + shotNumber);
 
-        _playerCtx.DialogEnter(_playerTargetDrawer[0].transform, _focusTargetDrawer[0].transform, cinematicCams[0].vcamera);
+        _cinematicShots[shotNumber - 1].Enter();
 
+        /*
+        _playerCtx.DialogEnter(_cinematicShots[0].PlayerTarget.transform, _focusTargetDrawer[0].transform, cinematicCams[0].vcamera);
         _companionCtx.TravelSetUpTalkBehaviour(_companionTargetDrawer[0].transform.position);
+        */
     }
 
     private void Continue() {
@@ -65,23 +69,26 @@ public class CinematicController : MonoBehaviour {
             Exit();
         }
         else {
-            SwitchPage();
+            NextShot();
         }
     }
 
-    private void SwitchPage() {
-        StartCoroutine(IteratePage());
+    private void NextShot() {
+        StartCoroutine(IterateShot());
     }
 
     private void Exit() {
         isInteracting = false;
 
+        /*
         _playerCtx.DialogExit();
-
         _companionCtx.ExitTalkState();
+        */
+
+        _cinematicShots[shotNumber].Exit();
     }
 
-    private IEnumerator IteratePage() {
+    private IEnumerator IterateShot() {
         isBusy = true;
         yield return null;
 
@@ -89,11 +96,15 @@ public class CinematicController : MonoBehaviour {
         Debug.Log("Page number: " + shotNumber);
         yield return null;
 
+        _cinematicShots[shotNumber].Enter();
+
+        /*
         foreach (CinematicVCameras _cinematicCam in cinematicCams) {
             if (_cinematicCam.shotIdx == shotNumber) {
                 CameraManager.Instance.SwitchGameVCamera(_cinematicCam.vcamera);
             }
         }
+        */
 
         isBusy = false;
         yield break;

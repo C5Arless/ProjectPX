@@ -11,4 +11,5 @@ public struct CinematicVCameras {
     public GameObject vcamera;    
     public int shotIdx;
     public float lenght;
+    public bool hasDolly;
 }
