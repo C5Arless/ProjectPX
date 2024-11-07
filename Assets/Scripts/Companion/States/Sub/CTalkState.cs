@@ -10,7 +10,7 @@ public class CTalkState : CBaseState {
     public override void UpdateState() {
         //Update logic        
 
-        CheckSwitchStates(); //MUST BE LAST INSTRUCTION
+        //CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
     public override void ExitState() {
         //Exit logic

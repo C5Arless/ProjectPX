@@ -2,12 +2,13 @@ using System.Collections;
 using UnityEngine;
 
 public class CinematicController : MonoBehaviour {
-    [SerializeField] int shots;
     [SerializeField] CinematicShot[] _cinematicShots;
+    [SerializeField] Material _cinematicFrame;
 
     private PXController _playerCtx;
     private CompanionController _companionCtx;
 
+    private int shots;
     private int shotNumber;
 
     private bool isInteracting;
@@ -15,6 +16,10 @@ public class CinematicController : MonoBehaviour {
 
     public PXController PlayerCtx { get { return _playerCtx; } }
     public CompanionController CompanionCtx { get { return _companionCtx; } }
+
+    private void Awake() {
+        shots = _cinematicShots.Length;
+    }
 
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "Player") {            
@@ -26,7 +31,7 @@ public class CinematicController : MonoBehaviour {
                 Debug.Log("Companion not found");
             }
 
-            Enter();
+            OnInteract();
         }        
     }
 
@@ -37,7 +42,7 @@ public class CinematicController : MonoBehaviour {
         }
     }
 
-    private void OnInteract() {
+    public void OnInteract() {
         if (isBusy) { return; }
 
         if (isInteracting) {
@@ -53,15 +58,9 @@ public class CinematicController : MonoBehaviour {
         
         isInteracting = true;
 
-        Debug.Log("Current pages: " + shots);
-        Debug.Log("Page number: " + shotNumber);
-
         _cinematicShots[shotNumber - 1].Enter();
 
-        /*
-        _playerCtx.DialogEnter(_cinematicShots[0].PlayerTarget.transform, _focusTargetDrawer[0].transform, cinematicCams[0].vcamera);
-        _companionCtx.TravelSetUpTalkBehaviour(_companionTargetDrawer[0].transform.position);
-        */
+        StartCoroutine("FrameIn");
     }
 
     private void Continue() {
@@ -79,13 +78,11 @@ public class CinematicController : MonoBehaviour {
 
     private void Exit() {
         isInteracting = false;
-
-        /*
-        _playerCtx.DialogExit();
+        
+        _playerCtx.InteractionExit();
         _companionCtx.ExitTalkState();
-        */
 
-        _cinematicShots[shotNumber].Exit();
+        StartCoroutine("FrameOut");
     }
 
     private IEnumerator IterateShot() {
@@ -93,22 +90,42 @@ public class CinematicController : MonoBehaviour {
         yield return null;
 
         shotNumber++;
-        Debug.Log("Page number: " + shotNumber);
         yield return null;
 
-        _cinematicShots[shotNumber].Enter();
-
-        /*
-        foreach (CinematicVCameras _cinematicCam in cinematicCams) {
-            if (_cinematicCam.shotIdx == shotNumber) {
-                CameraManager.Instance.SwitchGameVCamera(_cinematicCam.vcamera);
-            }
-        }
-        */
+        _cinematicShots[shotNumber - 1].Enter();        
 
         isBusy = false;
         yield break;
     }
 
+    private IEnumerator FrameIn() {
+        yield return null;
+
+        while (_cinematicFrame.GetFloat("_Transition") < 0.98f) {
+            float size = _cinematicFrame.GetFloat("_Transition");
+            float lerpSize = size + .05f;
+            _cinematicFrame.SetFloat("_Transition", lerpSize);
+            yield return null;
+        }
+
+        _cinematicFrame.SetFloat("_Transition", 1f);
+
+        yield break;
+    }
+
+    private IEnumerator FrameOut() {
+        yield return null;
+
+        while (_cinematicFrame.GetFloat("_Transition") > 0.01f) {
+            float size = _cinematicFrame.GetFloat("_Transition");
+            float lerpSize = size - .05f;
+            _cinematicFrame.SetFloat("_Transition", lerpSize);
+            yield return null;
+        }
+
+        _cinematicFrame.SetFloat("_Transition", 0f);
+
+        yield break;
+    }
 }
 

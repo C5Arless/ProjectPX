@@ -47,9 +47,6 @@ public class InteractController : MonoBehaviour {
         _popUp.SetActive(false);
         isInteracting = true;
 
-        Debug.Log("Current pages: " + pages);
-        Debug.Log("Page number: " + pageNumber);
-
         PXController _ctx = _playerCollider.GetComponent<PXController>();
         _ctx.DialogEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
 
@@ -73,7 +70,7 @@ public class InteractController : MonoBehaviour {
         isInteracting = false;
 
         PXController _ctx = _playerCollider.GetComponent<PXController>();
-        _ctx.DialogExit();
+        _ctx.InteractionExit();
 
         CompanionController _comp = GameObject.FindGameObjectWithTag("Companion").GetComponent<CompanionController>();
         _comp.ExitTalkState();
@@ -84,7 +81,6 @@ public class InteractController : MonoBehaviour {
         yield return null;
 
         pageNumber++;
-        Debug.Log("Page number: " + pageNumber);
         yield return null;
 
         foreach (InteractionVCameras _ivcam in interactionCams) {

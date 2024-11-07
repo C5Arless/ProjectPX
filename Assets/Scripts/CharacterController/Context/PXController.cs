@@ -335,9 +335,14 @@ public class PXController : MonoBehaviour {
         InputManager.Instance.SetActionMap("Dialog");
         StartCoroutine(DialogRoutine(playerPos, cameraFocus, _vcam));
     }
-    public void DialogExit() {
+    public void CinematicEnter(Transform playerPos, Transform cameraFocus, GameObject _vcam) {
+        onDialog = true;
+        InputManager.Instance.SetActionMap("Disabled");
+        StartCoroutine(DialogRoutine(playerPos, cameraFocus, _vcam));
+    }
+    public void InteractionExit() {
         onDialog = false;
-    }    
+    }
 
     //Collision Callbacks
     private void OnTriggerEnter(Collider other) {
@@ -648,5 +653,5 @@ public class PXController : MonoBehaviour {
 
         yield break;
     }
-    //
+
 }
