@@ -70,7 +70,7 @@ public class PXController : MonoBehaviour {
     private bool canDash;
     private bool canAttack = true;
     private bool canJump = true;
-    private bool canFreeLook;
+    private bool canFreeLook = true;
     private int dashCount = 1;
     private int attackCount = 1; //Per eventuale sistema di combo
     private int jumpCount = 2;
@@ -191,11 +191,12 @@ public class PXController : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         EvaluateHealth();
-        
-        if (!isDead && !onDialog) {
-            UpdateCamera(_cam, _forward, camInput, _currentSens);
+
+        _forward.transform.position = _asset.transform.position;
+
+        if (canFreeLook) {
+            UpdateCamera();
         }
-        
     }
 
     void FixedUpdate() {       
@@ -330,22 +331,32 @@ public class PXController : MonoBehaviour {
     }
 
     //External Callbacks
-    public void DialogEnter(Transform playerPos, Transform cameraFocus, GameObject _vcam) {
+    public void DialogEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
         onDialog = true;
         InputManager.Instance.SetActionMap("Dialog");
-        StartCoroutine(DialogRoutine(playerPos, cameraFocus, _vcam));
+        StartCoroutine(DialogRoutine(playerPos, focusTarget, _vcam));
     }
-    public void CinematicEnter(Transform playerPos, Transform cameraFocus, GameObject _vcam) {
+
+    public void CinematicEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
         onDialog = true;
         InputManager.Instance.SetActionMap("Disabled");
-        StartCoroutine(DialogRoutine(playerPos, cameraFocus, _vcam));
+        StartCoroutine(DialogRoutine(playerPos, focusTarget, _vcam));
     }
+
     public void InteractionExit() {
         onDialog = false;
     }
 
+    public void ActionCameraEnter() {
+        canFreeLook = false;
+    }
+
+    public void ActionCameraExit() {
+        canFreeLook = true;
+    }
+
     //Collision Callbacks
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other) {        
         if (other.tag == "Enemy") {
             SetDMGState();
         }
@@ -522,15 +533,23 @@ public class PXController : MonoBehaviour {
     }
 
     //Camera Methods
-    private void UpdateCamera(GameObject cam, GameObject forward, Vector2 mouseInput, float sens) {
+    private void UpdateCamera() {        
+        if (!isDead && !onDialog) {
+            UpdateFreeLookCamera(_cam, _forward, camInput, _currentSens);
+        }        
+    }
+
+    private void UpdateFreeLookCamera(GameObject cam, GameObject forward, Vector2 mouseInput, float sens) {
         CalculateCamMotion(mouseInput, sens);
         CamRotation(cam, forward);
     }
+
     private void CalculateCamMotion(Vector2 mouseInput, float sens) {
         yaxis += mouseInput.x * sens * Time.deltaTime;
         xaxis -= mouseInput.y * sens * Time.deltaTime;
         xaxis = Mathf.Clamp(xaxis, -30f, 60f);
     }
+
     private void CamRotation(GameObject cam, GameObject forward) {
         cam.transform.rotation = Quaternion.Euler(xaxis, yaxis, 0f);
         forward.transform.rotation = Quaternion.Euler(0f, yaxis, 0f);
