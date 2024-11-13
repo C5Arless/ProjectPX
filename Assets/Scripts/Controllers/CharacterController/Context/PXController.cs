@@ -318,6 +318,7 @@ public class PXController : MonoBehaviour {
         _interactAction.started -= OnInteract;
         _interactAction.canceled -= OnInteract;
     }
+
     private void InitializeActions() {
         _moveAction = InputManager.Instance.GetPlayerInput().actions["Move"];
         _jumpAction = InputManager.Instance.GetPlayerInput().actions["Jump"];
@@ -352,7 +353,8 @@ public class PXController : MonoBehaviour {
     }
 
     public void ActionCameraExit() {
-        canFreeLook = true;
+        CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
+        canFreeLook = true; 
     }
 
     //Collision Callbacks
@@ -533,6 +535,11 @@ public class PXController : MonoBehaviour {
     }
 
     //Camera Methods
+    public void UpdateExternalCamera(Transform playerPos, Transform cameraPivot) {        
+        _cam.transform.forward = ComputeForward2D(playerPos, cameraPivot);        
+        _forward.transform.forward = ComputeForward2D(playerPos, cameraPivot);
+    }
+
     private void UpdateCamera() {        
         if (!isDead && !onDialog) {
             UpdateFreeLookCamera(_cam, _forward, camInput, _currentSens);
