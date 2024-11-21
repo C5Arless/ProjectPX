@@ -1,11 +1,15 @@
 using UnityEngine;
 
 public class ActionCameraBlock : MonoBehaviour {
-    [SerializeField] ActionCamerasController _actionCamerasCtx;
     [SerializeField] GameObject _playerPos;
     [SerializeField] GameObject _actionVCamera;
 
+    private GameCamerasDomain _actionCamerasCtx;
     private bool pause = true;
+
+    private void Start() {
+        _actionCamerasCtx = GetComponent<GameCamerasDomain>();
+    }
 
     private void Update() {
         if (!pause) {

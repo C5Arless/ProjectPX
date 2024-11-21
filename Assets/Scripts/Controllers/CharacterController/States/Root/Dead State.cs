@@ -10,8 +10,8 @@ public class DeadState : BaseState, IContextInit {
 
         Ctx.AnimHandler.SetAlt(true);
         Ctx.AnimHandler.PlayDirect(AnimHandler.Dead());
-        VFXManager.Instance.SpawnFollowVFX(EnvVFX.Shock, Ctx.Player.transform.position, Ctx.Player.transform.rotation, Ctx.Player);
-        VFXManager.Instance.SpawnFollowVFX(EnvVFX.Smoke, Ctx.Player.transform.position, Ctx.Player.transform.rotation, Ctx.Player);
+        VFXManager.Instance.SpawnFollowVFX(EnvVFX.Shock, Ctx.Asset.transform.position, Ctx.Asset.transform.rotation, Ctx.Player);
+        VFXManager.Instance.SpawnFollowVFX(EnvVFX.Smoke, Ctx.Asset.transform.position, Ctx.Asset.transform.rotation, Ctx.Player);
 
         GravityOff();
         InitializeContext();

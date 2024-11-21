@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ActionCamerasController : MonoBehaviour {
+public class GameCamerasDomain : MonoBehaviour {
     private PXController _playerCtx;
     private CompanionController _companionCtx;
 
@@ -8,6 +8,8 @@ public class ActionCamerasController : MonoBehaviour {
     public CompanionController CompanionCtx { get {  return _companionCtx; } }
 
     private void OnTriggerEnter(Collider other) {
+        if (_playerCtx != null) { return; }
+
         if (other.tag == "Player") {
             _playerCtx = other.GetComponent<PXController>();
 

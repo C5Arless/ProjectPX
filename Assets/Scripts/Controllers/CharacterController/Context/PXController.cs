@@ -64,6 +64,7 @@ public class PXController : MonoBehaviour {
     private Vector3 surfaceNormal;
     private bool onPlatform;
     private bool onSlope;
+    private bool onActionCam;
     private bool onDialog;
     private bool onInteract;
     private bool canDMG = true;
@@ -130,6 +131,7 @@ public class PXController : MonoBehaviour {
     public bool CanAttack { get { return canAttack; } set { canAttack = value; } }
     public bool CanJump { get { return canJump; } set { canJump = value; } }
     public float JumpHeight { get { return jumpHeight; } set { jumpHeight = value; } }
+    public bool CanFreeLook { get { return canFreeLook; } }
 
     public bool IsDead { get { return isDead; } set { isDead = value; } }
     public bool IsIdle { get { return isIdle; } set { isIdle = value; } }
@@ -220,6 +222,7 @@ public class PXController : MonoBehaviour {
             camInput = Vector2.zero;
         }
     }
+
     public void OnJump(InputAction.CallbackContext input) {
         if (onInteract) { return; }
 
@@ -230,6 +233,7 @@ public class PXController : MonoBehaviour {
             jumpInput = false;
         }
     }
+
     public void OnAttack(InputAction.CallbackContext input) {
         if (input.ReadValue<float>() != 0f) {
             SetUpAttack();
@@ -238,6 +242,7 @@ public class PXController : MonoBehaviour {
             attackInput = false;
         }
     }
+
     public void OnDash(InputAction.CallbackContext input) {
         if (input.ReadValue<float>() != 0f) {
             SetUpDash();
@@ -246,9 +251,11 @@ public class PXController : MonoBehaviour {
             dashInput = false;
         }
     }
+
     public void OnMove(InputAction.CallbackContext input) {
         moveInput = input.ReadValue<Vector2>();
     } 
+
     public void OnInteract(InputAction.CallbackContext input) {
         if (!onInteract) { return; }
 
@@ -258,6 +265,7 @@ public class PXController : MonoBehaviour {
         ctx.OnInteract();
 
     }
+
     public void OnConfirm(InputAction.CallbackContext input) {
         if (input.ReadValue<float>() == 0f) { return; }
         
@@ -293,6 +301,7 @@ public class PXController : MonoBehaviour {
         _interactAction.started += OnInteract;
         _interactAction.canceled += OnInteract;
     }
+
     private void UnsubscribeCallbacks() {
         _jumpAction.started -= OnJump;
         _jumpAction.performed -= OnJump;
@@ -336,28 +345,30 @@ public class PXController : MonoBehaviour {
     //External Callbacks
     public void DialogEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
         onDialog = true;
+        canFreeLook = false;
         InputManager.Instance.SetActionMap("Dialog");
         StartCoroutine(DialogRoutine(playerPos, focusTarget, _vcam));
     }
 
     public void CinematicEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
         onDialog = true;
+        canFreeLook = false;
         InputManager.Instance.SetActionMap("Disabled");
         StartCoroutine(DialogRoutine(playerPos, focusTarget, _vcam));
     }
 
     public void InteractionExit() {
         onDialog = false;
+        canFreeLook = true;
     }
 
     public void ActionCameraEnter() {
-        canFreeLook = false;
+        canFreeLook = false;   
     }
 
     public void ActionCameraExit() {
         CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
-        canFreeLook = true;
-        
+        canFreeLook = true;       
     }
 
     //Collision Callbacks
@@ -380,6 +391,7 @@ public class PXController : MonoBehaviour {
             _interactionCollider = other;
         }
     }
+
     private void OnTriggerExit(Collider other) {
         if (other.tag == "Platform") {
             onPlatform = false;
@@ -390,15 +402,16 @@ public class PXController : MonoBehaviour {
             _interactionCollider = null;
         }
     }
+
     private void OnCollisionEnter(Collision collision) {
         if (collision.collider.tag == "Enemy") {
             SetDMGState();
         }
         if (collision.collider.tag == "Death") {
-            isDead = true;
-            //SetUpDeath();
+            isDead = true;            
         }
     }
+
     private void OnCollisionStay(Collision collision) {
         if (collision.collider.tag == "Enemy") {
             SetDMGState();
@@ -408,6 +421,7 @@ public class PXController : MonoBehaviour {
             SetSlope(angle, collision.GetContact(0).normal);
         }
     }
+
     private void OnCollisionExit(Collision collision) {
         if (collision.collider.tag == "Slope") {
             onSlope = false;
@@ -425,6 +439,7 @@ public class PXController : MonoBehaviour {
             return;
         }
     }
+
     private void SetUpDash() {
         if (attackInput || jumpInput) { return; }
 
@@ -436,6 +451,7 @@ public class PXController : MonoBehaviour {
             return;
         }
     }
+
     private void SetUpAttack() {
         if (dashInput || jumpInput) { return; }
 
@@ -447,11 +463,13 @@ public class PXController : MonoBehaviour {
             return;
         }
     }
+
     private void SetJumpState() {
         if (jumpCount <= 0 || !canJump || isDamaged) { return; }
 
         isJumping = true;                
     }
+
     private void SetDashState() {
         if (!canDash) { return; }         
         
@@ -460,6 +478,7 @@ public class PXController : MonoBehaviour {
             canDash = false;
         }
     }
+
     private void SetAttackState() {
         if (!canAttack) { return; }
         if (attackCount <= 0) { return; }
@@ -470,12 +489,14 @@ public class PXController : MonoBehaviour {
             canAttack = false;
         }
     }   
+
     private void SetSlope(float angle, Vector3 _surfaceNormal) {
         if (angle <= slopeAngle) {
             onSlope = true;
             surfaceNormal = _surfaceNormal;
         }
     }
+
     private void SetDMGState() {
         if (!canDMG) { return; }
 
@@ -483,6 +504,7 @@ public class PXController : MonoBehaviour {
             isDamaged = true;
         }
     }
+
     private void InitializePowerUps() {
         if (_playerInfo.PowerUps >= 2) {
             canDash = true;
@@ -494,6 +516,7 @@ public class PXController : MonoBehaviour {
             jumpCount = 1;
         }
     }
+
     private void EvaluateHealth() {
         switch (_playerInfo.CurrentHp) {
             case 0: {
@@ -526,6 +549,7 @@ public class PXController : MonoBehaviour {
 
         return distance;
     }
+
     private Vector3 ComputeForward2D(Transform _a, Transform _b) {
         Vector2 a = new Vector2(_a.position.x, _a.position.z);
         Vector2 b = new Vector2(_b.position.x, _b.position.z);
@@ -576,6 +600,7 @@ public class PXController : MonoBehaviour {
         }   
         yield break;
     }
+
     public IEnumerator ResetAttack() {
         canAttack = false;
         yield return new WaitForSeconds(.4f);
@@ -591,6 +616,7 @@ public class PXController : MonoBehaviour {
         }
         yield break;
     }
+
     public IEnumerator ResetDash() {
         yield return new WaitForSeconds(.4f);
 
@@ -607,6 +633,7 @@ public class PXController : MonoBehaviour {
 
         yield break;
     }
+
     public IEnumerator ResetJump() {
         canJump = true;
 
@@ -616,6 +643,7 @@ public class PXController : MonoBehaviour {
 
         yield break;
     }
+
     public IEnumerator ResetDMG() {
         canDMG = false;
         yield return new WaitForSeconds(.2f);
@@ -623,6 +651,7 @@ public class PXController : MonoBehaviour {
         canDMG = true;
         yield break;
     }
+
     private IEnumerator DialogRoutine(Transform playerTarget, Transform cameraTarget, GameObject _vcam) {
         CameraManager.Instance.SwitchGameVCamera(_vcam);
 
@@ -685,5 +714,4 @@ public class PXController : MonoBehaviour {
 
         yield break;
     }
-
 }
