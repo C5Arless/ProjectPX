@@ -194,9 +194,11 @@ public class PXController : MonoBehaviour {
 
         _forward.transform.position = _asset.transform.position;
 
+        
         if (canFreeLook) {
-            UpdateCamera();
+            UpdateCamera(camInput);
         }
+        
     }
 
     void FixedUpdate() {       
@@ -212,7 +214,7 @@ public class PXController : MonoBehaviour {
 
     //Input Callbacks
     public void OnLook(InputAction.CallbackContext input) {
-        if (input.ReadValue<Vector2>() != Vector2.zero) {
+        if (canFreeLook && input.ReadValue<Vector2>() != Vector2.zero) {
             camInput = input.ReadValue<Vector2>();
         } else {
             camInput = Vector2.zero;
@@ -354,7 +356,8 @@ public class PXController : MonoBehaviour {
 
     public void ActionCameraExit() {
         CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
-        canFreeLook = true; 
+        canFreeLook = true;
+        
     }
 
     //Collision Callbacks
@@ -538,9 +541,12 @@ public class PXController : MonoBehaviour {
     public void UpdateExternalCamera(Transform playerPos, Transform cameraPivot) {        
         _cam.transform.forward = ComputeForward2D(playerPos, cameraPivot);        
         _forward.transform.forward = ComputeForward2D(playerPos, cameraPivot);
+
+        yaxis = _cam.transform.rotation.eulerAngles.y;
+        xaxis = _cam.transform.rotation.eulerAngles.x;
     }
 
-    private void UpdateCamera() {        
+    private void UpdateCamera(Vector2 camInput) {        
         if (!isDead && !onDialog) {
             UpdateFreeLookCamera(_cam, _forward, camInput, _currentSens);
         }        

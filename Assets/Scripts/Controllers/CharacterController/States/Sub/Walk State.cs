@@ -14,9 +14,12 @@ public class WalkState : BaseState, IContextInit, IWalk {
     }
     public override void UpdateState() {
         //Update logic
+
+        /*
         if (Ctx.MoveInput != Vector2.zero) {
             Ctx.Player.transform.forward = Ctx.PlayerForward.transform.forward;
         }
+        */
 
         HandleWalk();
 
@@ -60,10 +63,12 @@ public class WalkState : BaseState, IContextInit, IWalk {
     }
     private Vector3 Direction() {
         if (!Ctx.OnSlope) {
-            Vector3 direction = Ctx.Player.transform.forward * Ctx.MoveInput.y + Ctx.Player.transform.right * Ctx.MoveInput.x;
+            Vector3 direction = Ctx.PlayerForward.transform.forward * Ctx.MoveInput.y + Ctx.PlayerForward.transform.right * Ctx.MoveInput.x;
+            //Vector3 direction = Ctx.Player.transform.forward * Ctx.MoveInput.y + Ctx.Player.transform.right * Ctx.MoveInput.x;
             return direction;
         } else {
-            Vector3 direction = Ctx.Player.transform.forward * Ctx.MoveInput.y + Ctx.Player.transform.right * Ctx.MoveInput.x;
+            Vector3 direction = Ctx.PlayerForward.transform.forward * Ctx.MoveInput.y + Ctx.PlayerForward.transform.right * Ctx.MoveInput.x;
+            //Vector3 direction = Ctx.Player.transform.forward * Ctx.MoveInput.y + Ctx.Player.transform.right * Ctx.MoveInput.x;
             Vector3 slopeDirection = Vector3.ProjectOnPlane(direction, Ctx.SurfaceNormal);
             return slopeDirection;
         }

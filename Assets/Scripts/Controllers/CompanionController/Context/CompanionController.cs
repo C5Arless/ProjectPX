@@ -271,7 +271,7 @@ public class CompanionController : MonoBehaviour {
                 rngToken = tempToken;
 
                 yield break;
-            }
+            } 
         }        
     }
 
@@ -405,6 +405,7 @@ public class CompanionController : MonoBehaviour {
 
     private IEnumerator UnstuckPredictRoutine() {
         Collider[] collisions = new Collider[8];
+        int buffer = 0;
 
         yield return null; 
 
@@ -420,7 +421,11 @@ public class CompanionController : MonoBehaviour {
 
         }
 
-        while (isUnstucking) {            
+        while (isUnstucking) {
+            if (buffer >= 7 && rngToken <= buffer) {
+                exclusionList = new bool[8];
+            }
+
             if (exclusionList[rngToken - 1] == false) {
 
                 collisions = Physics.OverlapSphere(ComputeTravelPosition(), .1f);
@@ -429,18 +434,23 @@ public class CompanionController : MonoBehaviour {
 
                     exclusionList[rngToken - 1] = true;
 
-                    UpdateRNGToken();
+                        UpdateRNGToken();
 
-                } else {
+                        buffer++;
+
+                    }
+                    else {
 
                     travelPosition = ComputeTravelPosition();
 
+                    exclusionList = new bool[8];
+
+                    break;
                 }
 
             } else {
                 
                 UpdateRNGToken();
-
             }            
 
             yield return null;
@@ -494,10 +504,24 @@ public class CompanionController : MonoBehaviour {
         if (Physics.Raycast(transform.position, (_playerHead.position - transform.position).normalized, out RaycastHit hitInfo, playerDistance + horizontalOffset)) {
             yield return null;
 
+            /*
             if (hitInfo.collider.tag != "Player" && hitInfo.collider.tag != "PlayerAttacks" && hitInfo.collider.tag != "Interact") {
                 isStuck = true;
             }
-            
+            */
+
+            if (hitInfo.collider.tag != "Player") {
+                if (hitInfo.collider.tag != "PlayerAttacks") {
+                    isStuck = true;
+                }
+                else if (hitInfo.collider.tag != "Interact") {
+                    isStuck = true;
+                }
+                else if (hitInfo.collider.tag != "PlayerVirtualCamera") {
+                    isStuck = true;
+                }
+            }
+
             yield break;
             
         }
