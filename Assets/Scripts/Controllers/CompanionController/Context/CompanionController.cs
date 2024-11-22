@@ -95,6 +95,8 @@ public class CompanionController : MonoBehaviour {
     public float PlayerDistance { get { return playerDistance; } set { playerDistance = value; } }
 
     void Awake() {
+        GameBucket.Instance.CompanionCtx = this;
+
         _stateHandler = new CompanionStateHandler(this);
         _playerHead = GameObject.Find("PlayerHead").transform;
 

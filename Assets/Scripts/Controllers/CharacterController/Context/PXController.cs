@@ -165,6 +165,8 @@ public class PXController : MonoBehaviour {
     
     // Awake is called before the Start 
     void Awake() {
+        GameBucket.Instance.PXController = this;
+
         Cursor.lockState = CursorLockMode.Locked;        
 
         _currentSens = _sens;

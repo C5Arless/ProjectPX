@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5798789301143724855}
-  - component: {fileID: 5286322734696628175}
   - component: {fileID: 8811929870473568162}
   m_Layer: 1
-  m_Name: ActionCameraDomain
+  m_Name: GameBucket
   m_TagString: PlayerVirtualCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,27 +32,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!65 &5286322734696628175
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5787116332676905361}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 8
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 524279
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 50, y: 25, z: 50}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8811929870473568162
 MonoBehaviour:
   m_ObjectHideFlags: 0
