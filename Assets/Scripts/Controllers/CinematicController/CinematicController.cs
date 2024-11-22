@@ -12,34 +12,21 @@ public class CinematicController : MonoBehaviour {
     private int shotNumber;
 
     private bool isInteracting;
-    private bool isBusy;
-
-    public PXController PlayerCtx { get { return _playerCtx; } }
-    public CompanionController CompanionCtx { get { return _companionCtx; } }
+    private bool isBusy;    
 
     private void Awake() {
         shots = _cinematicShots.Length;
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if (other.tag == "Player") {            
-            _playerCtx = other.GetComponent<PXController>();
-            
-            try {
-                _companionCtx = GameObject.FindGameObjectWithTag("Companion").GetComponent<CompanionController>();
-            } catch {
-                Debug.Log("Companion not found");
-            }
-
-            OnInteract();
-        }        
+    private void Start() {
+        _playerCtx = GameBucket.Instance.PXController;
+        _companionCtx = GameBucket.Instance.CompanionCtx;
     }
 
-    private void OnTriggerExit(Collider other) {
-        if (other.tag == "Player") {
-            _playerCtx = null;
-            _companionCtx = null;
-        }
+    private void OnTriggerEnter(Collider other) {
+        if (other.tag == "Player") {                        
+            OnInteract();
+        }        
     }
 
     public void OnInteract() {

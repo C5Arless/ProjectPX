@@ -10,8 +10,6 @@ public class InteractController : MonoBehaviour {
     [SerializeField] int pages;
     [SerializeField] InteractionVCameras[] interactionCams;
 
-    private Collider _playerCollider;
-
     private int pageNumber;
 
     private bool isInteracting;
@@ -19,15 +17,13 @@ public class InteractController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.tag == "Player") {
-            _popUp.SetActive(true);
-            _playerCollider = other;
+            _popUp.SetActive(true);            
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.tag == "Player") {
-            _popUp.SetActive(false);
-            _playerCollider = null;
+            _popUp.SetActive(false);            
         }
     }
 
@@ -47,11 +43,9 @@ public class InteractController : MonoBehaviour {
         _popUp.SetActive(false);
         isInteracting = true;
 
-        PXController _ctx = _playerCollider.GetComponent<PXController>();
-        _ctx.DialogEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
+        GameBucket.Instance.PXController.DialogEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
 
-        CompanionController _comp = GameObject.FindGameObjectWithTag("Companion").GetComponent<CompanionController>();
-        _comp.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
+        GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
     }
 
     private void Continue() {
@@ -68,12 +62,10 @@ public class InteractController : MonoBehaviour {
 
     private void Exit() {
         isInteracting = false;
+        
+        GameBucket.Instance.PXController.InteractionExit();
 
-        PXController _ctx = _playerCollider.GetComponent<PXController>();
-        _ctx.InteractionExit();
-
-        CompanionController _comp = GameObject.FindGameObjectWithTag("Companion").GetComponent<CompanionController>();
-        _comp.ExitTalkState();
+        GameBucket.Instance.CompanionCtx.ExitTalkState();
     }
 
     private IEnumerator IteratePage() {
