@@ -18,7 +18,7 @@ public class PXController : MonoBehaviour {
     [SerializeField] GameObject _cam;
     [SerializeField] GameObject _virtualCamera;
     [SerializeField] GameObject _forward;
-    [SerializeField] GameObject _playerparent;
+    [SerializeField] GameObject _playerparent;    
 
     [SerializeField] GameObject _dashPoint; // Spawnpoint Dash VFX
     [SerializeField] GameObject _attackPoint; // Spawnpoint Attack VFX
@@ -63,8 +63,7 @@ public class PXController : MonoBehaviour {
     //Context vars
     private Vector3 surfaceNormal;
     private bool onPlatform;
-    private bool onSlope;
-    private bool onActionCam;
+    private bool onSlope;    
     private bool onDialog;
     private bool onInteract;
     private bool canDMG = true;
@@ -120,9 +119,11 @@ public class PXController : MonoBehaviour {
     public bool AttackInput { get { return attackInput; } set { attackInput = value; } }
     public bool DashInput { get { return dashInput; } set { dashInput = value; } }
 
-    public Vector3 SurfaceNormal { get { return surfaceNormal; } }
     public bool OnSlope { get { return onSlope; } }
     public bool OnPlatform { get { return onPlatform; } set { onPlatform = value; } }
+    public bool OnDialog { get { return onDialog; } }    
+
+    public Vector3 SurfaceNormal { get { return surfaceNormal; } }
     public int DashCount { get { return dashCount; } set { dashCount = value; } }
     public int JumpCount { get { return jumpCount; } set { jumpCount = value; } }
     public int AttackCount { get { return attackCount; } set { attackCount = value; } }
@@ -711,7 +712,12 @@ public class PXController : MonoBehaviour {
 
         yield return new WaitForSeconds(.2f);
 
-        CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
+        if (!canFreeLook || onInteract) {
+            CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
+        }
+
+        onInteract = false;
+
         InputManager.Instance.SetActionMap("Player");
 
         yield break;

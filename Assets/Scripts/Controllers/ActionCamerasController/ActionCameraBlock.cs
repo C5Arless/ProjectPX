@@ -7,10 +7,17 @@ public class ActionCameraBlock : MonoBehaviour {
     private bool pause = true;
 
     private void Update() {
-        if (!pause) {
+        if (CheckUpdateCondition()) {
             _playerPos.transform.position = GameBucket.Instance.PXController.transform.position;
             GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);
         }
+    }
+
+    private bool CheckUpdateCondition() {
+        if (!pause && !GameBucket.Instance.PXController.OnDialog) {
+            return true;
+        }
+        else return false;
     }
 
     private void OnTriggerEnter(Collider other) {

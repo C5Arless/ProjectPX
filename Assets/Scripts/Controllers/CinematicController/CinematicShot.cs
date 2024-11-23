@@ -12,12 +12,15 @@ public class CinematicShot : MonoBehaviour {
     [SerializeField] float _shotLenght;
     [SerializeField][Range(.1f, 50f)] float _speed;
     [SerializeField] bool hasDolly;
+    [SerializeField] bool hasTransition;
 
     private CinematicController _controller;
 
     public GameObject FocusTarget { get { return _focusTarget; } set { _focusTarget = value; } }
     public GameObject PlayerTarget { get { return _playerTarget;} set { _playerTarget = value; } }
     public GameObject CompanionTarget { get { return _companionTarget; } set { _companionTarget = value; } }
+
+    public bool HasTransition { get { return hasTransition; } }
 
     private void Awake() {
         _controller = GetComponentInParent<CinematicController>();

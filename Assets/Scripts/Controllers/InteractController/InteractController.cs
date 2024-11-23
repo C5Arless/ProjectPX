@@ -62,10 +62,13 @@ public class InteractController : MonoBehaviour {
 
     private void Exit() {
         isInteracting = false;
+
+        StartCoroutine(ResetCollider());
         
         GameBucket.Instance.PXController.InteractionExit();
 
         GameBucket.Instance.CompanionCtx.ExitTalkState();
+
     }
 
     private IEnumerator IteratePage() {
@@ -84,5 +87,12 @@ public class InteractController : MonoBehaviour {
         isBusy = false;
         yield break;
     }
+    
+    private IEnumerator ResetCollider() {
+        transform.GetComponent<Collider>().enabled = false;
+        yield return new WaitForSeconds(3f);
 
+        transform.GetComponent<Collider>().enabled = true;
+        yield break;
+    }
 }

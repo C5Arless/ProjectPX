@@ -47,7 +47,9 @@ public class CinematicController : MonoBehaviour {
 
         _cinematicShots[shotNumber - 1].Enter();
 
-        StartCoroutine("FrameIn");
+        if (_cinematicShots[shotNumber - 1].HasTransition) {
+            StartCoroutine("FrameIn");
+        }
     }
 
     private void Continue() {
@@ -69,7 +71,9 @@ public class CinematicController : MonoBehaviour {
         _playerCtx.InteractionExit();
         _companionCtx.ExitTalkState();
 
-        StartCoroutine("FrameOut");
+        if (_cinematicShots[shotNumber - 1].HasTransition) {
+            StartCoroutine("FrameOut");
+        }
     }
 
     private IEnumerator IterateShot() {
