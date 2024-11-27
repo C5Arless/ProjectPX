@@ -2,7 +2,7 @@ public class CTalkState : CBaseState {
     public CTalkState(CompanionController currentContext, CompanionStateHandler stateHandler) : base(currentContext, stateHandler) { }
     public override void EnterState() {
         //Enter logic
-        Ctx.VisionEnterTalkBehaviour();
+        //Ctx.VisionEnterTalkBehaviour();
         Ctx.TravelEnterTalkBehaviour();
 
         InitializeContext();
@@ -10,7 +10,7 @@ public class CTalkState : CBaseState {
     public override void UpdateState() {
         //Update logic        
 
-        //CheckSwitchStates(); //MUST BE LAST INSTRUCTION
+        CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
     public override void ExitState() {
         //Exit logic

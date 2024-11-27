@@ -9,30 +9,16 @@ public class Stucked : MonoBehaviour {
         if (other.tag != "PlayerAttacks" && other.tag != "Interact" && other.tag != "PlayerVirtualCamera") {
             _ctx.IsStuck = true;
             _ctx.IsOperative = false;
-        }
-
-        /* OLD
-        if (other.tag != "PlayerAttacks" && _ctx.IsOperative && !_ctx.IsMoving && !_ctx.IsTalking) {
-            _ctx.IsStuck = true;
-            _ctx.IsOperative = false;
-        }
-        */
+        }         
     }
 
-    private void OnTriggerStay(Collider other) {
+    private void OnTriggerStay(Collider other) {        
         if (_ctx.IsMoving || _ctx.IsTalking) { return; }
 
         if (other.tag != "PlayerAttacks" && other.tag != "Interact" && other.tag != "PlayerVirtualCamera") {
             _ctx.IsStuck = true;
             _ctx.IsOperative = false;
         }
-
-        /* OLD
-        if (other.tag != "PlayerAttacks" && _ctx.IsOperative && !_ctx.IsMoving && !_ctx.IsTalking) {
-            _ctx.IsStuck = true;
-            _ctx.IsOperative = false;
-        }
-        */
 
         if (_ctx.IsStuck) {
 
@@ -49,12 +35,5 @@ public class Stucked : MonoBehaviour {
             _ctx.IsOperative = true;
         }
 
-        /* OLD
-        if (other.tag != "PlayerAttacks" && _ctx.IsStuck && !_ctx.IsMoving) {
-            _ctx.IsUnstucking = false;
-            _ctx.IsStuck = false;
-            _ctx.IsOperative = true;
-        }
-        */
     }
 }

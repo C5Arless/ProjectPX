@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -97,8 +98,7 @@ public class CompanionController : MonoBehaviour {
     void Awake() {
         GameBucket.Instance.CompanionCtx = this;
 
-        _stateHandler = new CompanionStateHandler(this);
-        _playerHead = GameObject.Find("PlayerHead").transform;
+        _stateHandler = new CompanionStateHandler(this);        
 
         limitDistanceMax = limitDistance * 2.5f;
         
@@ -110,6 +110,10 @@ public class CompanionController : MonoBehaviour {
 
         InitializeTravelDestinations();
         
+    }
+
+    private void Start() {
+        _playerHead = GameBucket.Instance.PXController.Head.transform;
     }
 
     void Update() {
@@ -503,15 +507,25 @@ public class CompanionController : MonoBehaviour {
     private IEnumerator CheckStuckRoutine() {
         yield return null;
 
+        if (isTalking || isMoving) { yield break; }
+
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, (_playerHead.position - transform.position).normalized, PlayerDistance);        
+
+        foreach (RaycastHit hit in hits) {
+            if (hit.collider.tag != "Player" && hit.collider.tag != "PlayerAttacks" && hit.collider.tag != "Interact") {
+                isStuck = true;
+                yield break;
+            }
+        }
+
+        /*
         if (Physics.Raycast(transform.position, (_playerHead.position - transform.position).normalized, out RaycastHit hitInfo, playerDistance + horizontalOffset)) {
             yield return null;
-
-            /*
-            if (hitInfo.collider.tag != "Player" && hitInfo.collider.tag != "PlayerAttacks" && hitInfo.collider.tag != "Interact") {
-                isStuck = true;
-            }
-            */
-
+            
+            //if (hitInfo.collider.tag != "Player" && hitInfo.collider.tag != "PlayerAttacks" && hitInfo.collider.tag != "Interact") {
+            //    isStuck = true;
+            //}            
+            
             if (hitInfo.collider.tag != "Player") {
                 if (hitInfo.collider.tag != "PlayerAttacks") {
                     isStuck = true;
@@ -523,10 +537,11 @@ public class CompanionController : MonoBehaviour {
                     isStuck = true;
                 }
             }
-
-            yield break;
             
+
+            yield break;            
         }
+        */
 
         yield break;
     }

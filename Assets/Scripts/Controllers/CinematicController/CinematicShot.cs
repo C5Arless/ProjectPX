@@ -42,6 +42,7 @@ public class CinematicShot : MonoBehaviour {
 
         GameBucket.Instance.PXController.CinematicEnter(_playerTarget.transform, _focusTarget.transform, _vcamera);
         GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
+        GameBucket.Instance.CompanionCtx.VisionSetUpTalkBehaviour(_companionTarget);
 
         CameraManager.Instance.SwitchGameVCamera(_vcamera);
 

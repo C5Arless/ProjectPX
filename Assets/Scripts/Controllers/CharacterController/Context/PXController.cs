@@ -18,7 +18,8 @@ public class PXController : MonoBehaviour {
     [SerializeField] GameObject _cam;
     [SerializeField] GameObject _virtualCamera;
     [SerializeField] GameObject _forward;
-    [SerializeField] GameObject _playerparent;    
+    [SerializeField] GameObject _playerparent;
+    [SerializeField] GameObject _head;
 
     [SerializeField] GameObject _dashPoint; // Spawnpoint Dash VFX
     [SerializeField] GameObject _attackPoint; // Spawnpoint Attack VFX
@@ -153,6 +154,7 @@ public class PXController : MonoBehaviour {
     public GameObject Asset { get { return _asset; } }
     public GameObject Camera { get { return _cam; } }
     public GameObject PlayerForward { get { return _forward; } }
+    public GameObject Head { get { return _head; } }
     public Rigidbody PlayerRb { get { return _playerRb; } }
     public Animator Animator { get { return _animator; } }
     public SphereCollider AttackCollider { get { return _attackCollider; } set { _attackCollider = value; } }
