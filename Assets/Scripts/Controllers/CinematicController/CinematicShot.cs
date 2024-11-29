@@ -40,9 +40,9 @@ public class CinematicShot : MonoBehaviour {
             _dollyCart.GetComponent<CinemachineDollyCart>().m_Speed = _speed;
         }
 
-        GameBucket.Instance.PXController.CinematicEnter(_playerTarget.transform, _focusTarget.transform, _vcamera);
-        GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
-        GameBucket.Instance.CompanionCtx.VisionSetUpTalkBehaviour(_companionTarget);
+        _controller.PXController.CinematicEnter(_playerTarget.transform, _focusTarget.transform, _vcamera);
+        _controller.CompanionController.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
+        _controller.CompanionController.VisionSetUpTalkBehaviour(_companionTarget);
 
         CameraManager.Instance.SwitchGameVCamera(_vcamera);
 

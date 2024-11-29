@@ -14,13 +14,11 @@ public class CinematicController : MonoBehaviour {
     private bool isInteracting;
     private bool isBusy;    
 
+    public PXController PXController { get { return _playerCtx; } }
+    public CompanionController CompanionController { get { return _companionCtx; } }
+
     private void Awake() {
         shots = _cinematicShots.Length;
-    }
-
-    private void Start() {
-        _playerCtx = GameBucket.Instance.PXController;
-        _companionCtx = GameBucket.Instance.CompanionCtx;
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -30,7 +28,12 @@ public class CinematicController : MonoBehaviour {
     }
 
     public void OnInteract() {
-        if (isBusy) { return; }
+        if (!isBusy) { 
+            _playerCtx = GameBucket.Instance.PXController;
+            _companionCtx = GameBucket.Instance.CompanionCtx;
+        } else {
+            return; 
+        }
 
         if (isInteracting) {
             Continue();

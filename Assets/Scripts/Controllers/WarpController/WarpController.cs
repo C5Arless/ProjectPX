@@ -9,7 +9,7 @@ public class WarpController : MonoBehaviour {
     private bool _state;
 
     private void Start() {
-        Invoke("SwitchToEnter", 1.25f);
+        Invoke("SwitchToEnter", 3f);
     }
 
     private void SwitchToEnter() {

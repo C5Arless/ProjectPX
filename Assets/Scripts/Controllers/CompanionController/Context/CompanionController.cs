@@ -96,8 +96,6 @@ public class CompanionController : MonoBehaviour {
     public float PlayerDistance { get { return playerDistance; } set { playerDistance = value; } }
 
     void Awake() {
-        GameBucket.Instance.CompanionCtx = this;
-
         _stateHandler = new CompanionStateHandler(this);        
 
         limitDistanceMax = limitDistance * 2.5f;
@@ -110,6 +108,7 @@ public class CompanionController : MonoBehaviour {
 
         InitializeTravelDestinations();
         
+        GameBucket.Instance.CompanionCtx = this;
     }
 
     private void Start() {

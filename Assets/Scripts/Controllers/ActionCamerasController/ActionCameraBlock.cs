@@ -6,10 +6,9 @@ public class ActionCameraBlock : MonoBehaviour {
 
     private bool pause = true;
 
-    private void Update() {
-        _playerPos.transform.position = GameBucket.Instance.PXController.transform.position;
-
+    private void Update() {        
         if (CheckUpdateCondition()) {
+            _playerPos.transform.position = GameBucket.Instance.PXController.transform.position;
             GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);
         }
     }
@@ -22,7 +21,11 @@ public class ActionCameraBlock : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (GameBucket.Instance.PXController.OnDialog) { return; }
+        try {
+            if (GameBucket.Instance.PXController.OnDialog) { return; }
+        } catch {
+            //
+        }
 
         if (other.tag == "Player") {
             pause = false;

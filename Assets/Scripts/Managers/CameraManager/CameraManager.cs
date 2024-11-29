@@ -26,9 +26,9 @@ public class CameraManager : MonoBehaviour {
     }
 
     private void Start() {
-        SetInitialState();
+        //SetInitialState();
 
-        //currentBrain = gameBrain;       
+        currentBrain = gameBrain;       //Required for testing in Lab_Test (SetInitState on Game)
     }
 
     public void OnPauseCamera(InputAction.CallbackContext input) {

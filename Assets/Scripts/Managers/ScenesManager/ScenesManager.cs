@@ -297,9 +297,9 @@ public class ScenesManager : MonoBehaviour {
 
     private IEnumerator InstantiatePlayerAndCompanion() {
         paused = true;
-        Instantiate(_playerPrefab, _cpObj.transform.position, _cpObj.transform.rotation);
-        yield return new WaitForSeconds(.2f);
+        yield return null;
 
+        Instantiate(_playerPrefab, _cpObj.transform.position, _cpObj.transform.rotation);
         Instantiate(_companionPrefab, _cpObj.transform.position + new Vector3(0f, 1f, 1f), _cpObj.transform.rotation);
         yield return new WaitForSeconds(.2f);
 
