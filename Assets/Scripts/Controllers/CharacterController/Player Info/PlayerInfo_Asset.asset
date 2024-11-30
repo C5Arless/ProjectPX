@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlayerInfo_Asset
   m_EditorClassIdentifier: 
   _slotID: 1
-  _name: Slot 1
-  _powerUps: 0
+  _name: Testing
+  _powerUps: 2
   _score: 0
   _currentHp: 3
-  _runtime: 0
-  _checkpoint: {x: 0, y: 0}
+  _runtime: 1
+  _checkpoint: {x: 2, y: 2}

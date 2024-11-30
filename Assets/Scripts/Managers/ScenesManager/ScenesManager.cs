@@ -112,7 +112,7 @@ public class ScenesManager : MonoBehaviour {
         StartCoroutine(SetLoadScene(n_scene));
         yield return new WaitWhile(() => paused);
 
-        StartCoroutine(RetrievePoint(Cp.CP_0));
+        StartCoroutine(RetrievePoint(Cp.CP_2));
         yield return new WaitWhile(() => paused);
 
         StartCoroutine(InstantiatePlayerAndCompanion());
