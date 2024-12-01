@@ -72,6 +72,7 @@ public class PXController : MonoBehaviour {
     private bool canAttack = true;
     private bool canJump = true;
     private bool canFreeLook = true;
+    private bool canInteract = true;
     private int dashCount = 1;
     private int attackCount = 1; //Per eventuale sistema di combo
     private int jumpCount = 2;
@@ -134,6 +135,7 @@ public class PXController : MonoBehaviour {
     public bool CanJump { get { return canJump; } set { canJump = value; } }
     public float JumpHeight { get { return jumpHeight; } set { jumpHeight = value; } }
     public bool CanFreeLook { get { return canFreeLook; } }
+    public bool CanInteract { get { return canInteract; } }
 
     public bool IsDead { get { return isDead; } set { isDead = value; } }
     public bool IsIdle { get { return isIdle; } set { isIdle = value; } }
@@ -350,6 +352,8 @@ public class PXController : MonoBehaviour {
     public void DialogEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
         onDialog = true;
         canFreeLook = false;
+        canInteract = false;
+
         InputManager.Instance.SetActionMap("Dialog");
         StartCoroutine(DialogRoutine(playerPos, focusTarget, _vcam));
     }
@@ -357,6 +361,8 @@ public class PXController : MonoBehaviour {
     public void CinematicEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
         onDialog = true;
         canFreeLook = false;
+        canInteract = false;
+
         InputManager.Instance.SetActionMap("Disabled");
         StartCoroutine(DialogRoutine(playerPos, focusTarget, _vcam));
     }
@@ -678,7 +684,7 @@ public class PXController : MonoBehaviour {
             yield return null;
         }
 
-        while (ComputeDistance2D(_asset.transform, cameraTarget) > 3f) {
+        while (ComputeDistance2D(_asset.transform, cameraTarget) > .6f) {
 
             targetForward = ComputeForward2D(cameraTarget, _asset.transform);
             _cam.transform.forward = targetForward;
@@ -693,6 +699,7 @@ public class PXController : MonoBehaviour {
             yield return null;
         }
 
+        /*
         targetForward = ComputeForward2D(cameraTarget, _asset.transform);
         _cam.transform.forward = targetForward;
 
@@ -704,6 +711,7 @@ public class PXController : MonoBehaviour {
         moveInput = new Vector2(0f, 1f);
 
         yield return null;
+        */
 
         ///
 
@@ -711,13 +719,14 @@ public class PXController : MonoBehaviour {
 
         yield return new WaitWhile(() => onDialog);
 
-        yield return new WaitForSeconds(.2f);
+        //yield return new WaitForSeconds(.2f);
 
         if (!canFreeLook || onInteract) {
             CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
         }
 
         onInteract = false;
+        canInteract = true;
 
         InputManager.Instance.SetActionMap("Player");
 

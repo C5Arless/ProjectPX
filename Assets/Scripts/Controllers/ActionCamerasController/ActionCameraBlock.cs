@@ -14,6 +14,13 @@ public class ActionCameraBlock : MonoBehaviour {
     }
 
     private bool CheckUpdateCondition() {
+        if (!pause && GameBucket.Instance.PXController.CanInteract) {
+            return true;
+        }
+        else return false;
+    }
+
+    private bool CheckStayCondition() {
         if (!pause && !GameBucket.Instance.PXController.OnDialog) {
             return true;
         }
@@ -21,8 +28,9 @@ public class ActionCameraBlock : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider other) {
+        if (!GameBucket.Instance.PXController.CanInteract) { return; }
+
         try {
-            if (GameBucket.Instance.PXController.OnDialog) { return; }
         } catch {
             //
         }
@@ -35,7 +43,7 @@ public class ActionCameraBlock : MonoBehaviour {
     }
 
     private void OnTriggerStay(Collider other) {
-        if (CheckUpdateCondition()) { return; }
+        if (CheckStayCondition()) { return; }
 
         if (other.tag == "Player") {
             pause = false;
