@@ -669,7 +669,7 @@ public class PXController : MonoBehaviour {
 
         Vector3 targetForward = ComputeForward2D(playerTarget, _asset.transform);        
 
-        while (ComputeDistance2D(_asset.transform, playerTarget) > .3f) {
+        while (ComputeDistance2D(_asset.transform, playerTarget) > .6f) {
 
             targetForward = ComputeForward2D(playerTarget, _asset.transform);
             _cam.transform.forward = targetForward;
@@ -684,6 +684,7 @@ public class PXController : MonoBehaviour {
             yield return null;
         }
 
+        /*
         while (ComputeDistance2D(_asset.transform, cameraTarget) > .6f) {
 
             targetForward = ComputeForward2D(cameraTarget, _asset.transform);
@@ -698,8 +699,8 @@ public class PXController : MonoBehaviour {
 
             yield return null;
         }
+        */
 
-        /*
         targetForward = ComputeForward2D(cameraTarget, _asset.transform);
         _cam.transform.forward = targetForward;
 
@@ -711,7 +712,6 @@ public class PXController : MonoBehaviour {
         moveInput = new Vector2(0f, 1f);
 
         yield return null;
-        */
 
         ///
 
@@ -719,16 +719,15 @@ public class PXController : MonoBehaviour {
 
         yield return new WaitWhile(() => onDialog);
 
-        //yield return new WaitForSeconds(.2f);
-
         if (!canFreeLook || onInteract) {
             CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
         }
 
         onInteract = false;
-        canInteract = true;
-
         InputManager.Instance.SetActionMap("Player");
+
+        yield return null;
+        canInteract = true;
 
         yield break;
     }

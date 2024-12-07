@@ -9,7 +9,7 @@ public class WarpController : MonoBehaviour {
     private bool _state;
 
     private void Start() {
-        Invoke("SwitchToEnter", 3f);
+        StartCoroutine(InitializeSwitch());
     }
 
     private void SwitchToEnter() {
@@ -36,4 +36,13 @@ public class WarpController : MonoBehaviour {
         }
     }
     
+    private IEnumerator InitializeSwitch() {
+        yield return new WaitForSeconds(1f);
+
+        yield return new WaitUntil(() => GameBucket.Instance.PXController.CanInteract);
+
+        SwitchToEnter();
+
+        yield break;
+    }
 }
