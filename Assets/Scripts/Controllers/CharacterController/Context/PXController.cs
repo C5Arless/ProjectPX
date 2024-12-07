@@ -67,6 +67,7 @@ public class PXController : MonoBehaviour {
     private bool onSlope;    
     private bool onDialog;
     private bool onInteract;
+    private bool onAction;
     private bool canDMG = true;
     private bool canDash;
     private bool canAttack = true;
@@ -80,7 +81,6 @@ public class PXController : MonoBehaviour {
 
     private float xaxis;
     private float yaxis;
-    private float _currentSens = 69f;
 
     private float gravity = 9.81f;
 
@@ -110,7 +110,7 @@ public class PXController : MonoBehaviour {
     private bool dashInput;
 
     //Constructors
-    public float CurrentSens { get { return _currentSens; } }
+    public float CurrentSens { get { return _sens; } }
     public float Gravity { get { return gravity; } set { gravity = value; } }
     public float GravityMultiplier { get { return gravityMultiplier; } }
     public float GravitySpeed { get { return gravitySpeed; } }
@@ -123,7 +123,8 @@ public class PXController : MonoBehaviour {
 
     public bool OnSlope { get { return onSlope; } }
     public bool OnPlatform { get { return onPlatform; } set { onPlatform = value; } }
-    public bool OnDialog { get { return onDialog; } }    
+    public bool OnDialog { get { return onDialog; } } 
+    public bool OnAction { get { return onAction; } }
 
     public Vector3 SurfaceNormal { get { return surfaceNormal; } }
     public int DashCount { get { return dashCount; } set { dashCount = value; } }
@@ -170,9 +171,7 @@ public class PXController : MonoBehaviour {
     
     // Awake is called before the Start 
     void Awake() {
-        Cursor.lockState = CursorLockMode.Locked;        
-
-        _currentSens = _sens;
+        Cursor.lockState = CursorLockMode.Locked;
 
         _animator = _asset.GetComponentInChildren<Animator>();
         _playerRb = _player.GetComponent<Rigidbody>();
@@ -369,16 +368,21 @@ public class PXController : MonoBehaviour {
 
     public void InteractionExit() {
         onDialog = false;
-        canFreeLook = true;
+
+        if (!onAction) {
+            canFreeLook = true;
+        }
     }
 
     public void ActionCameraEnter() {
-        canFreeLook = false;   
+        canFreeLook = false;
+        onAction = true;
     }
 
     public void ActionCameraExit() {
         CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
-        canFreeLook = true;       
+        canFreeLook = true;
+        onAction = false;
     }
 
     //Collision Callbacks
@@ -572,17 +576,36 @@ public class PXController : MonoBehaviour {
     }
 
     //Camera Methods
-    public void UpdateExternalCamera(Transform playerPos, Transform cameraPivot) {        
+    public void UpdateExternalCamera(Transform playerPos, Transform cameraPivot) {
+        Vector3 targetForward = ComputeForward2D(playerPos, cameraPivot);
+        float currentAngle = Vector3.Angle(_forward.transform.forward, targetForward);
+
+        if (currentAngle > 1f) {
+
+            Vector3 lerpForward = Vector3.Lerp(_forward.transform.forward, targetForward, .1f);
+            _cam.transform.forward = lerpForward;
+            _forward.transform.forward = lerpForward;            
+
+        } else {
+            _cam.transform.forward = targetForward; 
+            _forward.transform.forward = targetForward;
+
+            yaxis = _cam.transform.rotation.eulerAngles.y;
+            xaxis = _cam.transform.rotation.eulerAngles.x;        
+        }
+
+        /*
         _cam.transform.forward = ComputeForward2D(playerPos, cameraPivot);        
         _forward.transform.forward = ComputeForward2D(playerPos, cameraPivot);
 
         yaxis = _cam.transform.rotation.eulerAngles.y;
         xaxis = _cam.transform.rotation.eulerAngles.x;
+        */
     }
 
     private void UpdateCamera(Vector2 camInput) {        
         if (!isDead && !onDialog) {
-            UpdateFreeLookCamera(_cam, _forward, camInput, _currentSens);
+            UpdateFreeLookCamera(_cam, _forward, camInput, _sens);
         }        
     }
 
@@ -719,15 +742,16 @@ public class PXController : MonoBehaviour {
 
         yield return new WaitWhile(() => onDialog);
 
-        if (!canFreeLook || onInteract) {
+        if (!onAction) {
             CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
         }
 
         onInteract = false;
-        InputManager.Instance.SetActionMap("Player");
 
         yield return null;
+
         canInteract = true;
+        InputManager.Instance.SetActionMap("Player");
 
         yield break;
     }

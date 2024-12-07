@@ -649,7 +649,7 @@ MonoBehaviour:
   gravityMultiplier: 15
   gravitySpeed: 5
   jumpHeight: 10
-  _sens: 160
+  _sens: 110
   _sensRatio: 0.8
   slopeAngle: 31
 --- !u!64 &696663370532947348

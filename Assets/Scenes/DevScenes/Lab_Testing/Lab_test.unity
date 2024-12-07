@@ -9070,19 +9070,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8154378538328192795, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.702782
+      value: 0.7027823
       objectReference: {fileID: 0}
     - target: {fileID: 8154378538328192795, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.07808653
+      value: -0.07808656
       objectReference: {fileID: 0}
     - target: {fileID: 8154378538328192795, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.702782
+      value: 0.7027817
       objectReference: {fileID: 0}
     - target: {fileID: 8154378538328192795, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.078086525
+      value: 0.0780865
       objectReference: {fileID: 0}
     - target: {fileID: 8944317486007970092, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_IsActive
@@ -17011,6 +17011,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 616037714}
+    - target: {fileID: 3246902085619365528, guid: ff9dfb48cff0ba646b89c6da20ac23e2, type: 3}
+      propertyPath: _shotLenght
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3990321763541308915, guid: ff9dfb48cff0ba646b89c6da20ac23e2, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -23488,7 +23492,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3368931141113781961, guid: c2bfc86e3c130bb4bb1548643efc144c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3662903794212247453, guid: c2bfc86e3c130bb4bb1548643efc144c, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
