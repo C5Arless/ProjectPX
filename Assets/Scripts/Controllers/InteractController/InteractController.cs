@@ -63,11 +63,11 @@ public class InteractController : MonoBehaviour {
     private void Exit() {
         isInteracting = false;
 
-        StartCoroutine(ResetCollider());
+        StartCoroutine(ExitRoutine());
         
-        GameBucket.Instance.PXController.InteractionExit();
+        //GameBucket.Instance.PXController.InteractionExit();
 
-        GameBucket.Instance.CompanionCtx.ExitTalkState();
+        //GameBucket.Instance.CompanionCtx.ExitTalkState();
 
     }
 
@@ -91,6 +91,18 @@ public class InteractController : MonoBehaviour {
     private IEnumerator ResetCollider() {
         transform.GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(3f);
+
+        transform.GetComponent<Collider>().enabled = true;
+        yield break;
+    }
+
+    private IEnumerator ExitRoutine() {
+        GameBucket.Instance.PXController.InteractionExit();
+        GameBucket.Instance.CompanionCtx.ExitTalkState();
+        yield return null;
+
+        transform.GetComponent<Collider>().enabled = false;
+        yield return new WaitForSeconds(2f);
 
         transform.GetComponent<Collider>().enabled = true;
         yield break;

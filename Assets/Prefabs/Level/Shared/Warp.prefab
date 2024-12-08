@@ -51215,7 +51215,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8320042956135223829, guid: 6592e8794b9523848bdb6e8d28ec4505, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -51252,12 +51252,12 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 2.25
   m_Height: 6.6
   m_Direction: 0
-  m_Center: {x: 0, y: -0.5, z: 1.5}
+  m_Center: {x: 0, y: -0.5, z: 0.91}
 --- !u!1001 &3197147232610941441
 PrefabInstance:
   m_ObjectHideFlags: 0

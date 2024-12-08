@@ -56,7 +56,7 @@ public class MenuController : MonoBehaviour {
         if (input.phase == InputActionPhase.Started) {
             switch (mode) {
                 case UIMode.MainMenu: {
-                        //NavigateMenu()
+                        //NavigateMenu(input.ReadValue<Vector2>())
                         break;
                     }
                 case UIMode.Slots: {
@@ -64,7 +64,7 @@ public class MenuController : MonoBehaviour {
                         break;
                     }
                 case UIMode.Pause: {
-                        //NavigatePause()
+                        //NavigatePause(input.ReadValue<Vector2>())
                         break;
                     }
             }        
