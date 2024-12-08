@@ -52,6 +52,7 @@ public enum Record {
 }
 
 public enum UIMode {
+    MainScreen,
     MainMenu,
     Slots,
     Pause

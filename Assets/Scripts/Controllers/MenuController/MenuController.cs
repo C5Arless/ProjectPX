@@ -13,7 +13,7 @@ public class MenuController : MonoBehaviour {
     [SerializeField] RecordInfo[] recordsInfo;
     [SerializeField] PlayerInfo _playerInfo;
 
-    private UIMode mode = UIMode.MainMenu;
+    private UIMode mode = UIMode.MainScreen;
 
     private int currentSlot = 0;
     private int selectedSlot = 0;
@@ -23,6 +23,9 @@ public class MenuController : MonoBehaviour {
     private InputAction _submitAction;
     private InputAction _saveAction;
     private InputAction _quitAction;
+    private InputAction _pauseCameraAction;
+    private InputAction _resumeCameraAction;
+    private InputAction _anyButtonAction;
 
     public UIMode Mode { get { return mode; } set { mode = value; } }
     public int CurrentSlot { get {  return currentSlot; } set {  currentSlot = value; } }
@@ -72,8 +75,14 @@ public class MenuController : MonoBehaviour {
     }
 
     public void OnSubmit(InputAction.CallbackContext input) {
+        if (InputManager.Instance.GetPlayerInput().currentActionMap.ToString() != "UI") { return; }
+
         if (input.phase == InputActionPhase.Started) { 
             switch (mode) {
+                case UIMode.MainScreen: {
+                        //SubmitMainScreen();
+                        break;
+                    }
                 case UIMode.MainMenu: {
                         SubmitMenu();
                         break;
@@ -103,6 +112,33 @@ public class MenuController : MonoBehaviour {
 
         if (input.phase == InputActionPhase.Started) {
             ScenesManager.Instance.QuitGame();
+        }
+    }
+
+    public void OnPauseCamera(InputAction.CallbackContext input) {
+        if (input.phase == InputActionPhase.Started) {
+
+            mode = UIMode.Pause;
+            CameraManager.Instance.PauseOut();
+        }
+    }
+
+    public void OnResumeCamera(InputAction.CallbackContext input) {
+        if (mode != UIMode.Pause) { return; }
+
+        if (input.phase == InputActionPhase.Started) {
+            CameraManager.Instance.PauseIn();
+        }
+    }
+
+    public void OnAnyButton(InputAction.CallbackContext input) {
+        if (mode != UIMode.MainScreen) { return; }
+
+        if (input.phase == InputActionPhase.Started) {
+
+            mode = UIMode.MainMenu;
+            CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.Menu);
+            InputManager.Instance.SetActionMap("UI");
         }
     }
 
@@ -156,37 +192,61 @@ public class MenuController : MonoBehaviour {
     private void SubscribeCallbacks() {
         _navigateAction.started += OnNavigate;
         _navigateAction.performed += OnNavigate;
-        _navigateAction.canceled += OnNavigate;
+        //_navigateAction.canceled += OnNavigate;
 
         _submitAction.started += OnSubmit;
-        _submitAction.performed += OnSubmit;
-        _submitAction.canceled += OnSubmit;
+        //_submitAction.performed += OnSubmit;
+        //_submitAction.canceled += OnSubmit;
 
         _saveAction.started += OnSave;
-        _saveAction.performed += OnSave;
-        _saveAction.canceled += OnSave;
+        //_saveAction.performed += OnSave;
+        //_saveAction.canceled += OnSave;
 
         _quitAction.started += OnQuit;
-        _quitAction.performed += OnQuit;
-        _quitAction.canceled += OnQuit;
+        //_quitAction.performed += OnQuit;
+        //_quitAction.canceled += OnQuit;
+
+        _pauseCameraAction.started += OnPauseCamera;
+        //_pauseCameraAction.performed += OnPauseCamera;
+        //_pauseCameraAction.canceled += OnPauseCamera;
+
+        _resumeCameraAction.started += OnResumeCamera;
+        //_resumeCameraAction.performed += OnResumeCamera;
+        //_resumeCameraAction.canceled += OnResumeCamera;
+
+        _anyButtonAction.started += OnAnyButton;
+        //_anyButtonAction.performed += OnAnyButton;
+        //_anyButtonAction.canceled += OnAnyButton;
     }
 
     private void UnsubscribeCallbacks() {
         _navigateAction.started -= OnNavigate;
         _navigateAction.performed -= OnNavigate;
-        _navigateAction.canceled -= OnNavigate;
+        //_navigateAction.canceled -= OnNavigate;
 
         _submitAction.started -= OnSubmit;
-        _submitAction.performed -= OnSubmit;
-        _submitAction.canceled -= OnSubmit;
+        //_submitAction.performed -= OnSubmit;
+        //_submitAction.canceled -= OnSubmit;
 
         _saveAction.started -= OnSave;
-        _saveAction.performed -= OnSave;
-        _saveAction.canceled -= OnSave;
+        //_saveAction.performed -= OnSave;
+        //_saveAction.canceled -= OnSave;
 
         _quitAction.started -= OnQuit;
-        _quitAction.performed -= OnQuit;
-        _quitAction.canceled -= OnQuit;
+        //_quitAction.performed -= OnQuit;
+        //_quitAction.canceled -= OnQuit;
+
+        _pauseCameraAction.started -= OnPauseCamera;
+        //_pauseCameraAction.performed -= OnPauseCamera;
+        //_pauseCameraAction.canceled -= OnPauseCamera;
+
+        _resumeCameraAction.started -= OnResumeCamera;
+        //_resumeCameraAction.performed -= OnResumeCamera;
+        //_resumeCameraAction.canceled -= OnResumeCamera;
+
+        _anyButtonAction.started -= OnAnyButton;
+        //_anyButtonAction.performed -= OnAnyButton;
+        //_anyButtonAction.canceled -= OnAnyButton;
     }
 
     private void InitializeActions() {
@@ -194,6 +254,9 @@ public class MenuController : MonoBehaviour {
         _submitAction = InputManager.Instance.GetPlayerInput().actions["Submit"];
         _saveAction = InputManager.Instance.GetPlayerInput().actions["Save"];
         _quitAction = InputManager.Instance.GetPlayerInput().actions["Quit"];
+        _pauseCameraAction = InputManager.Instance.GetPlayerInput().actions["Pause"];
+        _resumeCameraAction = InputManager.Instance.GetPlayerInput().actions["Resume"];
+        _anyButtonAction = InputManager.Instance.GetPlayerInput().actions["AnyButton"];
     }
 
     private void OverwriteGame() {

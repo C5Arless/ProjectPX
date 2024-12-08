@@ -26,11 +26,12 @@ public class CameraManager : MonoBehaviour {
     }
 
     private void Start() {
-        //SetInitialState();
+        SetInitialState();
 
-        currentBrain = gameBrain;       //Required for testing in Lab_Test (SetInitState on Game)
+        //currentBrain = gameBrain;       //Required for testing in Lab_Test (SetInitState on Game)
     }
 
+    /*
     public void OnPauseCamera(InputAction.CallbackContext input) {
         if (input.phase == InputActionPhase.Started) {
 
@@ -48,13 +49,26 @@ public class CameraManager : MonoBehaviour {
     }
 
     public void OnAnyButton(InputAction.CallbackContext input) {
+        if (MenuController.Instance.Mode != UIMode.MainScreen) { return; }
+
         if (input.phase == InputActionPhase.Started) {
+
+            MenuController.Instance.Mode = UIMode.MainMenu;
             SwitchMenuVCamera(MenuVCameras.Menu);
         }
     }
+    */
 
     public void InitializeVCameras() {
         StartCoroutine("RetrieveVCameras");
+    }
+
+    public void PauseOut() {
+        StartCoroutine("PauseCameraOut");
+    }
+
+    public void PauseIn() {
+        StartCoroutine("PauseCameraIn");
     }
 
     public void StartGame() {
@@ -96,7 +110,7 @@ public class CameraManager : MonoBehaviour {
         }
     }
 
-    private void SwitchMenuVCamera(MenuVCameras target) {
+    public void SwitchMenuVCamera(MenuVCameras target) {
         if (currentMenuVCamera != menuVCameras[(int)target]) {
             menuVCameras[(int)target].gameObject.SetActive(true);
             currentMenuVCamera.gameObject.SetActive(false);

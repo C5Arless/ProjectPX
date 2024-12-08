@@ -30,11 +30,13 @@ public class InputManager : MonoBehaviour {
         return _currentActionMap;
     }
 
+    /*
     public void OnAnyButton(InputAction.CallbackContext input) {
         if (input.phase == InputActionPhase.Started) {
             SetActionMap("UI");
         }
     }
+    */
 
     public void SetActionMap(string target) {
         if (_currentActionMap != target) {

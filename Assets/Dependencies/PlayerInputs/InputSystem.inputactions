@@ -395,12 +395,12 @@
                 },
                 {
                     "name": "Submit",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "435fe2a2-f0da-4cff-8e00-ae065ceba5ce",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Cancel",
@@ -475,7 +475,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "UnPause",
+                    "name": "Resume",
                     "type": "Button",
                     "id": "51f59875-b320-4dc1-8e18-85bc4ef1fb5c",
                     "expectedControlType": "Button",
@@ -928,7 +928,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "UnPause",
+                    "action": "Resume",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -939,7 +939,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "UnPause",
+                    "action": "Resume",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
