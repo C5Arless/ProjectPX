@@ -84,7 +84,7 @@ public class MenuController : MonoBehaviour {
                         break;
                     }
                 case UIMode.MainMenu: {
-                        SubmitMenu();
+                        //SubmitMenu();
                         break;
                     }
                 case UIMode.Slots: {
