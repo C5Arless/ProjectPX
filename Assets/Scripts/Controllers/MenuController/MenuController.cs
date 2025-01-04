@@ -250,12 +250,17 @@ public class MenuController : MonoBehaviour {
     }
 
     private void InitializeActions() {
+        //UI Actions
         _navigateAction = InputManager.Instance.GetPlayerInput().actions["Navigate"];
         _submitAction = InputManager.Instance.GetPlayerInput().actions["Submit"];
         _saveAction = InputManager.Instance.GetPlayerInput().actions["Save"];
         _quitAction = InputManager.Instance.GetPlayerInput().actions["Quit"];
-        _pauseCameraAction = InputManager.Instance.GetPlayerInput().actions["Pause"];
         _resumeCameraAction = InputManager.Instance.GetPlayerInput().actions["Resume"];
+
+        //Player Actions
+        _pauseCameraAction = InputManager.Instance.GetPlayerInput().actions["Pause"];
+
+        //MainScreen Actions
         _anyButtonAction = InputManager.Instance.GetPlayerInput().actions["AnyButton"];
     }
 

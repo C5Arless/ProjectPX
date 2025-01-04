@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,18 +31,23 @@ public class InputManager : MonoBehaviour {
         return _currentActionMap;
     }
 
-    /*
-    public void OnAnyButton(InputAction.CallbackContext input) {
-        if (input.phase == InputActionPhase.Started) {
-            SetActionMap("UI");
-        }
-    }
-    */
-
     public void SetActionMap(string target) {
         if (_currentActionMap != target) {
-            playerInput.SwitchCurrentActionMap(target);
-            _currentActionMap = target;
+            StartCoroutine(EvaluateActionMap(target));
+            //playerInput.SwitchCurrentActionMap(target);
+            //_currentActionMap = target;
         }        
+    }
+
+    public IEnumerator EvaluateActionMap(string target) {
+        yield return null;
+
+        playerInput.SwitchCurrentActionMap("Disabled");
+        _currentActionMap = "Disabled";
+        yield return null;
+
+        playerInput.SwitchCurrentActionMap(target);
+        _currentActionMap = target;
+        yield break;
     }
 }
