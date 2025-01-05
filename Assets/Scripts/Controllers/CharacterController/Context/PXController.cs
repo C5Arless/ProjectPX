@@ -63,17 +63,21 @@ public class PXController : MonoBehaviour {
 
     //Context vars
     private Vector3 surfaceNormal;
+
     private bool onPlatform;
     private bool onSlope;    
     private bool onDialog;
     private bool onInteract;
     private bool onAction;
+    private bool onKinematic;
+
     private bool canDMG = true;
     private bool canDash;
     private bool canAttack = true;
     private bool canJump = true;
     private bool canFreeLook = true;
     private bool canInteract = true;
+
     private int dashCount = 1;
     private int attackCount = 1; //Per eventuale sistema di combo
     private int jumpCount = 2;
@@ -125,6 +129,7 @@ public class PXController : MonoBehaviour {
     public bool OnPlatform { get { return onPlatform; } set { onPlatform = value; } }
     public bool OnDialog { get { return onDialog; } } 
     public bool OnAction { get { return onAction; } }
+    public bool OnKinematic { get { return onKinematic; } set { onKinematic = value; } }
 
     public Vector3 SurfaceNormal { get { return surfaceNormal; } }
     public int DashCount { get { return dashCount; } set { dashCount = value; } }
@@ -175,7 +180,8 @@ public class PXController : MonoBehaviour {
 
         _animator = _asset.GetComponentInChildren<Animator>();
         _playerRb = _player.GetComponent<Rigidbody>();
-        _animHandler = GameObject.Find("P_Asset").AddComponent<AnimHandler>();
+
+        _animHandler = _asset.GetComponentInChildren<AnimHandler>();
         _stateHandler = new StateHandler(this, _animHandler);
 
         _currentRootState = StateHandler.Airborne();
@@ -234,26 +240,17 @@ public class PXController : MonoBehaviour {
         if (input.ReadValue<float>() != 0f) {
             SetUpJump();
         }
-        else {
-            jumpInput = false;
-        }
     }
 
     public void OnAttack(InputAction.CallbackContext input) {
         if (input.ReadValue<float>() != 0f) {
             SetUpAttack();
         }
-        else {
-            attackInput = false;
-        }
     }
 
     public void OnDash(InputAction.CallbackContext input) {
         if (input.ReadValue<float>() != 0f) {
             SetUpDash();
-        }
-        else {
-            dashInput = false;
         }
     }
 
@@ -264,33 +261,35 @@ public class PXController : MonoBehaviour {
     public void OnInteract(InputAction.CallbackContext input) {
         if (!onInteract) { return; }
 
-        if (input.ReadValue<float>() == 0f) { return; }
-
-        InteractController ctx = _interactionCollider.GetComponent<InteractController>();
-        ctx.OnInteract();
+        if (input.ReadValue<float>() != 0f) { 
+            InteractController ctx = _interactionCollider.GetComponent<InteractController>();
+            ctx.OnInteract();             
+        }
 
     }
 
     public void OnConfirm(InputAction.CallbackContext input) {
-        if (input.ReadValue<float>() == 0f) { return; }
-        
-        InteractController ctx = _interactionCollider.GetComponent<InteractController>();
-        ctx.OnInteract();
+        if (input.ReadValue<float>() != 0f) { 
+            InteractController ctx = _interactionCollider.GetComponent<InteractController>();
+            ctx.OnInteract();
+
+            //Debug.Log("OnConfirm from Dialog ActionMap");
+        }        
         
     }
 
     private void SubscribeCallbacks() {
         _jumpAction.started += OnJump;
-        _jumpAction.performed += OnJump;
+        //_jumpAction.performed += OnJump;
         //_jumpAction.canceled += OnJump;
 
         _attackAction.started += OnAttack;
-        _attackAction.performed += OnAttack;
-        _attackAction.canceled += OnAttack;
+        //_attackAction.performed += OnAttack;
+        //_attackAction.canceled += OnAttack;
 
         _dashAction.started += OnDash;
-        _dashAction.performed += OnDash;
-        _dashAction.canceled += OnDash;
+        //_dashAction.performed += OnDash;
+        //_dashAction.canceled += OnDash;
 
         _moveAction.started += OnMove;
         _moveAction.performed += OnMove;
@@ -301,24 +300,24 @@ public class PXController : MonoBehaviour {
         _lookAction.canceled += OnLook;
         
         _confirmAction.started += OnConfirm;
-        _confirmAction.canceled += OnConfirm;
+        //_confirmAction.canceled += OnConfirm;
 
         _interactAction.started += OnInteract;
-        _interactAction.canceled += OnInteract;
+        //_interactAction.canceled += OnInteract;
     }
 
     private void UnsubscribeCallbacks() {
         _jumpAction.started -= OnJump;
-        _jumpAction.performed -= OnJump;
+        //_jumpAction.performed -= OnJump;
         //_jumpAction.canceled -= OnJump;
 
         _attackAction.started -= OnAttack;
-        _attackAction.performed -= OnAttack;
-        _attackAction.canceled -= OnAttack;
+        //_attackAction.performed -= OnAttack;
+        //_attackAction.canceled -= OnAttack;
 
         _dashAction.started -= OnDash;
-        _dashAction.performed -= OnDash;
-        _dashAction.canceled -= OnDash;
+        //_dashAction.performed -= OnDash;
+        //_dashAction.canceled -= OnDash;
 
         _moveAction.started -= OnMove;
         _moveAction.performed -= OnMove;
@@ -329,22 +328,24 @@ public class PXController : MonoBehaviour {
         _lookAction.canceled -= OnLook;
         
         _confirmAction.started -= OnConfirm;
-        _confirmAction.canceled -= OnConfirm;
+        //_confirmAction.canceled -= OnConfirm;
         
         _interactAction.started -= OnInteract;
-        _interactAction.canceled -= OnInteract;
+        //_interactAction.canceled -= OnInteract;
     }
 
     private void InitializeActions() {
+        //Player Actions
         _moveAction = InputManager.Instance.GetPlayerInput().actions["Move"];
         _jumpAction = InputManager.Instance.GetPlayerInput().actions["Jump"];
         _lookAction = InputManager.Instance.GetPlayerInput().actions["Look"];
         _attackAction = InputManager.Instance.GetPlayerInput().actions["Attack"];
         _dashAction = InputManager.Instance.GetPlayerInput().actions["Dash"];
+        _interactAction = InputManager.Instance.GetPlayerInput().actions["Interact"];
 
+        //Dialog Actions
         _confirmAction = InputManager.Instance.GetPlayerInput().actions["Confirm"];
 
-        _interactAction = InputManager.Instance.GetPlayerInput().actions["Interact"];
     }
 
     //External Callbacks
@@ -446,7 +447,7 @@ public class PXController : MonoBehaviour {
     private void SetUpJump() {
         if (attackInput || dashInput) { return; }
         
-        if (!jumpInput) {
+        if (!jumpInput && jumpCount > 0) {
             jumpInput = true;
             SetJumpState();
         } else {
@@ -457,7 +458,7 @@ public class PXController : MonoBehaviour {
     private void SetUpDash() {
         if (attackInput || jumpInput) { return; }
 
-        if (!dashInput) {
+        if (!dashInput && canDash) {
             dashInput = true;
             SetDashState();
         }
@@ -469,7 +470,7 @@ public class PXController : MonoBehaviour {
     private void SetUpAttack() {
         if (dashInput || jumpInput) { return; }
 
-        if (!attackInput) {
+        if (!attackInput && canAttack) {
             attackInput = true;
             SetAttackState();
         }
@@ -495,7 +496,6 @@ public class PXController : MonoBehaviour {
 
     private void SetAttackState() {
         if (!canAttack) { return; }
-        if (attackCount <= 0) { return; }
         
         if (!isDamaged) {
             isAttacking = true;
@@ -575,6 +575,10 @@ public class PXController : MonoBehaviour {
         return forward;
     }
 
+    public void SetKinematic() {
+        StartCoroutine(EvaluateKinematic());
+    }
+
     //Camera Methods
     public void UpdateExternalCamera(Transform playerPos, Transform cameraPivot) {
         Vector3 targetForward = ComputeForward2D(playerPos, cameraPivot);
@@ -625,7 +629,71 @@ public class PXController : MonoBehaviour {
         forward.transform.rotation = Quaternion.Euler(0f, yaxis, 0f);
     }
 
+    //Animator Signals
+    public void HandleSignal(int signal) {
+        switch (signal) {
+            case 1: {
+                    AttackSignal();
+
+                    break;
+                }
+            case 2: {
+                    JumpSignal();
+
+                    break;
+                }
+            case 3: {
+                    DashSignal();
+
+                    break;
+                }
+            case 4: {
+                    KinematicSignal();
+
+                    break;
+                }
+            default: break;                    
+        }
+        
+    }
+
+    private void JumpSignal() {
+        isJumping = false;
+
+        if (!IsGrounded) { 
+            isFalling = true; 
+        } else {
+            isIdle = true;
+        }
+    }
+
+    private void AttackSignal() {
+        isAttacking = false;
+
+        if (!IsGrounded) {
+            isFalling = true;
+        }
+        else {
+            isIdle = true;
+        }
+    }
+
+    private void DashSignal() {
+        isDashing = false;
+    }
+
+    private void KinematicSignal() {
+        onKinematic = true;
+    }
+
     //Coroutine
+    private IEnumerator EvaluateKinematic() {
+        yield return new WaitUntil(() => onKinematic);
+
+        _playerRb.isKinematic = true;
+        yield break;
+    }
+
     public IEnumerator InitializeMoveSpeed() {
         while (moveSpeed > 600f) {
             moveSpeed = moveSpeed - ((moveSpeed * .6f) * Time.deltaTime);
@@ -636,24 +704,20 @@ public class PXController : MonoBehaviour {
 
     public IEnumerator ResetAttack() {
         canAttack = false;
-        yield return new WaitForSeconds(.4f);
 
-        isAttacking = false;
+        yield return new WaitWhile(() => isAttacking);
+
         canDMG = true;
 
         yield return new WaitForSeconds(.1f);
 
         canAttack = true;
-        if (isGrounded) {
-            attackCount = 1;
-        }
+
         yield break;
     }
 
     public IEnumerator ResetDash() {
-        yield return new WaitForSeconds(.4f);
-
-        isDashing = false;
+        yield return new WaitWhile(() => isAttacking);
 
         if (isGrounded) {
             yield return new WaitForSeconds(.6f);
@@ -670,9 +734,7 @@ public class PXController : MonoBehaviour {
     public IEnumerator ResetJump() {
         canJump = true;
 
-        yield return new WaitForSeconds(.2f);
-        isJumping = false;
-        
+        yield return new WaitWhile(() => isJumping);
 
         yield break;
     }

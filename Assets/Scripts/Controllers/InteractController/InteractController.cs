@@ -64,11 +64,6 @@ public class InteractController : MonoBehaviour {
         isInteracting = false;
 
         StartCoroutine(ExitRoutine());
-        
-        //GameBucket.Instance.PXController.InteractionExit();
-
-        //GameBucket.Instance.CompanionCtx.ExitTalkState();
-
     }
 
     private IEnumerator IteratePage() {
@@ -87,24 +82,19 @@ public class InteractController : MonoBehaviour {
         isBusy = false;
         yield break;
     }
-    
-    private IEnumerator ResetCollider() {
-        transform.GetComponent<Collider>().enabled = false;
-        yield return new WaitForSeconds(3f);
-
-        transform.GetComponent<Collider>().enabled = true;
-        yield break;
-    }
 
     private IEnumerator ExitRoutine() {
+        isBusy = true;
         GameBucket.Instance.PXController.InteractionExit();
         GameBucket.Instance.CompanionCtx.ExitTalkState();
-        yield return null;
+        
+        yield return new WaitForSeconds(1f);
 
         transform.GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(2f);
 
         transform.GetComponent<Collider>().enabled = true;
+        isBusy = false;
         yield break;
     }
 }

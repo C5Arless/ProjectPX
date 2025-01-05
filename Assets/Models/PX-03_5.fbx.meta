@@ -268,7 +268,7 @@ ModelImporter:
       name: Dash
       takeName: Dash
       internalID: -8444228808809566427
-      firstFrame: 10
+      firstFrame: 2
       lastFrame: 20
       wrapMode: 0
       orientationOffsetY: 0
@@ -288,7 +288,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.53494996
+        functionName: SendSignalToCtx
+        data: dash
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 3
+        intParameter: 3
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

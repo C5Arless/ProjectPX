@@ -11,9 +11,12 @@ public class AirborneState : BaseState, IContextInit, IPhysics {
     }
     public override void UpdateState() {
         //Update logic
+
+        /*
         if (Ctx.PlayerRb.velocity.y < -1f) {
             Ctx.IsFalling = true;
-        } 
+        }
+        */
 
         if (!Ctx.IsDashing || !Ctx.IsAttacking) {
             HandleGravity(Ctx.PlayerRb);
@@ -54,6 +57,9 @@ public class AirborneState : BaseState, IContextInit, IPhysics {
     private void InitializeJumpCount() {
         if (Ctx.JumpCount > 0) {
             Ctx.JumpCount--;
+        }
+        else if (Ctx.JumpCount <= 0) {
+            Ctx.JumpCount = 0;
         }
     }
 }

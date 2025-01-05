@@ -9,7 +9,7 @@ public class IdleState : BaseState, IContextInit {
     public override void EnterState() {
         //Enter logic
         InitializeContext();
-        Ctx.AnimHandler.SetAlt(false);
+        //Ctx.AnimHandler.SetAlt(false);
         Ctx.AnimHandler.PlayDirect(AnimHandler.Idle());
     }
     public override void UpdateState() {

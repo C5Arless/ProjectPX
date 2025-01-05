@@ -9,7 +9,7 @@ public class WalkState : BaseState, IContextInit, IWalk {
         InitializeContext();
 
         if (Ctx.IsGrounded) {       
-            Ctx.AnimHandler.Play(AnimHandler.Walk());
+            Ctx.AnimHandler.PlayDirect(AnimHandler.Walk());
         }
     }
     public override void UpdateState() {

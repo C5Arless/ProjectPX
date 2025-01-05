@@ -8,7 +8,7 @@ public class DeadState : BaseState, IContextInit {
         //Enter logic
         Debug.Log("Lmao u ded");
 
-        Ctx.AnimHandler.SetAlt(true);
+        //Ctx.AnimHandler.SetAlt(true);
         Ctx.AnimHandler.PlayDirect(AnimHandler.Dead());
         VFXManager.Instance.SpawnFollowVFX(EnvVFX.Shock, Ctx.Asset.transform.position, Ctx.Asset.transform.rotation, Ctx.Player);
         VFXManager.Instance.SpawnFollowVFX(EnvVFX.Smoke, Ctx.Asset.transform.position, Ctx.Asset.transform.rotation, Ctx.Player);
@@ -24,7 +24,7 @@ public class DeadState : BaseState, IContextInit {
     }
     public override void ExitState() {
         //Exit logic
-        Ctx.AnimHandler.SetAlt(false);
+        //Ctx.AnimHandler.SetAlt(false);
 
     }
     public override void CheckSwitchStates() {

@@ -10,8 +10,8 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
 
         InitializeParticles();
 
-        Ctx.AnimHandler.SetAlt(true);
-        Ctx.AnimHandler.Play(AnimHandler.Jump());
+        //Ctx.AnimHandler.SetAlt(true);
+        Ctx.AnimHandler.PlayDirect(AnimHandler.Jump());
 
         HandleJump(Ctx.PlayerRb);
         Ctx.StartCoroutine("ResetJump");
@@ -29,7 +29,7 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
     }
     public override void ExitState() {
         //Exit logic
-        Ctx.AnimHandler.SetAlt(false);
+        //Ctx.AnimHandler.SetAlt(false);
     }
     public override void CheckSwitchStates() {
         //Switch logic
@@ -62,13 +62,10 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
             SwitchState(StateHandler.Idle());
         }
     }
-    public void InitializeContext() {
-        Ctx.JumpInput = false;
+    public void InitializeContext() {       
         Ctx.MoveSpeed = 1760;
         Ctx.Gravity = 9.81f;
-        Ctx.JumpCount--;            
 
-        Ctx.CanJump = false;
         Ctx.IsFalling = false;
 
         Ctx.IsDashing = false;
@@ -83,6 +80,10 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
     
     private void HandleJump(Rigidbody rb) {
         //Jump Logic
+        Ctx.JumpCount--;
+        Ctx.JumpInput = false;
+        Ctx.CanJump = false;
+
         rb.velocity.Set(rb.velocity.x, -1f, rb.velocity.z);        
         rb.AddForce(Vector3.up * Ctx.JumpHeight * 3.14f, ForceMode.VelocityChange);
     }

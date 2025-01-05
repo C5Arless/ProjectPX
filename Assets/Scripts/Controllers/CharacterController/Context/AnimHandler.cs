@@ -14,6 +14,8 @@ enum Anim {
 }
 
 public class AnimHandler : MonoBehaviour {
+    [SerializeField] PXController _ctx;
+
     Animator _animator;
     Vector2 currentclip;
     Vector2 targetclip;    
@@ -39,21 +41,48 @@ public class AnimHandler : MonoBehaviour {
 
     public void Play(Vector2 clip) {
         if (clip != currentclip) {
+            StopCoroutine(LoadClip());
             targetclip = clip;
-            StartCoroutine(LoadClip());                   
+            StartCoroutine(LoadClip());        
         }
     }
+
     public void PlayDirect(Vector2 clip) {
         targetclip = clip;
-        
+
+        //Reset Time Logic
+        ResetBlendTime();
+
         _animator.SetFloat("xAxis", targetclip.x);
         _animator.SetFloat("yAxis", targetclip.y);
         currentclip = targetclip;
     }
-    public void SetAlt(bool alt) {
+
+    public void SendSignalToCtx(int value) {
+        _ctx.HandleSignal(value);
+    }
+
+    private void SetAlt(bool alt) {
         _animator.SetBool("onAlt", alt);
     }
+
+    private void ResetBlendTime() {
+        StartCoroutine(ResetBlend());
+    }
+
+    IEnumerator ResetBlend() {
+        SetAlt(true);
+        yield return null;
+
+        SetAlt(false);
+        yield break;
+    }
+
     IEnumerator LoadClip() {
+
+        //Reset Time Logic
+        ResetBlendTime();
+
         while (currentclip - targetclip != Vector2.zero) {
             Vector2 lerpvalue = Vector2.Lerp(currentclip, targetclip, .21f);
             Mathf.Clamp(lerpvalue.x, -.99f, .99f);
@@ -64,6 +93,7 @@ public class AnimHandler : MonoBehaviour {
             currentclip = lerpvalue;
             yield return null;
         }
+
         yield break;
     }
 

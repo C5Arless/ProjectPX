@@ -12,7 +12,7 @@ public class DashState : BaseState, IContextInit, IVFXInit {
         ColliderOn(Ctx.DashCollider);
         GravityOff();
 
-        Ctx.AnimHandler.SetAlt(true);
+        //Ctx.AnimHandler.SetAlt(true);
 
         InitializeParticles();
 
@@ -28,7 +28,7 @@ public class DashState : BaseState, IContextInit, IVFXInit {
     }
     public override void ExitState() {
         //Exit logic
-        Ctx.AnimHandler.SetAlt(false);
+        //Ctx.AnimHandler.SetAlt(false);
         ColliderOff(Ctx.DashCollider);
         GravityOn();
 
@@ -53,7 +53,7 @@ public class DashState : BaseState, IContextInit, IVFXInit {
         }
     }
     public void InitializeContext() {
-        Ctx.DashInput = false;
+        //Ctx.DashInput = false;
 
         Ctx.IsWalking = false;
         Ctx.IsIdle = false;
@@ -67,7 +67,9 @@ public class DashState : BaseState, IContextInit, IVFXInit {
         VFXManager.Instance.SpawnFollowVFX(PlayerVFX.DashTrail, Ctx.RingPoint.transform.position, Ctx.RingPoint.transform.rotation, Ctx.DashPoint);
     }
 
-    public void HandleDash(Rigidbody rb) {        
+    public void HandleDash(Rigidbody rb) {
+        Ctx.DashInput = false;
+
         rb.velocity.Set(0f, 0f, 0f);
         rb.AddForce(DashDirection() * 25f, ForceMode.Impulse);
     }

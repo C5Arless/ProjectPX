@@ -49,6 +49,8 @@ public class FallState : BaseState, IContextInit, IWalk {
     }
     public void InitializeContext() {
         Ctx.IsIdle = false;
+
+        //Ctx.IsJumping = false;
     }
     public void HandleWalk() {
         if (Direction() == Vector3.zero) { return; }

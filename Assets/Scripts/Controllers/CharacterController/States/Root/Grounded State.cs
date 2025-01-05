@@ -49,7 +49,7 @@ public class GroundedState : BaseState, IContextInit {
         Ctx.StopCoroutine("InitializeMoveSpeed");
         Ctx.MoveSpeed = 1760;
 
-        Ctx.AttackCount = 1;
+        //Ctx.AttackCount = 1;
 
         if (Ctx.PlayerInfo.PowerUps >= 1) {
             Ctx.JumpCount = 2;
