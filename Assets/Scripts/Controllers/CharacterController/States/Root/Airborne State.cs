@@ -5,10 +5,12 @@ public class AirborneState : BaseState, IContextInit, IPhysics {
     public AirborneState(PXController currentContext, StateHandler stateHandler, AnimHandler animHandler) : base(currentContext, stateHandler, animHandler) {
         IsRootState = true; //SOLO SU GROUNDED, AIRBORNE E DEAD (ROOT STATES)
     }
+
     public override void EnterState() {
         //Enter logic
         InitializeContext();
     }
+
     public override void UpdateState() {
         //Update logic
 
@@ -22,6 +24,7 @@ public class AirborneState : BaseState, IContextInit, IPhysics {
 
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
+
     public override void ExitState() {
         //Exit logic
         Ctx.Gravity = 9.81f;

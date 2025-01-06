@@ -4,6 +4,7 @@ public class FallState : BaseState, IContextInit, IWalk {
     public FallState(PXController currentContext, StateHandler stateHandler, AnimHandler animHandler) : base(currentContext, stateHandler, animHandler) {
         //State Constructor
     }
+
     public override void EnterState() {
         //Enter logic
         if (!Ctx.IsGrounded) {
@@ -11,6 +12,7 @@ public class FallState : BaseState, IContextInit, IWalk {
             Ctx.AnimHandler.Play(AnimHandler.Fall());
         }
     }
+
     public override void UpdateState() {
         //Update logic
 
@@ -21,13 +23,14 @@ public class FallState : BaseState, IContextInit, IWalk {
         HandleWalk();
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
+
     public override void ExitState() {
         //Exit logic
         
     }
+
     public override void CheckSwitchStates() {
         //Switch logic
-
         if (Ctx.IsWalking && Ctx.IsGrounded) {
             SwitchState(StateHandler.Walk());
         }
@@ -47,21 +50,23 @@ public class FallState : BaseState, IContextInit, IWalk {
             SwitchState(StateHandler.Attack());
         }
     }
+
     public void InitializeContext() {
         Ctx.IsIdle = false;
-
-        //Ctx.IsJumping = false;
     }
+
     public void HandleWalk() {
         if (Direction() == Vector3.zero) { return; }
         Ctx.Asset.transform.forward = Direction();
         Ctx.PlayerRb.AddForce(Direction() * Ctx.MoveSpeed * Time.deltaTime, ForceMode.Force);
         SpeedControl();
     }
+
     private Vector3 Direction() {
         Vector3 direction = Ctx.Player.transform.forward * Ctx.MoveInput.y + Ctx.Player.transform.right * Ctx.MoveInput.x;
         return direction;
     }
+
     private void SpeedControl() {
         Vector3 flatvelocity = new Vector3(Ctx.PlayerRb.velocity.x, 0f, Ctx.PlayerRb.velocity.z);
         if (flatvelocity.magnitude > Ctx.MoveSpeed) {

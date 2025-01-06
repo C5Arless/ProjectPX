@@ -4,18 +4,18 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
     public JumpState(PXController currentContext, StateHandler stateHandler, AnimHandler animHandler) : base(currentContext, stateHandler, animHandler) {
         //State Constructor
     }
+
     public override void EnterState() {
         //Enter logic
         InitializeContext();
 
         InitializeParticles();
-
-        //Ctx.AnimHandler.SetAlt(true);
         Ctx.AnimHandler.PlayDirect(AnimHandler.Jump());
 
         HandleJump(Ctx.PlayerRb);
         Ctx.StartCoroutine("ResetJump");
     }
+
     public override void UpdateState() {
         //Update logic
         Ctx.IsGrounded = false;
@@ -27,13 +27,14 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
         HandleWalk();
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
+
     public override void ExitState() {
         //Exit logic
-        //Ctx.AnimHandler.SetAlt(false);
+
     }
+
     public override void CheckSwitchStates() {
-        //Switch logic
-        
+        //Switch logic        
         if (Ctx.IsFalling) {
             SwitchState(StateHandler.Fall());
         }
@@ -62,6 +63,7 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
             SwitchState(StateHandler.Idle());
         }
     }
+
     public void InitializeContext() {       
         Ctx.MoveSpeed = 1760;
         Ctx.Gravity = 9.81f;
@@ -73,6 +75,7 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
         Ctx.IsWalking = false;
         Ctx.IsIdle = false;
     }
+
     public void InitializeParticles() {
         VFXManager.Instance.SpawnFixedVFX(PlayerVFX.JumpBump, Ctx.JumpPoint.transform.position, Ctx.JumpPoint.transform.rotation);
         VFXManager.Instance.SpawnFollowVFX(PlayerVFX.JumpTrail, Ctx.JumpPoint.transform.position, Ctx.JumpPoint.transform.rotation, Ctx.JumpPoint);
@@ -87,16 +90,19 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
         rb.velocity.Set(rb.velocity.x, -1f, rb.velocity.z);        
         rb.AddForce(Vector3.up * Ctx.JumpHeight * 3.14f, ForceMode.VelocityChange);
     }
+
     public void HandleWalk() {
         if (Direction() == Vector3.zero) { return; }
         Ctx.Asset.transform.forward = Direction();
         Ctx.PlayerRb.AddForce(Direction() * Ctx.MoveSpeed * Time.deltaTime, ForceMode.Force);
         SpeedControl();
     }
+
     private Vector3 Direction() {
         Vector3 direction = Ctx.Player.transform.forward * Ctx.MoveInput.y + Ctx.Player.transform.right * Ctx.MoveInput.x;
         return direction;
     }
+
     private void SpeedControl() {
         Vector3 flatvelocity = new Vector3(Ctx.PlayerRb.velocity.x, 0f, Ctx.PlayerRb.velocity.z);
         if (flatvelocity.magnitude > Ctx.MoveSpeed) {

@@ -6,10 +6,12 @@ public class GroundedState : BaseState, IContextInit {
     public GroundedState(PXController currentContext, StateHandler stateHandler, AnimHandler animHandler) : base (currentContext, stateHandler, animHandler){
         IsRootState = true; //SOLO SU GROUNDED, AIRBORNE E DEAD (ROOT STATES)
     }
+
     public override void EnterState() {
         //Enter logic
         InitializeContext();
     }
+
     public override void UpdateState() {
         //Update logic
         if (Ctx.OnSlope) {
@@ -28,11 +30,13 @@ public class GroundedState : BaseState, IContextInit {
 
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
+
     public override void ExitState() {
         //Exit logic
         Ctx.IsWalking = false;
         Ctx.IsIdle = false;
     }
+
     public override void CheckSwitchStates() {
         //Switch logic
         if (!Ctx.IsGrounded) {
@@ -41,7 +45,8 @@ public class GroundedState : BaseState, IContextInit {
         else if (Ctx.IsDead) {
             SwitchState(StateHandler.Dead());
         }
-    }   
+    }
+    
     public void InitializeContext() {
         Ctx.IsFalling = false;
         Ctx.IsJumping = false;

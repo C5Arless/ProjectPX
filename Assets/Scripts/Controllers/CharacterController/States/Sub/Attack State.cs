@@ -10,8 +10,7 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
         InitializeContext();
 
         ColliderOn(Ctx.AttackCollider);
-
-        //HandleAttack();
+        
         if (!Ctx.IsGrounded) {
             Ctx.OnKinematic = true;
             Ctx.PlayerRb.isKinematic = true;

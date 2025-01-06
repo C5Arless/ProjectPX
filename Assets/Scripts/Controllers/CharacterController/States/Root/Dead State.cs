@@ -4,6 +4,7 @@ public class DeadState : BaseState, IContextInit {
     public DeadState(PXController currentContext, StateHandler stateHandler, AnimHandler animHandler) : base (currentContext, stateHandler, animHandler){
         IsRootState = true; //SOLO SU GROUNDED, AIRBORNE E DEAD (ROOT STATES)
     }
+
     public override void EnterState() {
         //Enter logic
         Debug.Log("Lmao u ded");
@@ -17,20 +18,23 @@ public class DeadState : BaseState, IContextInit {
         InitializeContext();
         ScenesManager.Instance.ReloadOnDeath();
     }
+
     public override void UpdateState() {
         //Update logic
 
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
+
     public override void ExitState() {
         //Exit logic
-        //Ctx.AnimHandler.SetAlt(false);
 
     }
+
     public override void CheckSwitchStates() {
         //Switch logic
         
     }
+
     public void InitializeContext() {
         //
     }
