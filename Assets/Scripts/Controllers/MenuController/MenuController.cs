@@ -16,7 +16,7 @@ public class MenuController : MonoBehaviour {
     private UIMode mode = UIMode.MainScreen;
 
     private int currentSlot = 0;
-    private int selectedSlot = 0;
+    private int selectedSlot = 1;
     private int direction;
 
     private InputAction _navigateAction;

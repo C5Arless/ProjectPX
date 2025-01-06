@@ -448,7 +448,6 @@ public class PXController : MonoBehaviour {
         if (attackInput || dashInput) { return; }
         
         if (!jumpInput && jumpCount > 0) {
-            jumpInput = true;
             SetJumpState();
         } else {
             return;
@@ -459,7 +458,6 @@ public class PXController : MonoBehaviour {
         if (attackInput || jumpInput) { return; }
 
         if (!dashInput && canDash) {
-            dashInput = true;
             SetDashState();
         }
         else {
@@ -471,7 +469,6 @@ public class PXController : MonoBehaviour {
         if (dashInput || jumpInput) { return; }
 
         if (!attackInput && canAttack) {
-            attackInput = true;
             SetAttackState();
         }
         else {
@@ -482,22 +479,25 @@ public class PXController : MonoBehaviour {
     private void SetJumpState() {
         if (jumpCount <= 0 || !canJump || isDamaged) { return; }
 
+        jumpInput = true;
         isJumping = true;                
     }
 
     private void SetDashState() {
-        if (!canDash) { return; }         
+        if (!canDash || isAttacking) { return; }         
         
-        if (!isDamaged) { 
+        if (!isDamaged) {
+            dashInput = true;
             isDashing = true;
             canDash = false;
         }
     }
 
     private void SetAttackState() {
-        if (!canAttack) { return; }
+        if (!canAttack || isDashing) { return; }
         
         if (!isDamaged) {
+            attackInput = true;
             isAttacking = true;
             canDMG = false;
             canAttack = false;
@@ -638,6 +638,16 @@ public class PXController : MonoBehaviour {
         }
     }
 
+    public void HandleDash() {
+        dashInput = false;
+
+        VFXManager.Instance.SpawnFixedVFX(PlayerVFX.AirRing, _ringPoint.transform.position, _ringPoint.transform.rotation);
+        VFXManager.Instance.SpawnFollowVFX(PlayerVFX.DashTrail, _ringPoint.transform.position, _ringPoint.transform.rotation, _dashPoint);
+
+        _playerRb.velocity.Set(0f, 0f, 0f);
+        _playerRb.AddForce(DashDirection() * 25f, ForceMode.Impulse);
+    }
+
     private Vector3 DashDirection() {
         if (onSlope) {
             Vector3 direction = Vector3.ProjectOnPlane(_asset.transform.forward, surfaceNormal);
@@ -647,25 +657,30 @@ public class PXController : MonoBehaviour {
     }
 
     //Animator Signals
-    public void HandleSignal(int signal) {
-        switch (signal) {
-            case 1: {
+    public void HandleSignal(int _sig) {
+        switch (_sig) {
+            case (int)AnimatorSignal.attackSig: {
                     AttackSignal();
 
                     break;
                 }
-            case 2: {
+            case (int)AnimatorSignal.jumpSig: {
                     JumpSignal();
 
                     break;
                 }
-            case 3: {
+            case (int)AnimatorSignal.dashSig: {
                     DashSignal();
 
                     break;
                 }
-            case 4: {
-                    KinematicSignal();
+            case (int)AnimatorSignal.k_attackSig: {
+                    KinematicAttackSignal();
+
+                    break;
+                }
+            case (int)AnimatorSignal.s_dashSig: {
+                    DashStartSignal();
 
                     break;
                 }
@@ -699,9 +714,14 @@ public class PXController : MonoBehaviour {
         isDashing = false;
     }
 
-    private void KinematicSignal() {
-        onKinematic = false;
-        
+    private void DashStartSignal() {
+        _playerRb.isKinematic = false;
+
+    }
+    
+    private void KinematicAttackSignal() {
+        _playerRb.isKinematic = false;
+
         if (isGrounded) {
             HandleAttack();
         }
@@ -709,12 +729,17 @@ public class PXController : MonoBehaviour {
 
     //Coroutine
     private IEnumerator EvaluateKinematic() {
-        yield return new WaitWhile(() => onKinematic);
+        yield return new WaitWhile(() => _playerRb.isKinematic);
 
-        _playerRb.isKinematic = false;
         yield return null;
 
-        HandleAttack();
+        if (IsAttacking) {
+            HandleAttack();
+        }
+        else if (IsDashing) {
+            HandleDash();
+        }
+
         yield break;
     }
 

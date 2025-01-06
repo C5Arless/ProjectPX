@@ -15,8 +15,8 @@ enum Anim {
 
 public class AnimHandler : MonoBehaviour {
     [SerializeField] PXController _ctx;
+    [SerializeField] Animator _animator;
 
-    Animator _animator;
     Vector2 currentclip;
     Vector2 targetclip;    
 
@@ -34,10 +34,6 @@ public class AnimHandler : MonoBehaviour {
 
     public Vector2 CurrentClip { get { return currentclip; } }
     public Vector2 TargetClip { get { return targetclip; } }
-
-    private void Awake() {
-        _animator = gameObject.GetComponent<Animator>();
-    }
 
     public void Play(Vector2 clip) {
         if (clip != currentclip) {
@@ -58,8 +54,8 @@ public class AnimHandler : MonoBehaviour {
         currentclip = targetclip;
     }
 
-    public void SendSignalToCtx(int value) {
-        _ctx.HandleSignal(value);
+    public void SendSignalToCtx(int _sig) {
+        _ctx.HandleSignal(_sig);
     }
 
     private void SetAlt(bool alt) {

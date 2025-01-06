@@ -22,7 +22,7 @@ public class DashState : BaseState, IContextInit, IVFXInit {
 
     public override void UpdateState() {
         //Update logic
-        Ctx.PlayerRb.velocity.Set(0f, 0f, 0f);
+        //Ctx.PlayerRb.velocity.Set(0f, 0f, 0f);
 
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
@@ -30,8 +30,12 @@ public class DashState : BaseState, IContextInit, IVFXInit {
     public override void ExitState() {
         //Exit logic
         ColliderOff(Ctx.DashCollider);
-        GravityOn();
 
+        Ctx.PlayerRb.velocity.Set(0f, 0f, 0f);
+        Ctx.OnKinematic = false;
+        Ctx.PlayerRb.isKinematic = false;
+
+        GravityOn();
     }
 
     public override void CheckSwitchStates() {
@@ -39,10 +43,10 @@ public class DashState : BaseState, IContextInit, IVFXInit {
         if (!Ctx.IsDashing && Ctx.IsFalling) {
             SwitchState(StateHandler.Fall());
         } 
-        else if (Ctx.IsAttacking) {
+        else if (!Ctx.IsDashing && Ctx.IsAttacking) {
             SwitchState(StateHandler.Attack());
         } 
-        else if (Ctx.IsJumping) {
+        else if (!Ctx.IsDashing && Ctx.IsJumping) {
             SwitchState(StateHandler.Jump());
         }       
         else if (!Ctx.IsDashing && Ctx.IsGrounded && Ctx.IsWalking) {
@@ -59,12 +63,18 @@ public class DashState : BaseState, IContextInit, IVFXInit {
         Ctx.IsJumping = false;
         Ctx.IsAttacking = false;
         Ctx.IsDamaged = false;
-        
+
+        if (!Ctx.IsAttacking) {
+            Ctx.OnKinematic = true;
+            Ctx.PlayerRb.isKinematic = true;
+            Ctx.SetKinematic();
+        }
+
     }
 
     public void InitializeParticles() {
-        VFXManager.Instance.SpawnFixedVFX(PlayerVFX.AirRing, Ctx.RingPoint.transform.position, Ctx.RingPoint.transform.rotation);
-        VFXManager.Instance.SpawnFollowVFX(PlayerVFX.DashTrail, Ctx.RingPoint.transform.position, Ctx.RingPoint.transform.rotation, Ctx.DashPoint);
+        //VFXManager.Instance.SpawnFixedVFX(PlayerVFX.AirRing, Ctx.RingPoint.transform.position, Ctx.RingPoint.transform.rotation);
+        //VFXManager.Instance.SpawnFollowVFX(PlayerVFX.DashTrail, Ctx.RingPoint.transform.position, Ctx.RingPoint.transform.rotation, Ctx.DashPoint);
     }
 
     public void HandleDash(Rigidbody rb) {

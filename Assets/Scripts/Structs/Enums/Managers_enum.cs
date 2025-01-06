@@ -72,3 +72,10 @@ public enum MenuVCameras {
     Record
 }
 
+public enum AnimatorSignal {
+    attackSig = 1,
+    jumpSig = 2,
+    dashSig = 3,
+    k_attackSig = 4,
+    s_dashSig = 5,
+}

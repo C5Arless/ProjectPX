@@ -86756,14 +86756,14 @@ AnimationClip:
   m_Events:
   - time: 0.16666667
     functionName: SendSignalToCtx
-    data: kinematic
+    data: k_attackSig
     objectReferenceParameter: {fileID: 0}
     floatParameter: 4
     intParameter: 4
     messageOptions: 0
   - time: 0.43333334
     functionName: SendSignalToCtx
-    data: attack
+    data: attackSig
     objectReferenceParameter: {fileID: 0}
     floatParameter: 1
     intParameter: 1

@@ -11,7 +11,7 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
 
         ColliderOn(Ctx.AttackCollider);
         
-        if (!Ctx.IsGrounded) {
+        if (!Ctx.IsGrounded && !Ctx.IsDashing) {
             Ctx.OnKinematic = true;
             Ctx.PlayerRb.isKinematic = true;
             Ctx.SetKinematic();
@@ -54,7 +54,7 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
         else if (Ctx.IsDamaged) {
             SwitchState(StateHandler.Damage());
         } 
-        else if (Ctx.IsDashing) {
+        else if (Ctx.IsAttacking && Ctx.IsDashing) {
             SwitchState(StateHandler.Dash());
         }
         else if (Ctx.IsJumping) {
