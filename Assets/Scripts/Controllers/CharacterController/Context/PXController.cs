@@ -629,6 +629,23 @@ public class PXController : MonoBehaviour {
         forward.transform.rotation = Quaternion.Euler(0f, yaxis, 0f);
     }
 
+    private void HandleAttack() {
+        _playerRb.velocity.Set(0f, 0f, 0f);
+        _playerRb.AddForce(DashDirection() * 5f, ForceMode.Impulse);
+        
+        if (!isGrounded) {
+            _playerRb.AddForce(Vector3.up * 1.5f, ForceMode.Impulse);
+        }
+    }
+
+    private Vector3 DashDirection() {
+        if (onSlope) {
+            Vector3 direction = Vector3.ProjectOnPlane(_asset.transform.forward, surfaceNormal);
+            return direction;
+        }
+        else return _asset.transform.forward;
+    }
+
     //Animator Signals
     public void HandleSignal(int signal) {
         switch (signal) {
@@ -683,14 +700,21 @@ public class PXController : MonoBehaviour {
     }
 
     private void KinematicSignal() {
-        onKinematic = true;
+        onKinematic = false;
+        
+        if (isGrounded) {
+            HandleAttack();
+        }
     }
 
     //Coroutine
     private IEnumerator EvaluateKinematic() {
-        yield return new WaitUntil(() => onKinematic);
+        yield return new WaitWhile(() => onKinematic);
 
-        _playerRb.isKinematic = true;
+        _playerRb.isKinematic = false;
+        yield return null;
+
+        HandleAttack();
         yield break;
     }
 
@@ -717,7 +741,7 @@ public class PXController : MonoBehaviour {
     }
 
     public IEnumerator ResetDash() {
-        yield return new WaitWhile(() => isAttacking);
+        yield return new WaitWhile(() => isDashing);
 
         if (isGrounded) {
             yield return new WaitForSeconds(.6f);

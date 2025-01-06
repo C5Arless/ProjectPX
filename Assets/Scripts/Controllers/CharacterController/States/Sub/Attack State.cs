@@ -11,7 +11,12 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
 
         ColliderOn(Ctx.AttackCollider);
 
-        HandleAttack();
+        //HandleAttack();
+        if (!Ctx.IsGrounded) {
+            Ctx.OnKinematic = true;
+            Ctx.PlayerRb.isKinematic = true;
+            Ctx.SetKinematic();
+        }
 
         GravityOff();
 
@@ -29,9 +34,14 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
     public override void ExitState() {
         //Exit logic
         Ctx.PlayerRb.velocity.Set(0f, 0f, 0f);
+
+        if (!Ctx.IsGrounded) {
+            Ctx.OnKinematic = false;
+            Ctx.PlayerRb.isKinematic = false;            
+        }
+
         ColliderOff(Ctx.AttackCollider);
-        Ctx.PlayerRb.isKinematic = false;
-        GravityOn();        
+        GravityOn();
     }
 
     public override void CheckSwitchStates() {
@@ -68,22 +78,5 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
 
     public void InitializeParticles() {
         VFXManager.Instance.SpawnFollowVFX(PlayerVFX.AttackBurst, Ctx.AttackPoint.transform.position, Ctx.AttackPoint.transform.rotation, Ctx.AttackPoint);
-    }
-
-    private void HandleAttack() {
-        Ctx.PlayerRb.velocity.Set(0f, 0f, 0f);
-        Ctx.PlayerRb.AddForce(DashDirection() * 3f, ForceMode.Impulse);
-
-        if (!Ctx.IsGrounded) {
-            Ctx.SetKinematic();
-        }
-    }
-
-    private Vector3 DashDirection() {
-        if (Ctx.OnSlope) {
-            Vector3 direction = Vector3.ProjectOnPlane(Ctx.Asset.transform.forward, Ctx.SurfaceNormal);
-            return direction;
-        }
-        else return Ctx.Asset.transform.forward;
     }
 }

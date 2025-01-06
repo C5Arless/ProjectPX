@@ -12,11 +12,9 @@ public class AirborneState : BaseState, IContextInit, IPhysics {
     public override void UpdateState() {
         //Update logic
 
-        /*
-        if (Ctx.PlayerRb.velocity.y < -1f) {
+        if (!Ctx.IsAttacking && !Ctx.IsDashing && !Ctx.IsJumping) {
             Ctx.IsFalling = true;
         }
-        */
 
         if (!Ctx.IsDashing || !Ctx.IsAttacking) {
             HandleGravity(Ctx.PlayerRb);
@@ -41,7 +39,7 @@ public class AirborneState : BaseState, IContextInit, IPhysics {
     public void InitializeContext() {
         if (Ctx.MoveSpeed > 600) {
             Ctx.StartCoroutine("InitializeMoveSpeed");
-        }
+        }        
 
         if (Ctx.IsFalling) {
             InitializeJumpCount();
