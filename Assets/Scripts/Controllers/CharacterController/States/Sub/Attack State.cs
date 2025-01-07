@@ -17,6 +17,8 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
             Ctx.SetKinematic();
         }
 
+        Ctx.PlayerRb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+
         GravityOff();
 
         InitializeParticles();
@@ -32,12 +34,16 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
 
     public override void ExitState() {
         //Exit logic
+        Ctx.AttackInput = false;
         Ctx.PlayerRb.velocity.Set(0f, 0f, 0f);
 
         if (!Ctx.IsGrounded) {
             Ctx.OnKinematic = false;
             Ctx.PlayerRb.isKinematic = false;            
         }
+
+        Ctx.PlayerRb.constraints = RigidbodyConstraints.FreezeRotation;
+        Ctx.PlayerRb.ResetInertiaTensor();
 
         ColliderOff(Ctx.AttackCollider);
         GravityOn();
@@ -67,6 +73,7 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
 
     public void InitializeContext() {
         Ctx.AttackInput = false;
+        Ctx.AttackCount--;
 
         Ctx.IsWalking = false;
         Ctx.IsIdle = false;

@@ -30,7 +30,7 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
 
     public override void ExitState() {
         //Exit logic
-
+        Ctx.JumpInput = false;
     }
 
     public override void CheckSwitchStates() {

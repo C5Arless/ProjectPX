@@ -468,7 +468,7 @@ public class PXController : MonoBehaviour {
     private void SetUpAttack() {
         if (dashInput || jumpInput) { return; }
 
-        if (!attackInput && canAttack) {
+        if (!attackInput && attackCount > 0) {
             SetAttackState();
         }
         else {
@@ -597,14 +597,6 @@ public class PXController : MonoBehaviour {
             yaxis = _cam.transform.rotation.eulerAngles.y;
             xaxis = _cam.transform.rotation.eulerAngles.x;        
         }
-
-        /*
-        _cam.transform.forward = ComputeForward2D(playerPos, cameraPivot);        
-        _forward.transform.forward = ComputeForward2D(playerPos, cameraPivot);
-
-        yaxis = _cam.transform.rotation.eulerAngles.y;
-        xaxis = _cam.transform.rotation.eulerAngles.x;
-        */
     }
 
     private void UpdateCamera(Vector2 camInput) {        
@@ -761,6 +753,10 @@ public class PXController : MonoBehaviour {
         yield return new WaitForSeconds(.1f);
 
         canAttack = true;
+
+        if (isGrounded) {
+            attackCount = 1;
+        }
 
         yield break;
     }

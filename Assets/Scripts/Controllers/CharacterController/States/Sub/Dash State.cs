@@ -29,7 +29,11 @@ public class DashState : BaseState, IContextInit, IVFXInit {
 
     public override void ExitState() {
         //Exit logic
+        Ctx.DashInput = false;
         ColliderOff(Ctx.DashCollider);
+
+        Ctx.PlayerRb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezeRotation;
+        Ctx.PlayerRb.ResetInertiaTensor();
 
         Ctx.PlayerRb.velocity.Set(0f, 0f, 0f);
         Ctx.OnKinematic = false;
@@ -70,6 +74,7 @@ public class DashState : BaseState, IContextInit, IVFXInit {
             Ctx.SetKinematic();
         }
 
+        Ctx.PlayerRb.constraints = RigidbodyConstraints.FreezePositionY;
     }
 
     public void InitializeParticles() {

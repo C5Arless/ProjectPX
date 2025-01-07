@@ -289,7 +289,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.18137476
+      - time: 0.4022863
         functionName: SendSignalToCtx
         data: s_dashSig
         objectReferenceParameter: {instanceID: 0}
