@@ -12,11 +12,13 @@ public class MenuController : MonoBehaviour {
     [SerializeField] DataInfo[] slotsInfo;
     [SerializeField] RecordInfo[] recordsInfo;
     [SerializeField] PlayerInfo _playerInfo;
+    [Space]
+    [SerializeField] GameObject[] menuCanvas;
 
     private UIMode mode = UIMode.MainScreen;
 
     private int currentSlot = 0;
-    private int selectedSlot = 1;
+    private int selectedSlot = 0;
     private int direction;
 
     private InputAction _navigateAction;
@@ -35,8 +37,7 @@ public class MenuController : MonoBehaviour {
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else { Destroy(gameObject); }
-                
+        else { Destroy(gameObject); }                
     }
 
     private void Start() {
@@ -49,6 +50,8 @@ public class MenuController : MonoBehaviour {
 
         InitializeActions();
         SubscribeCallbacks();
+
+        StartCoroutine("SetEventCamera");
     }
 
     private void OnDestroy() {
@@ -111,7 +114,7 @@ public class MenuController : MonoBehaviour {
         if (mode != UIMode.Pause) { return; }
 
         if (input.phase == InputActionPhase.Started) {
-            ScenesManager.Instance.QuitGame();
+            QuitGame();
         }
     }
 
@@ -120,6 +123,7 @@ public class MenuController : MonoBehaviour {
 
             mode = UIMode.Pause;
             CameraManager.Instance.PauseOut();
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 
@@ -127,7 +131,7 @@ public class MenuController : MonoBehaviour {
         if (mode != UIMode.Pause) { return; }
 
         if (input.phase == InputActionPhase.Started) {
-            CameraManager.Instance.PauseIn();
+            ResumeGameplay();
         }
     }
 
@@ -161,6 +165,15 @@ public class MenuController : MonoBehaviour {
         mode = UIMode.MainMenu;
 
         StartCoroutine("DisplaySlots");
+    }
+
+    public void QuitGame() {
+        ScenesManager.Instance.QuitGame();
+    }
+
+    public void ResumeGameplay() {
+        CameraManager.Instance.PauseIn();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void DeleteSlot() {
@@ -354,6 +367,15 @@ public class MenuController : MonoBehaviour {
                 light.enabled = true;
             }
         }
+    }
+
+    private IEnumerator SetEventCamera() {
+        foreach (GameObject canvas in menuCanvas) {
+            canvas.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
+            yield return null;
+        }
+
+        yield break;
     }
 
     private IEnumerator DisplaySlots() {

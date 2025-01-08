@@ -17,6 +17,9 @@ public class CameraManager : MonoBehaviour {
 
     private VCameraMode mode;
 
+    public GameObject GameBrain { get { return gameBrain; } }
+    public GameObject MenuBrain { get { return menuBrain; } }
+
     private void Awake() {
         if (Instance == null) {
             Instance = this;
@@ -26,38 +29,9 @@ public class CameraManager : MonoBehaviour {
     }
 
     private void Start() {
-        //SetInitialState();
+        SetInitialState();
 
-        currentBrain = gameBrain;       //Required for testing in Lab_Test (SetInitState on Game)
-    }
-
-    /*
-    public void OnPauseCamera(InputAction.CallbackContext input) {
-        if (input.phase == InputActionPhase.Started) {
-
-            MenuController.Instance.Mode = UIMode.Pause;
-            StartCoroutine("PauseCameraOut");
-        }
-    }
-
-    public void OnResumeCamera(InputAction.CallbackContext input) {
-        if (MenuController.Instance.Mode != UIMode.Pause) { return; }
-
-        if (input.phase == InputActionPhase.Started) {
-            StartCoroutine("PauseCameraIn");            
-        }
-    }
-
-    public void OnAnyButton(InputAction.CallbackContext input) {
-        if (MenuController.Instance.Mode != UIMode.MainScreen) { return; }
-
-        if (input.phase == InputActionPhase.Started) {
-
-            MenuController.Instance.Mode = UIMode.MainMenu;
-            SwitchMenuVCamera(MenuVCameras.Menu);
-        }
-    }
-    */
+    }    
 
     public void InitializeVCameras() {
         StartCoroutine("RetrieveVCameras");
