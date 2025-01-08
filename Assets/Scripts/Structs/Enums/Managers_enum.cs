@@ -79,3 +79,25 @@ public enum AnimatorSignal {
     k_attackSig = 4,
     s_dashSig = 5,
 }
+
+public enum MainCanvasButtons {
+    ContinueButton,
+    NewGameButton,
+    OptionsButton,
+    HighScoreButton,
+    ExitButton
+}
+
+public enum SlotsCanvasButtons {
+    Slot1Button,
+    Slot2Button,
+    Slot3Button
+}
+
+public enum PauseCanvasButtons {
+    ResumeGameButton,
+    SaveGameButton,
+    OptionsButton,
+    MainMenuButton,
+    ExitButton
+}

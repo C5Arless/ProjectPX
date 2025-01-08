@@ -1,7 +1,15 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+
+[System.Serializable]
+public struct canvasButtons {
+    public GameObject[] menuButtons;
+    public GameObject[] slotsButtons;
+    public GameObject[] pauseButtons;
+}
 
 public class MenuController : MonoBehaviour { 
     public static MenuController Instance { get; private set; }
@@ -14,12 +22,14 @@ public class MenuController : MonoBehaviour {
     [SerializeField] PlayerInfo _playerInfo;
     [Space]
     [SerializeField] GameObject[] menuCanvas;
+    [SerializeField] canvasButtons buttons;
 
     private UIMode mode = UIMode.MainScreen;
 
     private int currentSlot = 0;
     private int selectedSlot = 0;
     private int direction;
+
 
     private InputAction _navigateAction;
     private InputAction _submitAction;
@@ -58,11 +68,60 @@ public class MenuController : MonoBehaviour {
         UnsubscribeCallbacks();
     }
 
+    private void SubscribeCallbacks() {
+        _navigateAction.started += OnNavigate;
+        _navigateAction.performed += OnNavigate;
+
+        _submitAction.started += OnSubmit;
+
+        _saveAction.started += OnSave;
+
+        _quitAction.started += OnQuit;
+
+        _pauseCameraAction.started += OnPauseCamera;
+
+        _resumeCameraAction.started += OnResumeCamera;
+
+        _anyButtonAction.started += OnAnyButton;
+    }
+
+    private void UnsubscribeCallbacks() {
+        _navigateAction.started -= OnNavigate;
+        _navigateAction.performed -= OnNavigate;
+
+        _submitAction.started -= OnSubmit;
+
+        _saveAction.started -= OnSave;
+
+        _quitAction.started -= OnQuit;
+
+        _pauseCameraAction.started -= OnPauseCamera;
+
+        _resumeCameraAction.started -= OnResumeCamera;
+
+        _anyButtonAction.started -= OnAnyButton;
+    }
+
+    private void InitializeActions() {
+        //UI Actions
+        _navigateAction = InputManager.Instance.GetPlayerInput().actions["Navigate"];
+        _submitAction = InputManager.Instance.GetPlayerInput().actions["Submit"];
+        _saveAction = InputManager.Instance.GetPlayerInput().actions["Save"];
+        _quitAction = InputManager.Instance.GetPlayerInput().actions["Quit"];
+        _resumeCameraAction = InputManager.Instance.GetPlayerInput().actions["Resume"];
+
+        //Player Actions
+        _pauseCameraAction = InputManager.Instance.GetPlayerInput().actions["Pause"];
+
+        //MainScreen Actions
+        _anyButtonAction = InputManager.Instance.GetPlayerInput().actions["AnyButton"];
+    }
+
     public void OnNavigate(InputAction.CallbackContext input) {
         if (input.phase == InputActionPhase.Started) {
             switch (mode) {
                 case UIMode.MainMenu: {
-                        //NavigateMenu(input.ReadValue<Vector2>())
+                        //NavigateMenu(input.ReadValue<Vector2>());
                         break;
                     }
                 case UIMode.Slots: {
@@ -70,7 +129,7 @@ public class MenuController : MonoBehaviour {
                         break;
                     }
                 case UIMode.Pause: {
-                        //NavigatePause(input.ReadValue<Vector2>())
+                        //NavigatePause(input.ReadValue<Vector2>());
                         break;
                     }
             }        
@@ -120,8 +179,10 @@ public class MenuController : MonoBehaviour {
 
     public void OnPauseCamera(InputAction.CallbackContext input) {
         if (input.phase == InputActionPhase.Started) {
+            UIMode mode = UIMode.Pause;
+            SwitchUIMode(mode);
+            //mode = UIMode.Pause;
 
-            mode = UIMode.Pause;
             CameraManager.Instance.PauseOut();
             Cursor.lockState = CursorLockMode.None;
         }
@@ -139,8 +200,10 @@ public class MenuController : MonoBehaviour {
         if (mode != UIMode.MainScreen) { return; }
 
         if (input.phase == InputActionPhase.Started) {
+            UIMode mode = UIMode.MainMenu;
+            SwitchUIMode(mode);
+            //mode = UIMode.MainMenu;
 
-            mode = UIMode.MainMenu;
             CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.Menu);
             InputManager.Instance.SetActionMap("UI");
         }
@@ -162,9 +225,19 @@ public class MenuController : MonoBehaviour {
         ScenesManager.Instance.MainMenu();
         DataManager.Instance.RefreshData();
 
-        mode = UIMode.MainMenu;
+        UIMode mode = UIMode.MainMenu;
+        SwitchUIMode(mode);
+        //mode = UIMode.MainMenu;
 
         StartCoroutine("DisplaySlots");
+    }
+
+    public void NewGame() {
+        UIMode mode = UIMode.Slots;
+        SwitchUIMode(mode);
+        //mode = UIMode.Slots;
+
+        CameraManager.Instance.MenuToSlot();
     }
 
     public void QuitGame() {
@@ -202,81 +275,7 @@ public class MenuController : MonoBehaviour {
         StartCoroutine("DisplayRecords");
     }
 
-    private void SubscribeCallbacks() {
-        _navigateAction.started += OnNavigate;
-        _navigateAction.performed += OnNavigate;
-        //_navigateAction.canceled += OnNavigate;
-
-        _submitAction.started += OnSubmit;
-        //_submitAction.performed += OnSubmit;
-        //_submitAction.canceled += OnSubmit;
-
-        _saveAction.started += OnSave;
-        //_saveAction.performed += OnSave;
-        //_saveAction.canceled += OnSave;
-
-        _quitAction.started += OnQuit;
-        //_quitAction.performed += OnQuit;
-        //_quitAction.canceled += OnQuit;
-
-        _pauseCameraAction.started += OnPauseCamera;
-        //_pauseCameraAction.performed += OnPauseCamera;
-        //_pauseCameraAction.canceled += OnPauseCamera;
-
-        _resumeCameraAction.started += OnResumeCamera;
-        //_resumeCameraAction.performed += OnResumeCamera;
-        //_resumeCameraAction.canceled += OnResumeCamera;
-
-        _anyButtonAction.started += OnAnyButton;
-        //_anyButtonAction.performed += OnAnyButton;
-        //_anyButtonAction.canceled += OnAnyButton;
-    }
-
-    private void UnsubscribeCallbacks() {
-        _navigateAction.started -= OnNavigate;
-        _navigateAction.performed -= OnNavigate;
-        //_navigateAction.canceled -= OnNavigate;
-
-        _submitAction.started -= OnSubmit;
-        //_submitAction.performed -= OnSubmit;
-        //_submitAction.canceled -= OnSubmit;
-
-        _saveAction.started -= OnSave;
-        //_saveAction.performed -= OnSave;
-        //_saveAction.canceled -= OnSave;
-
-        _quitAction.started -= OnQuit;
-        //_quitAction.performed -= OnQuit;
-        //_quitAction.canceled -= OnQuit;
-
-        _pauseCameraAction.started -= OnPauseCamera;
-        //_pauseCameraAction.performed -= OnPauseCamera;
-        //_pauseCameraAction.canceled -= OnPauseCamera;
-
-        _resumeCameraAction.started -= OnResumeCamera;
-        //_resumeCameraAction.performed -= OnResumeCamera;
-        //_resumeCameraAction.canceled -= OnResumeCamera;
-
-        _anyButtonAction.started -= OnAnyButton;
-        //_anyButtonAction.performed -= OnAnyButton;
-        //_anyButtonAction.canceled -= OnAnyButton;
-    }
-
-    private void InitializeActions() {
-        //UI Actions
-        _navigateAction = InputManager.Instance.GetPlayerInput().actions["Navigate"];
-        _submitAction = InputManager.Instance.GetPlayerInput().actions["Submit"];
-        _saveAction = InputManager.Instance.GetPlayerInput().actions["Save"];
-        _quitAction = InputManager.Instance.GetPlayerInput().actions["Quit"];
-        _resumeCameraAction = InputManager.Instance.GetPlayerInput().actions["Resume"];
-
-        //Player Actions
-        _pauseCameraAction = InputManager.Instance.GetPlayerInput().actions["Pause"];
-
-        //MainScreen Actions
-        _anyButtonAction = InputManager.Instance.GetPlayerInput().actions["AnyButton"];
-    }
-
+    /*
     private void OverwriteGame() {
         int slotID = slotsInfo[currentSlot].SlotID;
         DataManager.Instance.OverwriteData(slotID);
@@ -284,10 +283,28 @@ public class MenuController : MonoBehaviour {
 
         StartCoroutine("DisplaySlots");
     }
+    */
 
-    private void SubmitMenu() {
-        mode = UIMode.Slots;
-        CameraManager.Instance.MenuToSlot();
+    private void SwitchUIMode(UIMode _target) {
+        if (mode != _target) {
+            mode = _target;
+        }
+
+        switch (_target) {
+            case UIMode.MainMenu: {
+                    EventSystem.current.firstSelectedGameObject = buttons.menuButtons[(int)MainCanvasButtons.NewGameButton];
+                    break;
+                }
+            case UIMode.Slots: {
+                    EventSystem.current.firstSelectedGameObject = buttons.slotsButtons[(int)SlotsCanvasButtons.Slot1Button];
+                    break;
+                }
+            case UIMode.Pause: {
+                    EventSystem.current.firstSelectedGameObject = buttons.pauseButtons[(int)PauseCanvasButtons.ResumeGameButton];
+                    break;
+                }
+            default: break;
+        }
     }
 
     private void SelectSlot() {

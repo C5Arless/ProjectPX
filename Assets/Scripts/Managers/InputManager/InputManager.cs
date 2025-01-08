@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour {
     public static InputManager Instance { get; private set; }
@@ -38,6 +39,16 @@ public class InputManager : MonoBehaviour {
             //_currentActionMap = target;
         }        
     }
+
+    /*
+    public void OnControlsChangedEvent(PlayerInput input) {
+        if (playerInput.currentControlScheme == "Gamepad") {
+            Cursor.lockState = CursorLockMode.Locked;
+        } else {
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+    */
 
     public IEnumerator EvaluateActionMap(string target) {
         yield return null;
