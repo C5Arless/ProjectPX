@@ -1875,7 +1875,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 692
+  m_VersionIndex: 695
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -3727,11 +3727,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5a190210de4f5084b925540abed56656, type: 2}
   - {fileID: 11400000, guid: 6e9302127d960df4b94d3f992ffd61f6, type: 2}
   _playerInfo: {fileID: 11400000, guid: ab9b38bfd6de9aa41bf77144a6371ac0, type: 2}
-  menuCanvas:
-  - {fileID: 7761082999859044838}
-  - {fileID: 1705425810365286683}
-  - {fileID: 217072118037787971}
-  buttons:
+  _menuCanvas:
+    mainCanvas: {fileID: 7761082999859044838}
+    slotsCanvas: {fileID: 1705425810365286683}
+    pauseCanvas: {fileID: 217072118037787971}
+  _buttons:
     menuButtons:
     - {fileID: 6130051202978346842}
     - {fileID: 7909774245126791077}
@@ -6370,7 +6370,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 89
+  m_VersionIndex: 92
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -11384,8 +11384,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3656262791061954820}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.07808656, y: 0.7027817, z: 0.0780865, w: 0.7027823}
-  m_LocalPosition: {x: 15.4931965, y: 4.30925, z: 25.353}
+  m_LocalRotation: {x: -0.07808653, y: 0.702782, z: 0.07808653, w: 0.702782}
+  m_LocalPosition: {x: 15.4931965, y: 4.30925, z: 25.352999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16330,7 +16330,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 89
+  m_VersionIndex: 92
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -22882,7 +22882,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1779
+  m_VersionIndex: 1782
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -25720,7 +25720,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 649
+  m_VersionIndex: 652
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []

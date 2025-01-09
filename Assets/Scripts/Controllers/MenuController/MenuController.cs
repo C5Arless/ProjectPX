@@ -11,6 +11,13 @@ public struct canvasButtons {
     public GameObject[] pauseButtons;
 }
 
+[System.Serializable]
+public struct menuCanvas {
+    public GameObject mainCanvas;
+    public GameObject slotsCanvas;
+    public GameObject pauseCanvas;
+}
+
 public class MenuController : MonoBehaviour { 
     public static MenuController Instance { get; private set; }
 
@@ -21,8 +28,8 @@ public class MenuController : MonoBehaviour {
     [SerializeField] RecordInfo[] recordsInfo;
     [SerializeField] PlayerInfo _playerInfo;
     [Space]
-    [SerializeField] GameObject[] menuCanvas;
-    [SerializeField] canvasButtons buttons;
+    [SerializeField] menuCanvas _menuCanvas;
+    [SerializeField] canvasButtons _buttons;
 
     private UIMode mode = UIMode.MainScreen;
 
@@ -212,6 +219,9 @@ public class MenuController : MonoBehaviour {
     public void ContinueGame() {
         DataManager.Instance.ResumeData();
         ScenesManager.Instance.LoadGame();
+
+        CameraManager.Instance.StartGame();
+        InputManager.Instance.SetActionMap("Player");
     }
 
     public void SaveGame() {
@@ -228,6 +238,8 @@ public class MenuController : MonoBehaviour {
         UIMode mode = UIMode.MainMenu;
         SwitchUIMode(mode);
         //mode = UIMode.MainMenu;
+
+        CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.Menu);
 
         StartCoroutine("DisplaySlots");
     }
@@ -292,15 +304,27 @@ public class MenuController : MonoBehaviour {
 
         switch (_target) {
             case UIMode.MainMenu: {
-                    EventSystem.current.firstSelectedGameObject = buttons.menuButtons[(int)MainCanvasButtons.NewGameButton];
+                    _menuCanvas.mainCanvas.SetActive(true);
+                    _menuCanvas.slotsCanvas.SetActive(false);
+                    _menuCanvas.pauseCanvas.SetActive(false);
+                    
+                    EventSystem.current.firstSelectedGameObject = _buttons.menuButtons[(int)MainCanvasButtons.NewGameButton];
                     break;
                 }
             case UIMode.Slots: {
-                    EventSystem.current.firstSelectedGameObject = buttons.slotsButtons[(int)SlotsCanvasButtons.Slot1Button];
+                    _menuCanvas.mainCanvas.SetActive(false);
+                    _menuCanvas.slotsCanvas.SetActive(true);
+                    _menuCanvas.pauseCanvas.SetActive(false);
+                    
+                    EventSystem.current.firstSelectedGameObject = _buttons.slotsButtons[(int)SlotsCanvasButtons.Slot1Button];
                     break;
                 }
             case UIMode.Pause: {
-                    EventSystem.current.firstSelectedGameObject = buttons.pauseButtons[(int)PauseCanvasButtons.ResumeGameButton];
+                    _menuCanvas.mainCanvas.SetActive(false);
+                    _menuCanvas.slotsCanvas.SetActive(false);
+                    _menuCanvas.pauseCanvas.SetActive(true);
+
+                    EventSystem.current.firstSelectedGameObject = _buttons.pauseButtons[(int)PauseCanvasButtons.ResumeGameButton];
                     break;
                 }
             default: break;
@@ -387,10 +411,20 @@ public class MenuController : MonoBehaviour {
     }
 
     private IEnumerator SetEventCamera() {
-        foreach (GameObject canvas in menuCanvas) {
+        /*
+        foreach (GameObject canvas in _menuCanvas) {
             canvas.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
             yield return null;
         }
+        */
+
+        _menuCanvas.mainCanvas.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
+        yield return null;
+
+        _menuCanvas.slotsCanvas.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
+        yield return null;
+
+        _menuCanvas.pauseCanvas.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
 
         yield break;
     }

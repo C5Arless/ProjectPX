@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 3363002587100168212}
   - component: {fileID: 5028357515432968190}
   - component: {fileID: 6068785539659905033}
+  - component: {fileID: 7621339871354671262}
+  - component: {fileID: 4857805944773561165}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -56,7 +58,19 @@ MonoBehaviour:
       m_Calls: []
   m_ControlsChangedEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6068785539659905033}
+        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
+        m_MethodName: OnControlsChangedEvent
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls: []
@@ -95,35 +109,11 @@ MonoBehaviour:
     m_ActionId: 861e65cf-dce6-44f8-bef4-a09883a88c68
     m_ActionName: Player/Pause[/Keyboard/escape]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: OnNavigate
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: f77c0bb2-c391-48a6-ae57-ec5410c16ce9
     m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: OnSubmit
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: 435fe2a2-f0da-4cff-8e00-ae065ceba5ce
     m_ActionName: UI/Submit[/Keyboard/enter,/Keyboard/space]
   - m_PersistentCalls:
@@ -175,65 +165,25 @@ MonoBehaviour:
     m_ActionId: 51f59875-b320-4dc1-8e18-85bc4ef1fb5c
     m_ActionName: UI/Pause[/Keyboard/escape]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: OnSave
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: cdb506f7-ae20-4a4d-86ca-32cc3f5da9f0
     m_ActionName: UI/Save[/Keyboard/k]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CameraManager, Assembly-CSharp
-        m_MethodName: OnAnyButton
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 6068785539659905033}
-        m_TargetAssemblyTypeName: InputManager, Assembly-CSharp
-        m_MethodName: OnAnyButton
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: d1263c13-422f-4c4e-830c-a97ef8b3ef91
     m_ActionName: MainScreen/AnyButton[/Keyboard/anyKey]
   - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
-        m_MethodName: OnQuit
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_ActionId: e92c52f1-f57d-4509-8d5c-5e0507b4cc36
     m_ActionName: UI/Quit[/Keyboard/q]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a81a53d0-c23a-447f-8d31-58e1718b046c
+    m_ActionName: Player/Interact[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d5d8147b-ceff-435b-8ded-9279c76390ca
+    m_ActionName: Dialog/Confirm[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: MainScreen
@@ -252,3 +202,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 5028357515432968190}
+--- !u!114 &7621339871354671262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7573724632308363618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!114 &4857805944773561165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7573724632308363618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: -944628639613478452, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_PointAction: {fileID: -1033318514898246639, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_MoveAction: {fileID: 8871176769876633294, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_SubmitAction: {fileID: -3457885744935248116, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_CancelAction: {fileID: 5169126530031517244, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_LeftClickAction: {fileID: -7096591850610262675, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_MiddleClickAction: {fileID: 2806860628690999745, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_RightClickAction: {fileID: -7098107961114171608, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_ScrollWheelAction: {fileID: -6983142512261952278, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_TrackedDevicePositionAction: {fileID: -6630153474290467005, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 2157277638501917770, guid: 74a4394133c2d5045b53044fa2c4f55b, type: 3}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
