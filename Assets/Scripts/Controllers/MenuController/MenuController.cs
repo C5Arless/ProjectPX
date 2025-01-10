@@ -69,6 +69,12 @@ public class MenuController : MonoBehaviour {
         SubscribeCallbacks();
 
         StartCoroutine("SetEventCamera");
+
+        InputManager.Instance._controlsChangedResolver += Test;
+    }
+
+    private void Test() {
+        Debug.Log("Test");
     }
 
     private void OnDestroy() {
@@ -76,10 +82,10 @@ public class MenuController : MonoBehaviour {
     }
 
     private void SubscribeCallbacks() {
-        _navigateAction.started += OnNavigate;
-        _navigateAction.performed += OnNavigate;
+        //_navigateAction.started += OnNavigate;
+        //_navigateAction.performed += OnNavigate;
 
-        _submitAction.started += OnSubmit;
+        //_submitAction.started += OnSubmit;
 
         _saveAction.started += OnSave;
 
@@ -93,10 +99,10 @@ public class MenuController : MonoBehaviour {
     }
 
     private void UnsubscribeCallbacks() {
-        _navigateAction.started -= OnNavigate;
-        _navigateAction.performed -= OnNavigate;
+        //_navigateAction.started -= OnNavigate;
+        //_navigateAction.performed -= OnNavigate;
 
-        _submitAction.started -= OnSubmit;
+        //_submitAction.started -= OnSubmit;
 
         _saveAction.started -= OnSave;
 
@@ -206,13 +212,8 @@ public class MenuController : MonoBehaviour {
     public void OnAnyButton(InputAction.CallbackContext input) {
         if (mode != UIMode.MainScreen) { return; }
 
-        if (input.phase == InputActionPhase.Started) {
-            UIMode mode = UIMode.MainMenu;
-            SwitchUIMode(mode);
-            //mode = UIMode.MainMenu;
-
-            CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.Menu);
-            InputManager.Instance.SetActionMap("UI");
+        if (input.phase == InputActionPhase.Started) {            
+            StartCoroutine(ResolveAnyButtonAction());
         }
     }
 
@@ -236,8 +237,7 @@ public class MenuController : MonoBehaviour {
         DataManager.Instance.RefreshData();
 
         UIMode mode = UIMode.MainMenu;
-        SwitchUIMode(mode);
-        //mode = UIMode.MainMenu;
+        SwitchUIMode(mode);        
 
         CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.Menu);
 
@@ -287,47 +287,40 @@ public class MenuController : MonoBehaviour {
         StartCoroutine("DisplayRecords");
     }
 
-    /*
-    private void OverwriteGame() {
-        int slotID = slotsInfo[currentSlot].SlotID;
-        DataManager.Instance.OverwriteData(slotID);
-        DataManager.Instance.RefreshData();
-
-        StartCoroutine("DisplaySlots");
-    }
-    */
-
     private void SwitchUIMode(UIMode _target) {
         if (mode != _target) {
             mode = _target;
-        }
 
-        switch (_target) {
-            case UIMode.MainMenu: {
-                    _menuCanvas.mainCanvas.SetActive(true);
-                    _menuCanvas.slotsCanvas.SetActive(false);
-                    _menuCanvas.pauseCanvas.SetActive(false);
-                    
-                    EventSystem.current.firstSelectedGameObject = _buttons.menuButtons[(int)MainCanvasButtons.NewGameButton];
-                    break;
-                }
-            case UIMode.Slots: {
-                    _menuCanvas.mainCanvas.SetActive(false);
-                    _menuCanvas.slotsCanvas.SetActive(true);
-                    _menuCanvas.pauseCanvas.SetActive(false);
-                    
-                    EventSystem.current.firstSelectedGameObject = _buttons.slotsButtons[(int)SlotsCanvasButtons.Slot1Button];
-                    break;
-                }
-            case UIMode.Pause: {
-                    _menuCanvas.mainCanvas.SetActive(false);
-                    _menuCanvas.slotsCanvas.SetActive(false);
-                    _menuCanvas.pauseCanvas.SetActive(true);
+            switch (_target) {
+                case UIMode.MainMenu: {
+                        _menuCanvas.mainCanvas.SetActive(true);
+                        _menuCanvas.slotsCanvas.SetActive(false);
+                        _menuCanvas.pauseCanvas.SetActive(false);
 
-                    EventSystem.current.firstSelectedGameObject = _buttons.pauseButtons[(int)PauseCanvasButtons.ResumeGameButton];
-                    break;
-                }
-            default: break;
+                        EventSystem.current.SetSelectedGameObject(_buttons.menuButtons[(int)MainCanvasButtons.NewGameButton]);
+                        EventSystem.current.firstSelectedGameObject = _buttons.menuButtons[(int)MainCanvasButtons.NewGameButton];
+                        break;
+                    }
+                case UIMode.Slots: {
+                        _menuCanvas.mainCanvas.SetActive(false);
+                        _menuCanvas.slotsCanvas.SetActive(true);
+                        _menuCanvas.pauseCanvas.SetActive(false);
+
+                        EventSystem.current.SetSelectedGameObject(_buttons.slotsButtons[(int)SlotsCanvasButtons.Slot1Button]);
+                        EventSystem.current.firstSelectedGameObject = _buttons.slotsButtons[(int)SlotsCanvasButtons.Slot1Button];
+                        break;
+                    }
+                case UIMode.Pause: {
+                        _menuCanvas.mainCanvas.SetActive(false);
+                        _menuCanvas.slotsCanvas.SetActive(false);
+                        _menuCanvas.pauseCanvas.SetActive(true);
+
+                        EventSystem.current.SetSelectedGameObject(_buttons.pauseButtons[(int)PauseCanvasButtons.ResumeGameButton]);
+                        EventSystem.current.firstSelectedGameObject = _buttons.pauseButtons[(int)PauseCanvasButtons.ResumeGameButton];
+                        break;
+                    }
+                default: break;
+            }
         }
     }
 
@@ -410,14 +403,22 @@ public class MenuController : MonoBehaviour {
         }
     }
 
-    private IEnumerator SetEventCamera() {
-        /*
-        foreach (GameObject canvas in _menuCanvas) {
-            canvas.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
-            yield return null;
-        }
-        */
+    private IEnumerator ResolveAnyButtonAction() {
+        yield return null;
 
+        UIMode mode = UIMode.MainMenu;
+        SwitchUIMode(mode);                
+
+        yield return null;
+        CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.Menu);
+
+        yield return new WaitForSeconds(.4f);
+        InputManager.Instance.SetActionMap("UI");
+
+        yield break;
+    }
+
+    private IEnumerator SetEventCamera() {
         _menuCanvas.mainCanvas.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
         yield return null;
 

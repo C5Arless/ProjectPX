@@ -7,6 +7,9 @@ public class InputManager : MonoBehaviour {
 
     [SerializeField] PlayerInput playerInput;
 
+    public delegate void OnControlsChangedResolver();
+    public OnControlsChangedResolver _controlsChangedResolver;
+
     private string _currentActionMap;
 
     private void Awake() {
@@ -41,9 +44,18 @@ public class InputManager : MonoBehaviour {
     public void OnControlsChangedEvent(PlayerInput input) {
         if (playerInput.currentControlScheme == "Gamepad") {
             Cursor.lockState = CursorLockMode.Locked;
-            Debug.Log("OnControlsChangedEvent");
-        } else {
+
+            if (_controlsChangedResolver != null) {
+                _controlsChangedResolver();
+            }
+
+        } 
+        else if (playerInput.currentControlScheme == "Keyboard&Mouse") {
             Cursor.lockState = CursorLockMode.None;
+
+            if (_controlsChangedResolver != null) {
+                _controlsChangedResolver();
+            }
         }
     }
     
