@@ -31,12 +31,13 @@ public class MenuController : MonoBehaviour {
     [SerializeField] menuCanvas _menuCanvas;
     [SerializeField] canvasButtons _buttons;
 
+    private GameObject _highlightedButton;
+
     private UIMode mode = UIMode.MainScreen;
 
     private int currentSlot = 0;
     private int selectedSlot = 0;
     private int direction;
-
 
     private InputAction _navigateAction;
     private InputAction _submitAction;
@@ -68,13 +69,7 @@ public class MenuController : MonoBehaviour {
         InitializeActions();
         SubscribeCallbacks();
 
-        StartCoroutine("SetEventCamera");
-
-        InputManager.Instance._controlsChangedResolver += Test;
-    }
-
-    private void Test() {
-        Debug.Log("Test");
+        StartCoroutine("SetEventCamera");        
     }
 
     private void OnDestroy() {
@@ -82,7 +77,7 @@ public class MenuController : MonoBehaviour {
     }
 
     private void SubscribeCallbacks() {
-        //_navigateAction.started += OnNavigate;
+        _navigateAction.started += OnNavigate;
         //_navigateAction.performed += OnNavigate;
 
         //_submitAction.started += OnSubmit;
@@ -96,10 +91,12 @@ public class MenuController : MonoBehaviour {
         _resumeCameraAction.started += OnResumeCamera;
 
         _anyButtonAction.started += OnAnyButton;
+
+        InputManager.Instance._controlsChangedResolver += ControlsChanged;
     }
 
     private void UnsubscribeCallbacks() {
-        //_navigateAction.started -= OnNavigate;
+        _navigateAction.started -= OnNavigate;
         //_navigateAction.performed -= OnNavigate;
 
         //_submitAction.started -= OnSubmit;
@@ -113,6 +110,8 @@ public class MenuController : MonoBehaviour {
         _resumeCameraAction.started -= OnResumeCamera;
 
         _anyButtonAction.started -= OnAnyButton;
+
+        InputManager.Instance._controlsChangedResolver -= ControlsChanged;
     }
 
     private void InitializeActions() {
@@ -134,11 +133,11 @@ public class MenuController : MonoBehaviour {
         if (input.phase == InputActionPhase.Started) {
             switch (mode) {
                 case UIMode.MainMenu: {
-                        //NavigateMenu(input.ReadValue<Vector2>());
+                        NavigateMenu(input.ReadValue<Vector2>());
                         break;
                     }
                 case UIMode.Slots: {
-                        NavigateSlot(input.ReadValue<Vector2>());                        
+                        //NavigateSlot(input.ReadValue<Vector2>());                        
                         break;
                     }
                 case UIMode.Pause: {
@@ -261,6 +260,10 @@ public class MenuController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
+    public void SetHighlightedButton(GameObject target) {
+        _highlightedButton = target;
+    }
+
     public void DeleteSlot() {
         if (slotsInfo[currentSlot].Runtime == 0) {
             int slotID = slotsInfo[currentSlot].SlotID;
@@ -285,6 +288,23 @@ public class MenuController : MonoBehaviour {
         DataManager.Instance.RefreshRecords();
 
         StartCoroutine("DisplayRecords");
+    }
+
+    private void ControlsChanged() {
+        if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Gamepad") {
+            
+            if (_highlightedButton != null) {
+                EventSystem.current.SetSelectedGameObject(_highlightedButton);
+            } else {
+                EventSystem.current.SetSelectedGameObject(EventSystem.current.firstSelectedGameObject);
+            }
+
+            Debug.Log("Controls changed to Gamepad!");
+        }
+        else if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
+            EventSystem.current.SetSelectedGameObject(EventSystem.current.firstSelectedGameObject);
+            Debug.Log("Controls changed to Keyboard&Mouse!");
+        }
     }
 
     private void SwitchUIMode(UIMode _target) {
@@ -342,6 +362,16 @@ public class MenuController : MonoBehaviour {
             InputManager.Instance.SetActionMap("Player");
         }
 
+    }
+
+    private void NavigateMenu(Vector2 input) {
+        if (EventSystem.current.currentSelectedGameObject != null) { return; }
+
+        if (_highlightedButton != null) {
+            EventSystem.current.SetSelectedGameObject(_highlightedButton);
+        } else {
+            EventSystem.current.SetSelectedGameObject(EventSystem.current.firstSelectedGameObject);
+        }
     }
 
     private void NavigateSlot(Vector2 input) {
