@@ -75,6 +75,9 @@ public class MenuController : MonoBehaviour {
 
         _anyButtonAction.started += OnAnyButton;
 
+        _canvasHandler._onSaveSlotSelectButton += SelectSlots;
+        _canvasHandler._onSaveSlotHighlightButton += HighlightSlots;
+
     }
 
     private void UnsubscribeCallbacks() {
@@ -92,6 +95,9 @@ public class MenuController : MonoBehaviour {
         _resumeCameraAction.started -= OnResumeCamera;
 
         _anyButtonAction.started -= OnAnyButton;
+
+        _canvasHandler._onSaveSlotSelectButton -= SelectSlots;
+        _canvasHandler._onSaveSlotHighlightButton -= HighlightSlots;
 
     }
 
@@ -143,7 +149,7 @@ public class MenuController : MonoBehaviour {
                         break;
                     }
                 case UIMode.Slots: {
-                        SelectSlot();
+                        //SelectSlot();
                         break;
                     }
                 case UIMode.Pause: {
@@ -270,9 +276,9 @@ public class MenuController : MonoBehaviour {
         DataManager.Instance.RefreshRecords();
 
         StartCoroutine("DisplayRecords");
-    }    
+    }
 
-    private void SelectSlot() {
+    private void SubmitSlot() {
         if (slotsInfo[currentSlot].Checkpoint.x == 0) {            
             DataManager.Instance.AssignSlotInfo(currentSlot);
             ScenesManager.Instance.StartGame();
@@ -292,18 +298,66 @@ public class MenuController : MonoBehaviour {
 
     }
 
+    private void SelectSlots() {
+        if (_canvasHandler.SaveSlots[(int)SaveSlot.One] == _canvasHandler.SelectedButton) {
+            SwitchSlot(SaveSlot.One);
+        }
+        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Two] == _canvasHandler.SelectedButton) {
+            SwitchSlot(SaveSlot.Two);
+        }
+        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Three] == _canvasHandler.SelectedButton) {
+            SwitchSlot(SaveSlot.Three);
+        }
+    }
+
+    private void HighlightSlots() {
+        if (_canvasHandler.SaveSlots[(int)SaveSlot.One] == _canvasHandler.HighlightedButton) {
+            SwitchSlot(SaveSlot.One);
+        }
+        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Two] == _canvasHandler.HighlightedButton) {
+            SwitchSlot(SaveSlot.Two);
+        }
+        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Three] == _canvasHandler.HighlightedButton) {
+            SwitchSlot(SaveSlot.Three);
+        }
+    }
+
     private void NavigateSlot(Vector2 input) {
         if (input == new Vector2(1f, 0f)) {
             direction = 1;
-            SwitchSlot(direction);
+            //SwitchSlot(direction);
         }
 
         if (input == new Vector2(-1f, 0f)) {
             direction = 0;
-            SwitchSlot(direction);
+            //SwitchSlot(direction);
         }
     }
 
+    private void SwitchSlot(SaveSlot target) {
+        DeselectLights();
+
+        switch (target) {
+            case SaveSlot.One: {
+                    selectedSlot = (int)SaveSlot.One;
+                    break;
+                }
+            case SaveSlot.Two: {
+                    selectedSlot = (int)SaveSlot.Two;
+                    break;
+                }
+            case SaveSlot.Three: {
+                    selectedSlot = (int)SaveSlot.Three;
+                    break;
+                }
+            default: break;
+        }
+
+        currentSlot = selectedSlot;
+        SelectLights();
+    }
+
+    /*
     private void SwitchSlot(int direction) {
         DeselectLights();
         
@@ -329,7 +383,8 @@ public class MenuController : MonoBehaviour {
         currentSlot = selectedSlot;
         SelectLights();
     }
-
+    */
+    
     private void SelectLights() {        
         foreach (Light light in slots[selectedSlot].GetComponentsInChildren<Light>()) {
             if (light.tag == "Light") {

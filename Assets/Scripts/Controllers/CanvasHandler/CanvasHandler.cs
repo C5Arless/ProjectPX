@@ -6,8 +6,7 @@ using UnityEngine.UI;
 [System.Serializable]
 public struct canvasButtons {
     public GameObject NewGameButton;
-    public GameObject ContinueButton;
-    public GameObject Slot1Button;
+    public GameObject ContinueButton;    
     public GameObject ResumeButton;
     public GameObject AudioButton;
 }
@@ -22,8 +21,8 @@ public struct menuCanvas {
 public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
     [SerializeField] UI_Info _UIinfo;
     [SerializeField] menuCanvas _menuCanvas;
-
     [SerializeField] canvasButtons _buttons;
+    [SerializeField] GameObject[] _saveSlots;
 
     public delegate void OnSelectButton();
     public OnSelectButton _onSelectButton;
@@ -37,11 +36,18 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public delegate void OnExitHighlightButton();
     public OnExitHighlightButton _onExitHighlightButton;
 
+    public delegate void OnSaveSlotSelectButton();
+    public OnSaveSlotSelectButton _onSaveSlotSelectButton;
+
+    public delegate void OnSaveSlotHighlightButton();
+    public OnSaveSlotHighlightButton _onSaveSlotHighlightButton;
+
     private GameObject _highlightedButton;
     private GameObject _selectedButton;
 
     public GameObject HighlightedButton { get { return _highlightedButton; } }
     public GameObject SelectedButton { get { return _selectedButton; } }
+    public GameObject[] SaveSlots { get { return _saveSlots; } }
 
     private void Awake() {
         _onHighlightButton += () => Debug.Log("OnHighlightEvent!");
@@ -113,8 +119,8 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                         _menuCanvas.slotsCanvas.SetActive(true);
                         _menuCanvas.pauseCanvas.SetActive(false);
 
-                        EventSystem.current.SetSelectedGameObject(_buttons.Slot1Button);
-                        EventSystem.current.firstSelectedGameObject = _buttons.Slot1Button;
+                        EventSystem.current.SetSelectedGameObject(_saveSlots[(int)SaveSlot.One]);
+                        EventSystem.current.firstSelectedGameObject = _saveSlots[(int)SaveSlot.One];
                         break;
                     }
                 case UIMode.Pause: {
@@ -151,6 +157,11 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
             OnHighlight(target.gameObject);
             _onHighlightButton();
+
+            if (_UIinfo.UIMode == UIMode.Slots) {
+                _onSaveSlotHighlightButton();
+            }
+
         }
     }
 
@@ -169,6 +180,10 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         _selectedButton = target.gameObject;
 
         _onSelectButton();
+
+        if (_UIinfo.UIMode == UIMode.Slots) {
+            _onSaveSlotSelectButton();
+        }
     }
 
     private void OnHighlight(GameObject target) {

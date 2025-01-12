@@ -2057,7 +2057,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 701
+  m_VersionIndex: 704
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -6941,7 +6941,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 98
+  m_VersionIndex: 101
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -15370,8 +15370,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4167683720216107062}
   serializedVersion: 2
-  m_LocalRotation: {x: 3.7429606e-30, y: 0.62735194, z: -4.2675297e-31, w: 0.7787359}
-  m_LocalPosition: {x: 16.529783, y: 4.128006, z: 35.153534}
+  m_LocalRotation: {x: -1.0624865e-23, y: 0.62735385, z: 3.9243807e-23, w: 0.7787343}
+  m_LocalPosition: {x: 16.529781, y: 4.128006, z: 35.153538}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -19389,7 +19389,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 98
+  m_VersionIndex: 101
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -26873,7 +26873,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1788
+  m_VersionIndex: 1791
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -30538,7 +30538,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 658
+  m_VersionIndex: 661
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -30865,9 +30865,14 @@ MonoBehaviour:
     slotsCanvas: {fileID: 1705425810365286683}
     pauseCanvas: {fileID: 217072118037787971}
   _buttons:
-    menuButtons: []
-    slotsButtons: []
-    pauseButtons: []
+    NewGameButton: {fileID: 7909774245126791077}
+    ContinueButton: {fileID: 6130051202978346842}
+    ResumeButton: {fileID: 5699930884771252127}
+    AudioButton: {fileID: 4537492131643663089}
+  _saveSlots:
+  - {fileID: 8637285730953638493}
+  - {fileID: 3003587652902503887}
+  - {fileID: 1688343672111699431}
 --- !u!1 &7453835566383217634
 GameObject:
   m_ObjectHideFlags: 0
@@ -35499,7 +35504,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1707763441692099304}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5905955107517071725}
+        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_MethodName: MainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2371012692921180766
 MonoBehaviour:
   m_ObjectHideFlags: 0
