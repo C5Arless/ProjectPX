@@ -11,8 +11,8 @@ public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     private void OnHighlight() {
-        EventSystem.current.SetSelectedGameObject(null);
-        MenuController.Instance.SetHighlightedButton(this.gameObject);
+        //EventSystem.current.SetSelectedGameObject(null);
+        //MenuController.Instance.CanvasHandler.SetHighlightedButton(this.gameObject);
     }
 
     private void OnExitHighlight() {
