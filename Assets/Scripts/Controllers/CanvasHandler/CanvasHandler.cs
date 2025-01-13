@@ -8,21 +8,31 @@ public struct canvasButtons {
     public GameObject NewGameButton;
     public GameObject ContinueButton;    
     public GameObject ResumeButton;
-    public GameObject AudioButton;
+    public GameObject mAudioButton;
+    public GameObject pAudioButton;
+}
+
+[System.Serializable]
+public struct menuScreen {
+    public GameObject mainScreen;
+    public GameObject slotsScreen;
+    public GameObject pauseScreen;
 }
 
 [System.Serializable]
 public struct menuCanvas {
-    public GameObject mainCanvas;
+    public GameObject[] mainCanvas;
     public GameObject slotsCanvas;
-    public GameObject pauseCanvas;
+    public GameObject[] pauseCanvas;
 }
 
 public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
     [SerializeField] UI_Info _UIinfo;
-    [SerializeField] menuCanvas _menuCanvas;
+    [SerializeField] menuScreen _menuScreen;
     [SerializeField] canvasButtons _buttons;
     [SerializeField] GameObject[] _saveSlots;
+
+    [SerializeField] menuCanvas _menuCanvas;
 
     public delegate void OnSelectButton();
     public OnSelectButton _onSelectButton;
@@ -100,33 +110,70 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
+    public void SwitchOptions() {
+        if (_UIinfo.UIMode == UIMode.MainMenu) {
+
+            if (_menuCanvas.mainCanvas[0].activeSelf) {
+                _menuCanvas.mainCanvas[0].SetActive(false);
+                _menuCanvas.mainCanvas[1].SetActive(true);
+
+                EventSystem.current.SetSelectedGameObject(_buttons.mAudioButton);
+                EventSystem.current.firstSelectedGameObject = _buttons.mAudioButton;
+
+            } else {
+                _menuCanvas.mainCanvas[1].SetActive(false);
+                _menuCanvas.mainCanvas[0].SetActive(true);
+
+                EventSystem.current.SetSelectedGameObject(_buttons.NewGameButton);
+                EventSystem.current.firstSelectedGameObject = _buttons.NewGameButton;
+            }
+        }
+        else if (_UIinfo.UIMode == UIMode.Pause) {
+
+            if (_menuCanvas.pauseCanvas[0].activeSelf) {
+                _menuCanvas.pauseCanvas[0].SetActive(false);
+                _menuCanvas.pauseCanvas[1].SetActive(true);
+
+                EventSystem.current.SetSelectedGameObject(_buttons.pAudioButton);
+                EventSystem.current.firstSelectedGameObject = _buttons.pAudioButton;
+            }
+            else {
+                _menuCanvas.pauseCanvas[1].SetActive(false);
+                _menuCanvas.pauseCanvas[0].SetActive(true);
+
+                EventSystem.current.SetSelectedGameObject(_buttons.ResumeButton);
+                EventSystem.current.firstSelectedGameObject = _buttons.ResumeButton;
+            }            
+        }
+    }
+
     public void SwitchUIMode(UIMode _target) {
         if (_UIinfo.UIMode != _target) {
             _UIinfo.UIMode = _target;
 
             switch (_target) {
                 case UIMode.MainMenu: {
-                        _menuCanvas.mainCanvas.SetActive(true);
-                        _menuCanvas.slotsCanvas.SetActive(false);
-                        _menuCanvas.pauseCanvas.SetActive(false);
+                        _menuScreen.mainScreen.SetActive(true);
+                        _menuScreen.slotsScreen.SetActive(false);
+                        _menuScreen.pauseScreen.SetActive(false);
 
                         EventSystem.current.SetSelectedGameObject(_buttons.NewGameButton);
                         EventSystem.current.firstSelectedGameObject = _buttons.NewGameButton;
                         break;
                     }
                 case UIMode.Slots: {
-                        _menuCanvas.mainCanvas.SetActive(false);
-                        _menuCanvas.slotsCanvas.SetActive(true);
-                        _menuCanvas.pauseCanvas.SetActive(false);
+                        _menuScreen.mainScreen.SetActive(false);
+                        _menuScreen.slotsScreen.SetActive(true);
+                        _menuScreen.pauseScreen.SetActive(false);
 
                         EventSystem.current.SetSelectedGameObject(_saveSlots[(int)SaveSlot.One]);
                         EventSystem.current.firstSelectedGameObject = _saveSlots[(int)SaveSlot.One];
                         break;
                     }
                 case UIMode.Pause: {
-                        _menuCanvas.mainCanvas.SetActive(false);
-                        _menuCanvas.slotsCanvas.SetActive(false);
-                        _menuCanvas.pauseCanvas.SetActive(true);
+                        _menuScreen.mainScreen.SetActive(false);
+                        _menuScreen.slotsScreen.SetActive(false);
+                        _menuScreen.pauseScreen.SetActive(true);
 
                         EventSystem.current.SetSelectedGameObject(_buttons.ResumeButton);
                         EventSystem.current.firstSelectedGameObject = _buttons.ResumeButton;
@@ -196,13 +243,13 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }    
 
     private IEnumerator SetEventCamera() {
-        _menuCanvas.mainCanvas.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
+        _menuScreen.mainScreen.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
         yield return null;
 
-        _menuCanvas.slotsCanvas.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
+        _menuScreen.slotsScreen.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
         yield return null;
 
-        _menuCanvas.pauseCanvas.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
+        _menuScreen.pauseScreen.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
 
         yield break;
     }

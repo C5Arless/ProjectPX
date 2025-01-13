@@ -39,6 +39,10 @@ public class WarpController : MonoBehaviour {
     private IEnumerator InitializeSwitch() {
         yield return new WaitForSeconds(1f);
 
+        while (GameBucket.Instance.PXController == null) {
+            yield return null;
+        }
+
         yield return new WaitUntil(() => GameBucket.Instance.PXController.CanInteract);
 
         SwitchToEnter();

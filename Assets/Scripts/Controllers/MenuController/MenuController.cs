@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class MenuController : MonoBehaviour { 
@@ -18,13 +17,13 @@ public class MenuController : MonoBehaviour {
     [SerializeField] CanvasHandler _canvasHandler;    
 
     private int currentSlot = 0;
-    private int selectedSlot = 0;
-    private int direction;
+    private int selectedSlot = 0;    
 
     private InputAction _navigateAction;
     private InputAction _submitAction;
     private InputAction _saveAction;
     private InputAction _quitAction;
+    private InputAction _cancelAction;
     private InputAction _pauseCameraAction;
     private InputAction _resumeCameraAction;
     private InputAction _anyButtonAction;
@@ -69,6 +68,8 @@ public class MenuController : MonoBehaviour {
 
         _quitAction.started += OnQuit;
 
+        _cancelAction.started += OnCancel;
+
         _pauseCameraAction.started += OnPauseCamera;
 
         _resumeCameraAction.started += OnResumeCamera;
@@ -90,6 +91,8 @@ public class MenuController : MonoBehaviour {
 
         _quitAction.started -= OnQuit;
 
+        _cancelAction.started -= OnCancel;
+
         _pauseCameraAction.started -= OnPauseCamera;
 
         _resumeCameraAction.started -= OnResumeCamera;
@@ -107,6 +110,7 @@ public class MenuController : MonoBehaviour {
         _submitAction = InputManager.Instance.GetPlayerInput().actions["Submit"];
         _saveAction = InputManager.Instance.GetPlayerInput().actions["Save"];
         _quitAction = InputManager.Instance.GetPlayerInput().actions["Quit"];
+        _cancelAction = InputManager.Instance.GetPlayerInput().actions["Cancel"];
         _resumeCameraAction = InputManager.Instance.GetPlayerInput().actions["Resume"];
 
         //Player Actions
@@ -173,6 +177,14 @@ public class MenuController : MonoBehaviour {
 
         if (input.phase == InputActionPhase.Started) {
             QuitGame();
+        }
+    }
+
+    public void OnCancel(InputAction.CallbackContext input) {
+        if (_UIinfo.UIMode != UIMode.Records) { return; }
+
+        if (input.phase == InputActionPhase.Started) {
+            MainMenu();
         }
     }
 
@@ -243,6 +255,13 @@ public class MenuController : MonoBehaviour {
         CameraManager.Instance.MenuToSlot();
     }
 
+    public void Records() {
+        UIMode mode = UIMode.Records;
+        _canvasHandler.SwitchUIMode(mode);
+
+        CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.Record);
+    }
+
     public void QuitGame() {
         ScenesManager.Instance.QuitGame();
     }
@@ -278,21 +297,29 @@ public class MenuController : MonoBehaviour {
         StartCoroutine("DisplayRecords");
     }
 
-    private void SubmitSlot() {
+    public void SubmitSlot() {
         if (slotsInfo[currentSlot].Checkpoint.x == 0) {            
             DataManager.Instance.AssignSlotInfo(currentSlot);
             ScenesManager.Instance.StartGame();
+
             DataManager.Instance.OverwriteData(currentSlot);
             DataManager.Instance.RefreshData();
+
             CameraManager.Instance.SetCameraMode(VCameraMode.GameVCameras);
+            CameraManager.Instance.StartGame();
+
             InputManager.Instance.SetActionMap("Player");            
 
         } else {
             DataManager.Instance.AssignSlotInfo(currentSlot);
             ScenesManager.Instance.LoadGame();
+
             DataManager.Instance.OverwriteData(currentSlot);
             DataManager.Instance.RefreshData();
+
             CameraManager.Instance.SetCameraMode(VCameraMode.GameVCameras);
+            CameraManager.Instance.StartGame();
+
             InputManager.Instance.SetActionMap("Player");
         }
 
@@ -322,18 +349,6 @@ public class MenuController : MonoBehaviour {
         }
     }
 
-    private void NavigateSlot(Vector2 input) {
-        if (input == new Vector2(1f, 0f)) {
-            direction = 1;
-            //SwitchSlot(direction);
-        }
-
-        if (input == new Vector2(-1f, 0f)) {
-            direction = 0;
-            //SwitchSlot(direction);
-        }
-    }
-
     private void SwitchSlot(SaveSlot target) {
         DeselectLights();
 
@@ -355,35 +370,7 @@ public class MenuController : MonoBehaviour {
 
         currentSlot = selectedSlot;
         SelectLights();
-    }
-
-    /*
-    private void SwitchSlot(int direction) {
-        DeselectLights();
-        
-        if (direction == 1) {
-
-            if (selectedSlot < (int)SaveSlot.Three) {
-                selectedSlot++;
-            } else {
-                selectedSlot = (int)SaveSlot.One;
-            }
-
-        } else {
-
-            if (selectedSlot > (int)SaveSlot.One) {
-                selectedSlot--;
-            }
-            else {
-                selectedSlot = (int)SaveSlot.Three;
-            }
-
-        }
-
-        currentSlot = selectedSlot;
-        SelectLights();
-    }
-    */
+    }   
     
     private void SelectLights() {        
         foreach (Light light in slots[selectedSlot].GetComponentsInChildren<Light>()) {

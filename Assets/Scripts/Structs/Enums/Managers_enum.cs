@@ -55,7 +55,8 @@ public enum UIMode {
     MainScreen,
     MainMenu,
     Slots,
-    Pause
+    Pause,
+    Records
 }
 
 public enum VCameraMode {
