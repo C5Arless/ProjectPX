@@ -4,6 +4,7 @@ using UnityEngine;
 public class ActionCameraBlock : MonoBehaviour {
     [SerializeField] GameObject _playerPos;
     [SerializeField] GameObject _actionVCamera;
+    [SerializeField] GameObject _cameraPivot;
     [SerializeField] bool lockPlayer;
     [SerializeField] bool hasFollow;
 

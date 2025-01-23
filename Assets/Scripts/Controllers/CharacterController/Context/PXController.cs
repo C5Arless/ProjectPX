@@ -581,6 +581,8 @@ public class PXController : MonoBehaviour {
 
     //Camera Methods
     public void UpdateExternalCamera(Transform playerPos, Transform cameraPivot) {
+        //Updates player forward direction while inside ActionCameraBlock
+
         Vector3 targetForward = ComputeForward2D(playerPos, cameraPivot);
         float currentAngle = Vector3.Angle(_forward.transform.forward, targetForward);
 
