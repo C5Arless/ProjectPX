@@ -10,6 +10,7 @@ public struct canvasButtons {
     public GameObject ResumeButton;
     public GameObject mAudioButton;
     public GameObject pAudioButton;
+    public GameObject rBackButton;
 }
 
 [System.Serializable]
@@ -17,6 +18,7 @@ public struct menuScreen {
     public GameObject mainScreen;
     public GameObject slotsScreen;
     public GameObject pauseScreen;
+    public GameObject recordScreen;
 }
 
 [System.Serializable]
@@ -24,6 +26,7 @@ public struct menuCanvas {
     public GameObject[] mainCanvas;
     public GameObject slotsCanvas;
     public GameObject[] pauseCanvas;
+    public GameObject recordCanvas;
 }
 
 public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
@@ -87,11 +90,11 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private void ControlsChanged() {
         if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Gamepad") {
 
-            if (_highlightedButton != null) {
-                EventSystem.current.SetSelectedGameObject(_highlightedButton);
-            }
-            else if (_selectedButton != null) {
+            if (_selectedButton != null) {
                 EventSystem.current.SetSelectedGameObject(_selectedButton);
+            }
+            else if (_highlightedButton != null) {
+                EventSystem.current.SetSelectedGameObject(_highlightedButton);
             }
             else {
                 EventSystem.current.SetSelectedGameObject(EventSystem.current.firstSelectedGameObject);
@@ -156,6 +159,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                         _menuScreen.mainScreen.SetActive(true);
                         _menuScreen.slotsScreen.SetActive(false);
                         _menuScreen.pauseScreen.SetActive(false);
+                        _menuScreen.recordScreen.SetActive(false);
 
                         EventSystem.current.SetSelectedGameObject(_buttons.NewGameButton);
                         EventSystem.current.firstSelectedGameObject = _buttons.NewGameButton;
@@ -165,6 +169,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                         _menuScreen.mainScreen.SetActive(false);
                         _menuScreen.slotsScreen.SetActive(true);
                         _menuScreen.pauseScreen.SetActive(false);
+                        _menuScreen.recordScreen.SetActive(false);
 
                         EventSystem.current.SetSelectedGameObject(_saveSlots[(int)SaveSlot.One]);
                         EventSystem.current.firstSelectedGameObject = _saveSlots[(int)SaveSlot.One];
@@ -174,9 +179,20 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                         _menuScreen.mainScreen.SetActive(false);
                         _menuScreen.slotsScreen.SetActive(false);
                         _menuScreen.pauseScreen.SetActive(true);
+                        _menuScreen.recordScreen.SetActive(false);
 
                         EventSystem.current.SetSelectedGameObject(_buttons.ResumeButton);
                         EventSystem.current.firstSelectedGameObject = _buttons.ResumeButton;
+                        break;
+                    }
+                case UIMode.Records: {
+                        _menuScreen.mainScreen.SetActive(false);
+                        _menuScreen.slotsScreen.SetActive(false);
+                        _menuScreen.pauseScreen.SetActive(false);
+                        _menuScreen.recordScreen.SetActive(true);
+
+                        EventSystem.current.SetSelectedGameObject(_buttons.rBackButton);
+                        EventSystem.current.firstSelectedGameObject = _buttons.rBackButton;
                         break;
                     }
                 default: break;
@@ -187,11 +203,11 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void NavigateMenu(Vector2 input) {
         if (EventSystem.current.currentSelectedGameObject != null) { return; }
 
-        if (_highlightedButton != null) {
-            EventSystem.current.SetSelectedGameObject(_highlightedButton);
-        }
-        else if (_selectedButton != null) {
+        if (_selectedButton != null) {
             EventSystem.current.SetSelectedGameObject(_selectedButton);
+        }
+        else if (_highlightedButton != null) {
+            EventSystem.current.SetSelectedGameObject(_highlightedButton);
         }
         else {
             EventSystem.current.SetSelectedGameObject(EventSystem.current.firstSelectedGameObject);
@@ -213,6 +229,8 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
     public void OnPointerExit(PointerEventData eventData) {
+        if (eventData.pointerEnter == null) { return; }
+
         if (eventData.pointerEnter.GetComponent<Button>() != null) {
             _onExitHighlightButton();
         }
@@ -236,10 +254,6 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private void OnHighlight(GameObject target) {
         EventSystem.current.SetSelectedGameObject(null);
         _highlightedButton = target;        
-    }
-
-    private void OnExitHighlight() {
-        //
     }    
 
     private IEnumerator SetEventCamera() {
@@ -250,6 +264,9 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         yield return null;
 
         _menuScreen.pauseScreen.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
+        yield return null;
+
+        _menuScreen.recordScreen.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
 
         yield break;
     }

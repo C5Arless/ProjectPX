@@ -7,7 +7,7 @@ public class MenuController : MonoBehaviour {
     public static MenuController Instance { get; private set; }
 
     [SerializeField] GameObject[] slots;
-    [SerializeField] GameObject recordsPod;
+    //[SerializeField] GameObject recordsPod;
     [Space]
     [SerializeField] DataInfo[] slotsInfo;
     [SerializeField] RecordInfo[] recordsInfo;
@@ -44,7 +44,7 @@ public class MenuController : MonoBehaviour {
     private void Start() {
         DataManager.Instance.RefreshData();
         StartCoroutine("DisplaySlots");
-        StartCoroutine("DisplayRecords");
+        //StartCoroutine("DisplayRecords");
         SelectLights();
         
         CameraManager.Instance.InitializeVCameras();
@@ -128,10 +128,12 @@ public class MenuController : MonoBehaviour {
                         break;
                     }
                 case UIMode.Slots: {
+                        _canvasHandler.NavigateMenu(input.ReadValue<Vector2>());
                         //NavigateSlot(input.ReadValue<Vector2>());                        
                         break;
                     }
                 case UIMode.Pause: {
+                        _canvasHandler.NavigateMenu(input.ReadValue<Vector2>());
                         //NavigatePause(input.ReadValue<Vector2>());
                         break;
                     }
@@ -181,7 +183,7 @@ public class MenuController : MonoBehaviour {
     }
 
     public void OnCancel(InputAction.CallbackContext input) {
-        if (_UIinfo.UIMode != UIMode.Records) { return; }
+        if (_UIinfo.UIMode != UIMode.Records && _UIinfo.UIMode != UIMode.Slots) { return; }
 
         if (input.phase == InputActionPhase.Started) {
             MainMenu();
@@ -287,14 +289,16 @@ public class MenuController : MonoBehaviour {
         DataManager.Instance.SetRecord();
         DataManager.Instance.RefreshRecords();
 
-        StartCoroutine("DisplayRecords");
+        //Update on all canvas through canvasHandler
+        //StartCoroutine("DisplayRecords");
     }
 
     public void DeleteRecords() {
         DataManager.Instance.ResetRecords();
         DataManager.Instance.RefreshRecords();
 
-        StartCoroutine("DisplayRecords");
+        //Update on all canvas through canvasHandler
+        //StartCoroutine("DisplayRecords");
     }
 
     public void SubmitSlot() {
@@ -335,6 +339,9 @@ public class MenuController : MonoBehaviour {
         else if (_canvasHandler.SaveSlots[(int)SaveSlot.Three] == _canvasHandler.SelectedButton) {
             SwitchSlot(SaveSlot.Three);
         }
+        else {
+            DeselectLights();
+        }
     }
 
     private void HighlightSlots() {
@@ -346,6 +353,9 @@ public class MenuController : MonoBehaviour {
         }
         else if (_canvasHandler.SaveSlots[(int)SaveSlot.Three] == _canvasHandler.HighlightedButton) {
             SwitchSlot(SaveSlot.Three);
+        } 
+        else {
+            DeselectLights();
         }
     }
 
@@ -442,6 +452,7 @@ public class MenuController : MonoBehaviour {
         yield break;
     }
     
+    /*
     private IEnumerator DisplayRecords() {
         int i = 0;
         TMP_Text[] fields = recordsPod.GetComponentsInChildren<TMP_Text>();
@@ -463,5 +474,6 @@ public class MenuController : MonoBehaviour {
 
         yield break;
     }
+    */
 
 }
