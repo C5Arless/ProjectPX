@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -215,8 +216,12 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        if (eventData.pointerEnter.GetComponent<Button>() != null) {
-            Button target = eventData.pointerEnter.GetComponent<Button>();
+        if (eventData.pointerEnter.name == "Blocker") { return; }
+
+        if (HighlightCondition(eventData)) { 
+            return; 
+        } else {
+            RectTransform target = eventData.pointerEnter.GetComponent<RectTransform>();
 
             OnHighlight(target.gameObject);
             _onHighlightButton();
@@ -224,14 +229,15 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             if (_UIinfo.UIMode == UIMode.Slots) {
                 _onSaveSlotHighlightButton();
             }
-
         }
     }
 
     public void OnPointerExit(PointerEventData eventData) {
         if (eventData.pointerEnter == null) { return; }
 
-        if (eventData.pointerEnter.GetComponent<Button>() != null) {
+        if (HighlightCondition(eventData)) {
+            return;
+        } else {
             _onExitHighlightButton();
         }
     }
@@ -241,7 +247,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
     
     public void OnSelect(BaseEventData eventData) {        
-        Button target = eventData.selectedObject.GetComponent<Button>();
+        RectTransform target = eventData.selectedObject.GetComponent<RectTransform>();
         _selectedButton = target.gameObject;
 
         _onSelectButton();
@@ -251,10 +257,26 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
+    public void SetSelected(GameObject target) {
+        EventSystem.current.SetSelectedGameObject(target);
+        _selectedButton = target;
+    }
+
     private void OnHighlight(GameObject target) {
         EventSystem.current.SetSelectedGameObject(null);
+        _selectedButton = null;
+
         _highlightedButton = target;        
     }    
+
+    private bool HighlightCondition(PointerEventData eventData) {
+        if (eventData.pointerEnter.GetComponent<Button>() == null &&
+            eventData.pointerEnter.GetComponent<TMP_Dropdown>() == null &&
+            eventData.pointerEnter.GetComponent<Slider>() == null &&
+            eventData.pointerEnter.GetComponent<Toggle>() == null) {
+            return true;
+        } else return false;
+    }
 
     private IEnumerator SetEventCamera() {
         _menuScreen.mainScreen.GetComponent<Canvas>().worldCamera = CameraManager.Instance.MenuBrain.GetComponent<Camera>();
