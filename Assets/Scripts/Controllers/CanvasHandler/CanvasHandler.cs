@@ -35,8 +35,8 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] menuScreen _menuScreen;
     [SerializeField] canvasButtons _buttons;
     [SerializeField] GameObject[] _saveSlots;
-
     [SerializeField] menuCanvas _menuCanvas;
+    //[SerializeField] GameObject _firstSideWindow;
 
     public delegate void OnSelectButton();
     public OnSelectButton _onSelectButton;
@@ -58,6 +58,8 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private GameObject _highlightedButton;
     private GameObject _selectedButton;
+
+    private GameObject _currentSideWindow;
 
     public GameObject HighlightedButton { get { return _highlightedButton; } }
     public GameObject SelectedButton { get { return _selectedButton; } }
@@ -260,6 +262,15 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void SetSelected(GameObject target) {
         EventSystem.current.SetSelectedGameObject(target);
         _selectedButton = target;
+    }
+
+    public void SwitchSideWindow(GameObject target) {
+        if (_currentSideWindow != null) {
+            _currentSideWindow.SetActive(false);
+        }
+
+        _currentSideWindow = target;
+        _currentSideWindow.SetActive(true);
     }
 
     private void OnHighlight(GameObject target) {
