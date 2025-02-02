@@ -257,6 +257,20 @@ public class MenuController : MonoBehaviour {
         CameraManager.Instance.MenuToSlot();
     }
 
+    public void PauseToSlots() {
+        if (_UIinfo.UIMode == UIMode.Pause) {
+            UIMode mode = UIMode.Slots;
+            _canvasHandler.SwitchUIMode(mode);
+
+            CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.Slots);
+        } else {
+            UIMode mode = UIMode.Pause;
+            _canvasHandler.SwitchUIMode(mode);
+
+            CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.PauseEnd);
+        }
+    }
+
     public void Records() {
         UIMode mode = UIMode.Records;
         _canvasHandler.SwitchUIMode(mode);
@@ -330,13 +344,16 @@ public class MenuController : MonoBehaviour {
     }
 
     private void SelectSlots() {
-        if (_canvasHandler.SaveSlots[(int)SaveSlot.One] == _canvasHandler.SelectedButton) {
+        if (_canvasHandler.SaveSlots[(int)SaveSlot.One] == _canvasHandler.SelectedButton ||
+            _canvasHandler.OverwriteSlots[(int)SaveSlot.One] == _canvasHandler.SelectedButton) {
             SwitchSlot(SaveSlot.One);
         }
-        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Two] == _canvasHandler.SelectedButton) {
+        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Two] == _canvasHandler.SelectedButton ||
+            _canvasHandler.OverwriteSlots[(int)SaveSlot.Two] == _canvasHandler.SelectedButton) {
             SwitchSlot(SaveSlot.Two);
         }
-        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Three] == _canvasHandler.SelectedButton) {
+        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Three] == _canvasHandler.SelectedButton ||
+            _canvasHandler.OverwriteSlots[(int)SaveSlot.Three] == _canvasHandler.SelectedButton) {
             SwitchSlot(SaveSlot.Three);
         }
         else {
@@ -345,15 +362,18 @@ public class MenuController : MonoBehaviour {
     }
 
     private void HighlightSlots() {
-        if (_canvasHandler.SaveSlots[(int)SaveSlot.One] == _canvasHandler.HighlightedButton) {
+        if (_canvasHandler.SaveSlots[(int)SaveSlot.One] == _canvasHandler.HighlightedButton ||
+            _canvasHandler.OverwriteSlots[(int)SaveSlot.One] == _canvasHandler.HighlightedButton) {
             SwitchSlot(SaveSlot.One);
         }
-        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Two] == _canvasHandler.HighlightedButton) {
+        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Two] == _canvasHandler.HighlightedButton ||
+            _canvasHandler.OverwriteSlots[(int)SaveSlot.Two] == _canvasHandler.HighlightedButton) {
             SwitchSlot(SaveSlot.Two);
         }
-        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Three] == _canvasHandler.HighlightedButton) {
+        else if (_canvasHandler.SaveSlots[(int)SaveSlot.Three] == _canvasHandler.HighlightedButton ||
+            _canvasHandler.OverwriteSlots[(int)SaveSlot.Three] == _canvasHandler.HighlightedButton) {
             SwitchSlot(SaveSlot.Three);
-        } 
+        }
         else {
             DeselectLights();
         }

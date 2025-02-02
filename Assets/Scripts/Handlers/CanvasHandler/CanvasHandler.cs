@@ -35,6 +35,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] menuScreen _menuScreen;
     [SerializeField] canvasButtons _buttons;
     [SerializeField] GameObject[] _saveSlots;
+    [SerializeField] GameObject[] _overwriteSlots;
     [SerializeField] menuCanvas _menuCanvas;
     //[SerializeField] GameObject _firstSideWindow;
 
@@ -64,6 +65,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public GameObject HighlightedButton { get { return _highlightedButton; } }
     public GameObject SelectedButton { get { return _selectedButton; } }
     public GameObject[] SaveSlots { get { return _saveSlots; } }
+    public GameObject[] OverwriteSlots { get { return _overwriteSlots; } }
 
     private void Awake() {
         _onHighlightButton += () => Debug.Log("OnHighlightEvent!");
@@ -174,8 +176,14 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                         _menuScreen.pauseScreen.SetActive(false);
                         _menuScreen.recordScreen.SetActive(false);
 
-                        EventSystem.current.SetSelectedGameObject(_saveSlots[(int)SaveSlot.One]);
-                        EventSystem.current.firstSelectedGameObject = _saveSlots[(int)SaveSlot.One];
+                        if (GameBucket.Instance.PXController != null) {
+                            EventSystem.current.SetSelectedGameObject(_overwriteSlots[(int)SaveSlot.One]);
+                            EventSystem.current.firstSelectedGameObject = _overwriteSlots[(int)SaveSlot.One];
+                        } else {
+                            EventSystem.current.SetSelectedGameObject(_saveSlots[(int)SaveSlot.One]);
+                            EventSystem.current.firstSelectedGameObject = _saveSlots[(int)SaveSlot.One];
+                        }
+                        
                         break;
                     }
                 case UIMode.Pause: {
