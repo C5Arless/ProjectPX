@@ -1,3 +1,6 @@
+using System.Collections;
+using UnityEngine;
+
 public enum PlayerVFX {
     AirRing,
     DashTrail,

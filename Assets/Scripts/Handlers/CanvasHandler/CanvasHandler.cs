@@ -37,7 +37,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] GameObject[] _saveSlots;
     [SerializeField] GameObject[] _overwriteSlots;
     [SerializeField] menuCanvas _menuCanvas;
-    //[SerializeField] GameObject _firstSideWindow;
+
 
     public delegate void OnSelectButton();
     public OnSelectButton _onSelectButton;
@@ -78,6 +78,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         SubscribeCallbacks();
 
         StartCoroutine("SetEventCamera");
+        ValidateContinueButton();
     }
 
     private void OnDestroy() {
@@ -233,6 +234,10 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         } else {
             RectTransform target = eventData.pointerEnter.GetComponent<RectTransform>();
 
+            if (CheckContinueButton(target.gameObject)) {
+                ValidateContinueButton();
+            }
+
             OnHighlight(target.gameObject);
             _onHighlightButton();
 
@@ -258,6 +263,11 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     
     public void OnSelect(BaseEventData eventData) {        
         RectTransform target = eventData.selectedObject.GetComponent<RectTransform>();
+
+        if (CheckContinueButton(target.gameObject)) {
+            ValidateContinueButton();
+        }
+
         _selectedButton = target.gameObject;
 
         _onSelectButton();
@@ -287,6 +297,23 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         _highlightedButton = target;        
     }    
+
+    private void ValidateContinueButton() {
+        DataInfo[] slotsInfo = DataManager.Instance.SlotsInfo;
+        
+        foreach (DataInfo info in slotsInfo) {
+            if (info.Runtime != 0) {
+                _buttons.ContinueButton.GetComponent<Button>().interactable = true;
+            }
+        }
+    }
+
+    private bool CheckContinueButton(GameObject target) {
+        if (target == _buttons.ContinueButton) {
+            return true;
+        }
+        else return false;
+    }
 
     private bool HighlightCondition(PointerEventData eventData) {
         if (eventData.pointerEnter.GetComponent<Button>() == null &&

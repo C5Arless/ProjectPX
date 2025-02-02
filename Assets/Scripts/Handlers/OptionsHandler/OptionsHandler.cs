@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OptionsHandler : MonoBehaviour {
     [SerializeField] TMP_InputField inputField;
@@ -41,5 +42,37 @@ public class OptionsHandler : MonoBehaviour {
         if (inputField != null && inputField.text.Length > 0) {
             inputField.text = inputField.text.Substring(0, inputField.text.Length - 1);
         }
+    }
+
+    public void SelectName() {
+        DataManager.Instance.PlayerInfo.Name = inputField.text;
+    }
+
+    public void HandleMasterVolume(Slider target) {
+        Debug.Log("Value: " + target.value);
+    }
+
+    public void HandleMusicVolume(Slider target) {
+        Debug.Log("Value: " + target.value);
+    }
+
+    public void HandleSFXVolume(Slider target) {
+        Debug.Log("Value: " + target.value);
+    }
+
+    public void HandleMuteVolume(Toggle target) {
+        Debug.Log("Value: " + target.isOn);
+    }
+
+    public void HandleDisplayResolution(TMP_Dropdown target) {
+        Debug.Log("Value: " + target.value);
+    }
+
+    public void HandleDisplayMode(TMP_Dropdown target) {
+        Debug.Log("Value: " + target.value);
+    }
+
+    public void HandleQuality(TMP_Dropdown target) {
+        Debug.Log("Value: " + target.value);
     }
 }

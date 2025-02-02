@@ -216,13 +216,14 @@ public class MenuController : MonoBehaviour {
         }
     }
 
-    public void ContinueGame() {
-        DataManager.Instance.ResumeData();
-        ScenesManager.Instance.LoadGame();
+    
+    public void NewGame() {
+        ScenesManager.Instance.StartGame();
 
         CameraManager.Instance.StartGame();
         InputManager.Instance.SetActionMap("Player");
     }
+    
 
     public void SaveGame() {
         DataManager.Instance.OverwriteData(currentSlot);
@@ -243,7 +244,7 @@ public class MenuController : MonoBehaviour {
         StartCoroutine("DisplaySlots");
     }
 
-    public void NewGame() {
+    public void LoadGame() {
         UIMode mode = UIMode.Slots;
         _canvasHandler.SwitchUIMode(mode);        
 
@@ -287,9 +288,11 @@ public class MenuController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
     }    
 
-    public void DeleteSlot() {
-        if (slotsInfo[currentSlot].Runtime == 0) {
-            int slotID = slotsInfo[currentSlot].SlotID;
+    public void DeleteSlot(int saveSlot) {
+        if (saveSlot < 0 && saveSlot > 2) { return; }
+
+        if (slotsInfo[saveSlot].Runtime == 0) {
+            int slotID = slotsInfo[saveSlot].SlotID;
             DataManager.Instance.DeleteData(slotID);
             DataManager.Instance.RefreshData();
 
@@ -297,6 +300,16 @@ public class MenuController : MonoBehaviour {
         } else {
             Debug.Log("Current slot is active!");
         }
+    }
+
+    public void DeleteAllSlots() {                        
+        DataManager.Instance.DeleteData(1);
+        DataManager.Instance.DeleteData(2);
+        DataManager.Instance.DeleteData(3);
+        DataManager.Instance.RefreshData();
+
+        StartCoroutine("DisplaySlots");
+       
     }
 
     public void SetNewRecord() {
@@ -316,19 +329,7 @@ public class MenuController : MonoBehaviour {
     }
 
     public void SubmitSlot() {
-        if (slotsInfo[currentSlot].Checkpoint.x == 0) {            
-            DataManager.Instance.AssignSlotInfo(currentSlot);
-            ScenesManager.Instance.StartGame();
-
-            DataManager.Instance.OverwriteData(currentSlot);
-            DataManager.Instance.RefreshData();
-
-            CameraManager.Instance.SetCameraMode(VCameraMode.GameVCameras);
-            CameraManager.Instance.StartGame();
-
-            InputManager.Instance.SetActionMap("Player");            
-
-        } else {
+        if (slotsInfo[currentSlot].Checkpoint.x != 0) {                        
             DataManager.Instance.AssignSlotInfo(currentSlot);
             ScenesManager.Instance.LoadGame();
 
@@ -340,7 +341,6 @@ public class MenuController : MonoBehaviour {
 
             InputManager.Instance.SetActionMap("Player");
         }
-
     }
 
     private void SelectSlots() {

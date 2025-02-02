@@ -9,6 +9,9 @@ public class DataManager : MonoBehaviour {
     [SerializeField] DataInfo[] slotsInfo;
     [SerializeField] PlayerInfo playerInfo;
 
+    public DataInfo[] SlotsInfo { get { return slotsInfo; } }
+    public PlayerInfo PlayerInfo { get { return playerInfo; } }
+
     private void Awake() {
         if (Instance == null) {
             Instance = this;
@@ -19,6 +22,8 @@ public class DataManager : MonoBehaviour {
     }
 
     private void Start() {
+        InitializePlayerInfo();
+
         CheckData();
         Invoke("RefreshData", .25f);
         Invoke("RefreshRecords", .5f);
@@ -30,6 +35,16 @@ public class DataManager : MonoBehaviour {
 
     public void RefreshRecords() {
         StartCoroutine("InitializeRecords");
+    }
+
+    public void InitializePlayerInfo() {
+        playerInfo.SlotID = 0;
+        playerInfo.Name = "Default";
+        playerInfo.PowerUps = 0;
+        playerInfo.Score = 0;
+        playerInfo.CurrentHp = 3;
+        playerInfo.Runtime = 0;
+        playerInfo.Checkpoint = new Vector2(0, 0);
     }
 
     public void CheckData() {
@@ -85,6 +100,7 @@ public class DataManager : MonoBehaviour {
         checkpointData[0] = playerInfo.Checkpoint.x;
         checkpointData[1] = playerInfo.Checkpoint.y;
 
+        DBVault.SetActiveSlot(slotID);
         DBVault.UpdateSlotByIdx(slotID, slotData);
         DBVault.UpdateCheckpoint(slotID, checkpointData);        
     }
