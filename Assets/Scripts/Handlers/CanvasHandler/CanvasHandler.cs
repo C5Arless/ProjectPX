@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -68,10 +69,10 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public GameObject[] OverwriteSlots { get { return _overwriteSlots; } }
 
     private void Awake() {
-        _onHighlightButton += () => Debug.Log("OnHighlightEvent!");
-        _onExitHighlightButton += () => Debug.Log("OnExitHighlightEvent!");
-        _onSelectButton += () => Debug.Log("OnSelectEvent!");
-        _onDeselectButton += () => Debug.Log("OnDeselectEvent!");
+        _onHighlightButton += DefaultEvent;
+        _onExitHighlightButton += DefaultEvent;
+        _onSelectButton += DefaultEvent;
+        _onDeselectButton += DefaultEvent;
     }
 
     private void Start() {
@@ -91,6 +92,10 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void UnsubscribeCallbacks() {
         InputManager.Instance._controlsChangedResolver -= ControlsChanged;
+    }
+
+    private void DefaultEvent() {
+        //
     }
 
     private void ControlsChanged() {
@@ -227,8 +232,54 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        if (eventData.pointerEnter.name == "Blocker") { return; }
+        if (eventData.pointerEnter.name == "Blocker") { return; }        
 
+        GameObject target = eventData.pointerEnter;
+
+        if (target.GetComponent<Button>() != null) {
+            Button subtarget = eventData.pointerEnter.GetComponent<Button>();
+
+            if (CheckContinueButton(subtarget.gameObject)) {
+                ValidateContinueButton();
+            }
+
+            OnHighlight(subtarget.gameObject);
+            _onHighlightButton();
+
+            if (_UIinfo.UIMode == UIMode.Slots) {
+                _onSaveSlotHighlightButton();
+            }
+        }
+        
+        if (target.GetComponent<Slider>() != null) {
+            Slider subtarget = eventData.pointerEnter.GetComponent<Slider>();
+
+            OnHighlight(subtarget.gameObject);
+            _onHighlightButton();
+        }
+        
+        if (target.GetComponent<TMP_Dropdown>() != null) {
+            TMP_Dropdown subtarget = eventData.pointerEnter.GetComponent<TMP_Dropdown>();
+
+            OnHighlight(subtarget.gameObject);
+            _onHighlightButton();
+        }
+        
+        if (target.GetComponent<Toggle>() != null) {
+            Toggle subtarget = eventData.pointerEnter.GetComponent<Toggle>();
+
+            OnHighlight(subtarget.gameObject);
+            _onHighlightButton();
+        }
+        
+        if (target.GetComponent<TMP_InputField>() != null) {
+            TMP_InputField subtarget = eventData.pointerEnter.GetComponent<TMP_InputField>();
+
+            OnHighlight(subtarget.gameObject);
+            _onHighlightButton();
+        }
+
+        /*
         if (HighlightCondition(eventData)) { 
             return; 
         } else {
@@ -245,6 +296,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 _onSaveSlotHighlightButton();
             }
         }
+        */
     }
 
     public void OnPointerExit(PointerEventData eventData) {
