@@ -13,3 +13,9 @@ public struct CinematicVCameras {
     public float lenght;
     public bool hasDolly;
 }
+
+[System.Serializable]
+public struct AudioClipsDrawer {
+    public AudioClip[] musicTracks;
+    public AudioClip[] sFXTracks;
+}

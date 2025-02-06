@@ -74,3 +74,6 @@ crashlytics-build.properties
 /Assets/Scenes/EnemyTest.unity.meta
 /Assets/Scenes/PlayerUITest.unity
 /Assets/Scenes/PlayerUITest.unity.meta
+
+# AudioClips
+/Assets/AudioClips/

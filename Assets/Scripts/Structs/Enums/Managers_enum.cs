@@ -105,3 +105,39 @@ public enum PauseCanvasButtons {
     MainMenuButton,
     ExitButton
 }
+
+public enum MusicTracks {
+    MainMenu_Intro,
+    MainMenu_Loop,
+    Lab_Intro,
+    Lab_Loop,
+    Map1_Intro,
+    Map1_Loop,
+    Warp1_Intro,
+    Warp1_Loop,
+    Warp2_Intro,
+    Warp2_Loop,
+    Warp3_Intro,
+    Warp3_Loop1,
+    Warp3_Loop2,
+    Warp3_Loop3,
+    Warp3_End
+}
+
+public enum SFXTracks {
+    Keyboard_1,
+    Keyboard_2,
+    Keyboard_3,
+    Keyboard_4,
+    AirSweep,
+    Scatter,
+    Overdrive,
+    Bump,
+    Boop,
+    Whoop,
+    Crash,
+    Pow,
+    Tap,
+    Spotlight
+
+}
