@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class OptionsHandler : MonoBehaviour {
@@ -17,6 +18,8 @@ public class OptionsHandler : MonoBehaviour {
 
     private void SubscribeCallbacks() {
         InputManager.Instance._controlsChangedResolver += ControlsChanged;
+
+        inputField.onValueChanged.AddListener(KeyboardSound);
     }
 
     private void UnsubscribeCallbacks() {
@@ -29,6 +32,10 @@ public class OptionsHandler : MonoBehaviour {
         } else {
             inputField.interactable = true;
         }
+    }
+
+    private void KeyboardSound(string text) {
+        AudioManager.Instance.PlayKeyboardSound();        
     }
 
     public void AddText(TMP_Text text) {

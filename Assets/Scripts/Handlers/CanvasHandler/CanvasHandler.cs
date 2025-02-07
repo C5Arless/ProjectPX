@@ -71,7 +71,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private void Awake() {
         _onHighlightButton += DefaultEvent;
         _onExitHighlightButton += DefaultEvent;
-        _onSelectButton += DefaultEvent;
+        _onSelectButton += KeyboardSound;
         _onDeselectButton += DefaultEvent;
     }
 
@@ -96,6 +96,10 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void DefaultEvent() {
         //
+    }
+
+    private void KeyboardSound() {
+        AudioManager.Instance.PlayKeyboardSound();
     }
 
     private void ControlsChanged() {
@@ -330,8 +334,10 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     }
 
     public void SetSelected(GameObject target) {
-        EventSystem.current.SetSelectedGameObject(target);
-        _selectedButton = target;
+        if (target.activeSelf) { 
+            EventSystem.current.SetSelectedGameObject(target);
+            _selectedButton = target;        
+        }
     }
 
     public void SwitchSideWindow(GameObject target) {
