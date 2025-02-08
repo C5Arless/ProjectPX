@@ -27,6 +27,10 @@ public class AudioManager : MonoBehaviour {
         SFXTracks sFXTracks = (SFXTracks)clipID;
 
         PlaySFX(sFXTracks);
+    } 
+
+    public void HandleSignal() {
+        Debug.Log("Handling Signal!");
     }
 
     private void PlaySFX(SFXTracks clip) {
@@ -36,11 +40,11 @@ public class AudioManager : MonoBehaviour {
         audioSource.clip = _clipsDrawer.sFXTracks[(int)clip];
         audioSource.outputAudioMixerGroup = _mixer.outputAudioMixerGroup;
 
-        StartCoroutine(PlayClip(audioSource));
+        StartCoroutine(PlayClipOnce(audioSource));
         
     }
 
-    private IEnumerator PlayClip(AudioSource source) {
+    private IEnumerator PlayClipOnce(AudioSource source) {
         source.PlayOneShot(source.clip);
 
         yield return new WaitWhile(() => source.isPlaying);

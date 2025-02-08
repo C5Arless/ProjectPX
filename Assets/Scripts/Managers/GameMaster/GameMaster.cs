@@ -2,10 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 public class GameMaster : MonoBehaviour {
-    public static GameMaster Instance { get; private set; }
-    
-    [SerializeField] PlayerInfo _playerinfo;
-
+    public static GameMaster Instance;
 
     private void Awake() {
 
@@ -20,21 +17,9 @@ public class GameMaster : MonoBehaviour {
     void Start() {
         Debug.Log("Game Master Start");        
 
-        ScenesManager.Instance.MainMenu();
-        //StartCoroutine(StartGame());
+        //ScenesManager.Instance.MainMenu();
+
+        //AudioManager Call
     }
-
-    private IEnumerator StartGame() {
-        yield return new WaitForSeconds(10f);
-        ScenesManager.Instance.StartGame();
-        CameraManager.Instance.StartGame();
-
-        while (ScenesManager.Instance.IsBusy()) {
-            yield return null;
-        }
-
-        InputManager.Instance.StartGame();
-
-        yield break;
-    }
+    
 }
