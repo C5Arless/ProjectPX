@@ -29,8 +29,12 @@ public class AudioManager : MonoBehaviour {
         PlaySFX(sFXTracks);
     } 
 
-    public void HandleSignal() {
+    public void HandleSignal(int signal) {
         Debug.Log("Handling Signal!");
+        
+        if (signal == 3) {
+            MenuController.Instance.ActivateIntroLights();
+        }
     }
 
     private void PlaySFX(SFXTracks clip) {

@@ -7,7 +7,8 @@ public class MenuController : MonoBehaviour {
     public static MenuController Instance { get; private set; }
 
     [SerializeField] GameObject[] slots;
-    //[SerializeField] GameObject recordsPod;
+    [SerializeField] GameObject _introLight1;
+    [SerializeField] GameObject _introLight2;
     [Space]
     [SerializeField] DataInfo[] slotsInfo;
     [SerializeField] RecordInfo[] recordsInfo;
@@ -340,6 +341,14 @@ public class MenuController : MonoBehaviour {
             CameraManager.Instance.StartGame();
 
             InputManager.Instance.SetActionMap("Player");
+        }
+    }
+
+    public void ActivateIntroLights() {
+        if (_introLight1.activeSelf) {
+            _introLight2.SetActive(true);
+        } else {
+            _introLight1.SetActive(true);
         }
     }
 
