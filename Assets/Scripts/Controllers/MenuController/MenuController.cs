@@ -44,15 +44,19 @@ public class MenuController : MonoBehaviour {
 
     private void Start() {
         DataManager.Instance.RefreshData();
-        StartCoroutine("DisplaySlots");
-        //StartCoroutine("DisplayRecords");
+        StartCoroutine("DisplaySlots");        
         SelectLights();
         
         CameraManager.Instance.InitializeVCameras();
+        Invoke("InitOST", .5f);
 
         InitializeActions();
         SubscribeCallbacks();
         
+    }
+
+    private void InitOST() {
+        AudioManager.Instance.PlayMusic(MusicTracks.MainMenu_Intro);
     }
 
     private void OnDestroy() {

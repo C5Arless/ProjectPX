@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Timeline;
 
 [System.Serializable]
 public struct InteractionVCameras {
@@ -16,6 +17,12 @@ public struct CinematicVCameras {
 
 [System.Serializable]
 public struct AudioClipsDrawer {
-    public AudioClip[] musicTracks;
+    public MusicDrawer[] musicTracks;
     public AudioClip[] sFXTracks;
+}
+
+[System.Serializable]
+public struct MusicDrawer {
+    public AudioClip track;
+    public TimelineAsset timeline;
 }

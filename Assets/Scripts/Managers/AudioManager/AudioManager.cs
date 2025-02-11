@@ -1,7 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Playables;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Timeline;
 
 public class AudioManager : MonoBehaviour {
     public static AudioManager Instance;
@@ -34,6 +35,7 @@ public class AudioManager : MonoBehaviour {
         
         if (signal == 3) {
             MenuController.Instance.ActivateIntroLights();
+            PlaySFX(SFXTracks.Spotlight);
         }
     }
 
@@ -43,9 +45,24 @@ public class AudioManager : MonoBehaviour {
         AudioSource audioSource = SFXSource.GetComponent<AudioSource>();
         audioSource.clip = _clipsDrawer.sFXTracks[(int)clip];
         audioSource.outputAudioMixerGroup = _mixer.outputAudioMixerGroup;
+        audioSource.volume = .05f;
 
         StartCoroutine(PlayClipOnce(audioSource));
         
+    }
+
+    public void PlayMusic(MusicTracks track) {
+        AudioSource audioSource = MusicSource.GetComponent<AudioSource>();
+        PlayableDirector playbackTrack = MusicSource.GetComponent<PlayableDirector>();
+
+        if (audioSource != null) {
+            audioSource.clip = _clipsDrawer.musicTracks[(int)track].track;
+            playbackTrack.playableAsset = _clipsDrawer.musicTracks[(int)track].timeline;
+            audioSource.volume = .15f;
+
+            playbackTrack.Play();
+            audioSource.Play();
+        }
     }
 
     private IEnumerator PlayClipOnce(AudioSource source) {
@@ -54,5 +71,11 @@ public class AudioManager : MonoBehaviour {
         yield return new WaitWhile(() => source.isPlaying);
         
         Destroy(source);
+    }
+
+    private IEnumerator PlayMusicTrack(AudioSource source) {
+        
+        
+        yield return null;
     }
 }
