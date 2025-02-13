@@ -123,11 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &340119289 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8298314339829458474, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
-  m_PrefabInstance: {fileID: 2109609349}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &417439645
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,13 +694,13 @@ MonoBehaviour:
         - m_Target: {fileID: 1041757715}
           m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
           m_MethodName: HandleSignal
-          m_Mode: 3
+          m_Mode: 5
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 1
             m_FloatArgument: 0
-            m_StringArgument: 
+            m_StringArgument: 01
             m_BoolArgument: 0
           m_CallState: 2
     - m_PersistentCalls:
@@ -713,13 +708,13 @@ MonoBehaviour:
         - m_Target: {fileID: 1041757715}
           m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
           m_MethodName: HandleSignal
-          m_Mode: 3
+          m_Mode: 5
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: 
+            m_StringArgument: 00
             m_BoolArgument: 0
           m_CallState: 2
     - m_PersistentCalls:
@@ -727,13 +722,13 @@ MonoBehaviour:
         - m_Target: {fileID: 1041757715}
           m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
           m_MethodName: HandleSignal
-          m_Mode: 3
+          m_Mode: 5
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 2
             m_FloatArgument: 0
-            m_StringArgument: 
+            m_StringArgument: 02
             m_BoolArgument: 0
           m_CallState: 2
     - m_PersistentCalls:
@@ -741,13 +736,13 @@ MonoBehaviour:
         - m_Target: {fileID: 1041757715}
           m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
           m_MethodName: HandleSignal
-          m_Mode: 3
+          m_Mode: 5
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 3
             m_FloatArgument: 0
-            m_StringArgument: 
+            m_StringArgument: 03
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!82 &1017587361
@@ -905,7 +900,7 @@ MonoBehaviour:
     musicTracks:
     - track: {fileID: 8300000, guid: e8a6fa44811c8d743a03046eca3d4641, type: 3}
       timeline: {fileID: 11400000, guid: 9539738962bf37b47b61072aea778cd9, type: 2}
-    - track: {fileID: 0}
+    - track: {fileID: 8300000, guid: b43ba0f3392bbe24c92aad015eb5a8a1, type: 3}
       timeline: {fileID: 0}
     - track: {fileID: 0}
       timeline: {fileID: 0}
@@ -1903,11 +1898,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &2076739271 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4070189417146743231, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
-  m_PrefabInstance: {fileID: 2109609349}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2109609349
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1918,27 +1908,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 520092704829636509, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.529781
+      value: 16.529783
       objectReference: {fileID: 0}
     - target: {fileID: 520092704829636509, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 35.153538
+      value: 35.153534
       objectReference: {fileID: 0}
     - target: {fileID: 520092704829636509, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7787343
+      value: 0.7787359
       objectReference: {fileID: 0}
     - target: {fileID: 520092704829636509, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 1.0624865e-23
+      value: -3.7429606e-30
       objectReference: {fileID: 0}
     - target: {fileID: 520092704829636509, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.62735385
+      value: 0.62735194
       objectReference: {fileID: 0}
     - target: {fileID: 520092704829636509, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -3.9243807e-23
+      value: 4.2675297e-31
       objectReference: {fileID: 0}
     - target: {fileID: 1230685322137889735, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_Name
@@ -1952,10 +1942,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 2064336133}
-    - target: {fileID: 4070189417146743231, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4135375592729046727, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -1972,10 +1958,6 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1234017024}
-    - target: {fileID: 5468024237235033663, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5485780882447331907, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2016,14 +1998,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5905955107517071725, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
-      propertyPath: _introLight1
-      value: 
-      objectReference: {fileID: 2076739271}
-    - target: {fileID: 5905955107517071725, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
-      propertyPath: _introLight2
-      value: 
-      objectReference: {fileID: 340119289}
     - target: {fileID: 6270053157801729568, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -2083,10 +2057,6 @@ PrefabInstance:
     - target: {fileID: 8154378538328192795, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.07658079
-      objectReference: {fileID: 0}
-    - target: {fileID: 8298314339829458474, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9131347950368207893, guid: 63fa5eb0566c80c458b5756bff634373, type: 3}
       propertyPath: m_Mesh

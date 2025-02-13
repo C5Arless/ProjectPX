@@ -3,6 +3,7 @@ using UnityEngine.Playables;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Timeline;
+//using System;
 
 public class AudioManager : MonoBehaviour {
     public static AudioManager Instance;
@@ -30,12 +31,47 @@ public class AudioManager : MonoBehaviour {
         PlaySFX(sFXTracks);
     } 
 
-    public void HandleSignal(int signal) {
-        Debug.Log("Handling Signal!");
-        
-        if (signal == 3) {
-            MenuController.Instance.ActivateIntroLights();
-            PlaySFX(SFXTracks.Spotlight);
+    public void HandleSignal(string signal) {
+        Vector2 _target = new Vector2();
+        string _signalX = signal.Substring(0, signal.Length - 1);
+        string _signalY = signal.Substring(signal.Length - 1, 1);
+        _target.x = int.Parse(_signalX);
+        _target.y = int.Parse(_signalY);
+
+        Debug.Log("Handling Signal! [" + _target.x + ", " + _target.y + "]");
+
+        EvaluateSignal(_target);
+
+    }
+
+    private void EvaluateSignal(Vector2 target) {
+        switch ((int)target.x) {
+            case 0: {
+                    OnIntroSignal((int)target.y);
+                    break;
+                }
+            default: { break; }
+        }
+    }
+
+    private void OnIntroSignal(int target) {
+        switch (target) {
+            case 0: {                    
+                    break;
+                }
+            case 1: {
+                    break;
+                }
+            case 2: {
+                    PlayMusic(MusicTracks.MainMenu_Loop);
+                    break;
+                }
+            case 3: {
+                    MenuController.Instance.ActivateIntroLights();
+                    PlaySFX(SFXTracks.Spotlight);
+                    break; 
+                }
+            default: { break; }
         }
     }
 
@@ -52,17 +88,31 @@ public class AudioManager : MonoBehaviour {
     }
 
     public void PlayMusic(MusicTracks track) {
-        AudioSource audioSource = MusicSource.GetComponent<AudioSource>();
-        PlayableDirector playbackTrack = MusicSource.GetComponent<PlayableDirector>();
+        if (_clipsDrawer.musicTracks[(int)track].timeline != null) {
+            AudioSource audioSource = MusicSource.GetComponent<AudioSource>();
+            PlayableDirector playbackTrack = MusicSource.GetComponent<PlayableDirector>();
 
-        if (audioSource != null) {
-            audioSource.clip = _clipsDrawer.musicTracks[(int)track].track;
-            playbackTrack.playableAsset = _clipsDrawer.musicTracks[(int)track].timeline;
-            audioSource.volume = .15f;
+            if (audioSource != null) {
+                audioSource.clip = _clipsDrawer.musicTracks[(int)track].track;
+                playbackTrack.playableAsset = _clipsDrawer.musicTracks[(int)track].timeline;
+                audioSource.volume = .15f;
 
-            playbackTrack.Play();
-            audioSource.Play();
+                playbackTrack.Play();
+                audioSource.Play();
+            }        
+
+        } else {
+            AudioSource audioSource = MusicSource.GetComponent<AudioSource>();           
+
+            if (audioSource != null) {
+                audioSource.clip = _clipsDrawer.musicTracks[(int)track].track;
+                audioSource.loop = true;
+                audioSource.volume = .15f;
+
+                audioSource.Play();
+            }
         }
+
     }
 
     private IEnumerator PlayClipOnce(AudioSource source) {
@@ -73,7 +123,7 @@ public class AudioManager : MonoBehaviour {
         Destroy(source);
     }
 
-    private IEnumerator PlayMusicTrack(AudioSource source) {
+    private IEnumerator PlayMusicTrack(AudioSource source, PlayableDirector playback) {
         
         
         yield return null;
