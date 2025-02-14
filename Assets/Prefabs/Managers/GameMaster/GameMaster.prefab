@@ -44,4 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f1d9903491638142abf9c2a5b9e04b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerinfo: {fileID: 11400000, guid: ab9b38bfd6de9aa41bf77144a6371ac0, type: 2}
+  _managerPrefabs:
+  - {fileID: 5787116332676905361, guid: 8756a6ddd693f7343a0ceb8f431b7ceb, type: 3}
+  - {fileID: 329258543186485493, guid: 336e472d3a7feaf46a444d0550aa1d9a, type: 3}
+  - {fileID: 5717954940236864013, guid: 1d1e304441dcfe64fb22d27db09c4461, type: 3}
+  - {fileID: 227303419582080142, guid: 41d825ec3138c0f448ab9d4f5da40358, type: 3}
+  - {fileID: 8171082787599860330, guid: 8c3dc4a7b57e314458aba2e484db3603, type: 3}
+  - {fileID: 7573724632308363618, guid: f5327d8c66092d040b63b71c405f9996, type: 3}
+  - {fileID: 2014711948444394149, guid: ada4047d406dc2b4a8e55b88f7fad0d9, type: 3}

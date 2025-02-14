@@ -4,6 +4,10 @@ using UnityEngine;
 public class GameMaster : MonoBehaviour {
     public static GameMaster Instance;
 
+    [SerializeField] GameObject[] _managerPrefabs;
+
+    private bool gameStarted;
+
     private void Awake() {
 
         if (Instance == null) {
@@ -15,11 +19,20 @@ public class GameMaster : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        Debug.Log("Game Master Start");        
+        Debug.Log("Game Master Start");
 
-        ScenesManager.Instance.MainMenu();
-
+        StartCoroutine(InitializeManagers());
+        //ScenesManager.Instance.MainMenu();
         //AudioManager Call
     }
     
+    private IEnumerator InitializeManagers() {
+        foreach (GameObject _prefab in _managerPrefabs) {
+            Instantiate(_prefab, Vector3.zero, new Quaternion());
+            yield return null;
+        }
+
+        ScenesManager.Instance.MainMenu();
+        yield break;
+    }
 }
