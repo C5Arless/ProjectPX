@@ -39,6 +39,8 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] GameObject[] _overwriteSlots;
     [SerializeField] menuCanvas _menuCanvas;
 
+    [SerializeField] GameObject[] _introScreen;
+
 
     public delegate void OnSelectButton();
     public OnSelectButton _onSelectButton;
@@ -62,6 +64,8 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private GameObject _selectedButton;
 
     private GameObject _currentSideWindow;
+
+    private int introIdx = 0;
 
     public GameObject HighlightedButton { get { return _highlightedButton; } }
     public GameObject SelectedButton { get { return _selectedButton; } }
@@ -349,6 +353,25 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         _currentSideWindow.SetActive(true);
     }
 
+    public void CycleIntro() {
+        if (!_introScreen[0].activeSelf) { return; }
+
+        if (introIdx == 0) {
+            _introScreen[1].SetActive(true);
+            introIdx++;
+        }
+        else if (introIdx == 1) {
+            _introScreen[1].SetActive(false);
+            _introScreen[2].SetActive(true);
+            introIdx++;
+        }
+        else {
+            introIdx = 0;
+
+            StartCoroutine(FadeIntro());
+        }
+    }
+
     private void OnHighlight(GameObject target) {
         EventSystem.current.SetSelectedGameObject(null);
         //_selectedButton = null;
@@ -397,4 +420,24 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         yield break;
     }
 
+    private IEnumerator FadeIntro() {
+        _introScreen[1].SetActive(false);
+        _introScreen[2].SetActive(false);
+        yield return null;
+
+        Image background = _introScreen[0].GetComponentInChildren<Image>();
+
+        while (background.color.a > 0f) {
+            float alpha = background.color.a - .02f;
+
+            background.color = new Color(background.color.r, background.color.g, background.color.b, alpha);
+
+            yield return null;
+        }
+
+        _introScreen[0].SetActive(false);
+
+        yield break;
+
+    } 
 }

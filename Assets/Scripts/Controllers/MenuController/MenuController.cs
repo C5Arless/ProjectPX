@@ -356,6 +356,10 @@ public class MenuController : MonoBehaviour {
         }
     }
 
+    public void CallIntroRoutine() {
+        _canvasHandler.CycleIntro();
+    }
+
     private void SelectSlots() {
         if (_canvasHandler.SaveSlots[(int)SaveSlot.One] == _canvasHandler.SelectedButton ||
             _canvasHandler.OverwriteSlots[(int)SaveSlot.One] == _canvasHandler.SelectedButton) {

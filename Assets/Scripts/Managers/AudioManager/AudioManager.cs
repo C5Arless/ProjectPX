@@ -56,10 +56,11 @@ public class AudioManager : MonoBehaviour {
 
     private void OnIntroSignal(int target) {
         switch (target) {
-            case 0: {                    
+            case 0: {
+                    MenuController.Instance.CallIntroRoutine();
                     break;
                 }
-            case 1: {
+            case 1: {                    
                     break;
                 }
             case 2: {
