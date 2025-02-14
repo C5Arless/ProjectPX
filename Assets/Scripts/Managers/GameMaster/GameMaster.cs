@@ -17,7 +17,7 @@ public class GameMaster : MonoBehaviour {
     void Start() {
         Debug.Log("Game Master Start");        
 
-        //ScenesManager.Instance.MainMenu();
+        ScenesManager.Instance.MainMenu();
 
         //AudioManager Call
     }

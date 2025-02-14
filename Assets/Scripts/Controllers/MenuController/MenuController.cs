@@ -360,6 +360,10 @@ public class MenuController : MonoBehaviour {
         _canvasHandler.CycleIntro();
     }
 
+    public void ShowHideLogo() {
+        _canvasHandler.ShowHideLogo();
+    }
+
     private void SelectSlots() {
         if (_canvasHandler.SaveSlots[(int)SaveSlot.One] == _canvasHandler.SelectedButton ||
             _canvasHandler.OverwriteSlots[(int)SaveSlot.One] == _canvasHandler.SelectedButton) {

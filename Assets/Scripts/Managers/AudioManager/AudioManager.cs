@@ -64,7 +64,9 @@ public class AudioManager : MonoBehaviour {
                     break;
                 }
             case 2: {
+                    MenuController.Instance.ShowHideLogo();
                     PlayMusic(MusicTracks.MainMenu_Loop);
+                    InputManager.Instance.SetActionMap("MainScreen");
                     break;
                 }
             case 3: {

@@ -372,6 +372,14 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
+    public void ShowHideLogo() {
+        if (_introScreen[3].activeSelf) {
+            _introScreen[3].SetActive(false);
+        } else {
+            _introScreen[3].SetActive(true);
+        }
+    }
+
     private void OnHighlight(GameObject target) {
         EventSystem.current.SetSelectedGameObject(null);
         //_selectedButton = null;
