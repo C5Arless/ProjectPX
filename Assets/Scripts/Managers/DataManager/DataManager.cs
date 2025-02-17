@@ -9,6 +9,11 @@ public class DataManager : MonoBehaviour {
     [SerializeField] DataInfo[] slotsInfo;
     [SerializeField] PlayerInfo playerInfo;
 
+    [SerializeField] OptionsInfo _defaultInfo;
+    [SerializeField] OptionsInfo _currentInfo;
+
+    private string[] _optionsPayload = new string[6];
+
     public DataInfo[] SlotsInfo { get { return slotsInfo; } }
     public PlayerInfo PlayerInfo { get { return playerInfo; } }
 
@@ -18,10 +23,14 @@ public class DataManager : MonoBehaviour {
             DontDestroyOnLoad(gameObject);            
         }
         else { Destroy(gameObject); }
-        
+
+        FillOptionsPayload();
     }
 
     private void Start() {
+        InitializeDefaultOptions();
+        InitializeCurrentOptions();
+
         InitializePlayerInfo();
 
         CheckData();
@@ -35,17 +44,7 @@ public class DataManager : MonoBehaviour {
 
     public void RefreshRecords() {
         StartCoroutine("InitializeRecords");
-    }
-
-    public void InitializePlayerInfo() {
-        playerInfo.SlotID = 0;
-        playerInfo.Name = "Default";
-        playerInfo.PowerUps = 0;
-        playerInfo.Score = 0;
-        playerInfo.CurrentHp = 3;
-        playerInfo.Runtime = 0;
-        playerInfo.Checkpoint = new Vector2(0, 0);
-    }
+    }    
 
     public void CheckData() {
         try {
@@ -53,7 +52,7 @@ public class DataManager : MonoBehaviour {
         } catch {
             DBVault.ReBuildDB();
         }
-    }
+    }    
 
     public void ResumeData() {
         object[] activeData = DBVault.GetActiveData();
@@ -132,6 +131,122 @@ public class DataManager : MonoBehaviour {
     public void ResetRecords() {
         DBVault.ResetHighscore();
 
+    }
+
+    private void InitializeCurrentOptions() {
+        //Check if there are options in PlayerPrefs and then fill currentInfo
+
+        for (OptionPayload i = 0; (int)i <= _optionsPayload.Length - 1; i++) {
+            
+            if (!PlayerPrefs.HasKey(i.ToString())) {
+                DefaultOption(i);
+            } else {
+                CurrentOption(i);
+            }
+
+        }
+    }
+
+    private void FillOptionsPayload() {
+        for (OptionPayload i = 0; (int)i <= _optionsPayload.Length - 1; i++) {
+            _optionsPayload[(int)i] = i.ToString();
+        }
+    }
+
+    private void CurrentOption(OptionPayload target) {
+        switch (target) {
+            case OptionPayload.MasterVolume: {
+                    _currentInfo.MasterVolume = PlayerPrefs.GetInt(target.ToString());
+                    break;
+                }
+            case OptionPayload.MusicVolume: {
+                    _currentInfo.MusicVolume = PlayerPrefs.GetInt(target.ToString());
+                    break;
+                }
+            case OptionPayload.SfxVolume: {
+                    _currentInfo.SfxVolume = PlayerPrefs.GetInt(target.ToString());
+                    break;
+                }
+            case OptionPayload.Mute: {
+                    _currentInfo.Mute = PlayerPrefs.GetInt(target.ToString());
+                    break;
+                }
+            case OptionPayload.DisplayResolution: {
+                    string value = PlayerPrefs.GetString(target.ToString());
+                    Vector2 resolution = new Vector2();
+                    string resX = value.Substring(0, 4);
+                    string resY = value.Substring(value.Length - 1, 4);
+                    resolution.x = int.Parse(resX);
+                    resolution.y = int.Parse(resY);
+
+                    _currentInfo.DisplayResolution = resolution;
+                    break;
+                }
+            case OptionPayload.DisplayMode: {
+                    _currentInfo.DisplayMode = PlayerPrefs.GetInt(target.ToString());
+                    break;
+                }
+            case OptionPayload.Quality: {
+                    _currentInfo.Quality = PlayerPrefs.GetInt(target.ToString());
+                    break;
+                }
+            default: break;
+        }
+    }
+
+    private void DefaultOption(OptionPayload target) {
+        switch (target) {
+            case OptionPayload.MasterVolume: {
+                _currentInfo.MasterVolume = _defaultInfo.MasterVolume;
+                break;
+            }
+            case OptionPayload.MusicVolume: {
+                _currentInfo.MusicVolume = _defaultInfo.MusicVolume;
+                break;
+            }
+            case OptionPayload.SfxVolume: {
+                _currentInfo.SfxVolume = _defaultInfo.SfxVolume;
+                break;
+            }
+            case OptionPayload.Mute: {
+                _currentInfo.Mute = _defaultInfo.Mute;
+                break;
+            }
+            case OptionPayload.DisplayResolution: {
+                _currentInfo.DisplayResolution = _defaultInfo.DisplayResolution;
+                break;
+            }
+            case OptionPayload.DisplayMode: {
+                _currentInfo.DisplayMode = _defaultInfo.DisplayMode;
+                break;
+            }
+            case OptionPayload.Quality: {
+                _currentInfo.Quality = _defaultInfo.Quality;
+                break;
+            }
+            default: break;
+        }
+    }
+
+    private void InitializePlayerInfo() {
+        playerInfo.SlotID = 0;
+        playerInfo.Name = "Default";
+        playerInfo.PowerUps = 0;
+        playerInfo.Score = 0;
+        playerInfo.CurrentHp = 3;
+        playerInfo.Runtime = 0;
+        playerInfo.Checkpoint = new Vector2(0, 0);
+    }
+
+    private void InitializeDefaultOptions() {
+        _defaultInfo.MasterVolume = 5;
+        _defaultInfo.MusicVolume = 5;
+        _defaultInfo.SfxVolume = 5;
+        _defaultInfo.Mute = 0;
+
+        _defaultInfo.DisplayResolution = new Vector2(1920f, 1080f);
+        _defaultInfo.DisplayMode = (int)OptionDisplayMode.Fullscreen;
+        _defaultInfo.Quality = (int)OptionQuality.HIGH;
     }
 
     private IEnumerator RetrieveData() {

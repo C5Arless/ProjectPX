@@ -1,6 +1,3 @@
-using System.Collections;
-using UnityEngine;
-
 public enum PlayerVFX {
     AirRing,
     DashTrail,
@@ -139,4 +136,26 @@ public enum SFXTracks {
     Pow,
     Tap,
     Spotlight
+}
+
+public enum OptionDisplayMode {
+    Fullscreen,
+    Windowed,
+    Borderless
+}
+
+public enum OptionQuality {
+    LOW,
+    MEDIUM,
+    HIGH
+}
+
+public enum OptionPayload {
+    MasterVolume,
+    MusicVolume,
+    SfxVolume,
+    Mute,
+    DisplayResolution,
+    DisplayMode,
+    Quality
 }
