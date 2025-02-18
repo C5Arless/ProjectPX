@@ -133,6 +133,52 @@ public class DataManager : MonoBehaviour {
 
     }
 
+    public void ApplyCurrentOption(OptionPayload target) {
+        switch (target) {
+            case OptionPayload.MasterVolume: {
+                    PlayerPrefs.SetInt(target.ToString(), _currentInfo.MasterVolume);
+                    PlayerPrefs.Save();
+                    break;
+                }
+            case OptionPayload.MusicVolume: {
+                    PlayerPrefs.SetInt(target.ToString(), _currentInfo.MusicVolume);
+                    PlayerPrefs.Save();
+                    break;
+                }
+            case OptionPayload.EnvVolume: {
+                    PlayerPrefs.SetInt(target.ToString(), _currentInfo.EnvVolume);
+                    PlayerPrefs.Save();
+                    break;
+                }
+            case OptionPayload.SfxVolume: {
+                    PlayerPrefs.SetInt(target.ToString(), _currentInfo.SfxVolume);
+                    PlayerPrefs.Save();
+                    break;
+                }
+            case OptionPayload.Mute: {
+                    PlayerPrefs.SetInt(target.ToString(), _currentInfo.Mute);
+                    PlayerPrefs.Save();
+                    break;
+                }
+            case OptionPayload.DisplayResolution: {
+                    PlayerPrefs.SetString(target.ToString(), _currentInfo.DisplayResolution.x + " x " + _currentInfo.DisplayResolution.y);
+                    PlayerPrefs.Save();
+                    break;
+                }
+            case OptionPayload.DisplayMode: {
+                    PlayerPrefs.SetInt(target.ToString(), _currentInfo.DisplayMode);
+                    PlayerPrefs.Save();
+                    break;
+                }
+            case OptionPayload.Quality: {
+                    PlayerPrefs.SetInt(target.ToString(), _currentInfo.Quality);
+                    PlayerPrefs.Save();
+                    break;
+                }
+            default: break;
+        }
+    }
+
     private void InitializeCurrentOptions() {
         //Check if there are options in PlayerPrefs and then fill currentInfo
         for (OptionPayload i = 0; (int)i <= _optionsPayload.Length - 1; i++) {
@@ -197,7 +243,7 @@ public class DataManager : MonoBehaviour {
         }
     }
 
-    private void DefaultOption(OptionPayload target) {
+    public void DefaultOption(OptionPayload target) {
         switch (target) {
             case OptionPayload.MasterVolume: {
                 _currentInfo.MasterVolume = _defaultInfo.MasterVolume;

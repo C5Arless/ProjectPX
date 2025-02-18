@@ -159,7 +159,7 @@ public class AudioManager : MonoBehaviour {
 
     }
 
-    private void InitializeMixerVolumes() {
+    public void InitializeMixerVolumes() {
         float masterValue = (_currentInfo.MasterVolume + .001f) / 10f;
         _mixer.SetFloat(OptionPayload.MasterVolume.ToString(), Mathf.Log10(masterValue) * 20f);
 

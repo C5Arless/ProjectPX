@@ -7,7 +7,13 @@ using UnityEngine.UI;
 public class OptionsHandler : MonoBehaviour {
     [SerializeField] TMP_InputField inputField;
 
-    [SerializeField] OptionsInfo _currentInfo;    
+    [SerializeField] OptionsInfo _currentInfo;
+
+    public delegate void OnAudioDefaultAction();
+    public OnAudioDefaultAction _onAudioDefaultAction;
+
+    public delegate void OnVideoDefaultAction();
+    public OnVideoDefaultAction _onVideoDefaultAction;
 
     private void Start() {
         SubscribeCallbacks();
@@ -23,10 +29,20 @@ public class OptionsHandler : MonoBehaviour {
         InputManager.Instance._controlsChangedResolver += ControlsChanged;
 
         inputField.onValueChanged.AddListener(KeyboardSound);
+
+        _onAudioDefaultAction += DefaultAction;
+        _onVideoDefaultAction += DefaultAction;
     }
 
     private void UnsubscribeCallbacks() {
         InputManager.Instance._controlsChangedResolver -= ControlsChanged;
+
+        _onAudioDefaultAction -= DefaultAction;
+        _onVideoDefaultAction -= DefaultAction;
+    }
+
+    private void DefaultAction() {
+        //
     }
 
     public void AddText(TMP_Text text) {
@@ -43,10 +59,28 @@ public class OptionsHandler : MonoBehaviour {
     }
 
     public void DefaultVideo() {
+        DataManager.Instance.DefaultOption(OptionPayload.DisplayResolution);
+        DataManager.Instance.DefaultOption(OptionPayload.DisplayMode);
+        DataManager.Instance.DefaultOption(OptionPayload.Quality);
+
+        //VideoBehaviour
+
+        _onVideoDefaultAction();
+
         Debug.Log("Video options reset to default!");
     }
 
     public void DefaultAudio() {
+        DataManager.Instance.DefaultOption(OptionPayload.MasterVolume);
+        DataManager.Instance.DefaultOption(OptionPayload.MusicVolume);
+        DataManager.Instance.DefaultOption(OptionPayload.EnvVolume);
+        DataManager.Instance.DefaultOption(OptionPayload.SfxVolume);
+        DataManager.Instance.DefaultOption(OptionPayload.Mute);
+
+        AudioManager.Instance.InitializeMixerVolumes();
+
+        _onAudioDefaultAction();
+
         Debug.Log("Audio options reset to default!");
     }
 
@@ -59,6 +93,8 @@ public class OptionsHandler : MonoBehaviour {
 
         AudioManager.Instance.ChangeVolume(AudioManagerMixer.Master, (int)target.value);
 
+        DataManager.Instance.ApplyCurrentOption(OptionPayload.MasterVolume);
+
         Debug.Log("Value: " + target.value);
     }
 
@@ -66,6 +102,8 @@ public class OptionsHandler : MonoBehaviour {
         _currentInfo.MusicVolume = (int)target.value;
 
         AudioManager.Instance.ChangeVolume(AudioManagerMixer.Music, (int)target.value);
+
+        DataManager.Instance.ApplyCurrentOption(OptionPayload.MusicVolume);
 
         Debug.Log("Value: " + target.value);
     }
@@ -75,6 +113,8 @@ public class OptionsHandler : MonoBehaviour {
 
         AudioManager.Instance.ChangeVolume(AudioManagerMixer.Environment, (int)target.value);
 
+        DataManager.Instance.ApplyCurrentOption(OptionPayload.MusicVolume);
+
         Debug.Log("Value: " + target.value);
     }
 
@@ -82,6 +122,8 @@ public class OptionsHandler : MonoBehaviour {
         _currentInfo.SfxVolume = (int)target.value;
 
         AudioManager.Instance.ChangeVolume(AudioManagerMixer.SoundFX, (int)target.value);
+
+        DataManager.Instance.ApplyCurrentOption(OptionPayload.SfxVolume);
 
         Debug.Log("Value: " + target.value);
     }
@@ -94,6 +136,8 @@ public class OptionsHandler : MonoBehaviour {
         }
 
         AudioManager.Instance.MuteUnmuteVolume(target.isOn);
+
+        DataManager.Instance.ApplyCurrentOption(OptionPayload.Mute);
 
         Debug.Log("Value: " + target.isOn);
     }
@@ -114,15 +158,29 @@ public class OptionsHandler : MonoBehaviour {
         resolution.y = int.Parse(resY);
 
         _currentInfo.DisplayResolution = resolution;
+
+        //VideoBehaviour
+
+        DataManager.Instance.ApplyCurrentOption(OptionPayload.DisplayResolution);
     }
 
     public void HandleDisplayMode(TMP_Dropdown target) {
         _currentInfo.DisplayMode = target.value;
+
+        DataManager.Instance.ApplyCurrentOption(OptionPayload.DisplayMode);
+
+        //VideoBehaviour
+
         Debug.Log("Value: " + target.value);
     }
 
     public void HandleQuality(TMP_Dropdown target) {
         _currentInfo.Quality = target.value;
+
+        DataManager.Instance.ApplyCurrentOption(OptionPayload.Quality);
+
+        //VideoBehaviour
+
         Debug.Log("Value: " + target.value);
     }
 
