@@ -60,6 +60,9 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public delegate void OnSaveSlotHighlightButton();
     public OnSaveSlotHighlightButton _onSaveSlotHighlightButton;
 
+    public delegate void OnSwitchOptions();
+    public OnSwitchOptions _onSwitchOptions;
+
     private GameObject _highlightedButton;
     private GameObject _selectedButton;
 
@@ -77,6 +80,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         _onExitHighlightButton += DefaultEvent;
         _onSelectButton += KeyboardSound;
         _onDeselectButton += DefaultEvent;
+        _onSwitchOptions += DefaultEvent;
     }
 
     private void Start() {
@@ -148,7 +152,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
                 EventSystem.current.SetSelectedGameObject(_buttons.NewGameButton);
                 EventSystem.current.firstSelectedGameObject = _buttons.NewGameButton;
-            }
+            }            
         }
         else if (_UIinfo.UIMode == UIMode.Pause) {
 
@@ -167,6 +171,8 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 EventSystem.current.firstSelectedGameObject = _buttons.ResumeButton;
             }            
         }
+
+        _onSwitchOptions();
     }
 
     public void SwitchUIMode(UIMode _target) {

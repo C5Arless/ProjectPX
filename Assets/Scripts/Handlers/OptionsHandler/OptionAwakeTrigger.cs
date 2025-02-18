@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class OptionAwakeTrigger : MonoBehaviour {
     [SerializeField] OptionsHandler _optionsHandler;
+    [SerializeField] CanvasHandler _canvasHandler;
+
     [SerializeField] OptionsInfo _currentInfo;
     [SerializeField] OptionPayload _targetValue;
 
@@ -14,7 +16,7 @@ public class OptionAwakeTrigger : MonoBehaviour {
     }
 
     private void Start() {
-        InitializeValues();
+        UpdateValues();
         SubscribeActions();
 
     }
@@ -22,18 +24,18 @@ public class OptionAwakeTrigger : MonoBehaviour {
     private void SubscribeActions() {
         _optionsHandler._onAudioDefaultAction += UpdateValues;
         _optionsHandler._onVideoDefaultAction += UpdateValues;
+
+        _canvasHandler._onSwitchOptions += UpdateValues;
     }
 
     private void UnsubscribeActions() {
         _optionsHandler._onAudioDefaultAction -= UpdateValues;
         _optionsHandler._onVideoDefaultAction -= UpdateValues;
+
+        _canvasHandler._onSwitchOptions -= UpdateValues;
     }
 
     private void UpdateValues() {
-        InitializeValues();
-    }
-
-    private void InitializeValues() {
         switch (_targetValue) {
             case OptionPayload.MasterVolume: {
                 Slider _slider = GetComponent<Slider>();

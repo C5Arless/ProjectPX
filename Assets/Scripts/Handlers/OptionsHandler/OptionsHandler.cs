@@ -18,7 +18,6 @@ public class OptionsHandler : MonoBehaviour {
     private void Start() {
         SubscribeCallbacks();
 
-        //Set initial options state
     }
 
     private void OnDestroy() {
@@ -48,7 +47,6 @@ public class OptionsHandler : MonoBehaviour {
     public void AddText(TMP_Text text) {
         if (inputField.text.Length < inputField.characterLimit) {
             inputField.text += text.text;
-
         }
     }
 
@@ -89,13 +87,21 @@ public class OptionsHandler : MonoBehaviour {
     }
 
     public void HandleMasterVolume(Slider target) {
-        _currentInfo.MasterVolume = (int)target.value;
+        if (_currentInfo.Mute == 1) {            
+            _currentInfo.MasterVolume = (int)target.value;
+            DataManager.Instance.ApplyCurrentOption(OptionPayload.MasterVolume);
 
-        AudioManager.Instance.ChangeVolume(AudioManagerMixer.Master, (int)target.value);
+        } else {
+            _currentInfo.MasterVolume = (int)target.value;
 
-        DataManager.Instance.ApplyCurrentOption(OptionPayload.MasterVolume);
+            AudioManager.Instance.ChangeVolume(AudioManagerMixer.Master, (int)target.value);
 
-        Debug.Log("Value: " + target.value);
+            DataManager.Instance.ApplyCurrentOption(OptionPayload.MasterVolume);
+
+            Debug.Log("Value: " + target.value);
+
+        }
+
     }
 
     public void HandleMusicVolume(Slider target) {

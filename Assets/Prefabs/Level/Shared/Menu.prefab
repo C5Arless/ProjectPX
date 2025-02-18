@@ -2678,7 +2678,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2487089570022309745}
   m_Layer: 18
-  m_Name: Selection (7)
+  m_Name: AudioDefault
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5167,7 +5167,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 779
+  m_VersionIndex: 782
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -14531,7 +14531,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3098303496898219944}
   m_Layer: 18
-  m_Name: Selection (7)
+  m_Name: AudioDefault
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16293,7 +16293,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 176
+  m_VersionIndex: 179
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -16849,6 +16849,7 @@ GameObject:
   m_Component:
   - component: {fileID: 702355501428944848}
   - component: {fileID: 2773883106983325188}
+  - component: {fileID: 7739396083640185800}
   m_Layer: 18
   m_Name: Toggle
   m_TagString: Untagged
@@ -16936,6 +16937,22 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_IsOn: 0
+--- !u!114 &7739396083640185800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1862495466687184641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 4
 --- !u!1 &1889909149424410202
 GameObject:
   m_ObjectHideFlags: 0
@@ -24439,6 +24456,7 @@ GameObject:
   - component: {fileID: 878484688619786673}
   - component: {fileID: 6424837476494364598}
   - component: {fileID: 192579489891067707}
+  - component: {fileID: 332085461565108047}
   m_Layer: 18
   m_Name: QualityDropdown
   m_TagString: Untagged
@@ -24636,6 +24654,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &332085461565108047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2718076298834343351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 7
 --- !u!1 &2741112255059651383
 GameObject:
   m_ObjectHideFlags: 0
@@ -25479,6 +25513,7 @@ GameObject:
   - component: {fileID: 6615025685463587234}
   - component: {fileID: 3429775920506589851}
   - component: {fileID: 1860416136814277967}
+  - component: {fileID: 5362009150572192380}
   m_Layer: 18
   m_Name: ResolutionDropdown
   m_TagString: Untagged
@@ -25680,6 +25715,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &5362009150572192380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2831187207932815640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 5
 --- !u!1 &2832399695053996509
 GameObject:
   m_ObjectHideFlags: 0
@@ -29593,7 +29644,7 @@ MonoBehaviour:
           m_MethodName: SetSelected
           m_Mode: 2
           m_Arguments:
-            m_ObjectArgument: {fileID: 2941272063436872269}
+            m_ObjectArgument: {fileID: 9151783736123239990}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
@@ -30265,6 +30316,7 @@ GameObject:
   - component: {fileID: 9065727351291707078}
   - component: {fileID: 6699189323743949002}
   - component: {fileID: 3918783347274229365}
+  - component: {fileID: 8075073266899946269}
   m_Layer: 18
   m_Name: Slider
   m_TagString: Untagged
@@ -30386,6 +30438,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &8075073266899946269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3148692659325646489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 1
 --- !u!1 &3178860323575784120
 GameObject:
   m_ObjectHideFlags: 0
@@ -30569,6 +30637,7 @@ GameObject:
   - component: {fileID: 8653419944770166820}
   - component: {fileID: 511570257181105479}
   - component: {fileID: 55197040630826518}
+  - component: {fileID: 1033672634711359229}
   m_Layer: 18
   m_Name: Slider
   m_TagString: Untagged
@@ -30690,6 +30759,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &1033672634711359229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3207947247088298574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 3
 --- !u!1 &3214674464593072046
 GameObject:
   m_ObjectHideFlags: 0
@@ -33879,6 +33964,7 @@ GameObject:
   - component: {fileID: 1757039935746188327}
   - component: {fileID: 240289776705079162}
   - component: {fileID: 651728573124739230}
+  - component: {fileID: 6193733656845564487}
   m_Layer: 18
   m_Name: ResolutionDropdown
   m_TagString: Untagged
@@ -34080,6 +34166,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &6193733656845564487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3571121071898177413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 5
 --- !u!1 &3591780899934237169
 GameObject:
   m_ObjectHideFlags: 0
@@ -34217,6 +34319,7 @@ GameObject:
   - component: {fileID: 7630915356160519258}
   - component: {fileID: 1845183038502629948}
   - component: {fileID: 6418449290101078363}
+  - component: {fileID: 4763660329738282660}
   m_Layer: 18
   m_Name: Slider
   m_TagString: Untagged
@@ -34338,6 +34441,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &4763660329738282660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3604006708541036083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 3
 --- !u!1 &3612780396570359340
 GameObject:
   m_ObjectHideFlags: 0
@@ -34596,8 +34715,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3656262791061954820}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.07771216, y: 0.69771284, z: 0.07658079, w: 0.7080205}
-  m_LocalPosition: {x: 15.48698, y: 4.3147736, z: 25.316425}
+  m_LocalRotation: {x: -0.07771323, y: 0.6977125, z: 0.07658178, w: 0.7080207}
+  m_LocalPosition: {x: 15.4869795, y: 4.314781, z: 25.316427}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -36802,7 +36921,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1112141678995929642}
   m_Layer: 18
-  m_Name: Selection (6)
+  m_Name: VideoDefault
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39912,8 +40031,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4167683720216107062}
   serializedVersion: 2
-  m_LocalRotation: {x: -1.0624865e-23, y: 0.62735385, z: 3.9243807e-23, w: 0.7787343}
-  m_LocalPosition: {x: 16.529781, y: 4.128006, z: 35.153538}
+  m_LocalRotation: {x: -8.853207e-14, y: 0.6273515, z: 7.132162e-14, w: 0.77873623}
+  m_LocalPosition: {x: 16.529785, y: 4.128006, z: 35.153538}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -43512,6 +43631,7 @@ GameObject:
   - component: {fileID: 3736801400624617142}
   - component: {fileID: 2911047030581543914}
   - component: {fileID: 4303782495846594183}
+  - component: {fileID: 5881255517204462947}
   m_Layer: 18
   m_Name: DisplayModeDropdown
   m_TagString: Untagged
@@ -43709,6 +43829,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &5881255517204462947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4494822816295412221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 6
 --- !u!1 &4495235067561857636
 GameObject:
   m_ObjectHideFlags: 0
@@ -46706,6 +46842,7 @@ GameObject:
   - component: {fileID: 6532640480386911364}
   - component: {fileID: 6104687747510919440}
   - component: {fileID: 1254453381429895345}
+  - component: {fileID: 8607660368304855103}
   m_Layer: 18
   m_Name: Slider
   m_TagString: Untagged
@@ -46827,6 +46964,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &8607660368304855103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4799463615504722962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 2
 --- !u!1 &4801457887036019674
 GameObject:
   m_ObjectHideFlags: 0
@@ -47724,6 +47877,7 @@ GameObject:
   - component: {fileID: 2909766154089139794}
   - component: {fileID: 8235573949786321562}
   - component: {fileID: 3655557388728020104}
+  - component: {fileID: 3161972311445837445}
   m_Layer: 18
   m_Name: Slider
   m_TagString: Untagged
@@ -47845,6 +47999,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &3161972311445837445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4892884810451333525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 2
 --- !u!1 &4893243454585172906
 GameObject:
   m_ObjectHideFlags: 0
@@ -48186,6 +48356,7 @@ GameObject:
   - component: {fileID: 7209938016255370259}
   - component: {fileID: 6328186232835684182}
   - component: {fileID: 5940057268708436031}
+  - component: {fileID: 9145293451732451244}
   m_Layer: 18
   m_Name: Slider
   m_TagString: Untagged
@@ -48307,6 +48478,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &9145293451732451244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4968175746534720390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 1
 --- !u!1 &5007102595887982844
 GameObject:
   m_ObjectHideFlags: 0
@@ -50268,7 +50455,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 176
+  m_VersionIndex: 179
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -52202,7 +52389,7 @@ MonoBehaviour:
           m_MethodName: SetSelected
           m_Mode: 2
           m_Arguments:
-            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgument: {fileID: 379722712149313778}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
@@ -53442,6 +53629,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1233877334320846597}
   - component: {fileID: 4379893267507250162}
+  - component: {fileID: 8785811732861887806}
   m_Layer: 18
   m_Name: Toggle
   m_TagString: Untagged
@@ -53529,6 +53717,22 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   m_IsOn: 0
+--- !u!114 &8785811732861887806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5364013361940987724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 4
 --- !u!1 &5366799738634035881
 GameObject:
   m_ObjectHideFlags: 0
@@ -64520,7 +64724,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6133577846390863785
 RectTransform:
   m_ObjectHideFlags: 0
@@ -65690,7 +65894,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1866
+  m_VersionIndex: 1869
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -66315,6 +66519,7 @@ GameObject:
   - component: {fileID: 4081202601789212698}
   - component: {fileID: 3175849674603788319}
   - component: {fileID: 3519065966949956397}
+  - component: {fileID: 5021210045838222362}
   m_Layer: 18
   m_Name: Slider
   m_TagString: Untagged
@@ -66436,6 +66641,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &5021210045838222362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560604234044901217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 0
 --- !u!1 &6561339872215782855
 GameObject:
   m_ObjectHideFlags: 0
@@ -69048,7 +69269,7 @@ MonoBehaviour:
         m_MethodName: SetSelected
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 4247663122916697789}
+          m_ObjectArgument: {fileID: 1629796629517592084}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -69105,7 +69326,7 @@ MonoBehaviour:
           m_MethodName: SetSelected
           m_Mode: 2
           m_Arguments:
-            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgument: {fileID: 3348077828316584193}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
@@ -69764,7 +69985,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5228722851458216741}
   m_Layer: 18
-  m_Name: Selection (6)
+  m_Name: VideoDefault
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70610,6 +70831,7 @@ GameObject:
   - component: {fileID: 6884984650000981025}
   - component: {fileID: 4955335375006335661}
   - component: {fileID: 6779751417602469449}
+  - component: {fileID: 4049908120196949726}
   m_Layer: 18
   m_Name: QualityDropdown
   m_TagString: Untagged
@@ -70807,6 +71029,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &4049908120196949726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7066189059260515358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 7
 --- !u!1 &7075236174266798419
 GameObject:
   m_ObjectHideFlags: 0
@@ -72934,7 +73172,7 @@ MonoBehaviour:
         m_MethodName: SetSelected
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 2328836762313544496}
+          m_ObjectArgument: {fileID: 8224720695472059944}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -72991,7 +73229,7 @@ MonoBehaviour:
           m_MethodName: SetSelected
           m_Mode: 2
           m_Arguments:
-            m_ObjectArgument: {fileID: 2941272063436872269}
+            m_ObjectArgument: {fileID: 4537492131643663089}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
@@ -74041,7 +74279,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 736
+  m_VersionIndex: 739
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -74914,7 +75152,7 @@ MonoBehaviour:
     ContinueButton: {fileID: 6130051202978346842}
     ResumeButton: {fileID: 5699930884771252127}
     mAudioButton: {fileID: 4537492131643663089}
-    pAudioButton: {fileID: 0}
+    pAudioButton: {fileID: 379722712149313778}
     rBackButton: {fileID: 7617327740507050133}
   _saveSlots:
   - {fileID: 8637285730953638493}
@@ -77612,6 +77850,7 @@ GameObject:
   - component: {fileID: 52068454690409224}
   - component: {fileID: 8542217826495752788}
   - component: {fileID: 101812877461628523}
+  - component: {fileID: 621660368788657248}
   m_Layer: 18
   m_Name: DisplayModeDropdown
   m_TagString: Untagged
@@ -77809,6 +78048,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &621660368788657248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7705699689232198190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 6
 --- !u!1 &7726464975814899908
 GameObject:
   m_ObjectHideFlags: 0
@@ -83544,6 +83799,7 @@ GameObject:
   - component: {fileID: 4919620652229139778}
   - component: {fileID: 4291715831412532145}
   - component: {fileID: 2051036703039328450}
+  - component: {fileID: 9053306525412159633}
   m_Layer: 18
   m_Name: Slider
   m_TagString: Untagged
@@ -83665,6 +83921,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &9053306525412159633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8171496236728665864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3ff85ea23c6ba48a4a6291355e848c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _optionsHandler: {fileID: 2848085629099031827}
+  _canvasHandler: {fileID: 3142403468634278889}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+  _targetValue: 0
 --- !u!1 &8198088634466010287
 GameObject:
   m_ObjectHideFlags: 0
