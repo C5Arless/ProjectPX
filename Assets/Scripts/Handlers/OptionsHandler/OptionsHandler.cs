@@ -11,6 +11,8 @@ public class OptionsHandler : MonoBehaviour {
 
     private void Start() {
         SubscribeCallbacks();
+
+        //Set initial options state
     }
 
     private void OnDestroy() {
@@ -54,16 +56,33 @@ public class OptionsHandler : MonoBehaviour {
 
     public void HandleMasterVolume(Slider target) {
         _currentInfo.MasterVolume = (int)target.value;
+
+        AudioManager.Instance.ChangeVolume(AudioManagerMixer.Master, (int)target.value);
+
         Debug.Log("Value: " + target.value);
     }
 
     public void HandleMusicVolume(Slider target) {
         _currentInfo.MusicVolume = (int)target.value;
+
+        AudioManager.Instance.ChangeVolume(AudioManagerMixer.Music, (int)target.value);
+
+        Debug.Log("Value: " + target.value);
+    }
+
+    public void HandleEnvVolume(Slider target) {
+        _currentInfo.EnvVolume = (int)target.value;
+
+        AudioManager.Instance.ChangeVolume(AudioManagerMixer.Environment, (int)target.value);
+
         Debug.Log("Value: " + target.value);
     }
 
     public void HandleSFXVolume(Slider target) {
         _currentInfo.SfxVolume = (int)target.value;
+
+        AudioManager.Instance.ChangeVolume(AudioManagerMixer.SoundFX, (int)target.value);
+
         Debug.Log("Value: " + target.value);
     }
 
@@ -73,6 +92,8 @@ public class OptionsHandler : MonoBehaviour {
         } else {
             _currentInfo.Mute = 0;
         }
+
+        AudioManager.Instance.MuteUnmuteVolume(target.isOn);
 
         Debug.Log("Value: " + target.isOn);
     }

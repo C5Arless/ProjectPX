@@ -12,7 +12,7 @@ public class DataManager : MonoBehaviour {
     [SerializeField] OptionsInfo _defaultInfo;
     [SerializeField] OptionsInfo _currentInfo;
 
-    private string[] _optionsPayload = new string[6];
+    private string[] _optionsPayload = new string[7];
 
     public DataInfo[] SlotsInfo { get { return slotsInfo; } }
     public PlayerInfo PlayerInfo { get { return playerInfo; } }
@@ -135,7 +135,6 @@ public class DataManager : MonoBehaviour {
 
     private void InitializeCurrentOptions() {
         //Check if there are options in PlayerPrefs and then fill currentInfo
-
         for (OptionPayload i = 0; (int)i <= _optionsPayload.Length - 1; i++) {
             
             if (!PlayerPrefs.HasKey(i.ToString())) {
@@ -161,6 +160,10 @@ public class DataManager : MonoBehaviour {
                 }
             case OptionPayload.MusicVolume: {
                     _currentInfo.MusicVolume = PlayerPrefs.GetInt(target.ToString());
+                    break;
+                }
+            case OptionPayload.EnvVolume: {
+                    _currentInfo.EnvVolume = PlayerPrefs.GetInt(target.ToString());
                     break;
                 }
             case OptionPayload.SfxVolume: {
@@ -204,6 +207,10 @@ public class DataManager : MonoBehaviour {
                 _currentInfo.MusicVolume = _defaultInfo.MusicVolume;
                 break;
             }
+            case OptionPayload.EnvVolume: {
+                    _currentInfo.EnvVolume = _defaultInfo.EnvVolume;
+                    break;
+                }
             case OptionPayload.SfxVolume: {
                 _currentInfo.SfxVolume = _defaultInfo.SfxVolume;
                 break;
@@ -241,7 +248,8 @@ public class DataManager : MonoBehaviour {
     private void InitializeDefaultOptions() {
         _defaultInfo.MasterVolume = 5;
         _defaultInfo.MusicVolume = 5;
-        _defaultInfo.SfxVolume = 5;
+        _defaultInfo.EnvVolume = 5;
+        _defaultInfo.SfxVolume = 2;
         _defaultInfo.Mute = 0;
 
         _defaultInfo.DisplayResolution = new Vector2(1920f, 1080f);

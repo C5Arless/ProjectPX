@@ -3,18 +3,19 @@ using UnityEngine.Playables;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Timeline;
-//using System;
 
 public class AudioManager : MonoBehaviour {
     public static AudioManager Instance;
 
     [SerializeField] AudioMixer _mixer;
 
-    [SerializeField] GameObject masterSource;
     [SerializeField] GameObject MusicSource;
+    [SerializeField] GameObject EnvSource;
     [SerializeField] GameObject SFXSource;
 
     [SerializeField] AudioClipsDrawer _clipsDrawer;
+
+    [SerializeField] OptionsInfo _currentInfo;
 
     private void Awake() {
         if (Instance == null) {
@@ -22,6 +23,11 @@ public class AudioManager : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
         }
         else { Destroy(gameObject); }
+    }
+
+    private void Start() {
+        //Set initial volume to mixer
+        InitializeMixerVolumes();
     }
 
     public void PlayKeyboardSound() {
@@ -42,6 +48,41 @@ public class AudioManager : MonoBehaviour {
 
         EvaluateSignal(_target);
 
+    }
+
+    public void ChangeVolume(AudioManagerMixer mixer, int value) {
+        switch (mixer) {
+            case AudioManagerMixer.Master: {
+                    float masterValue = (value + .001f) / 10f;
+                    _mixer.SetFloat(OptionPayload.MasterVolume.ToString(), Mathf.Log10(masterValue) * 20f);
+                    break;
+                }
+            case AudioManagerMixer.Music: {
+                    float musicValue = (value + .001f) / 10f;
+                    _mixer.SetFloat(OptionPayload.MusicVolume.ToString(), Mathf.Log10(musicValue) * 20f);
+                    break;
+                }
+            case AudioManagerMixer.Environment: {
+                    float envValue = (value + .001f) / 10f;
+                    _mixer.SetFloat(OptionPayload.EnvVolume.ToString(), Mathf.Log10(envValue) * 20f);
+                    break;
+                }
+            case AudioManagerMixer.SoundFX: {
+                    float sfxValue = (value + .001f) / 10f;
+                    _mixer.SetFloat(OptionPayload.SfxVolume.ToString(), Mathf.Log10(sfxValue) * 20f);
+                    break;
+                }
+            default: break;
+        }
+    }
+
+    public void MuteUnmuteVolume(bool toggle) {
+        if (!toggle) {
+            float masterValue = (_currentInfo.MasterVolume + .001f) / 10f;
+            _mixer.SetFloat(OptionPayload.MasterVolume.ToString(), Mathf.Log10(masterValue) * 20f);
+        } else {
+            _mixer.SetFloat(OptionPayload.MasterVolume.ToString(), -80f);
+        }
     }
 
     private void EvaluateSignal(Vector2 target) {
@@ -74,17 +115,17 @@ public class AudioManager : MonoBehaviour {
                     PlaySFX(SFXTracks.Spotlight);
                     break; 
                 }
-            default: { break; }
+            default:  break; 
         }
     }
 
-    private void PlaySFX(SFXTracks clip) {
+    public void PlaySFX(SFXTracks clip) {
         SFXSource.AddComponent<AudioSource>().playOnAwake = false;
 
         AudioSource audioSource = SFXSource.GetComponent<AudioSource>();
         audioSource.clip = _clipsDrawer.sFXTracks[(int)clip];
-        audioSource.outputAudioMixerGroup = _mixer.outputAudioMixerGroup;
-        audioSource.volume = .05f;
+        audioSource.outputAudioMixerGroup = _mixer.FindMatchingGroups("Master/SFX")[0];
+        audioSource.volume = 1f;
 
         StartCoroutine(PlayClipOnce(audioSource));
         
@@ -98,7 +139,7 @@ public class AudioManager : MonoBehaviour {
             if (audioSource != null) {
                 audioSource.clip = _clipsDrawer.musicTracks[(int)track].track;
                 playbackTrack.playableAsset = _clipsDrawer.musicTracks[(int)track].timeline;
-                audioSource.volume = .15f;
+                audioSource.volume = 1f;
 
                 playbackTrack.Play();
                 audioSource.Play();
@@ -110,12 +151,26 @@ public class AudioManager : MonoBehaviour {
             if (audioSource != null) {
                 audioSource.clip = _clipsDrawer.musicTracks[(int)track].track;
                 audioSource.loop = true;
-                audioSource.volume = .15f;
+                audioSource.volume = 1f;
 
                 audioSource.Play();
             }
         }
 
+    }
+
+    private void InitializeMixerVolumes() {
+        float masterValue = (_currentInfo.MasterVolume + .001f) / 10f;
+        _mixer.SetFloat(OptionPayload.MasterVolume.ToString(), Mathf.Log10(masterValue) * 20f);
+
+        float musicValue = (_currentInfo.MusicVolume + .001f) / 10f;
+        _mixer.SetFloat(OptionPayload.MusicVolume.ToString(), Mathf.Log10(musicValue) * 20f);
+
+        float envValue = (_currentInfo.EnvVolume + .001f) / 10f;
+        _mixer.SetFloat(OptionPayload.EnvVolume.ToString(), Mathf.Log10(envValue) * 20f);
+
+        float sfxValue = (_currentInfo.SfxVolume + .001f) / 10f;
+        _mixer.SetFloat(OptionPayload.SfxVolume.ToString(), Mathf.Log10(sfxValue) * 20f);
     }
 
     private IEnumerator PlayClipOnce(AudioSource source) {

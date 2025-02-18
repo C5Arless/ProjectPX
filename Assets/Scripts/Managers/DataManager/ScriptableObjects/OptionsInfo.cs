@@ -5,6 +5,7 @@ using UnityEngine;
 public class OptionsInfo : ScriptableObject {
     private int _masterVolume;
     private int _musicVolume;
+    private int _envVolume;
     private int _sfxVolume;
     private int _mute;
 
@@ -14,6 +15,7 @@ public class OptionsInfo : ScriptableObject {
 
     public int MasterVolume { get { return _masterVolume; } set { _masterVolume = value; } }
     public int MusicVolume { get { return _musicVolume; } set { _musicVolume = value; } }
+    public int EnvVolume { get { return _envVolume; } set { _envVolume = value; } }
     public int SfxVolume { get { return _sfxVolume; } set { _sfxVolume = value; } }
     public int Mute { get { return _mute; } set { _mute = value; } }
 

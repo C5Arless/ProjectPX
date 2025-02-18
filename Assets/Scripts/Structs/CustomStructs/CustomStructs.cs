@@ -18,6 +18,7 @@ public struct CinematicVCameras {
 [System.Serializable]
 public struct AudioClipsDrawer {
     public MusicDrawer[] musicTracks;
+    public AudioClip[] envTracks;
     public AudioClip[] sFXTracks;
 }
 

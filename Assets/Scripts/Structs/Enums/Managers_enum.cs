@@ -121,6 +121,12 @@ public enum MusicTracks {
     Warp3_End
 }
 
+public enum EnvTracks {
+    NutsNBolts,
+    StaticCurrent,
+    Rumbling
+}
+
 public enum SFXTracks {
     Keyboard_1,
     Keyboard_2,
@@ -153,9 +159,17 @@ public enum OptionQuality {
 public enum OptionPayload {
     MasterVolume,
     MusicVolume,
+    EnvVolume,
     SfxVolume,
     Mute,
     DisplayResolution,
     DisplayMode,
     Quality
+}
+
+public enum AudioManagerMixer {
+    Master,
+    Music,
+    Environment,
+    SoundFX
 }
