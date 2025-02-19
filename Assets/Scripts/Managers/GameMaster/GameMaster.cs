@@ -34,13 +34,13 @@ public class GameMaster : MonoBehaviour {
         DataManager.Instance.InitializeData();
         yield return null;
 
-        VideoManager.Instance.InitializeVideoSettings();
-        yield return null;
-
         AudioManager.Instance.InitializeMixerVolumes();
         yield return null;
 
         CameraManager.Instance.InitializeCameras();
+        yield return null;
+
+        VideoManager.Instance.InitializeVideoSettings();
         yield return null;
 
         ScenesManager.Instance.MainMenu();

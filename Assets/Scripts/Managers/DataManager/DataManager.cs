@@ -12,7 +12,7 @@ public class DataManager : MonoBehaviour {
     [SerializeField] OptionsInfo _defaultInfo;
     [SerializeField] OptionsInfo _currentInfo;
 
-    private string[] _optionsPayload = new string[7];
+    private string[] _optionsPayload = new string[8];
 
     public DataInfo[] SlotsInfo { get { return slotsInfo; } }
     public PlayerInfo PlayerInfo { get { return playerInfo; } }

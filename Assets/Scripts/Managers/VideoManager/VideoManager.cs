@@ -18,21 +18,19 @@ public class VideoManager : MonoBehaviour {
     }
 
     public void SetResolution(Vector2 target) {
-        if (_currentInfo.DisplayResolution != target) {
-            
-            if (_currentInfo.DisplayMode != 0) {
-                Screen.SetResolution((int)_currentInfo.DisplayResolution.x, (int)_currentInfo.DisplayResolution.y, false);
-            } else {
-                Screen.SetResolution((int)_currentInfo.DisplayResolution.x, (int)_currentInfo.DisplayResolution.y, true);
-            }
+        if (_currentInfo.DisplayMode != 0) {
+            Screen.SetResolution((int)target.x, (int)target.y, false);
+        }
+        else {
+            Screen.SetResolution((int)target.x, (int)target.y, true);
         }
     }
 
     public void SetQuality(OptionQuality target) {
         if (QualitySettings.renderPipeline != _qualityAssets[(int)target]) {
-
             QualitySettings.SetQualityLevel((int)target, true);
-            QualitySettings.renderPipeline = _qualityAssets[(int)target];
+
+            StartCoroutine(SetQualityAsset(target));                      
         }
     }
 
@@ -46,20 +44,24 @@ public class VideoManager : MonoBehaviour {
                     Screen.fullScreenMode = FullScreenMode.Windowed;
                     break;
                 }
-            case OptionDisplayMode.Borderless: {
-                    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
-                    break;
-                }
             default: break;
         }
     }
 
-    public void InitializeVideoSettings() {
-        OptionDisplayMode _mode = (OptionDisplayMode)_currentInfo.DisplayMode;        
-        OptionQuality _quality = (OptionQuality)_currentInfo.Quality;
+    public void InitializeVideoSettings() {        
+        SetResolution(_currentInfo.DisplayResolution);        
 
-        SetResolution(_currentInfo.DisplayResolution);
-        SetDisplayMode(_mode);
-        SetQuality(_quality);
+        OptionDisplayMode _mode = (OptionDisplayMode)_currentInfo.DisplayMode;
+        SetDisplayMode(_mode);        
+
+        OptionQuality _quality = (OptionQuality)_currentInfo.Quality;
+        SetQuality(_quality);               
+    }
+
+    private IEnumerator SetQualityAsset(OptionQuality target) {
+        yield return new WaitForEndOfFrame();
+
+        QualitySettings.renderPipeline = _qualityAssets[(int)target];
+        yield break;
     }
 }

@@ -146,8 +146,7 @@ public enum SFXTracks {
 
 public enum OptionDisplayMode {
     Fullscreen,
-    Windowed,
-    Borderless
+    Windowed
 }
 
 public enum OptionQuality {
