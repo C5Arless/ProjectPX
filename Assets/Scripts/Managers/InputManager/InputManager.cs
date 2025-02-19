@@ -39,7 +39,6 @@ public class InputManager : MonoBehaviour {
             StartCoroutine(EvaluateActionMap(target));
         }        
     }
-
     
     public void OnControlsChangedEvent(PlayerInput input) {
         if (playerInput.currentControlScheme == "Gamepad") {
@@ -57,8 +56,7 @@ public class InputManager : MonoBehaviour {
                 _controlsChangedResolver();
             }
         }
-    }
-    
+    }    
 
     public IEnumerator EvaluateActionMap(string target) {
         yield return null;

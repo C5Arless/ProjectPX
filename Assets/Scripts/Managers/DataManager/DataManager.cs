@@ -27,7 +27,7 @@ public class DataManager : MonoBehaviour {
         FillOptionsPayload();
     }
 
-    private void Start() {
+    public void InitializeData() {
         InitializeDefaultOptions();
         InitializeCurrentOptions();
 
@@ -130,7 +130,6 @@ public class DataManager : MonoBehaviour {
 
     public void ResetRecords() {
         DBVault.ResetHighscore();
-
     }
 
     public void ApplyCurrentOption(OptionPayload target) {

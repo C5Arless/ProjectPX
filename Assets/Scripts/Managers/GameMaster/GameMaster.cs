@@ -22,8 +22,7 @@ public class GameMaster : MonoBehaviour {
         Debug.Log("Game Master Start");
 
         StartCoroutine(InitializeManagers());
-        //ScenesManager.Instance.MainMenu();
-        //AudioManager Call
+
     }
     
     private IEnumerator InitializeManagers() {
@@ -32,7 +31,24 @@ public class GameMaster : MonoBehaviour {
             yield return null;
         }
 
+        DataManager.Instance.InitializeData();
+        yield return null;
+
+        VideoManager.Instance.InitializeVideoSettings();
+        yield return null;
+
+        AudioManager.Instance.InitializeMixerVolumes();
+        yield return null;
+
+        CameraManager.Instance.InitializeCameras();
+        yield return null;
+
         ScenesManager.Instance.MainMenu();
+        yield return null;
+
+        AudioManager.Instance.PlayMusic(MusicTracks.MainMenu_Intro);
+        yield return null;
+
         yield break;
     }
 }

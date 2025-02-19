@@ -28,10 +28,21 @@ public class CameraManager : MonoBehaviour {
         else { Destroy(gameObject); }        
     }
 
-    private void Start() {
-        SetInitialState();
+    public void InitializeCameras() {
+        try {
+            currentMenuVCamera = menuVCameras[(int)MenuVCameras.MainScreen].gameObject;
+            currentMenuVCamera.SetActive(true);
 
-    }    
+            currentBrain = menuBrain;
+            currentBrain.SetActive(true);
+
+            mode = VCameraMode.MenuVCameras;
+        }
+        catch {
+            InitializeVCameras();
+            Invoke("SetInitialState", .5f);
+        }
+    }
 
     public void InitializeVCameras() {
         StartCoroutine("RetrieveVCameras");
@@ -98,22 +109,7 @@ public class CameraManager : MonoBehaviour {
             currentBrain.SetActive(false);
             currentBrain = targetBrain;
         }
-    }
-
-    private void SetInitialState() {
-        try {
-            currentMenuVCamera = menuVCameras[(int)MenuVCameras.MainScreen].gameObject;
-            currentMenuVCamera.SetActive(true);
-
-            currentBrain = menuBrain;
-            currentBrain.SetActive(true);
-
-            mode = VCameraMode.MenuVCameras;
-        } catch {
-            InitializeVCameras();
-            Invoke("SetInitialState", .5f);
-        }
-    }
+    }    
 
     private IEnumerator PauseCameraOut() {
         Time.timeScale = 0f;

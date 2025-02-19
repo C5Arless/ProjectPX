@@ -25,11 +25,6 @@ public class AudioManager : MonoBehaviour {
         else { Destroy(gameObject); }
     }
 
-    private void Start() {
-        //Set initial volume to mixer
-        InitializeMixerVolumes();
-    }
-
     public void PlayKeyboardSound() {
         int clipID = Random.Range(0, 4);
         SFXTracks sFXTracks = (SFXTracks)clipID;
