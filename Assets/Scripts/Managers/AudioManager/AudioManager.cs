@@ -133,21 +133,24 @@ public class AudioManager : MonoBehaviour {
 
             if (audioSource != null) {
                 audioSource.clip = _clipsDrawer.musicTracks[(int)track].track;
-                playbackTrack.playableAsset = _clipsDrawer.musicTracks[(int)track].timeline;
                 audioSource.volume = 1f;
+                playbackTrack.playableAsset = _clipsDrawer.musicTracks[(int)track].timeline;
+                playbackTrack.time = 0f;
 
                 playbackTrack.Play();
                 audioSource.Play();
             }        
 
         } else {
-            AudioSource audioSource = MusicSource.GetComponent<AudioSource>();           
+            AudioSource audioSource = MusicSource.GetComponent<AudioSource>();
+            PlayableDirector playbackTrack = MusicSource.GetComponent<PlayableDirector>();
+            playbackTrack.Stop();
 
             if (audioSource != null) {
                 audioSource.clip = _clipsDrawer.musicTracks[(int)track].track;
                 audioSource.loop = true;
                 audioSource.volume = 1f;
-
+               
                 audioSource.Play();
             }
         }

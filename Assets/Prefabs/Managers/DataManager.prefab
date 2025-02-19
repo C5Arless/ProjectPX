@@ -55,3 +55,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 16b52352f75e42d459026290f8dfc4a3, type: 2}
   - {fileID: 11400000, guid: b1a8ed09ca6d563488ffdb7a2b14d773, type: 2}
   playerInfo: {fileID: 11400000, guid: ab9b38bfd6de9aa41bf77144a6371ac0, type: 2}
+  _defaultInfo: {fileID: 11400000, guid: 609f611878dc1c9409062f9fa6853d6f, type: 2}
+  _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}

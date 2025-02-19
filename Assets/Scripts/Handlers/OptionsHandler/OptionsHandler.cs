@@ -173,6 +173,7 @@ public class OptionsHandler : MonoBehaviour {
         _currentInfo.DisplayResolution = resolution;
 
         //VideoBehaviour
+        VideoManager.Instance.SetResolution(_currentInfo.DisplayResolution);
 
         DataManager.Instance.ApplyCurrentOption(OptionPayload.DisplayResolution);
     }
@@ -183,6 +184,7 @@ public class OptionsHandler : MonoBehaviour {
         DataManager.Instance.ApplyCurrentOption(OptionPayload.DisplayMode);
 
         //VideoBehaviour
+        VideoManager.Instance.SetDisplayMode((OptionDisplayMode)_currentInfo.DisplayMode);
 
         Debug.Log("Value: " + target.value);
     }
@@ -193,6 +195,7 @@ public class OptionsHandler : MonoBehaviour {
         DataManager.Instance.ApplyCurrentOption(OptionPayload.Quality);
 
         //VideoBehaviour
+        VideoManager.Instance.SetQuality((OptionQuality)_currentInfo.Quality);
 
         Debug.Log("Value: " + target.value);
     }

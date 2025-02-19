@@ -40,7 +40,7 @@ public class CameraManager : MonoBehaviour {
         }
         catch {
             InitializeVCameras();
-            Invoke("SetInitialState", .5f);
+            Invoke("InitializeCameras", .5f);
         }
     }
 
