@@ -1,45 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5328125119516157316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d613f08f173d4dd895bb07b3230baa9, type: 3}
-  m_Name: CustomLighting
-  m_EditorClassIdentifier: 
-  m_Active: 0
-  injectionPoint: 600
-  fetchColorBuffer: 1
-  requirements: 6
-  passMaterial: {fileID: 2100000, guid: e701a1fa19427124786e05bececb03c3, type: 2}
-  passIndex: 0
-  bindDepthStencilAttachment: 0
-  m_Version: 1
---- !u!114 &-1136193245867481699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d613f08f173d4dd895bb07b3230baa9, type: 3}
-  m_Name: Screen Dissolve Pass
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  injectionPoint: 600
-  fetchColorBuffer: 1
-  requirements: 4
-  passMaterial: {fileID: 2100000, guid: f2090664c30c1b14bb6380f64eb2d52c, type: 2}
-  passIndex: 0
-  bindDepthStencilAttachment: 0
-  m_Version: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49,114 +9,106 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
+  m_Script: {fileID: 11500000, guid: bf2edee5c58d82540a51f03df9d42094, type: 3}
   m_Name: High
   m_EditorClassIdentifier: 
-  debugShaders:
-    debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
-    hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
-  m_RendererFeatures:
-  - {fileID: 7330646814516124851}
-  - {fileID: -1136193245867481699}
-  - {fileID: 2724652345610072780}
-  - {fileID: 2291719623993392731}
-  - {fileID: -5328125119516157316}
-  m_RendererFeatureMap: b31c153970b0bb659de5de3f436e3bf0ccf2855cdfe8cf255bfeea20dbd2cd1f7c5a67f46eb20eb6
-  m_UseNativeRenderPass: 0
-  postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
-  xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
-  shaders:
-    blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
-    copyDepthPS: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
-    screenSpaceShadowPS: {fileID: 0}
-    samplingPS: {fileID: 4800000, guid: 04c410c9937594faa893a11dceb85f7e, type: 3}
-    stencilDeferredPS: {fileID: 4800000, guid: e9155b26e1bc55942a41e518703fe304, type: 3}
-    fallbackErrorPS: {fileID: 4800000, guid: e6e9a19c3678ded42a3bc431ebef7dbd, type: 3}
-    fallbackLoadingPS: {fileID: 4800000, guid: 7f888aff2ac86494babad1c2c5daeee2, type: 3}
-    materialErrorPS: {fileID: 4800000, guid: 5fd9a8feb75a4b5894c241777f519d4e, type: 3}
-    coreBlitPS: {fileID: 4800000, guid: 93446b5c5339d4f00b85c159e1159b7c, type: 3}
-    coreBlitColorAndDepthPS: {fileID: 4800000, guid: d104b2fc1ca6445babb8e90b0758136b, type: 3}
-    blitHDROverlay: {fileID: 4800000, guid: a89bee29cffa951418fc1e2da94d1959, type: 3}
-    cameraMotionVector: {fileID: 4800000, guid: c56b7e0d4c7cb484e959caeeedae9bbf, type: 3}
-    objectMotionVector: {fileID: 4800000, guid: 7b3ede40266cd49a395def176e1bc486, type: 3}
-    dataDrivenLensFlare: {fileID: 4800000, guid: 6cda457ac28612740adb23da5d39ea92, type: 3}
-  m_AssetVersion: 2
-  m_OpaqueLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_TransparentLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_DefaultStencilState:
-    overrideStencilState: 0
-    stencilReference: 0
-    stencilCompareFunction: 8
-    passOperation: 2
-    failOperation: 0
-    zFailOperation: 0
-  m_ShadowTransparentReceive: 0
-  m_RenderingMode: 2
-  m_DepthPrimingMode: 1
-  m_CopyDepthMode: 0
-  m_AccurateGbufferNormals: 0
-  m_IntermediateTextureMode: 1
---- !u!114 &2291719623993392731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d613f08f173d4dd895bb07b3230baa9, type: 3}
-  m_Name: Shadows Stepped Pass
-  m_EditorClassIdentifier: 
-  m_Active: 0
-  injectionPoint: 600
-  fetchColorBuffer: 1
-  requirements: 7
-  passMaterial: {fileID: 2100000, guid: b19274dc665c37347a6bc8bee1697996, type: 2}
-  passIndex: 0
-  bindDepthStencilAttachment: 0
-  m_Version: 1
---- !u!114 &2724652345610072780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d613f08f173d4dd895bb07b3230baa9, type: 3}
-  m_Name: Cinematic Frame Pass
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  injectionPoint: 600
-  fetchColorBuffer: 1
-  requirements: 6
-  passMaterial: {fileID: 2100000, guid: ebf474160e5b6974eb766b2bac6d4d58, type: 2}
-  passIndex: 0
-  bindDepthStencilAttachment: 1
-  m_Version: 1
---- !u!114 &7330646814516124851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d613f08f173d4dd895bb07b3230baa9, type: 3}
-  m_Name: Scene Fade Pass
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  injectionPoint: 600
-  fetchColorBuffer: 1
-  requirements: 6
-  passMaterial: {fileID: 2100000, guid: 4b0d5e33d146a7c48b351d4f40bfca1c, type: 2}
-  passIndex: 0
-  bindDepthStencilAttachment: 1
-  m_Version: 1
+  k_AssetVersion: 11
+  k_AssetPreviousVersion: 11
+  m_RendererType: 1
+  m_RendererData: {fileID: 0}
+  m_RendererDataList:
+  - {fileID: 11400000, guid: d654946081a621c42ad16c6dc050a480, type: 2}
+  m_DefaultRendererIndex: 0
+  m_RequireDepthTexture: 1
+  m_RequireOpaqueTexture: 1
+  m_OpaqueDownsampling: 1
+  m_SupportsTerrainHoles: 1
+  m_SupportsHDR: 1
+  m_HDRColorBufferPrecision: 0
+  m_MSAA: 8
+  m_RenderScale: 1
+  m_UpscalingFilter: 0
+  m_FsrOverrideSharpness: 0
+  m_FsrSharpness: 0.92
+  m_EnableLODCrossFade: 1
+  m_LODCrossFadeDitheringType: 1
+  m_ShEvalMode: 0
+  m_MainLightRenderingMode: 1
+  m_MainLightShadowsSupported: 1
+  m_MainLightShadowmapResolution: 2048
+  m_AdditionalLightsRenderingMode: 1
+  m_AdditionalLightsPerObjectLimit: 4
+  m_AdditionalLightShadowsSupported: 1
+  m_AdditionalLightsShadowmapResolution: 2048
+  m_AdditionalLightsShadowResolutionTierLow: 256
+  m_AdditionalLightsShadowResolutionTierMedium: 512
+  m_AdditionalLightsShadowResolutionTierHigh: 1024
+  m_ReflectionProbeBlending: 1
+  m_ReflectionProbeBoxProjection: 0
+  m_ShadowDistance: 50
+  m_ShadowCascadeCount: 3
+  m_Cascade2Split: 0.024999999
+  m_Cascade3Split: {x: 0.14999999, y: 0.45}
+  m_Cascade4Split: {x: 0.046706434, y: 0.24653198, z: 0.43887538}
+  m_CascadeBorder: 0
+  m_ShadowDepthBias: 0.001
+  m_ShadowNormalBias: 0.001
+  m_AnyShadowsSupported: 1
+  m_SoftShadowsSupported: 1
+  m_ConservativeEnclosingSphere: 1
+  m_NumIterationsEnclosingSphere: 64
+  m_SoftShadowQuality: 3
+  m_AdditionalLightsCookieResolution: 2048
+  m_AdditionalLightsCookieFormat: 3
+  m_UseSRPBatcher: 1
+  m_SupportsDynamicBatching: 0
+  m_MixedLightingSupported: 1
+  m_SupportsLightCookies: 1
+  m_SupportsLightLayers: 1
+  m_DebugLevel: 0
+  m_StoreActionsOptimization: 0
+  m_EnableRenderGraph: 0
+  m_UseAdaptivePerformance: 1
+  m_ColorGradingMode: 0
+  m_ColorGradingLutSize: 32
+  m_UseFastSRGBLinearConversion: 1
+  m_SupportDataDrivenLensFlare: 1
+  m_ShadowType: 1
+  m_LocalShadowsSupported: 0
+  m_LocalShadowsAtlasResolution: 256
+  m_MaxPixelLights: 0
+  m_ShadowAtlasResolution: 256
+  m_VolumeFrameworkUpdateMode: 0
+  m_Textures:
+    blueNoise64LTex: {fileID: 2800000, guid: e3d24661c1e055f45a7560c033dbb837, type: 3}
+    bayerMatrixTex: {fileID: 2800000, guid: f9ee4ed84c1d10c49aabb9b210b0fc44, type: 3}
+  m_PrefilteringModeMainLightShadows: 3
+  m_PrefilteringModeAdditionalLight: 4
+  m_PrefilteringModeAdditionalLightShadows: 2
+  m_PrefilterXRKeywords: 1
+  m_PrefilteringModeForwardPlus: 1
+  m_PrefilteringModeDeferredRendering: 0
+  m_PrefilteringModeScreenSpaceOcclusion: 0
+  m_PrefilterDebugKeywords: 1
+  m_PrefilterWriteRenderingLayers: 1
+  m_PrefilterHDROutput: 1
+  m_PrefilterSSAODepthNormals: 0
+  m_PrefilterSSAOSourceDepthLow: 1
+  m_PrefilterSSAOSourceDepthMedium: 1
+  m_PrefilterSSAOSourceDepthHigh: 1
+  m_PrefilterSSAOInterleaved: 0
+  m_PrefilterSSAOBlueNoise: 1
+  m_PrefilterSSAOSampleCountLow: 0
+  m_PrefilterSSAOSampleCountMedium: 1
+  m_PrefilterSSAOSampleCountHigh: 1
+  m_PrefilterDBufferMRT1: 1
+  m_PrefilterDBufferMRT2: 1
+  m_PrefilterDBufferMRT3: 1
+  m_PrefilterSoftShadowsQualityLow: 1
+  m_PrefilterSoftShadowsQualityMedium: 1
+  m_PrefilterSoftShadowsQualityHigh: 1
+  m_PrefilterSoftShadows: 0
+  m_PrefilterScreenCoord: 1
+  m_PrefilterNativeRenderPass: 1
+  m_ShaderVariantLogLevel: 0
+  m_ShadowCascades: 0

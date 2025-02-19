@@ -223,8 +223,22 @@ public class DataManager : MonoBehaviour {
             case OptionPayload.DisplayResolution: {
                     string value = PlayerPrefs.GetString(target.ToString());
                     Vector2 resolution = new Vector2();
-                    string resX = value.Substring(0, 4);
-                    string resY = value.Substring(value.Length - 1, 4);
+                    string resX;
+                    string resY;
+
+                    if (value.Length == 11) {
+                        resX = value.Substring(0, 4);
+                        resY = value.Substring(7, 4);
+                    }
+                    else if (value.Length == 10) {
+                        resX = value.Substring(0, 4);
+                        resY = value.Substring(7, 3);
+                    }
+                    else {
+                        resX = value.Substring(0, 3);
+                        resY = value.Substring(6, 3);
+                    }
+
                     resolution.x = int.Parse(resX);
                     resolution.y = int.Parse(resY);
 
