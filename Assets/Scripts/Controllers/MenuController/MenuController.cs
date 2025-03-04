@@ -159,7 +159,7 @@ public class MenuController : MonoBehaviour {
                         break;
                     }
                 case UIMode.Pause: {
-                        //SubmitPause()
+                        //SubmitPause();
                         break;
                     }
             }        

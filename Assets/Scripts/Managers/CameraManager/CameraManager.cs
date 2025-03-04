@@ -106,7 +106,10 @@ public class CameraManager : MonoBehaviour {
     private void SwitchBrain(GameObject targetBrain) {
         if (targetBrain != currentBrain) {
             targetBrain.SetActive(true);
-            currentBrain.SetActive(false);
+
+            if (currentBrain != null) { currentBrain.SetActive(false); } // TESTING PURPOSE
+            //currentBrain.SetActive(false); // DEFINITIVE
+
             currentBrain = targetBrain;
         }
     }    

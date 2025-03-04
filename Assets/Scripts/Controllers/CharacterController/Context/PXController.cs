@@ -582,13 +582,14 @@ public class PXController : MonoBehaviour {
     //Camera Methods
     public void UpdateExternalCamera(Transform playerPos, Transform cameraPivot) {
         //Updates player forward direction while inside ActionCameraBlock
+        if (onDialog) { return; }
 
         Vector3 targetForward = ComputeForward2D(playerPos, cameraPivot);
         float currentAngle = Vector3.Angle(_forward.transform.forward, targetForward);
 
         if (currentAngle > 1f) {
 
-            Vector3 lerpForward = Vector3.Lerp(_forward.transform.forward, targetForward, .1f);
+            Vector3 lerpForward = Vector3.Lerp(_forward.transform.forward, targetForward, 1f);
             _cam.transform.forward = lerpForward;
             _forward.transform.forward = lerpForward;            
 
@@ -814,24 +815,7 @@ public class PXController : MonoBehaviour {
             moveInput = new Vector2(0f, 1f);
 
             yield return null;
-        }
-
-        /*
-        while (ComputeDistance2D(_asset.transform, cameraTarget) > .6f) {
-
-            targetForward = ComputeForward2D(cameraTarget, _asset.transform);
-            _cam.transform.forward = targetForward;
-
-            targetForward = ComputeForward2D(cameraTarget, _asset.transform);
-            _forward.transform.forward = targetForward;
-
-            yield return null;
-
-            moveInput = new Vector2(0f, 1f);
-
-            yield return null;
-        }
-        */
+        }        
 
         targetForward = ComputeForward2D(cameraTarget, _asset.transform);
         _cam.transform.forward = targetForward;

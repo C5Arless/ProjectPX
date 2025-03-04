@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -59,7 +60,7 @@ public class InputManager : MonoBehaviour {
     }    
 
     public IEnumerator EvaluateActionMap(string target) {
-        yield return null;
+        yield return new WaitWhile(() => CameraManager.Instance.GameBrain.GetComponent<CinemachineBrain>().IsBlending);
 
         playerInput.SwitchCurrentActionMap("Disabled");
         _currentActionMap = "Disabled";
