@@ -1,6 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class InteractController : MonoBehaviour {    
     [SerializeField] GameObject _focusTarget;
     [SerializeField] GameObject _playerTarget;
@@ -101,4 +105,27 @@ public class InteractController : MonoBehaviour {
         isBusy = false;
         yield break;
     }
+
+    #if UNITY_EDITOR
+    private void OnDrawGizmos() {
+        if (_focusTarget != null) {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(_focusTarget.transform.position, 0.2f);
+            UnityEditor.Handles.Label(_focusTarget.transform.position, "FocusTarget");
+        }
+
+        if (_playerTarget != null) {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(_playerTarget.transform.position, 0.2f);
+            UnityEditor.Handles.Label(_playerTarget.transform.position, "PlayerTarget");
+        }
+
+        if (_companionTarget != null) {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(_companionTarget.transform.position, 0.2f);
+            UnityEditor.Handles.Label(_companionTarget.transform.position, "CompanionTarget");
+        }
+    }
+
+    #endif
 }

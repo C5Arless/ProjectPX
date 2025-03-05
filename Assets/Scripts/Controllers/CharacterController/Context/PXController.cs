@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PXController : MonoBehaviour {
     //State reference
@@ -795,14 +796,14 @@ public class PXController : MonoBehaviour {
         yield break;
     }
 
-    private IEnumerator DialogRoutine(Transform playerTarget, Transform cameraTarget, GameObject _vcam) {
+    private IEnumerator DialogRoutine(Transform playerTarget, Transform focusTarget, GameObject _vcam) {
         CameraManager.Instance.SwitchGameVCamera(_vcam);
 
         yield return null;
 
         Vector3 targetForward = ComputeForward2D(playerTarget, _asset.transform);        
 
-        while (ComputeDistance2D(_asset.transform, playerTarget) > .6f) {
+        while (ComputeDistance2D(_asset.transform, playerTarget) > .15f) {
 
             targetForward = ComputeForward2D(playerTarget, _asset.transform);
             _cam.transform.forward = targetForward;
@@ -810,13 +811,38 @@ public class PXController : MonoBehaviour {
             targetForward = ComputeForward2D(playerTarget, _asset.transform); 
             _forward.transform.forward = targetForward;
 
-            yield return null;
-
             moveInput = new Vector2(0f, 1f);
 
             yield return null;
         }        
 
+        moveInput = new Vector2(0f, 0f);
+
+        isWalking = false;
+
+        _playerRb.velocity = Vector3.zero;
+        _playerRb.ResetInertiaTensor();
+
+        yield return null;
+
+        targetForward = ComputeForward2D(focusTarget, _asset.transform);
+        _cam.transform.forward = targetForward;
+
+        targetForward = ComputeForward2D(focusTarget, _asset.transform);
+        _forward.transform.forward = targetForward;
+
+        yield return null;
+
+        _player.transform.position = new Vector3(playerTarget.transform.position.x, _player.transform.position.y, playerTarget.transform.position.z);
+
+        yield return null;
+
+        //_player.transform.rotation = _forward.transform.rotation;
+        _asset.transform.rotation = _forward.transform.rotation;
+
+        yield return null;
+
+        /*
         targetForward = ComputeForward2D(cameraTarget, _asset.transform);
         _cam.transform.forward = targetForward;
 
@@ -829,9 +855,7 @@ public class PXController : MonoBehaviour {
 
         yield return null;
 
-        ///
-
-        moveInput = new Vector2(0f, 0f);
+        */
 
         yield return new WaitWhile(() => onDialog);
 

@@ -4,6 +4,7 @@ using UnityEngine;
 public class CinematicController : MonoBehaviour {
     [SerializeField] CinematicShot[] _cinematicShots;
     [SerializeField] Material _cinematicFrame;
+    [SerializeField] bool _isSkippable;
 
     private PXController _playerCtx;
     private CompanionController _companionCtx;
@@ -43,6 +44,20 @@ public class CinematicController : MonoBehaviour {
         }
     }
 
+    public void SkipCinematic() {
+        if (_isSkippable) {
+            StopAllCoroutines();
+            _cinematicFrame.SetFloat("_Transition", 0f);
+
+            isInteracting = false;
+
+            _playerCtx.InteractionExit();
+            _companionCtx.ExitTalkState();
+
+            Destroy(this.gameObject);
+        }
+    }
+
     private void Enter() {
         shotNumber = 1;
         
@@ -77,6 +92,8 @@ public class CinematicController : MonoBehaviour {
         if (_cinematicShots[shotNumber - 1].HasTransition) {
             StartCoroutine("FrameOut");
         }
+
+        Destroy(this.gameObject);
     }
 
     private IEnumerator IterateShot() {
