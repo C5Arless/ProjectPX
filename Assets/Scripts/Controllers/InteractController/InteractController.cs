@@ -46,6 +46,8 @@ public class InteractController : MonoBehaviour {
         GameBucket.Instance.PXController.DialogEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
 
         GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
+
+        GameBucket.Instance.GameCanvasHandler.DialogIn();
     }
 
     private void Continue() {
@@ -87,7 +89,9 @@ public class InteractController : MonoBehaviour {
         isBusy = true;
         GameBucket.Instance.PXController.InteractionExit();
         GameBucket.Instance.CompanionCtx.ExitTalkState();
-        
+
+        GameBucket.Instance.GameCanvasHandler.DialogOut();
+
         yield return new WaitForSeconds(1f);
 
         transform.GetComponent<Collider>().enabled = false;
