@@ -10,6 +10,8 @@ public class CTalkState : CBaseState {
     public override void UpdateState() {
         //Update logic        
 
+        Ctx.VisionUpdateMoveBehaviour();
+
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
     public override void ExitState() {

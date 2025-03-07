@@ -50,6 +50,7 @@ public class InteractController : MonoBehaviour {
         GameBucket.Instance.PXController.DialogEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
 
         GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
+        GameBucket.Instance.CompanionCtx.VisionSetUpTalkBehaviour(_focusTarget);
 
         GameBucket.Instance.GameCanvasHandler.DialogIn();
     }

@@ -125,8 +125,9 @@ public class CompanionController : MonoBehaviour {
     //EXTERNAL CALLS
     public void VisionSetUpTalkBehaviour(GameObject focusTarget) {
         VisionExitBehaviour();
+        StopCoroutine("VisionFocusRoutine");
 
-        visionLocked = true;
+        //visionLocked = true;
         visionDiscoveryTransform = focusTarget.transform;
         StartCoroutine("VisionFocusRoutine");
     }
@@ -301,7 +302,7 @@ public class CompanionController : MonoBehaviour {
         travelRotation.SetLookRotation(travelForward);
         _focusDefaultPivot.rotation = Quaternion.Euler(0f, travelRotation.eulerAngles.y, 0f);
 
-        while (travelDistance > 0.3f) {
+        while (travelDistance > 0.05f) {
             travelDistance = Mathf.Abs(Vector3.Distance(transform.position, travelPosition));
             travelForward = (travelPosition - transform.position).normalized;
             travelRotation.SetLookRotation(travelForward);
@@ -314,6 +315,9 @@ public class CompanionController : MonoBehaviour {
 
             yield return null;
         }
+
+        transform.position = travelPosition;
+        yield return null;
 
         travelLocked = false;
         isMoving = false;
@@ -382,16 +386,19 @@ public class CompanionController : MonoBehaviour {
     }
 
     private IEnumerator VisionFocusRoutine() {
+        _focusPoint.position = visionDiscoveryTransform.position;
         Vector3 lerpPoint = _focusPoint.position;        
         
         _focusPivot.LookAt(visionDiscoveryTransform.position);
         visionFocusPoint = _focusPoint.position;
 
-        while (Mathf.Abs(Vector3.Distance(lerpPoint, visionFocusPoint)) > 0.2f) {            
+        while (Mathf.Abs(Vector3.Distance(lerpPoint, visionFocusPoint)) > 0.2f) {
+            _focusPoint.position = visionDiscoveryTransform.position;
             _focusPivot.LookAt(visionDiscoveryTransform.position);
             visionFocusPoint = _focusPoint.position;
             _asset.LookAt(lerpPoint);            
             lerpPoint = Vector3.LerpUnclamped(lerpPoint, visionFocusPoint, 10f * Time.deltaTime);
+
             yield return null;
         }
 

@@ -837,25 +837,7 @@ public class PXController : MonoBehaviour {
 
         yield return null;
 
-        //_player.transform.rotation = _forward.transform.rotation;
         _asset.transform.rotation = _forward.transform.rotation;
-
-        yield return null;
-
-        /*
-        targetForward = ComputeForward2D(cameraTarget, _asset.transform);
-        _cam.transform.forward = targetForward;
-
-        targetForward = ComputeForward2D(cameraTarget, _asset.transform);
-        _forward.transform.forward = targetForward;
-
-        yield return null;
-
-        moveInput = new Vector2(0f, 1f);
-
-        yield return null;
-
-        */
 
         yield return new WaitWhile(() => onDialog);
 
