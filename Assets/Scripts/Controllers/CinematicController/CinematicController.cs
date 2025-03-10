@@ -5,6 +5,7 @@ public class CinematicController : MonoBehaviour {
     [SerializeField] CinematicShot[] _cinematicShots;
     [SerializeField] Material _cinematicFrame;
     [SerializeField] bool _isSkippable;
+    [SerializeField] bool _destroyWhenDone;
 
     private PXController _playerCtx;
     private CompanionController _companionCtx;
@@ -54,7 +55,9 @@ public class CinematicController : MonoBehaviour {
             _playerCtx.InteractionExit();
             _companionCtx.ExitTalkState();
 
-            Destroy(this.gameObject);
+            if (_destroyWhenDone) {
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -93,7 +96,9 @@ public class CinematicController : MonoBehaviour {
             StartCoroutine("FrameOut");
         }
 
-        Destroy(this.gameObject);
+        if (_destroyWhenDone) {
+            Destroy(this.gameObject);
+        }
     }
 
     private IEnumerator IterateShot() {
