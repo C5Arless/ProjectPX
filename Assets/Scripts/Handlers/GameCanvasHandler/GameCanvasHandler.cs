@@ -26,21 +26,25 @@ public class GameCanvasHandler : MonoBehaviour {
 
     public void DialogIn() {        
         Vector3 startPos = new Vector3(0f, -150f, 0f);
-        Vector3 targetPos = new Vector3(0f, 0f, 0f);
-        _isBusy = true;
+        Vector3 targetPos = new Vector3(0f, 0f, 0f);  
 
-        StartCoroutine(IteratePosition(startPos, targetPos));
+        StartCoroutine(IteratePosition(startPos, targetPos));        
     }
 
     public void DialogOut() {
         Vector3 startPos = new Vector3(0f, 0f, 0f);
-        Vector3 targetPos = new Vector3(0f, -150f, 0f);
-        _isBusy = true;
+        Vector3 targetPos = new Vector3(0f, -150f, 0f);        
 
         StartCoroutine(IteratePosition(startPos, targetPos));
     }
 
+    public void DialogWrite(int IDX) {
+        StartCoroutine(DisplayDialog(IDX));
+    }
+
     private IEnumerator IteratePosition(Vector3 startPos, Vector3 targetPos) {
+        _isBusy = true;
+
         if (startPos.y < targetPos.y) {            
             _dialogWindow.SetActive(true);
             Vector3 position = startPos;
@@ -68,12 +72,27 @@ public class GameCanvasHandler : MonoBehaviour {
                 _dialogWindow.transform.localPosition = position;
                 
                 yield return null;
-            }            
+            }
 
+            _name.text = null;
+            _dialogText.text = null;
             _dialogWindow.SetActive(false);
 
             _isBusy = false;
             yield break;
         }
+    }
+
+    private IEnumerator DisplayDialog(int IDX) {
+        yield return null;
+
+        yield return new WaitWhile(() => _isBusy);
+
+        _name.text = GameBucket.Instance.GetDialogObject(IDX).Name;
+        yield return null;
+
+        _dialogText.text = GameBucket.Instance.GetDialogObject(IDX).Line;
+        yield break;
+
     }
 }

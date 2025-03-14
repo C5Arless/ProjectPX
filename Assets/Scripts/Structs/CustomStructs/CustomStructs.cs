@@ -28,3 +28,21 @@ public struct MusicDrawer {
     public TimelineAsset timeline;
 }
 
+[System.Serializable]
+public struct DialogPages {
+    public int dialogIdx;
+    public int pageIdx;
+}
+
+[System.Serializable]
+public struct DialogObject {
+    public int IDX;
+    public string Name;
+    public string Line;
+    public string[] Options;
+    public int NEXT;
+}
+
+public class DialogWrapper {
+    public DialogObject[] Dialogues;
+}

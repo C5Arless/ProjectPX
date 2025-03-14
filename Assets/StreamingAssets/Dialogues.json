@@ -5,14 +5,14 @@
             "Name": "Default",
             "Line": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
             "Options": null,
-            "NEXT": null
+            "NEXT": -1
         },
         {
             "IDX": 1,
             "Name": "FX - 41",
-            "Line": "Questa è una linea di dialogo!",
+            "Line": "This is a dialogue line!",
             "Options": null,
-            "NEXT": null
+            "NEXT": -1
         }
     ]
 }

@@ -12,7 +12,9 @@ public class InteractController : MonoBehaviour {
     [SerializeField] GameObject _popUp;
 
     [SerializeField] int pages;
+
     [SerializeField] InteractionVCameras[] interactionCams;
+    [SerializeField] DialogPages[] _DialogPages;
 
     private int pageNumber;
 
@@ -53,6 +55,7 @@ public class InteractController : MonoBehaviour {
         GameBucket.Instance.CompanionCtx.VisionSetUpTalkBehaviour(_focusTarget);
 
         GameBucket.Instance.GameCanvasHandler.DialogIn();
+        GameBucket.Instance.GameCanvasHandler.DialogWrite(_DialogPages[pageNumber - 1].dialogIdx);
     }
 
     private void Continue() {
@@ -85,6 +88,8 @@ public class InteractController : MonoBehaviour {
                 CameraManager.Instance.SwitchGameVCamera(_ivcam.vcamera);
             }
         }
+
+        GameBucket.Instance.GameCanvasHandler.DialogWrite(_DialogPages[pageNumber - 1].dialogIdx);
 
         isBusy = false;
         yield break;
