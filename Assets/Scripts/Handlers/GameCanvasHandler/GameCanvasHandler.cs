@@ -13,8 +13,10 @@ public class GameCanvasHandler : MonoBehaviour {
     public OnTransitionInDone _onTransitionInDone;
 
     private bool _isBusy;
+    private bool _isTyping;
 
     public bool IsBusy { get { return _isBusy; } }
+    public bool IsTyping { get { return _isTyping; } }
 
     private void Awake() {
         GameBucket.Instance.GameCanvasHandler = this;
@@ -40,6 +42,17 @@ public class GameCanvasHandler : MonoBehaviour {
 
     public void DialogWrite(int IDX) {
         StartCoroutine(DisplayDialog(IDX));
+    }
+
+    public void DialogClear() {
+        StopAllCoroutines();
+        _isBusy = false;
+        _name.text = string.Empty;
+        _dialogText.text = string.Empty;        
+    }
+
+    public void DialogSkip() {
+        _isTyping = false;
     }
 
     private IEnumerator IteratePosition(Vector3 startPos, Vector3 targetPos) {
@@ -74,8 +87,9 @@ public class GameCanvasHandler : MonoBehaviour {
                 yield return null;
             }
 
-            _name.text = null;
-            _dialogText.text = null;
+            _name.text = string.Empty;
+            _dialogText.text = string.Empty;
+
             _dialogWindow.SetActive(false);
 
             _isBusy = false;
@@ -88,11 +102,29 @@ public class GameCanvasHandler : MonoBehaviour {
 
         yield return new WaitWhile(() => _isBusy);
 
+        _isBusy = true;
+
         _name.text = GameBucket.Instance.GetDialogObject(IDX).Name;
         yield return null;
 
-        _dialogText.text = GameBucket.Instance.GetDialogObject(IDX).Line;
-        yield break;
+        _isTyping = true;
 
+        string line = GameBucket.Instance.GetDialogObject(IDX).Line;
+        while (!string.Equals(_dialogText.text, line)) {
+            string subline = line.Substring(0, _dialogText.text.Length + 1);
+            _dialogText.text = subline;
+
+            if (!_isTyping) {
+                _dialogText.text = line;
+                _isBusy = true;
+                yield break;
+            }
+
+            yield return new WaitForSeconds(Mathf.PingPong(.001f, .2f));
+        }
+
+        _isTyping = false;
+        _isBusy = false;
+        yield break;
     }
 }

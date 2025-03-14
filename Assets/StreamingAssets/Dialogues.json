@@ -10,7 +10,21 @@
         {
             "IDX": 1,
             "Name": "FX - 41",
-            "Line": "This is a dialogue line!",
+            "Line": "This is a test dialogue line!",
+            "Options": null,
+            "NEXT": -1
+        },
+        {
+            "IDX": 2,
+            "Name": "FX - 41",
+            "Line": "Also viva il duce!",
+            "Options": null,
+            "NEXT": -1
+        },
+        {
+            "IDX": 3,
+            "Name": "FX - 41",
+            "Line": "Porcacciodeddiooooooooooooo",
             "Options": null,
             "NEXT": -1
         }

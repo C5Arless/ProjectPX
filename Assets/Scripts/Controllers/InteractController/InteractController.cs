@@ -66,8 +66,12 @@ public class InteractController : MonoBehaviour {
         }
     }
 
-    private void SwitchPage() {        
-        StartCoroutine(IteratePage());
+    private void SwitchPage() {
+        if (GameBucket.Instance.GameCanvasHandler.IsTyping) {
+            GameBucket.Instance.GameCanvasHandler.DialogSkip();
+        } else {
+            StartCoroutine(IteratePage());
+        }
     }
 
     private void Exit() {
@@ -89,6 +93,7 @@ public class InteractController : MonoBehaviour {
             }
         }
 
+        GameBucket.Instance.GameCanvasHandler.DialogClear();
         GameBucket.Instance.GameCanvasHandler.DialogWrite(_DialogPages[pageNumber - 1].dialogIdx);
 
         isBusy = false;
