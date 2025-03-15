@@ -27,15 +27,15 @@ public class GameCanvasHandler : MonoBehaviour {
     }
 
     public void DialogIn() {        
-        Vector3 startPos = new Vector3(0f, -150f, 0f);
-        Vector3 targetPos = new Vector3(0f, 0f, 0f);  
+        Vector3 startPos = new Vector3(0f, -800f, 0f);
+        Vector3 targetPos = new Vector3(0f, -350f, 0f);  
 
         StartCoroutine(IteratePosition(startPos, targetPos));        
     }
 
     public void DialogOut() {
-        Vector3 startPos = new Vector3(0f, 0f, 0f);
-        Vector3 targetPos = new Vector3(0f, -150f, 0f);        
+        Vector3 startPos = new Vector3(0f, -350f, 0f);
+        Vector3 targetPos = new Vector3(0f, -800f, 0f);        
 
         StartCoroutine(IteratePosition(startPos, targetPos));
     }
