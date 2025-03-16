@@ -35,8 +35,9 @@ public class GameCanvasHandler : MonoBehaviour {
 
     public void DialogOut() {
         Vector3 startPos = new Vector3(0f, -350f, 0f);
-        Vector3 targetPos = new Vector3(0f, -800f, 0f);        
+        Vector3 targetPos = new Vector3(0f, -800f, 0f);
 
+        AudioManager.Instance.StopVoice();
         StartCoroutine(IteratePosition(startPos, targetPos));
     }
 
@@ -46,6 +47,9 @@ public class GameCanvasHandler : MonoBehaviour {
 
     public void DialogClear() {
         StopAllCoroutines();
+
+        AudioManager.Instance.StopVoice();
+
         _isBusy = false;
         _name.text = string.Empty;
         _dialogText.text = string.Empty;        
@@ -53,6 +57,8 @@ public class GameCanvasHandler : MonoBehaviour {
 
     public void DialogSkip() {
         _isTyping = false;
+
+        AudioManager.Instance.StopVoice();
     }
 
     private IEnumerator IteratePosition(Vector3 startPos, Vector3 targetPos) {
@@ -112,6 +118,12 @@ public class GameCanvasHandler : MonoBehaviour {
         string line = GameBucket.Instance.GetDialogObject(IDX).Line;
         while (!string.Equals(_dialogText.text, line)) {
             string subline = line.Substring(0, _dialogText.text.Length + 1);
+            char lastchar = subline.ToCharArray()[subline.Length - 1];
+
+            if (lastchar != ' ') {
+                AudioManager.Instance.PlayVoice();
+            }
+
             _dialogText.text = subline;
 
             if (!_isTyping) {

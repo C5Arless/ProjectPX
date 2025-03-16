@@ -141,7 +141,12 @@ public enum SFXTracks {
     Crash,
     Pow,
     Tap,
-    Spotlight
+    Spotlight,
+    Voice_1,
+    Voice_2,
+    Voice_3,
+    Voice_4,
+    Voice_5
 }
 
 public enum OptionDisplayMode {

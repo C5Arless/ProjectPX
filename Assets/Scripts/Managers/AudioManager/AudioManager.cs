@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine.Playables;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Timeline;
 
 public class AudioManager : MonoBehaviour {
     public static AudioManager Instance;
@@ -12,6 +11,7 @@ public class AudioManager : MonoBehaviour {
     [SerializeField] GameObject MusicSource;
     [SerializeField] GameObject EnvSource;
     [SerializeField] GameObject SFXSource;
+    [SerializeField] GameObject VoiceSource;
 
     [SerializeField] AudioClipsDrawer _clipsDrawer;
 
@@ -31,6 +31,21 @@ public class AudioManager : MonoBehaviour {
 
         PlaySFX(sFXTracks);
     } 
+
+    public void PlayVoice() {
+        int clipID = Random.Range(14, 19);
+        SFXTracks voiceTracks = (SFXTracks)clipID;
+
+        PlayVoiceSample(voiceTracks);
+    }
+
+    public void StopVoice() {
+        AudioSource voiceSource = VoiceSource.GetComponent<AudioSource>();
+
+        if (voiceSource != null) {
+            voiceSource.Stop();
+        }
+    }
 
     public void HandleSignal(string signal) {
         Vector2 _target = new Vector2();
@@ -114,6 +129,30 @@ public class AudioManager : MonoBehaviour {
         }
     }
 
+    private void PlayVoiceSample(SFXTracks clip) {
+        AudioSource audioSource = VoiceSource.GetComponent<AudioSource>();
+
+        if (audioSource != null) {
+            audioSource.Stop();
+
+            AudioSource voiceSource = VoiceSource.AddComponent<AudioSource>();
+            voiceSource.playOnAwake = false;
+            voiceSource.clip = _clipsDrawer.sFXTracks[(int)clip];
+            voiceSource.outputAudioMixerGroup = _mixer.FindMatchingGroups("Master/SFX")[0];
+            voiceSource.volume = 1f;
+
+            StartCoroutine(PlayVoiceClip(voiceSource));
+        } else {
+            AudioSource voiceSource = VoiceSource.AddComponent<AudioSource>();
+            voiceSource.playOnAwake = false;
+            voiceSource.clip = _clipsDrawer.sFXTracks[(int)clip];
+            voiceSource.outputAudioMixerGroup = _mixer.FindMatchingGroups("Master/SFX")[0];
+            voiceSource.volume = 1f;
+
+            StartCoroutine(PlayVoiceClip(voiceSource));
+        }
+    }
+
     public void PlaySFX(SFXTracks clip) {
         SFXSource.AddComponent<AudioSource>().playOnAwake = false;
 
@@ -176,6 +215,14 @@ public class AudioManager : MonoBehaviour {
 
         yield return new WaitWhile(() => source.isPlaying);
         
+        Destroy(source);
+    }
+
+    private IEnumerator PlayVoiceClip(AudioSource source) {
+        source.PlayOneShot(source.clip);
+
+        yield return new WaitWhile(() => source.isPlaying);
+
         Destroy(source);
     }
 
