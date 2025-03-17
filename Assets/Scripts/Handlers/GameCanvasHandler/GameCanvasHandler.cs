@@ -37,6 +37,7 @@ public class GameCanvasHandler : MonoBehaviour {
         Vector3 startPos = new Vector3(0f, -350f, 0f);
         Vector3 targetPos = new Vector3(0f, -800f, 0f);
 
+        _isTyping = false;
         AudioManager.Instance.StopVoice();
         StartCoroutine(IteratePosition(startPos, targetPos));
     }
