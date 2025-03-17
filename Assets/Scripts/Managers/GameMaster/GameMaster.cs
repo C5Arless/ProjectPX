@@ -46,6 +46,7 @@ public class GameMaster : MonoBehaviour {
         ScenesManager.Instance.MainMenu();
         yield return null;
 
+        //this is temporary
         AudioManager.Instance.PlayMusic(MusicTracks.MainMenu_Intro);
         yield return null;
 

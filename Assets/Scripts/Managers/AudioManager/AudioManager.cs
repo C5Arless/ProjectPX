@@ -134,23 +134,15 @@ public class AudioManager : MonoBehaviour {
 
         if (audioSource != null) {
             audioSource.Stop();
-
-            AudioSource voiceSource = VoiceSource.AddComponent<AudioSource>();
-            voiceSource.playOnAwake = false;
-            voiceSource.clip = _clipsDrawer.sFXTracks[(int)clip];
-            voiceSource.outputAudioMixerGroup = _mixer.FindMatchingGroups("Master/SFX")[0];
-            voiceSource.volume = 1f;
-
-            StartCoroutine(PlayVoiceClip(voiceSource));
-        } else {
-            AudioSource voiceSource = VoiceSource.AddComponent<AudioSource>();
-            voiceSource.playOnAwake = false;
-            voiceSource.clip = _clipsDrawer.sFXTracks[(int)clip];
-            voiceSource.outputAudioMixerGroup = _mixer.FindMatchingGroups("Master/SFX")[0];
-            voiceSource.volume = 1f;
-
-            StartCoroutine(PlayVoiceClip(voiceSource));
         }
+
+        AudioSource voiceSource = VoiceSource.AddComponent<AudioSource>();
+        voiceSource.playOnAwake = false;
+        voiceSource.clip = _clipsDrawer.sFXTracks[(int)clip];
+        voiceSource.outputAudioMixerGroup = _mixer.FindMatchingGroups("Master/SFX")[0];
+        voiceSource.volume = 1f;
+
+        StartCoroutine(PlayVoiceClip(voiceSource));
     }
 
     public void PlaySFX(SFXTracks clip) {
