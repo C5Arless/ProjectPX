@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class GameCanvasHandler : MonoBehaviour {
     [SerializeField] GameObject _dialogWindow;
@@ -27,15 +28,15 @@ public class GameCanvasHandler : MonoBehaviour {
     }
 
     public void DialogIn() {        
-        Vector3 startPos = new Vector3(0f, -800f, 0f);
-        Vector3 targetPos = new Vector3(0f, -350f, 0f);  
+        Vector3 startPos = new Vector3(0f, -500f, 0f);
+        Vector3 targetPos = new Vector3(0f, -60f, 0f);  
 
         StartCoroutine(IteratePosition(startPos, targetPos));        
     }
 
     public void DialogOut() {
-        Vector3 startPos = new Vector3(0f, -350f, 0f);
-        Vector3 targetPos = new Vector3(0f, -800f, 0f);
+        Vector3 startPos = new Vector3(0f, -60f, 0f);
+        Vector3 targetPos = new Vector3(0f, -500f, 0f);
 
         _isTyping = false;
         AudioManager.Instance.StopVoice();
@@ -64,12 +65,13 @@ public class GameCanvasHandler : MonoBehaviour {
 
     private IEnumerator IteratePosition(Vector3 startPos, Vector3 targetPos) {
         _isBusy = true;
+        _dialogWindow.transform.localPosition = startPos;
 
         if (startPos.y < targetPos.y) {            
             _dialogWindow.SetActive(true);
             Vector3 position = startPos;
 
-            _dialogWindow.transform.position = position;
+            _dialogWindow.transform.localPosition = position;
 
             while (position.y < targetPos.y) {
                 position.y = position.y + 30f;
@@ -85,7 +87,7 @@ public class GameCanvasHandler : MonoBehaviour {
         } else {            
             Vector3 position = startPos;
 
-            _dialogWindow.transform.position = position;
+            _dialogWindow.transform.localPosition = position;
 
             while (position.y > targetPos.y) {
                 position.y = position.y - 30f;
@@ -133,7 +135,7 @@ public class GameCanvasHandler : MonoBehaviour {
                 yield break;
             }
 
-            yield return new WaitForSeconds(Mathf.PingPong(.001f, .2f));
+            yield return new WaitForSeconds(Mathf.PingPong(.01f, .2f));
         }
 
         _isTyping = false;

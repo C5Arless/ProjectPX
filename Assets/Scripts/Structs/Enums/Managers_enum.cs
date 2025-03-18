@@ -149,6 +149,14 @@ public enum SFXTracks {
     Voice_5
 }
 
+public enum VoiceMood {
+    Default,
+    Sad,
+    Scared,
+    Angry,
+    Excited
+}
+
 public enum OptionDisplayMode {
     Fullscreen,
     Windowed

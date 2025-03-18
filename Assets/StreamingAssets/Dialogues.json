@@ -3,6 +3,7 @@
         {
             "IDX": 0,
             "Name": "Default",
+            "Mood": "Default",
             "Line": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
             "Options": null,
             "NEXT": -1
@@ -10,6 +11,7 @@
         {
             "IDX": 1,
             "Name": "FX - 41",
+            "Mood": "Sad",
             "Line": "This is a test dialogue line!",
             "Options": null,
             "NEXT": -1
@@ -17,6 +19,7 @@
         {
             "IDX": 2,
             "Name": "FX - 41",
+            "Mood": "Excited",
             "Line": "Also viva il duce!",
             "Options": null,
             "NEXT": -1
@@ -24,6 +27,7 @@
         {
             "IDX": 3,
             "Name": "FX - 41",
+            "Mood": "Angry",
             "Line": "Porcacciodeddiooooooooooooo",
             "Options": null,
             "NEXT": -1

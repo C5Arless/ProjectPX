@@ -38,6 +38,7 @@ public struct DialogPages {
 public struct DialogObject {
     public int IDX;
     public string Name;
+    public string Mood;
     public string Line;
     public string[] Options;
     public int NEXT;
