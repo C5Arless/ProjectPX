@@ -11,22 +11,22 @@
         {
             "IDX": 1,
             "Name": "FX - 41",
-            "Mood": "Sad",
+            "Mood": "Default",
             "Line": "This is a test dialogue line!",
             "Options": null,
-            "NEXT": -1
+            "NEXT": 2
         },
         {
             "IDX": 2,
             "Name": "FX - 41",
-            "Mood": "Excited",
+            "Mood": "Scared",
             "Line": "Also viva il duce!",
             "Options": null,
-            "NEXT": -1
+            "NEXT": 3
         },
         {
             "IDX": 3,
-            "Name": "FX - 41",
+            "Name": "Default",
             "Mood": "Angry",
             "Line": "Porcacciodeddiooooooooooooo",
             "Options": null,

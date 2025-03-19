@@ -32,11 +32,11 @@ public class AudioManager : MonoBehaviour {
         PlaySFX(sFXTracks);
     } 
 
-    public void PlayVoice() {
+    public void PlayVoice(string name, string mood) {
         int clipID = Random.Range(14, 19);
         SFXTracks voiceTracks = (SFXTracks)clipID;
 
-        PlayVoiceSample(voiceTracks);
+        PlayVoiceSample(voiceTracks, name, mood);
     }
 
     public void StopVoice() {
@@ -129,7 +129,7 @@ public class AudioManager : MonoBehaviour {
         }
     }
 
-    private void PlayVoiceSample(SFXTracks clip) {
+    private void PlayVoiceSample(SFXTracks clip, string name, string mood) {
         AudioSource audioSource = VoiceSource.GetComponent<AudioSource>();
 
         if (audioSource != null) {
@@ -140,6 +140,7 @@ public class AudioManager : MonoBehaviour {
         voiceSource.playOnAwake = false;
         voiceSource.clip = _clipsDrawer.sFXTracks[(int)clip];
         voiceSource.outputAudioMixerGroup = _mixer.FindMatchingGroups("Master/SFX")[0];
+        voiceSource.pitch = GetVoiceName(name) + GetVoiceMood(mood);
         voiceSource.volume = 1f;
 
         StartCoroutine(PlayVoiceClip(voiceSource));
@@ -200,6 +201,46 @@ public class AudioManager : MonoBehaviour {
 
         float sfxValue = (_currentInfo.SfxVolume + .001f) / 10f;
         _mixer.SetFloat(OptionPayload.SfxVolume.ToString(), Mathf.Log10(sfxValue) * 20f);
+    }
+
+    private float GetVoiceMood(string mood) {
+        switch (mood) {
+            case "Sad": {
+                    return -.15f;
+                }
+            case "Scared": {
+                    return .15f;
+                }
+            case "Angry": {
+                    return -.2f;
+                }
+            case "Excited": {
+                    return .05f;
+                }
+            default: {
+                    return 0f;
+                }
+        }
+    }
+
+    private float GetVoiceName(string name) {
+        switch (name) {
+            case "FX - 41": {
+                    return 1.5f;
+                }
+            case "Scared": {
+                    return .15f;
+                }
+            case "Angry": {
+                    return -.2f;
+                }
+            case "Excited": {
+                    return .05f;
+                }
+            default: {
+                    return 1f;
+                }
+        }
     }
 
     private IEnumerator PlayClipOnce(AudioSource source) {

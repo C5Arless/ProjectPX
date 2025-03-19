@@ -63,6 +63,29 @@ public class GameCanvasHandler : MonoBehaviour {
         AudioManager.Instance.StopVoice();
     }
 
+    private Vector2 GetMood(string mood) {         
+        switch (mood) {
+            case "Default": {
+                    return new Vector2(.01f, .2f);            
+                }
+            case "Sad": {
+                    return new Vector2(.1f, .5f);
+                }
+            case "Scared": {
+                    return new Vector2(.005f, .02f);
+                }
+            case "Angry": {
+                    return new Vector2(.05f, .05f);
+                }
+            case "Excited": {
+                    return new Vector2(.05f, .02f);
+                }
+            default: {
+                    return Vector2.zero;
+                }
+        }
+    }
+
     private IEnumerator IteratePosition(Vector3 startPos, Vector3 targetPos) {
         _isBusy = true;
         _dialogWindow.transform.localPosition = startPos;
@@ -113,18 +136,22 @@ public class GameCanvasHandler : MonoBehaviour {
 
         _isBusy = true;
 
-        _name.text = GameBucket.Instance.GetDialogObject(IDX).Name;
+        string name = GameBucket.Instance.GetDialogObject(IDX).Name;
+        _name.text = name;
         yield return null;
 
         _isTyping = true;
 
+        string mood = GameBucket.Instance.GetDialogObject(IDX).Mood;
+        Vector2 targetMood = GetMood(mood);
         string line = GameBucket.Instance.GetDialogObject(IDX).Line;
+
         while (!string.Equals(_dialogText.text, line)) {
             string subline = line.Substring(0, _dialogText.text.Length + 1);
             char lastchar = subline.ToCharArray()[subline.Length - 1];
 
-            if (lastchar != ' ') {
-                AudioManager.Instance.PlayVoice();
+            if (lastchar != ' ') {                
+                AudioManager.Instance.PlayVoice(name, mood);
             }
 
             _dialogText.text = subline;
@@ -135,7 +162,7 @@ public class GameCanvasHandler : MonoBehaviour {
                 yield break;
             }
 
-            yield return new WaitForSeconds(Mathf.PingPong(.01f, .2f));
+            yield return new WaitForSeconds(Mathf.PingPong(targetMood.x, targetMood.y));
         }
 
         _isTyping = false;
