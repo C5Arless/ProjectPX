@@ -64,6 +64,7 @@ Transform:
   - {fileID: 1368581346989991885}
   - {fileID: 633749688474875680}
   - {fileID: 1494916675521317018}
+  - {fileID: 7798295445869902351}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5312832764120956212
@@ -82,6 +83,7 @@ MonoBehaviour:
   MusicSource: {fileID: 7101729276147132930}
   EnvSource: {fileID: 1505326934413845840}
   SFXSource: {fileID: 6280584439255109718}
+  VoiceSource: {fileID: 4164476363278754975}
   _clipsDrawer:
     musicTracks:
     - track: {fileID: 8300000, guid: e8a6fa44811c8d743a03046eca3d4641, type: 3}
@@ -115,7 +117,43 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 8300000, guid: 22434940ed79efd4ab365e0c9b44e1e5, type: 3}
+    - {fileID: 8300000, guid: 5eb703ae79cef814fb34fae39ed6fbaa, type: 3}
+    - {fileID: 8300000, guid: 65b6b16cc4da8c144af3be9f91e1463c, type: 3}
+    - {fileID: 8300000, guid: 4624ed4339679d04e8b10964cc652e13, type: 3}
+    - {fileID: 8300000, guid: 74ad2191b32a99145837537b42bcb8f8, type: 3}
+    - {fileID: 8300000, guid: ff836019b4f4f6940a79aad935ac6466, type: 3}
   _currentInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
+--- !u!1 &4164476363278754975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7798295445869902351}
+  m_Layer: 0
+  m_Name: VoiceSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7798295445869902351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4164476363278754975}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2726008788665615049}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6280584439255109718
 GameObject:
   m_ObjectHideFlags: 0

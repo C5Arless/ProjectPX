@@ -44,6 +44,13 @@ public struct DialogObject {
     public int NEXT;
 }
 
+[System.Serializable]
+public struct DialogData {
+    public int IDX;
+    public VoiceName Name;
+    public VoiceMood Mood;
+}
+
 public class DialogWrapper {
     public DialogObject[] Dialogues;
 }

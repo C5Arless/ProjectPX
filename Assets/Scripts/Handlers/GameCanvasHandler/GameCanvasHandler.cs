@@ -63,21 +63,21 @@ public class GameCanvasHandler : MonoBehaviour {
         AudioManager.Instance.StopVoice();
     }
 
-    private Vector2 GetMood(string mood) {         
+    private Vector2 GetMood(VoiceMood mood) {         
         switch (mood) {
-            case "Default": {
+            case VoiceMood.Default: {
                     return new Vector2(.01f, .2f);            
                 }
-            case "Sad": {
+            case VoiceMood.Sad: {
                     return new Vector2(.1f, .5f);
                 }
-            case "Scared": {
+            case VoiceMood.Scared: {
                     return new Vector2(.005f, .02f);
                 }
-            case "Angry": {
+            case VoiceMood.Angry: {
                     return new Vector2(.05f, .05f);
                 }
-            case "Excited": {
+            case VoiceMood.Excited: {
                     return new Vector2(.05f, .02f);
                 }
             default: {
@@ -137,13 +137,16 @@ public class GameCanvasHandler : MonoBehaviour {
         _isBusy = true;
 
         string name = GameBucket.Instance.GetDialogObject(IDX).Name;
+        VoiceName nameData = GameBucket.Instance.GetDialogData(IDX).Name;
         _name.text = name;
         yield return null;
 
         _isTyping = true;
 
         string mood = GameBucket.Instance.GetDialogObject(IDX).Mood;
-        Vector2 targetMood = GetMood(mood);
+        VoiceMood moodData = GameBucket.Instance.GetDialogData(IDX).Mood;
+
+        Vector2 targetMood = GetMood(moodData);
         string line = GameBucket.Instance.GetDialogObject(IDX).Line;
 
         while (!string.Equals(_dialogText.text, line)) {
@@ -151,7 +154,7 @@ public class GameCanvasHandler : MonoBehaviour {
             char lastchar = subline.ToCharArray()[subline.Length - 1];
 
             if (lastchar != ' ') {                
-                AudioManager.Instance.PlayVoice(name, mood);
+                AudioManager.Instance.PlayVoice(nameData, moodData);
             }
 
             _dialogText.text = subline;

@@ -32,7 +32,7 @@ public class AudioManager : MonoBehaviour {
         PlaySFX(sFXTracks);
     } 
 
-    public void PlayVoice(string name, string mood) {
+    public void PlayVoice(VoiceName name, VoiceMood mood) {
         int clipID = Random.Range(14, 19);
         SFXTracks voiceTracks = (SFXTracks)clipID;
 
@@ -129,7 +129,7 @@ public class AudioManager : MonoBehaviour {
         }
     }
 
-    private void PlayVoiceSample(SFXTracks clip, string name, string mood) {
+    private void PlayVoiceSample(SFXTracks clip, VoiceName name, VoiceMood mood) {
         AudioSource audioSource = VoiceSource.GetComponent<AudioSource>();
 
         if (audioSource != null) {
@@ -203,18 +203,18 @@ public class AudioManager : MonoBehaviour {
         _mixer.SetFloat(OptionPayload.SfxVolume.ToString(), Mathf.Log10(sfxValue) * 20f);
     }
 
-    private float GetVoiceMood(string mood) {
+    private float GetVoiceMood(VoiceMood mood) {
         switch (mood) {
-            case "Sad": {
+            case VoiceMood.Sad: {
                     return -.15f;
                 }
-            case "Scared": {
+            case VoiceMood.Scared: {
                     return .15f;
                 }
-            case "Angry": {
+            case VoiceMood.Angry: {
                     return -.2f;
                 }
-            case "Excited": {
+            case VoiceMood.Excited: {
                     return .05f;
                 }
             default: {
@@ -223,19 +223,10 @@ public class AudioManager : MonoBehaviour {
         }
     }
 
-    private float GetVoiceName(string name) {
+    private float GetVoiceName(VoiceName name) {
         switch (name) {
-            case "FX - 41": {
+            case VoiceName.Companion: {
                     return 1.5f;
-                }
-            case "Scared": {
-                    return .15f;
-                }
-            case "Angry": {
-                    return -.2f;
-                }
-            case "Excited": {
-                    return .05f;
                 }
             default: {
                     return 1f;

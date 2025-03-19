@@ -157,6 +157,11 @@ public enum VoiceMood {
     Excited
 }
 
+public enum VoiceName {
+    Default,
+    Companion
+}
+
 public enum OptionDisplayMode {
     Fullscreen,
     Windowed

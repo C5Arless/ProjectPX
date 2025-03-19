@@ -11,6 +11,10 @@ public class GameBucket : MonoBehaviour {
 
     private GameCanvasHandler _gameCanvasHandler;
     private DialogObject[] _dialogues;
+    private List<DialogData> _dialogData = new List<DialogData>();
+
+    private VoiceMood[] _moodMask = new VoiceMood[5];
+    private VoiceName[] _nameMask = new VoiceName[2];
 
     public PXController PXController { get { return _playerCtx; } set { _playerCtx = value; } }
     public CompanionController CompanionCtx { get {  return _companionCtx; } set { _companionCtx = value; } }
@@ -22,6 +26,8 @@ public class GameBucket : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
         }
         else { Destroy(gameObject); }
+
+        InitializeMasks();
     }
 
     private void Start() {
@@ -32,6 +38,24 @@ public class GameBucket : MonoBehaviour {
         return _dialogues[IDX];
     }
 
+    public DialogData GetDialogData(int IDX) {
+        return _dialogData[IDX];
+    }
+
+    private void RetrieveDialogData(DialogObject[] dialogues) {
+        foreach (DialogObject dialog in dialogues) {
+            DialogData target = new DialogData();
+            
+            VoiceMood targetMood = RetrieveMood(dialog);
+            VoiceName targetName = RetrieveName(dialog);
+            target.Mood = targetMood;
+            target.Name = targetName;            
+            target.IDX = dialog.IDX;
+
+            _dialogData.Add(target);
+        }
+    }
+
     private void RetrieveDialogObjects() {
         string path = Path.Combine(Application.streamingAssetsPath, "Dialogues.json");
 
@@ -40,9 +64,38 @@ public class GameBucket : MonoBehaviour {
 
             DialogWrapper dialogWrapper = JsonConvert.DeserializeObject<DialogWrapper>(jsonContent);
             _dialogues = dialogWrapper.Dialogues;
+            RetrieveDialogData(_dialogues);
         }
         else {
             Debug.LogError("File JSON non trovato!");
+        }
+    }
+
+    private VoiceMood RetrieveMood(DialogObject dialog) {
+        foreach (VoiceMood _mask in _moodMask) {
+            if (_mask.ToString() == dialog.Mood) {
+                return _mask;
+            }
+        }
+        return VoiceMood.Default;
+    }
+
+    private VoiceName RetrieveName(DialogObject dialog) {
+        foreach (VoiceName _mask in _moodMask) {
+            if (_mask.ToString() == dialog.Name) {
+                return _mask;
+            }
+        }
+        return VoiceName.Default;
+    }
+
+    private void InitializeMasks() {
+        for (int i = 0; i <= _moodMask.Length - 1; i++) {
+            _moodMask[i] = (VoiceMood)i;
+        }
+
+        for (int i = 0; i <= _nameMask.Length - 1; i++) {
+            _nameMask[i] = (VoiceName)i;
         }
     }
 }
