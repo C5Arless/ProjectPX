@@ -2,6 +2,7 @@
     "Dialogues": [
         {
             "IDX": 0,
+            "Tag":  "Default",
             "Name": "Default",
             "Mood": "Default",
             "Line": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -10,6 +11,7 @@
         },
         {
             "IDX": 1,
+            "Tag": "Companion",
             "Name": "FX - 41",
             "Mood": "Default",
             "Line": "This is a test dialogue line!",
@@ -19,6 +21,7 @@
         {
             "IDX": 2,
             "Name": "FX - 41",
+            "Tag": "Companion",
             "Mood": "Scared",
             "Line": "Also viva il duce!",
             "Options": null,
@@ -26,7 +29,8 @@
         },
         {
             "IDX": 3,
-            "Name": "Default",
+            "Tag": "NPC",
+            "Name": "Sgrodo",
             "Mood": "Angry",
             "Line": "Porcacciodeddiooooooooooooo",
             "Options": null,

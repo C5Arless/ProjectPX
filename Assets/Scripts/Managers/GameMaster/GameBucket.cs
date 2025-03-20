@@ -82,7 +82,7 @@ public class GameBucket : MonoBehaviour {
 
     private VoiceName RetrieveName(DialogObject dialog) {
         foreach (VoiceName _mask in _moodMask) {
-            if (_mask.ToString() == dialog.Name) {
+            if (_mask.ToString() == dialog.Tag) {
                 return _mask;
             }
         }

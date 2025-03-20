@@ -159,7 +159,8 @@ public enum VoiceMood {
 
 public enum VoiceName {
     Default,
-    Companion
+    Companion,
+    NPC
 }
 
 public enum OptionDisplayMode {

@@ -37,6 +37,7 @@ public struct DialogPages {
 [System.Serializable]
 public struct DialogObject {
     public int IDX;
+    public string Tag;
     public string Name;
     public string Mood;
     public string Line;

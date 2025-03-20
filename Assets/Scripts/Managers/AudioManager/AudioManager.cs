@@ -212,7 +212,7 @@ public class AudioManager : MonoBehaviour {
                     return .15f;
                 }
             case VoiceMood.Angry: {
-                    return -.2f;
+                    return .03f;
                 }
             case VoiceMood.Excited: {
                     return .05f;
@@ -227,6 +227,9 @@ public class AudioManager : MonoBehaviour {
         switch (name) {
             case VoiceName.Companion: {
                     return 1.5f;
+                }
+            case VoiceName.NPC: {
+                    return .5f;
                 }
             default: {
                     return 1f;
