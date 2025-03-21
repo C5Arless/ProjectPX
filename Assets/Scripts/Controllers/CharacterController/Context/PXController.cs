@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PXController : MonoBehaviour {
     //State reference
@@ -30,6 +29,7 @@ public class PXController : MonoBehaviour {
     [SerializeField] Material _visor; // Material reference for Health Based Display Color
 
     [SerializeField] PlayerInfo _playerInfo;
+    [SerializeField] OptionsInfo _optionsInfo;
 
     Animator _animator;
     Rigidbody _playerRb;
@@ -99,8 +99,11 @@ public class PXController : MonoBehaviour {
     [Range(0.1f, 80f)] float jumpHeight;
 
     [SerializeField]
-    [Range(0f, 300f)] float _sens;
-    
+    [Range(0f, 300f)] float _mouseSens;
+
+    [SerializeField]
+    [Range(0f, 300f)] float _analogSens;
+
     [SerializeField]
     [Range(0.01f, 1f)] float _sensRatio;
 
@@ -115,7 +118,7 @@ public class PXController : MonoBehaviour {
     private bool dashInput;
 
     //Constructors
-    public float CurrentSens { get { return _sens; } }
+    public float CurrentSens { get { return _mouseSens; } }
     public float Gravity { get { return gravity; } set { gravity = value; } }
     public float GravityMultiplier { get { return gravityMultiplier; } }
     public float GravitySpeed { get { return gravitySpeed; } }
@@ -280,17 +283,11 @@ public class PXController : MonoBehaviour {
     }
 
     private void SubscribeCallbacks() {
-        _jumpAction.started += OnJump;
-        //_jumpAction.performed += OnJump;
-        //_jumpAction.canceled += OnJump;
+        _jumpAction.started += OnJump;        
 
-        _attackAction.started += OnAttack;
-        //_attackAction.performed += OnAttack;
-        //_attackAction.canceled += OnAttack;
+        _attackAction.started += OnAttack;        
 
-        _dashAction.started += OnDash;
-        //_dashAction.performed += OnDash;
-        //_dashAction.canceled += OnDash;
+        _dashAction.started += OnDash;        
 
         _moveAction.started += OnMove;
         _moveAction.performed += OnMove;
@@ -300,25 +297,17 @@ public class PXController : MonoBehaviour {
         _lookAction.performed += OnLook;
         _lookAction.canceled += OnLook;
         
-        _confirmAction.started += OnConfirm;
-        //_confirmAction.canceled += OnConfirm;
+        _confirmAction.started += OnConfirm;        
 
-        _interactAction.started += OnInteract;
-        //_interactAction.canceled += OnInteract;
+        _interactAction.started += OnInteract;       
     }
 
     private void UnsubscribeCallbacks() {
-        _jumpAction.started -= OnJump;
-        //_jumpAction.performed -= OnJump;
-        //_jumpAction.canceled -= OnJump;
+        _jumpAction.started -= OnJump;        
 
-        _attackAction.started -= OnAttack;
-        //_attackAction.performed -= OnAttack;
-        //_attackAction.canceled -= OnAttack;
+        _attackAction.started -= OnAttack;        
 
-        _dashAction.started -= OnDash;
-        //_dashAction.performed -= OnDash;
-        //_dashAction.canceled -= OnDash;
+        _dashAction.started -= OnDash;        
 
         _moveAction.started -= OnMove;
         _moveAction.performed -= OnMove;
@@ -329,10 +318,8 @@ public class PXController : MonoBehaviour {
         _lookAction.canceled -= OnLook;
         
         _confirmAction.started -= OnConfirm;
-        //_confirmAction.canceled -= OnConfirm;
         
         _interactAction.started -= OnInteract;
-        //_interactAction.canceled -= OnInteract;
     }
 
     private void InitializeActions() {
@@ -605,13 +592,26 @@ public class PXController : MonoBehaviour {
 
     private void UpdateCamera(Vector2 camInput) {        
         if (!isDead && !onDialog) {
-            UpdateFreeLookCamera(_cam, _forward, camInput, _sens);
+            EvaluateCamera(camInput);
         }        
     }
 
-    private void UpdateFreeLookCamera(GameObject cam, GameObject forward, Vector2 mouseInput, float sens) {
-        CalculateCamMotion(mouseInput, sens);
+    private void EvaluateCamera(Vector2 camInput) {
+        if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
+            UpdateFreeLookMouseCamera(_cam, _forward, camInput, _mouseSens);
+        } else {
+            UpdateFreeLookAnalogCamera(_cam, _forward, camInput, _analogSens);
+        }
+    }
+
+    private void UpdateFreeLookAnalogCamera(GameObject cam, GameObject forward, Vector2 input, float sens) {
+        CalculateCamMotion(input, sens);
         CamRotation(cam, forward);
+    }
+
+    private void UpdateFreeLookMouseCamera(GameObject cam, GameObject forward, Vector2 input, float sens) {        
+        CalculateCamMotion(input, sens);
+        CamRotation(cam, forward);        
     }
 
     private void CalculateCamMotion(Vector2 mouseInput, float sens) {

@@ -182,7 +182,9 @@ public enum OptionPayload {
     Mute,
     DisplayResolution,
     DisplayMode,
-    Quality
+    Quality,
+    MouseSens,
+    PadSens
 }
 
 public enum AudioManagerMixer {

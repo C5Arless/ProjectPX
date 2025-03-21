@@ -12,7 +12,7 @@ public class DataManager : MonoBehaviour {
     [SerializeField] OptionsInfo _defaultInfo;
     [SerializeField] OptionsInfo _currentInfo;
 
-    private string[] _optionsPayload = new string[8];
+    private string[] _optionsPayload = new string[10];
 
     public DataInfo[] SlotsInfo { get { return slotsInfo; } }
     public PlayerInfo PlayerInfo { get { return playerInfo; } }
@@ -174,6 +174,16 @@ public class DataManager : MonoBehaviour {
                     PlayerPrefs.Save();
                     break;
                 }
+            case OptionPayload.MouseSens: {
+                    PlayerPrefs.SetInt(target.ToString(), _currentInfo.MouseSens);
+                    PlayerPrefs.Save();
+                    break;
+                }
+            case OptionPayload.PadSens: {
+                    PlayerPrefs.SetInt(target.ToString(), _currentInfo.PadSens);
+                    PlayerPrefs.Save();
+                    break;
+                }
             default: break;
         }
     }
@@ -252,6 +262,14 @@ public class DataManager : MonoBehaviour {
                     _currentInfo.Quality = PlayerPrefs.GetInt(target.ToString());
                     break;
                 }
+            case OptionPayload.MouseSens: {
+                    _currentInfo.MouseSens = PlayerPrefs.GetInt(target.ToString());
+                    break;
+                }
+            case OptionPayload.PadSens: {
+                    _currentInfo.PadSens = PlayerPrefs.GetInt(target.ToString());
+                    break;
+                }
             default: break;
         }
     }
@@ -290,6 +308,14 @@ public class DataManager : MonoBehaviour {
                 _currentInfo.Quality = _defaultInfo.Quality;
                 break;
             }
+            case OptionPayload.MouseSens: {
+                    _currentInfo.MouseSens = _defaultInfo.MouseSens;
+                    break;
+                }
+            case OptionPayload.PadSens: {
+                    _currentInfo.PadSens = _defaultInfo.PadSens;
+                    break;
+                }
             default: break;
         }
     }

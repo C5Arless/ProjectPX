@@ -11,7 +11,10 @@ public class OptionsInfo : ScriptableObject {
 
     private Vector2 _displayResolution;
     private int _displayMode;
-    private int _quality;  
+    private int _quality;
+
+    private int _mouseSens;
+    private int _padSens;
 
     public int MasterVolume { get { return _masterVolume; } set { _masterVolume = value; } }
     public int MusicVolume { get { return _musicVolume; } set { _musicVolume = value; } }
@@ -22,6 +25,8 @@ public class OptionsInfo : ScriptableObject {
     public Vector2 DisplayResolution { get { return _displayResolution; } set { _displayResolution = value; } }
     public int DisplayMode { get { return _displayMode; } set { _displayMode = value; } }
     public int Quality { get { return _quality; } set { _quality = value; } }
+    public int MouseSens { get { return _mouseSens; } set { _mouseSens = value; } }
+    public int PadSens { get { return _padSens; } set { _padSens = value; } }
 
 }
 

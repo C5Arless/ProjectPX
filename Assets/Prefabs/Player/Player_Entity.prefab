@@ -346,7 +346,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6323615956022173221}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1386033, y: 1e-45, z: -0, w: 0.990348}
+  m_LocalRotation: {x: 0.1386033, y: -0, z: -0, w: 0.990348}
   m_LocalPosition: {x: 0, y: 2.06, z: -4.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -644,12 +644,14 @@ MonoBehaviour:
   _ringPoint: {fileID: 7629964013666667223}
   _visor: {fileID: 2100000, guid: 595d6e1605d9deb4581d96ac9097b71c, type: 2}
   _playerInfo: {fileID: 11400000, guid: ab9b38bfd6de9aa41bf77144a6371ac0, type: 2}
+  _optionsInfo: {fileID: 11400000, guid: 028e366032b5d5448bd68ca946d3bba1, type: 2}
   _attackCollider: {fileID: 3710616230948931598}
   _dashCollider: {fileID: 6627579499874808275}
   gravityMultiplier: 15
   gravitySpeed: 5
   jumpHeight: 10
-  _sens: 110
+  _mouseSens: 300
+  _analogSens: 100
   _sensRatio: 0.8
   slopeAngle: 31
 --- !u!64 &696663370532947348
@@ -716,7 +718,7 @@ GameObject:
   - component: {fileID: 7496276369993302058}
   - component: {fileID: 970838729429133990}
   - component: {fileID: 7569820930276634460}
-  - component: {fileID: 5741331755427448857}
+  - component: {fileID: 814249622817385900}
   m_Layer: 9
   m_Name: cm
   m_TagString: Untagged
@@ -778,7 +780,7 @@ MonoBehaviour:
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
---- !u!114 &5741331755427448857
+--- !u!114 &814249622817385900
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -792,8 +794,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BindingMode: 1
   m_FollowOffset: {x: 0, y: 0, z: 0}
-  m_XDamping: 0.5
-  m_YDamping: 0.5
+  m_XDamping: 1
+  m_YDamping: 1
   m_ZDamping: 1
   m_AngularDampingMode: 0
   m_PitchDamping: 0
