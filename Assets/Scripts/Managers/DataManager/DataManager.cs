@@ -340,6 +340,9 @@ public class DataManager : MonoBehaviour {
         _defaultInfo.DisplayResolution = new Vector2(1920f, 1080f);
         _defaultInfo.DisplayMode = (int)OptionDisplayMode.Fullscreen;
         _defaultInfo.Quality = (int)OptionQuality.HIGH;
+
+        _defaultInfo.MouseSens = 300;
+        _defaultInfo.PadSens = 100;
     }
 
     private IEnumerator RetrieveData() {

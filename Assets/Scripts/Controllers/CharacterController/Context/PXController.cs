@@ -96,16 +96,7 @@ public class PXController : MonoBehaviour {
     [Range(0.1f, 10f)] float gravitySpeed;
 
     [SerializeField]
-    [Range(0.1f, 80f)] float jumpHeight;
-
-    [SerializeField]
-    [Range(0f, 300f)] float _mouseSens;
-
-    [SerializeField]
-    [Range(0f, 300f)] float _analogSens;
-
-    [SerializeField]
-    [Range(0.01f, 1f)] float _sensRatio;
+    [Range(0.1f, 80f)] float jumpHeight;    
 
     [SerializeField]
     [Range(0f, 35f)] float slopeAngle;
@@ -117,8 +108,7 @@ public class PXController : MonoBehaviour {
     private bool attackInput;
     private bool dashInput;
 
-    //Constructors
-    public float CurrentSens { get { return _mouseSens; } }
+    //Constructors   
     public float Gravity { get { return gravity; } set { gravity = value; } }
     public float GravityMultiplier { get { return gravityMultiplier; } }
     public float GravitySpeed { get { return gravitySpeed; } }
@@ -598,20 +588,22 @@ public class PXController : MonoBehaviour {
 
     private void EvaluateCamera(Vector2 camInput) {
         if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
-            UpdateFreeLookMouseCamera(_cam, _forward, camInput, _mouseSens);
+            UpdateFreeLookMouseCamera(_cam, _forward, camInput, _optionsInfo.MouseSens);
         } else {
-            UpdateFreeLookAnalogCamera(_cam, _forward, camInput, _analogSens);
+            UpdateFreeLookAnalogCamera(_cam, _forward, camInput, _optionsInfo.PadSens);
         }
     }
 
     private void UpdateFreeLookAnalogCamera(GameObject cam, GameObject forward, Vector2 input, float sens) {
         CalculateCamMotion(input, sens);
-        CamRotation(cam, forward);
+        CamRotation(cam, forward);        
     }
 
     private void UpdateFreeLookMouseCamera(GameObject cam, GameObject forward, Vector2 input, float sens) {        
-        CalculateCamMotion(input, sens);
-        CamRotation(cam, forward);        
+        if (input.x > .2f && input.y > .25f) {
+            CalculateCamMotion(input, sens);
+            CamRotation(cam, forward);
+        }
     }
 
     private void CalculateCamMotion(Vector2 mouseInput, float sens) {

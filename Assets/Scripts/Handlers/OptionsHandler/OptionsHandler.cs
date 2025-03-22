@@ -62,6 +62,10 @@ public class OptionsHandler : MonoBehaviour {
         DataManager.Instance.DefaultOption(OptionPayload.Quality);
 
         //VideoBehaviour
+        VideoManager.Instance.SetResolution(_currentInfo.DisplayResolution);
+        VideoManager.Instance.SetQuality((OptionQuality)_currentInfo.Quality);
+        VideoManager.Instance.SetDisplayMode((OptionDisplayMode)_currentInfo.DisplayMode);
+
 
         _onVideoDefaultAction();
 
@@ -80,6 +84,15 @@ public class OptionsHandler : MonoBehaviour {
         _onAudioDefaultAction();
 
         Debug.Log("Audio options reset to default!");
+    }
+
+    public void DefaultGame() {
+        DataManager.Instance.DefaultOption(OptionPayload.MouseSens);
+        DataManager.Instance.DefaultOption(OptionPayload.PadSens);        
+
+        //GameBehaviour
+
+        Debug.Log("Game options reset to default!");
     }
 
     public void SelectName() {
@@ -130,6 +143,22 @@ public class OptionsHandler : MonoBehaviour {
         AudioManager.Instance.ChangeVolume(AudioManagerMixer.SoundFX, (int)target.value);
 
         DataManager.Instance.ApplyCurrentOption(OptionPayload.SfxVolume);
+
+        Debug.Log("Value: " + target.value);
+    }
+
+    public void HandleMouseSens(Slider target) {
+        _currentInfo.MouseSens = (int)target.value;
+
+        DataManager.Instance.ApplyCurrentOption(OptionPayload.MouseSens);
+
+        Debug.Log("Value: " + target.value);
+    }
+
+    public void HandlePadSens(Slider target) {
+        _currentInfo.PadSens = (int)target.value;
+
+        DataManager.Instance.ApplyCurrentOption(OptionPayload.PadSens);
 
         Debug.Log("Value: " + target.value);
     }

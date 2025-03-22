@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -82,6 +80,16 @@ public class OptionAwakeTrigger : MonoBehaviour {
             case OptionPayload.Quality: {
                     TMP_Dropdown _dropdown = GetComponent<TMP_Dropdown>();
                     _dropdown.value = _currentInfo.Quality;
+                    break;
+                }
+            case OptionPayload.MouseSens: {
+                    Slider _slider = GetComponent<Slider>();
+                    _slider.value = _currentInfo.MouseSens;
+                    break;
+                }
+            case OptionPayload.PadSens: {
+                    Slider _slider = GetComponent<Slider>();
+                    _slider.value = _currentInfo.PadSens;
                     break;
                 }
             default: break;
