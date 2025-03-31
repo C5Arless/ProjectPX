@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngine.VFX;
 
 public class CompanionController : MonoBehaviour {
@@ -133,11 +134,17 @@ public class CompanionController : MonoBehaviour {
     }
 
     public void TravelSetUpTalkBehaviour(Vector3 position) {
+        Vector3 target = position;
+
+        StartCoroutine(TravelSetUpTalk(target));
+
+        /*
         travelPosition = position;
         IsTalking = true;
+        */
     }
 
-    //PRIVATE METHODS
+    //
     private void InitializeTravelDestinations() {
         travelDestinations[0] = new Vector3(horizontalOffset, verticalOffset, -horizontalOffset);
         travelDestinations[1] = new Vector3(0f, verticalOffset, -horizontalOffset);
@@ -213,7 +220,7 @@ public class CompanionController : MonoBehaviour {
         StopCoroutine("VisionFocusRoutine");
     }
 
-    public void TravelEnterBehaviour() {
+    public void TravelEnterBehaviour() {        
         travelLocked = true;
         UpdateRNGToken();
         StartCoroutine("TravelPredictRoutine");
@@ -221,7 +228,7 @@ public class CompanionController : MonoBehaviour {
     }
 
     public void TravelEnterTalkBehaviour() {
-        travelLocked = true;        
+        travelLocked = true;
         StartCoroutine("TravelMoveRoutine");
     }
 
@@ -258,6 +265,19 @@ public class CompanionController : MonoBehaviour {
     public void CheckOperativeBehaviour() {
         //StopCoroutine("CheckOperativeRoutine");
         StartCoroutine("CheckOperativeRoutine");
+    }
+
+    private IEnumerator TravelSetUpTalk(Vector3 target) {
+        StopCoroutine("TravelMoveRoutine");
+        travelLocked = false;
+        isMoving = false;
+        currentVelocity = 0f;
+        _trail.SetFloat("DragDirection", 0f);
+        yield return null;
+
+        travelPosition = target;
+        IsTalking = true;
+        yield break;
     }
 
     private IEnumerator CycleRNGToken() {

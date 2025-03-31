@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 public class GameCanvasHandler : MonoBehaviour {
     [SerializeField] GameObject _dialogWindow;
@@ -15,8 +12,9 @@ public class GameCanvasHandler : MonoBehaviour {
 
     private bool _isBusy;
     private bool _isTyping;
+    private bool _isTransitioning;
 
-    public bool IsBusy { get { return _isBusy; } }
+    public bool IsTransitioning { get { return _isTransitioning; } }
     public bool IsTyping { get { return _isTyping; } }
 
     private void Awake() {
@@ -88,6 +86,7 @@ public class GameCanvasHandler : MonoBehaviour {
 
     private IEnumerator IteratePosition(Vector3 startPos, Vector3 targetPos) {
         _isBusy = true;
+        _isTransitioning = true;
         _dialogWindow.transform.localPosition = startPos;
 
         if (startPos.y < targetPos.y) {            
@@ -104,6 +103,8 @@ public class GameCanvasHandler : MonoBehaviour {
             }
 
             _onTransitionInDone();
+
+            _isTransitioning = false;
             _isBusy = false;
             yield break;
 
@@ -124,6 +125,7 @@ public class GameCanvasHandler : MonoBehaviour {
 
             _dialogWindow.SetActive(false);
 
+            _isTransitioning = false;
             _isBusy = false;
             yield break;
         }

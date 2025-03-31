@@ -600,7 +600,7 @@ public class PXController : MonoBehaviour {
     }
 
     private void UpdateFreeLookMouseCamera(GameObject cam, GameObject forward, Vector2 input, float sens) {        
-        if (input.x > .2f && input.y > .25f) {
+        if (Mathf.Abs(input.x) > .005f && Mathf.Abs(input.y) > .001f) {
             CalculateCamMotion(input, sens);
             CamRotation(cam, forward);
         }
