@@ -50,16 +50,6 @@ public class InteractController : MonoBehaviour {
         isInteracting = true;
 
         StartCoroutine(EnterRoutine());
-
-        /*
-        GameBucket.Instance.PXController.DialogEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
-
-        GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
-        GameBucket.Instance.CompanionCtx.VisionSetUpTalkBehaviour(_focusTarget);
-
-        GameBucket.Instance.GameCanvasHandler.DialogIn();
-        GameBucket.Instance.GameCanvasHandler.DialogWrite(_DialogPages[pageNumber - 1].dialogIdx);
-        */
     }
 
     private void Continue() {
@@ -119,7 +109,7 @@ public class InteractController : MonoBehaviour {
 
         GameBucket.Instance.GameCanvasHandler.DialogWrite(_DialogPages[pageNumber - 1].dialogIdx);
         isBusy = false;
-        yield return null;
+        yield break;
     }
 
     private IEnumerator ExitRoutine() {
