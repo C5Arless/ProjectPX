@@ -105,14 +105,10 @@ public enum PauseCanvasButtons {
 
 public enum MusicTracks {
     MainMenu_Intro,
-    MainMenu_Loop,
-    Lab_Intro,
-    Lab_Loop,
-    Map1_Intro,
-    Map1_Loop,
-    Warp1_Intro,
-    Warp1_Loop,
-    Warp2_Intro,
+    MainMenu_Loop,    
+    Lab_Loop,    
+    Map1_Loop,    
+    Warp1_Loop,    
     Warp2_Loop,
     Warp3_Intro,
     Warp3_Loop1,

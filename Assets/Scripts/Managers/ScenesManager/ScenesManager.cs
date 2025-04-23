@@ -56,7 +56,14 @@ public class ScenesManager : MonoBehaviour {
         if (paused) { return; }
 
         globalPause = true;
-        StartCoroutine(InitializeMainMenu());
+        StartCoroutine(InitializeMainMenu(false));
+    }
+
+    public void ReturnToMainMenu() {
+        if (paused) { return; }
+
+        globalPause = true;
+        StartCoroutine(InitializeMainMenu(true));
     }
 
     public void QuitGame() {
@@ -85,8 +92,34 @@ public class ScenesManager : MonoBehaviour {
         }
     }
 
-    private IEnumerator InitializeMainMenu() {
-        StartCoroutine(TransitionBlackOut(_dissolve));        
+    private void FireSoundTracks(Scenes target) {
+        switch (target) {
+            case Scenes.Lab: {
+                    AudioManager.Instance.PlayMusic(MusicTracks.Lab_Loop);
+                    return;
+                }
+            case Scenes.Map1: {
+                    AudioManager.Instance.PlayMusic(MusicTracks.Map1_Loop);
+                    return;
+                }
+            case Scenes.Warp1: {
+                    AudioManager.Instance.PlayMusic(MusicTracks.Warp1_Loop);
+                    return;
+                }
+            case Scenes.Warp2: {
+                    AudioManager.Instance.PlayMusic(MusicTracks.Warp2_Loop);
+                    return;
+                }
+            case Scenes.Warp3: {
+                    AudioManager.Instance.PlayMusic(MusicTracks.Warp3_Intro);
+                    return;
+                }
+            default: return;
+        }
+    }
+
+    private IEnumerator InitializeMainMenu(bool fromPause) {
+        StartCoroutine(TransitionBlackOut(_dissolve));     
         yield return new WaitWhile(() => paused);
 
         StartCoroutine(SetLoadScene((int)Scenes.MainMenu));
@@ -97,6 +130,12 @@ public class ScenesManager : MonoBehaviour {
 
         yield return new WaitForSeconds(1f);
 
+        if (fromPause) { 
+            AudioManager.Instance.PlayMusic(MusicTracks.MainMenu_Loop); 
+        } else {
+            AudioManager.Instance.PlayMusic(MusicTracks.MainMenu_Intro);
+        }
+        
         StartCoroutine(TransitionOut(_dissolve, _dissolveSpeed));
         yield return new WaitWhile(() => paused);
 
@@ -119,11 +158,9 @@ public class ScenesManager : MonoBehaviour {
         StartCoroutine(InstantiatePlayerAndCompanion());
         yield return new WaitWhile(() => paused);
 
+        AudioManager.Instance.PlayMusic(MusicTracks.Lab_Loop);
         StartCoroutine(TransitionOut(_fade, _fadeSpeed));
         yield return new WaitWhile(() => paused);        
-
-        StartCoroutine(TransitionOut(_fade, _fadeSpeed));
-        yield return new WaitWhile(() => paused);
 
         globalPause = false;
         yield break;

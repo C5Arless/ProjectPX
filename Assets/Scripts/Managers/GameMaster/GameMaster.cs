@@ -47,8 +47,8 @@ public class GameMaster : MonoBehaviour {
         yield return null;
 
         //this is temporary
-        AudioManager.Instance.PlayMusic(MusicTracks.MainMenu_Intro);
-        yield return null;
+        //AudioManager.Instance.PlayMusic(MusicTracks.MainMenu_Intro);
+        //yield return null;
 
         yield break;
     }

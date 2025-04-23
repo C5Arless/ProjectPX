@@ -90,7 +90,7 @@ MonoBehaviour:
       timeline: {fileID: 11400000, guid: 9539738962bf37b47b61072aea778cd9, type: 2}
     - track: {fileID: 8300000, guid: b43ba0f3392bbe24c92aad015eb5a8a1, type: 3}
       timeline: {fileID: 0}
-    - track: {fileID: 0}
+    - track: {fileID: 8300000, guid: 4569ae6356a758843873dd211a5fa3b8, type: 3}
       timeline: {fileID: 0}
     - track: {fileID: 0}
       timeline: {fileID: 0}

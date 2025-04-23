@@ -23,6 +23,8 @@ public class GameCanvasHandler : MonoBehaviour {
 
     private void Start() {
         _onTransitionInDone += () => { };
+
+        InitializeRenderCamera();
     }
 
     public void DialogIn() {        
@@ -82,6 +84,10 @@ public class GameCanvasHandler : MonoBehaviour {
                     return Vector2.zero;
                 }
         }
+    }
+
+    private void InitializeRenderCamera() {
+        _dialogWindow.GetComponentInParent<Canvas>().worldCamera = CameraManager.Instance.GameBrain.GetComponent<Camera>();
     }
 
     private IEnumerator IteratePosition(Vector3 startPos, Vector3 targetPos) {

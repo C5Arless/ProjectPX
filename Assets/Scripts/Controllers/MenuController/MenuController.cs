@@ -233,7 +233,7 @@ public class MenuController : MonoBehaviour {
     }
 
     public void ReturnToMainMenu() {
-        ScenesManager.Instance.MainMenu();
+        ScenesManager.Instance.ReturnToMainMenu();
         DataManager.Instance.RefreshData();
 
         UIMode mode = UIMode.MainMenu;
