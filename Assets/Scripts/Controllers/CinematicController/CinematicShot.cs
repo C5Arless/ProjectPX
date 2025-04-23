@@ -8,6 +8,7 @@ using UnityEditor;
 
 public class CinematicShot : MonoBehaviour {
     [SerializeField] GameObject _vcamera;
+    [SerializeField] GameObject _vcameraTarget;
     [SerializeField] GameObject _focusTarget;
     [SerializeField] GameObject _playerTarget;
     [SerializeField] GameObject _companionTarget;
@@ -67,19 +68,31 @@ public class CinematicShot : MonoBehaviour {
         if (_focusTarget != null) {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(_focusTarget.transform.position, 0.2f);
-            UnityEditor.Handles.Label(_focusTarget.transform.position, "FocusTarget");
+            UnityEditor.Handles.Label(_focusTarget.transform.position, "CShotFocusTarget");
         }
 
         if (_playerTarget != null) {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(_playerTarget.transform.position, 0.2f);
-            UnityEditor.Handles.Label(_playerTarget.transform.position, "PlayerTarget");
+            UnityEditor.Handles.Label(_playerTarget.transform.position, "CShotPlayerTarget");
         }
 
         if (_companionTarget != null) {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(_companionTarget.transform.position, 0.2f);
-            UnityEditor.Handles.Label(_companionTarget.transform.position, "CompanionTarget");
+            UnityEditor.Handles.Label(_companionTarget.transform.position, "CShotCompanionTarget");
+        }
+
+        if (_vcamera != null) {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(_vcamera.transform.position, 0.2f);
+            UnityEditor.Handles.Label(_vcamera.transform.position, "CShotVCamera");
+        }
+
+        if (_vcameraTarget != null) {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(_vcameraTarget.transform.position, 0.2f);
+            UnityEditor.Handles.Label(_vcameraTarget.transform.position, "CShotVCameraTarget");
         }
     }
 

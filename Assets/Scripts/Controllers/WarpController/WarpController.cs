@@ -15,14 +15,7 @@ public class WarpController : MonoBehaviour {
     private void SwitchToEnter() {
         _state = true;
         SwitchTrigger();
-    }
-
-    /*
-    public void SwitchToExit() {
-        _state = false;
-        SwitchTrigger();
-    }
-    */
+    }    
 
     private void SwitchTrigger() {
         if (_state) {

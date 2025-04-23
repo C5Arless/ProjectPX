@@ -82,6 +82,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _vcamera: {fileID: 8366335811903440420}
+  _vcameraTarget: {fileID: 532408693988063584}
   _focusTarget: {fileID: 3999407967122786354}
   _playerTarget: {fileID: 7558451204970282853}
   _companionTarget: {fileID: 4698100179910251820}
@@ -89,6 +90,7 @@ MonoBehaviour:
   _shotLenght: 1
   _speed: 2
   hasDolly: 1
+  hasTransition: 0
 --- !u!1 &2977865581860708348
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,6 +284,8 @@ MonoBehaviour:
   _cinematicShots:
   - {fileID: 6802017204400486863}
   _cinematicFrame: {fileID: 2100000, guid: ebf474160e5b6974eb766b2bac6d4d58, type: 2}
+  _isSkippable: 0
+  _destroyWhenDone: 0
 --- !u!65 &13630380117316052
 BoxCollider:
   m_ObjectHideFlags: 0

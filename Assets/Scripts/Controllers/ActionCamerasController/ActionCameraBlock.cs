@@ -1,6 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class ActionCameraBlock : MonoBehaviour {
     [SerializeField] GameObject _playerPos;
     [SerializeField] GameObject _actionVCamera;
@@ -87,4 +91,21 @@ public class ActionCameraBlock : MonoBehaviour {
 
         yield break;
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos() {
+        if (_actionVCamera != null) {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireSphere(_actionVCamera.transform.position, 0.2f);
+            UnityEditor.Handles.Label(_actionVCamera.transform.position, "ActionVCamera");
+        }
+
+        if (_playerPos != null) {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(_playerPos.transform.position, 0.2f);
+            UnityEditor.Handles.Label(_playerPos.transform.position, "ActionPlayerPos");
+        }
+    }
+
+#endif
 }

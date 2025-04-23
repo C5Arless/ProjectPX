@@ -134,19 +134,19 @@ public class InteractController : MonoBehaviour {
         if (_focusTarget != null) {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(_focusTarget.transform.position, 0.2f);
-            UnityEditor.Handles.Label(_focusTarget.transform.position, "FocusTarget");
+            UnityEditor.Handles.Label(_focusTarget.transform.position, "InteractFocusTarget");
         }
 
         if (_playerTarget != null) {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(_playerTarget.transform.position, 0.2f);
-            UnityEditor.Handles.Label(_playerTarget.transform.position, "PlayerTarget");
+            UnityEditor.Handles.Label(_playerTarget.transform.position, "InteractPlayerTarget");
         }
 
         if (_companionTarget != null) {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(_companionTarget.transform.position, 0.2f);
-            UnityEditor.Handles.Label(_companionTarget.transform.position, "CompanionTarget");
+            UnityEditor.Handles.Label(_companionTarget.transform.position, "InteractCompanionTarget");
         }
     }
 
