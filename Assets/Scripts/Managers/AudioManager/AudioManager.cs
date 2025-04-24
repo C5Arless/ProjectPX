@@ -17,12 +17,22 @@ public class AudioManager : MonoBehaviour {
 
     [SerializeField] OptionsInfo _currentInfo;
 
+    private AudioSource _currentMusicSource;
+    private PlayableDirector _currentPlaybackTrack;
+
+    private bool _musicPlaying;
+
     private void Awake() {
         if (Instance == null) {
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else { Destroy(gameObject); }
+    }
+
+    private void Start() {
+        _currentMusicSource = MusicSource.GetComponent<AudioSource>();
+        _currentPlaybackTrack = MusicSource.GetComponent<PlayableDirector>();
     }
 
     public void PlayKeyboardSound() {
@@ -116,7 +126,7 @@ public class AudioManager : MonoBehaviour {
                 }
             case 2: {
                     MenuController.Instance.ShowHideLogo();
-                    PlayMusic(MusicTracks.MainMenu_Loop);
+                    PlayMusicNow(MusicTracks.MainMenu_Loop);
                     InputManager.Instance.SetActionMap("MainScreen");
                     break;
                 }
@@ -159,34 +169,9 @@ public class AudioManager : MonoBehaviour {
     }
 
     public void PlayMusic(MusicTracks track) {
-        if (_clipsDrawer.musicTracks[(int)track].timeline != null) {
-            AudioSource audioSource = MusicSource.GetComponent<AudioSource>();
-            PlayableDirector playbackTrack = MusicSource.GetComponent<PlayableDirector>();
+        if (_clipsDrawer.musicTracks[(int)track].track == null) { return; }
 
-            if (audioSource != null) {
-                audioSource.clip = _clipsDrawer.musicTracks[(int)track].track;
-                audioSource.volume = 1f;
-                playbackTrack.playableAsset = _clipsDrawer.musicTracks[(int)track].timeline;
-                playbackTrack.time = 0f;
-
-                playbackTrack.Play();
-                audioSource.Play();
-            }        
-
-        } else {
-            AudioSource audioSource = MusicSource.GetComponent<AudioSource>();
-            PlayableDirector playbackTrack = MusicSource.GetComponent<PlayableDirector>();
-            playbackTrack.Stop();
-
-            if (audioSource != null) {
-                audioSource.clip = _clipsDrawer.musicTracks[(int)track].track;
-                audioSource.loop = true;
-                audioSource.volume = 1f;
-               
-                audioSource.Play();
-            }
-        }
-
+        StartCoroutine(PlayMusicTrack((int)track));
     }
 
     public void InitializeMixerVolumes() {
@@ -201,6 +186,39 @@ public class AudioManager : MonoBehaviour {
 
         float sfxValue = (_currentInfo.SfxVolume + .001f) / 10f;
         _mixer.SetFloat(OptionPayload.SfxVolume.ToString(), Mathf.Log10(sfxValue) * 20f);
+    }
+
+    public void PlayMusicNow(MusicTracks track) {
+        if (_clipsDrawer.musicTracks[(int)track].track == null) { return; }
+
+        if (_clipsDrawer.musicTracks[(int)track].timeline != null) {
+            _currentPlaybackTrack.Stop();
+            _currentMusicSource.Stop();
+
+            _currentMusicSource.clip = _clipsDrawer.musicTracks[(int)track].track;            
+            _currentMusicSource.volume = 1f;
+            _currentPlaybackTrack.playableAsset = _clipsDrawer.musicTracks[(int)track].timeline;
+            _currentPlaybackTrack.time = 0f;
+
+            _currentPlaybackTrack.Play();
+            _currentMusicSource.Play();
+            _musicPlaying = true;
+
+        } else {
+            _currentPlaybackTrack.Stop();
+            _currentMusicSource.Stop();
+
+            _currentMusicSource.clip = _clipsDrawer.musicTracks[(int)track].track;
+            _currentMusicSource.loop = true;
+            _currentMusicSource.volume = 1f;
+        
+            _currentMusicSource.Play();        
+            _musicPlaying = true;
+        }
+    }
+
+    public void StopMusic() {
+        StartCoroutine(StopMusicTrack());
     }
 
     private float GetVoiceMood(VoiceMood mood) {
@@ -253,9 +271,66 @@ public class AudioManager : MonoBehaviour {
         Destroy(source);
     }
 
-    private IEnumerator PlayMusicTrack(AudioSource source, PlayableDirector playback) {
-        
-        
-        yield return null;
+    private IEnumerator PlayMusicTrack(int target) {                
+        if (_clipsDrawer.musicTracks[target].timeline != null) {
+            _currentPlaybackTrack.Stop();
+            _currentMusicSource.Stop();
+
+            _currentMusicSource.clip = _clipsDrawer.musicTracks[target].track;
+            _currentMusicSource.volume = 0f;
+            _currentPlaybackTrack.playableAsset = _clipsDrawer.musicTracks[target].timeline;
+            _currentPlaybackTrack.time = 0f;
+
+            _currentPlaybackTrack.Play();
+            _currentMusicSource.Play();
+
+            _musicPlaying = true;
+
+            while (_currentMusicSource.volume < 1f) {
+                _currentMusicSource.volume += .05f;
+                yield return null;
+            }
+
+            _currentMusicSource.volume = 1f;
+            yield return null;
+
+        } else {
+            _currentPlaybackTrack.Stop();
+            _currentMusicSource.Stop();
+
+            _currentMusicSource.clip = _clipsDrawer.musicTracks[target].track;
+            _currentMusicSource.volume = 0f;
+            _currentMusicSource.loop = true;
+
+            _currentMusicSource.Play();
+
+            _musicPlaying = true;
+
+            while (_currentMusicSource.volume < 1f) {
+                _currentMusicSource.volume += .05f;
+                yield return null;
+            }
+
+            _currentMusicSource.volume = 1f;
+            yield return null;
+
+        }
+
+        yield break;
+    }
+
+    private IEnumerator StopMusicTrack() {
+        if (_musicPlaying) {
+            while (_currentMusicSource.volume > .02f) {
+                _currentMusicSource.volume -= .05f;
+                yield return null;
+            }
+            _musicPlaying = false;
+            _currentMusicSource.volume = 0f;
+        }
+
+        _currentPlaybackTrack.Stop();
+        _currentMusicSource.Stop();
+        yield break;
     }
 }

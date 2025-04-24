@@ -228,7 +228,7 @@ PlayableDirector:
   m_GameObject: {fileID: 7101729276147132930}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 9539738962bf37b47b61072aea778cd9, type: 2}
+  m_PlayableAsset: {fileID: 0}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 0
@@ -250,7 +250,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -6140033621409190998, guid: 6d4dc88f776067d45b14af1d59f7b969, type: 2}
-  m_audioClip: {fileID: 8300000, guid: e8a6fa44811c8d743a03046eca3d4641, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.179
   m_Pitch: 1

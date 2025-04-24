@@ -119,6 +119,7 @@ public class ScenesManager : MonoBehaviour {
     }
 
     private IEnumerator InitializeMainMenu(bool fromPause) {
+        AudioManager.Instance.StopMusic();
         StartCoroutine(TransitionBlackOut(_dissolve));     
         yield return new WaitWhile(() => paused);
 
@@ -133,7 +134,7 @@ public class ScenesManager : MonoBehaviour {
         if (fromPause) { 
             AudioManager.Instance.PlayMusic(MusicTracks.MainMenu_Loop); 
         } else {
-            AudioManager.Instance.PlayMusic(MusicTracks.MainMenu_Intro);
+            AudioManager.Instance.PlayMusicNow(MusicTracks.MainMenu_Intro);
         }
         
         StartCoroutine(TransitionOut(_dissolve, _dissolveSpeed));
@@ -146,6 +147,7 @@ public class ScenesManager : MonoBehaviour {
     }
 
     private IEnumerator InitializeStart(int n_scene) {
+        AudioManager.Instance.StopMusic();
         StartCoroutine(TransitionBlackOut(_fade));
         yield return new WaitWhile(() => paused);
 
@@ -167,6 +169,7 @@ public class ScenesManager : MonoBehaviour {
     }
 
     private IEnumerator InitializeLoad(int n_scene) {
+        AudioManager.Instance.StopMusic();
         StartCoroutine(TransitionBlackOut(_fade));
         yield return new WaitWhile(() => paused);
 
@@ -182,6 +185,7 @@ public class ScenesManager : MonoBehaviour {
         StartCoroutine(InstantiateMenu());
         yield return new WaitWhile(() => paused);
 
+        FireSoundTracks((Scenes)n_scene);
         StartCoroutine(TransitionOut(_fade, _fadeSpeed));
         yield return new WaitWhile(() => paused);
 
@@ -193,6 +197,7 @@ public class ScenesManager : MonoBehaviour {
         string currentActionMap = InputManager.Instance.GetActionMap();
         InputManager.Instance.SetActionMap("Disabled");
 
+        AudioManager.Instance.StopMusic();
         StartCoroutine(TransitionIn(_fade, _fadeSpeed));
         yield return new WaitWhile(() => paused);
 
@@ -205,6 +210,7 @@ public class ScenesManager : MonoBehaviour {
         StartCoroutine(InstantiatePlayerAndCompanion());
         yield return new WaitWhile(() => paused);
 
+        FireSoundTracks((Scenes)n_scene);
         StartCoroutine(TransitionOut(_fade, _fadeSpeed));
         yield return new WaitWhile(() => paused);
 
