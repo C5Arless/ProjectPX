@@ -39,6 +39,7 @@ public class PXController : MonoBehaviour {
     InputAction _lookAction;
     InputAction _attackAction;
     InputAction _dashAction;
+    InputAction _showUIAction;
 
     InputAction _interactAction; //Interaction
 
@@ -272,6 +273,14 @@ public class PXController : MonoBehaviour {
         
     }
 
+    public void OnShowUI(InputAction.CallbackContext input) {
+        if (onInteract) { return; }
+
+        if (input.ReadValue<float>() != 0f) {            
+            GameBucket.Instance.GameCanvasHandler.ShowUI();
+        }
+    }
+
     private void SubscribeCallbacks() {
         _jumpAction.started += OnJump;        
 
@@ -286,6 +295,8 @@ public class PXController : MonoBehaviour {
         _lookAction.started += OnLook;
         _lookAction.performed += OnLook;
         _lookAction.canceled += OnLook;
+
+        _showUIAction.started += OnShowUI;
         
         _confirmAction.started += OnConfirm;        
 
@@ -306,7 +317,9 @@ public class PXController : MonoBehaviour {
         _lookAction.started -= OnLook;
         _lookAction.performed -= OnLook;
         _lookAction.canceled -= OnLook;
-        
+
+        _showUIAction.started -= OnShowUI;
+
         _confirmAction.started -= OnConfirm;
         
         _interactAction.started -= OnInteract;
@@ -320,6 +333,7 @@ public class PXController : MonoBehaviour {
         _attackAction = InputManager.Instance.GetPlayerInput().actions["Attack"];
         _dashAction = InputManager.Instance.GetPlayerInput().actions["Dash"];
         _interactAction = InputManager.Instance.GetPlayerInput().actions["Interact"];
+        _showUIAction = InputManager.Instance.GetPlayerInput().actions["ShowUI"];
 
         //Dialog Actions
         _confirmAction = InputManager.Instance.GetPlayerInput().actions["Confirm"];

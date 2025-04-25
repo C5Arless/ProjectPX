@@ -1,11 +1,15 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameCanvasHandler : MonoBehaviour {
     [SerializeField] GameObject _dialogWindow;
     [SerializeField] TMP_Text _name;
     [SerializeField] TMP_Text _dialogText;
+    [Space]
+    [SerializeField] GameObject _uiWindow;
+    [SerializeField] Slider _lifeDisplay;
 
     public delegate void OnTransitionInDone();
     public OnTransitionInDone _onTransitionInDone;
@@ -25,6 +29,18 @@ public class GameCanvasHandler : MonoBehaviour {
         _onTransitionInDone += () => { };
 
         InitializeRenderCamera();
+    }
+
+    public void ShowUI() {
+        if (_isBusy) { return; }
+
+        _isBusy = true;
+
+        _uiWindow.SetActive(true);
+        _lifeDisplay.value = DataManager.Instance.PlayerInfo.CurrentHp;
+        //Add info here
+
+        StartCoroutine(IterateUIPosition());
     }
 
     public void DialogIn() {        
@@ -88,6 +104,32 @@ public class GameCanvasHandler : MonoBehaviour {
 
     private void InitializeRenderCamera() {
         _dialogWindow.GetComponentInParent<Canvas>().worldCamera = CameraManager.Instance.GameBrain.GetComponent<Camera>();
+    }
+
+    private IEnumerator IterateUIPosition() {        
+        //Show
+        while (_uiWindow.transform.localPosition.y >= 350f) {
+            Vector3 distance = new Vector3(0f, 50f, 0f);
+            _uiWindow.transform.localPosition -= distance;
+            yield return null;
+        }
+        _uiWindow.transform.localPosition = new Vector3(0f, 350f, 0f);
+
+        yield return new WaitForSecondsRealtime(4.5f);
+        
+        //Hide
+        while (_uiWindow.transform.localPosition.y <= 700f) {
+            Vector3 distance = new Vector3(0f, 50f, 0f);
+            _uiWindow.transform.localPosition += distance;
+            yield return null;
+        }
+        _uiWindow.transform.localPosition = new Vector3(0f, 700f, 0f);
+        _uiWindow.SetActive(false);
+        
+        yield return null;
+        _isBusy = false;
+
+        yield break;
     }
 
     private IEnumerator IteratePosition(Vector3 startPos, Vector3 targetPos) {
