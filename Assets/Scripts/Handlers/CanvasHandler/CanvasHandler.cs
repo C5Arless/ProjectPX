@@ -386,6 +386,10 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
+    public void AnyButtonExitBehaviour() {
+        _introScreen[4].SetActive(false);
+    }
+
     private void OnHighlight(GameObject target) {
         EventSystem.current.SetSelectedGameObject(null);
         //_selectedButton = null;

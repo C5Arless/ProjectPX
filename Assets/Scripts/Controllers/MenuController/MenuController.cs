@@ -443,7 +443,8 @@ public class MenuController : MonoBehaviour {
         yield return null;
 
         UIMode mode = UIMode.MainMenu;
-        _canvasHandler.SwitchUIMode(mode);                
+        _canvasHandler.SwitchUIMode(mode);
+        _canvasHandler.AnyButtonExitBehaviour();
 
         yield return null;
         CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.Menu);
