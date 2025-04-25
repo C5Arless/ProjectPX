@@ -115,7 +115,7 @@ public class GameCanvasHandler : MonoBehaviour {
         }
         _uiWindow.transform.localPosition = new Vector3(0f, 350f, 0f);
 
-        yield return new WaitForSecondsRealtime(4.5f);
+        yield return new WaitForSecondsRealtime(4f);
         
         //Hide
         while (_uiWindow.transform.localPosition.y <= 700f) {

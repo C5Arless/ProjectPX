@@ -823,6 +823,7 @@ public class PXController : MonoBehaviour {
         }        
 
         moveInput = new Vector2(0f, 0f);
+        yield return null;
 
         isWalking = false;
 
