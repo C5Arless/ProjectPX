@@ -199,19 +199,19 @@ public class PXController : MonoBehaviour {
     void Update() {
         EvaluateHealth();
 
-        _forward.transform.position = _asset.transform.position;
-
-        
-        if (canFreeLook) {
-            UpdateCamera(camInput);
-        }
-        
+        _forward.transform.position = _asset.transform.position;                       
     }
 
     void FixedUpdate() {       
         _currentRootState.UpdateState();
         if (!isDead) { 
             _currentSubState.UpdateState();
+        }
+    }
+
+    private void LateUpdate() {
+        if (canFreeLook) {
+            UpdateCamera(camInput);
         }
     }
 
@@ -593,7 +593,7 @@ public class PXController : MonoBehaviour {
         }
     }
 
-    private void UpdateCamera(Vector2 camInput) {        
+    private void UpdateCamera(Vector2 camInput) { 
         if (!isDead && !onDialog) {
             EvaluateCamera(camInput);
         }        
@@ -612,11 +612,18 @@ public class PXController : MonoBehaviour {
         CamRotation(cam, forward);        
     }
 
-    private void UpdateFreeLookMouseCamera(GameObject cam, GameObject forward, Vector2 input, float sens) {        
+    private void UpdateFreeLookMouseCamera(GameObject cam, GameObject forward, Vector2 input, float sens) {
+        if (input.sqrMagnitude > .005f) {
+            CalculateCamMotion(input, sens);
+            CamRotation(cam, forward);
+        }
+
+        /*
         if (Mathf.Abs(input.x) > .005f && Mathf.Abs(input.y) > .001f) {
             CalculateCamMotion(input, sens);
             CamRotation(cam, forward);
         }
+        */
     }
 
     private void CalculateCamMotion(Vector2 mouseInput, float sens) {
