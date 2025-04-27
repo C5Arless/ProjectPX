@@ -16,6 +16,7 @@ public class ActionCameraBlock : MonoBehaviour {
     private bool onAction;
 
     private void OnTriggerEnter(Collider other) {
+        if (GameBucket.Instance.PXController.OnDialog) { return; }
         if (GameBucket.Instance.PXController.OnAction) { return; }
 
         if (other.tag == "Player") {
@@ -35,7 +36,7 @@ public class ActionCameraBlock : MonoBehaviour {
 
     
     private void OnTriggerStay(Collider other) {
-        if (!GameBucket.Instance.PXController.CanInteract) { return; }
+        if (GameBucket.Instance.PXController.OnDialog) { return; }
         if (GameBucket.Instance.PXController.OnAction) { return; }
 
         if (other.tag == "Player") {

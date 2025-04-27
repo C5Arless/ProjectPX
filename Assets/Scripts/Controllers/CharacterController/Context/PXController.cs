@@ -193,7 +193,6 @@ public class PXController : MonoBehaviour {
         InitializeActions();
         InitializePowerUps();
         SubscribeCallbacks();
-
     }
 
     // Update is called once per frame
@@ -830,6 +829,7 @@ public class PXController : MonoBehaviour {
         _playerRb.velocity = Vector3.zero;
         _playerRb.ResetInertiaTensor();
 
+        _player.transform.position = new Vector3(playerTarget.transform.position.x, _player.transform.position.y, playerTarget.transform.position.z);
         yield return null;
 
         targetForward = ComputeForward2D(focusTarget, _asset.transform);
@@ -838,9 +838,8 @@ public class PXController : MonoBehaviour {
         targetForward = ComputeForward2D(focusTarget, _asset.transform);
         _forward.transform.forward = targetForward;
 
-        yield return null;
+        //yield return null;
 
-        _player.transform.position = new Vector3(playerTarget.transform.position.x, _player.transform.position.y, playerTarget.transform.position.z);
 
         yield return null;
 

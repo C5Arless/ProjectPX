@@ -10,6 +10,8 @@ public class GameCanvasHandler : MonoBehaviour {
     [Space]
     [SerializeField] GameObject _uiWindow;
     [SerializeField] Slider _lifeDisplay;
+    [SerializeField] Image _lifeColor;
+    [SerializeField] Image _lifeColorBg;
 
     public delegate void OnTransitionInDone();
     public OnTransitionInDone _onTransitionInDone;
@@ -37,7 +39,9 @@ public class GameCanvasHandler : MonoBehaviour {
         _isBusy = true;
 
         _uiWindow.SetActive(true);
-        _lifeDisplay.value = DataManager.Instance.PlayerInfo.CurrentHp;
+        int targetHp = DataManager.Instance.PlayerInfo.CurrentHp;
+        _lifeDisplay.value = targetHp;
+        SetLifeColor(targetHp);
         //Add info here
 
         StartCoroutine(IterateUIPosition());
@@ -77,6 +81,27 @@ public class GameCanvasHandler : MonoBehaviour {
         _isTyping = false;
 
         AudioManager.Instance.StopVoice();
+    }
+
+    private void SetLifeColor(int targetHp) {
+        switch (targetHp) {
+            case 1: {
+                    _lifeColor.color = Color.red;
+                    _lifeColorBg.color = Color.red;                    
+                    break;
+                }
+            case 2: {
+                    _lifeColor.color = Color.yellow;
+                    _lifeColorBg.color = Color.yellow;
+                    break;
+                }
+            case 3: {
+                    _lifeColor.color = Color.green;
+                    _lifeColorBg.color = Color.green;
+                    break;
+                }
+            default: return;
+        }
     }
 
     private Vector2 GetMood(VoiceMood mood) {         
