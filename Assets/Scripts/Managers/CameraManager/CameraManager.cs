@@ -17,6 +17,7 @@ public class CameraManager : MonoBehaviour {
 
     private VCameraMode mode;
 
+    public GameObject CurrentGameCamera { get { return currentGameVCamera; } set { currentGameVCamera = value; } }
     public GameObject GameBrain { get { return gameBrain; } }
     public GameObject MenuBrain { get { return menuBrain; } }
 

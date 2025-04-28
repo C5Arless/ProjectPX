@@ -579,7 +579,6 @@ public class PXController : MonoBehaviour {
         float currentAngle = Vector3.Angle(_forward.transform.forward, targetForward);
 
         if (currentAngle > 1f) {
-
             Vector3 lerpForward = Vector3.Lerp(_forward.transform.forward, targetForward, 1f);
             _cam.transform.forward = lerpForward;
             _forward.transform.forward = lerpForward;            

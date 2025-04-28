@@ -87,6 +87,14 @@ public class ActionCameraBlock : MonoBehaviour {
 
         while (onAction) {            
             GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);
+
+            if (CameraManager.Instance.CurrentGameCamera != _actionVCamera) {
+                CameraManager.Instance.CurrentGameCamera.SetActive(false);
+                CameraManager.Instance.CurrentGameCamera = _actionVCamera;
+                CameraManager.Instance.CurrentGameCamera.SetActive(true);
+                yield return null;
+            }
+
             yield return null;
         }
 
