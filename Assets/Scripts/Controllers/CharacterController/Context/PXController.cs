@@ -364,6 +364,8 @@ public class PXController : MonoBehaviour {
         if (!onAction) {
             canFreeLook = true;
         }
+
+        CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
     }
 
     public void ActionCameraEnter() {
