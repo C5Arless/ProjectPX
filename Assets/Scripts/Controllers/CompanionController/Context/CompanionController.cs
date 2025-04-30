@@ -210,6 +210,10 @@ public class CompanionController : MonoBehaviour {
     }
 
     public void VisionUpdateMoveBehaviour() {
+        if (visionDiscoveryTransform == null) {
+            visionDiscoveryTransform = _focusDefaultPoint;
+        }
+
         _focusPivot.LookAt(visionDiscoveryTransform.position);
         _asset.LookAt(visionDiscoveryTransform.position);
     }

@@ -16,25 +16,25 @@
             "Mood": "Default",
             "Line": "This is a test dialogue line!",
             "Options": null,
-            "NEXT": 2
+            "NEXT": -1
         },
         {
             "IDX": 2,
-            "Name": "FX - 41",
             "Tag": "Companion",
-            "Mood": "Scared",
-            "Line": "Also viva il duce!",
+            "Name": "FX - 41",
+            "Mood": "Default",
+            "Line": "Looks like some scientist drawing",
             "Options": null,
-            "NEXT": 3
+            "NEXT": -1
         },
         {
             "IDX": 3,
-            "Tag": "NPC",
-            "Name": "Sgrodo",
-            "Mood": "Angry",
-            "Line": "Porcacciodeddiooooooooooooo",
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Default",
+            "Line": "Maybe someone worked here before...",
             "Options": null,
-            "NEXT": -1
+            "NEXT": 2
         }
     ]
 }

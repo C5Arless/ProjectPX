@@ -16,18 +16,32 @@ public class InteractController : MonoBehaviour {
     [SerializeField] InteractionVCameras[] interactionCams;
     [SerializeField] DialogPages[] _DialogPages;
 
+    [SerializeField] bool hasTrigger;
+
     private int pageNumber;
 
     private bool isInteracting;
-    private bool isBusy;
+    private bool isBusy;    
 
     private void OnTriggerEnter(Collider other) {
+        if (GameBucket.Instance.PXController.OnDialog) { return; }
+
         if (other.tag == "Player") {
-            _popUp.SetActive(true);            
+            EvaluateInteraction();            
+        }
+    }
+
+    private void OnTriggerStay(Collider other) {
+        if (GameBucket.Instance.PXController.OnDialog) { return; }
+
+        if (other.tag == "Player") {
+            EvaluateInteraction();
         }
     }
 
     private void OnTriggerExit(Collider other) {
+        if (hasTrigger) { return; }
+
         if (other.tag == "Player") {
             _popUp.SetActive(false);            
         }
@@ -42,6 +56,16 @@ public class InteractController : MonoBehaviour {
             Enter();  
         }
     }   
+
+    private void EvaluateInteraction() {
+        if (isInteracting) { return; }
+
+        if (hasTrigger) {
+            OnInteract();
+        } else {
+            _popUp.SetActive(true);
+        }
+    }
 
     private void Enter() {
         pageNumber = 1;

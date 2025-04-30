@@ -341,6 +341,7 @@ public class PXController : MonoBehaviour {
 
     //External Callbacks
     public void DialogEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
+        onAction = false;
         onDialog = true;
         canFreeLook = false;
         canInteract = false;

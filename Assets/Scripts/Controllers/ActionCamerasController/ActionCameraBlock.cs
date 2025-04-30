@@ -62,10 +62,14 @@ public class ActionCameraBlock : MonoBehaviour {
         if (GameBucket.Instance.PXController.OnDialog) { return; }
 
         if (other.tag == "Player") {
-            onAction = false;
-            isLocked = false;
-            GameBucket.Instance.PXController.ActionCameraExit();
+            ActionExit();
         }
+    }
+
+    public void ActionExit() {
+        onAction = false;
+        isLocked = false;
+        GameBucket.Instance.PXController.ActionCameraExit();
     }
 
     private IEnumerator LockPlayerPosition() {
@@ -88,16 +92,8 @@ public class ActionCameraBlock : MonoBehaviour {
         yield return null;
 
         while (onAction) {            
-            GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);
-            /*
-            if (CameraManager.Instance.CurrentGameCamera != _actionVCamera) {
-                CameraManager.Instance.CurrentGameCamera.SetActive(false);
-                CameraManager.Instance.CurrentGameCamera = _actionVCamera;
-                CameraManager.Instance.CurrentGameCamera.SetActive(true);
-                yield return null;
-            }
-            */
-            CameraManager.Instance.SwitchGameVCamera(_actionVCamera);            
+            GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);            
+            CameraManager.Instance.SwitchGameVCamera(_actionVCamera);       
             yield return null;
         }
 
