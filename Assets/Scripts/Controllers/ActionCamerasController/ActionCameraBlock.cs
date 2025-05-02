@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System.Threading.Tasks;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -27,13 +28,13 @@ public class ActionCameraBlock : MonoBehaviour {
             
             if (lockPlayer) {
                 isLocked = true;
+                //TestTask();
                 StartCoroutine("LockPlayerPosition");
             } else {
                 StartCoroutine("OnActionRoutine");
             }
         }
     }
-
     
     private void OnTriggerStay(Collider other) {
         if (GameBucket.Instance.PXController.OnDialog) { return; }
@@ -47,14 +48,14 @@ public class ActionCameraBlock : MonoBehaviour {
 
             if (lockPlayer) {
                 isLocked = true;
+                //TestTask();
                 StartCoroutine("LockPlayerPosition");
             }
             else {
                 StartCoroutine("OnActionRoutine");
             }
         }
-    }    
-    
+    }        
 
     private void OnTriggerExit(Collider other) {
         if (!onAction) { return; }
@@ -64,6 +65,13 @@ public class ActionCameraBlock : MonoBehaviour {
         if (other.tag == "Player") {
             ActionExit();
         }
+    }
+
+    public async Task TestTask() {
+        Debug.Log("Task started");
+        await TaskRoutine.RunCoroutineAsync(this, LockPlayerPosition());
+
+        Debug.Log("Task ended");
     }
 
     public void ActionExit() {
