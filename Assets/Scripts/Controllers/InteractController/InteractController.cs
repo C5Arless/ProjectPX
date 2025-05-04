@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,16 +19,37 @@ public class InteractController : MonoBehaviour {
 
     [SerializeField] bool hasTrigger;
 
+    InputAction _interactAction;
+    InputAction _confirmAction;
+
     private int pageNumber;
 
     private bool isInteracting;
-    private bool isBusy;    
+    private bool isBusy;
+
+    private void Start() {
+        InitializeActions();
+        //SubscribeActions();
+    }
+
+    private void OnEnable() {
+        //SubscribeActions();
+    }
+
+    private void OnDisable() {
+        UnsubscribeActions();
+    }
+
+    private void OnDestroy() {
+        UnsubscribeActions();
+    }
 
     private void OnTriggerEnter(Collider other) {
         if (GameBucket.Instance.PXController.OnDialog) { return; }
 
         if (other.tag == "Player") {
-            EvaluateInteraction();            
+            SubscribeActions();
+            EvaluateInteraction();          
         }
     }
 
@@ -35,7 +57,7 @@ public class InteractController : MonoBehaviour {
         if (GameBucket.Instance.PXController.OnDialog) { return; }
 
         if (other.tag == "Player") {
-            EvaluateInteraction();
+            //EvaluateInteraction();
         }
     }
 
@@ -43,11 +65,43 @@ public class InteractController : MonoBehaviour {
         if (hasTrigger) { return; }
 
         if (other.tag == "Player") {
+            UnsubscribeActions();
             _popUp.SetActive(false);            
         }
     }
 
-    public void OnInteract() {
+    public void OnInteract(InputAction.CallbackContext input) {
+        if (!GameBucket.Instance.PXController.OnInteract) { return; }
+
+        if (input.ReadValue<float>() != 0f) {
+            Interact();
+        }
+
+    }
+
+    public void OnConfirm(InputAction.CallbackContext input) {
+        if (input.ReadValue<float>() != 0f) {
+            Interact();
+        }
+    }
+
+    private void InitializeActions() {
+        _interactAction = InputManager.Instance.GetPlayerInput().actions["Interact"];
+        _confirmAction = InputManager.Instance.GetPlayerInput().actions["Confirm"];
+    }
+
+    private void SubscribeActions() {
+        _confirmAction.started += OnConfirm;
+        _interactAction.started += OnInteract;
+    }
+
+    private void UnsubscribeActions() {
+        _confirmAction.started -= OnConfirm;
+        _interactAction.started -= OnInteract;
+    }
+
+
+    public void Interact() {
         if (isBusy) { return; }
 
         if (isInteracting) {
@@ -61,7 +115,7 @@ public class InteractController : MonoBehaviour {
         if (isInteracting) { return; }
 
         if (hasTrigger) {
-            OnInteract();
+            Interact();
         } else {
             _popUp.SetActive(true);
         }
@@ -143,8 +197,9 @@ public class InteractController : MonoBehaviour {
 
         GameBucket.Instance.GameCanvasHandler.DialogOut();
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitWhile(() => GameBucket.Instance.GameCanvasHandler.IsTransitioning);        
 
+        UnsubscribeActions();
         transform.GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(2f);
 

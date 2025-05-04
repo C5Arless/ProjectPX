@@ -225,7 +225,14 @@ public class GameCanvasHandler : MonoBehaviour {
         string line = GameBucket.Instance.GetDialogObject(IDX).Line;
 
         while (!string.Equals(_dialogText.text, line)) {
-            string subline = line.Substring(0, _dialogText.text.Length + 1);
+            string subline = string.Empty;
+
+            if (line.Length > 0) {
+                subline = line.Substring(0, _dialogText.text.Length + 1);
+            } else {
+                subline = line;
+            }
+
             char lastchar = subline.ToCharArray()[subline.Length - 1];
 
             if (lastchar != ' ') {                
