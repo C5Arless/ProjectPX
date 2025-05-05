@@ -352,14 +352,24 @@ public class ScenesManager : MonoBehaviour {
     }
 
     private IEnumerator InstantiateMenu() {
-        paused = true;        
+        paused = true;
 
+        if (GameBucket.Instance.MenuCtx == null) {
+            //Debug.Log("No menu found");
+            Instantiate(_menuPrefab, new Vector3(0f, -100f, 0f), new Quaternion());            
+        }
+        else {
+            //Debug.Log("Menu found");
+        }
+
+        /*
         if (MenuController.Instance == null) {
             //Debug.Log("No menu found");
             Instantiate(_menuPrefab, new Vector3(0f, -100f, 0f), new Quaternion());
         } else {
             //Debug.Log("Menu found");
         }
+        */
 
         yield return new WaitForSeconds(.2f);
 

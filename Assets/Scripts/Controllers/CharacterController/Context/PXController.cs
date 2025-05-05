@@ -41,14 +41,8 @@ public class PXController : MonoBehaviour {
     InputAction _dashAction;
     InputAction _showUIAction;
 
-    //InputAction _interactAction; //Interaction
-
-    //InputAction _confirmAction; //Dialogue
-
     [SerializeField] SphereCollider _attackCollider;
     [SerializeField] SphereCollider _dashCollider;
-
-    //private Collider _interactionCollider;
 
     //Root States
     private bool isDead = false;
@@ -251,29 +245,7 @@ public class PXController : MonoBehaviour {
 
     public void OnMove(InputAction.CallbackContext input) {
         moveInput = input.ReadValue<Vector2>();
-    } 
-
-    /*
-    public void OnInteract(InputAction.CallbackContext input) {
-        if (!onInteract) { return; }
-
-        if (input.ReadValue<float>() != 0f) { 
-            InteractController ctx = _interactionCollider.GetComponent<InteractController>();
-            ctx.OnInteract();             
-        }
-
-    }
-
-    public void OnConfirm(InputAction.CallbackContext input) {
-        if (input.ReadValue<float>() != 0f) { 
-            InteractController ctx = _interactionCollider.GetComponent<InteractController>();
-            ctx.OnInteract();
-
-            //Debug.Log("OnConfirm from Dialog ActionMap");
-        }        
-        
-    }
-    */
+    }     
 
     public void OnShowUI(InputAction.CallbackContext input) {
         if (onInteract) { return; }
@@ -298,11 +270,7 @@ public class PXController : MonoBehaviour {
         _lookAction.performed += OnLook;
         _lookAction.canceled += OnLook;
 
-        _showUIAction.started += OnShowUI;
-        
-        //_confirmAction.started += OnConfirm;        
-
-        //_interactAction.started += OnInteract;       
+        _showUIAction.started += OnShowUI;         
     }
 
     private void UnsubscribeCallbacks() {
@@ -321,10 +289,6 @@ public class PXController : MonoBehaviour {
         _lookAction.canceled -= OnLook;
 
         _showUIAction.started -= OnShowUI;
-
-        //_confirmAction.started -= OnConfirm;
-        
-        //_interactAction.started -= OnInteract;
     }
 
     private void InitializeActions() {
@@ -334,12 +298,7 @@ public class PXController : MonoBehaviour {
         _lookAction = InputManager.Instance.GetPlayerInput().actions["Look"];
         _attackAction = InputManager.Instance.GetPlayerInput().actions["Attack"];
         _dashAction = InputManager.Instance.GetPlayerInput().actions["Dash"];
-        //_interactAction = InputManager.Instance.GetPlayerInput().actions["Interact"];
         _showUIAction = InputManager.Instance.GetPlayerInput().actions["ShowUI"];
-
-        //Dialog Actions
-        //_confirmAction = InputManager.Instance.GetPlayerInput().actions["Confirm"];
-
     }
 
     //External Callbacks
@@ -399,7 +358,6 @@ public class PXController : MonoBehaviour {
         }
         if (other.tag == "Interact") {
             onInteract = true;
-            //_interactionCollider = other;
         }
     }
 
@@ -410,7 +368,6 @@ public class PXController : MonoBehaviour {
         }
         if (other.tag == "Interact") {
             onInteract = false;
-            //_interactionCollider = null;
         }
     }
 

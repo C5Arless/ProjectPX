@@ -12901,6 +12901,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CinematicTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 5660986887816884515, guid: 7aec31f59d246de42aaac1f4a19c3120, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6302719018462569259, guid: 7aec31f59d246de42aaac1f4a19c3120, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

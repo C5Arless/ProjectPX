@@ -118,20 +118,20 @@ public class AudioManager : MonoBehaviour {
     private void OnIntroSignal(int target) {
         switch (target) {
             case 0: {
-                    MenuController.Instance.CallIntroRoutine();
+                    GameBucket.Instance.MenuCtx.CallIntroRoutine();
                     break;
                 }
             case 1: {                    
                     break;
                 }
             case 2: {
-                    MenuController.Instance.ShowHideLogo();
+                    GameBucket.Instance.MenuCtx.ShowHideLogo();
                     PlayMusicNow(MusicTracks.MainMenu_Loop);
                     InputManager.Instance.SetActionMap("MainScreen");
                     break;
                 }
             case 3: {
-                    MenuController.Instance.ActivateIntroLights();
+                    GameBucket.Instance.MenuCtx.ActivateIntroLights();
                     PlaySFX(SFXTracks.Spotlight);
                     break; 
                 }

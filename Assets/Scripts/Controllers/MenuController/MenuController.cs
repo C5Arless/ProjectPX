@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MenuController : MonoBehaviour { 
-    public static MenuController Instance { get; private set; }
-
     [SerializeField] GameObject[] slots;
     [SerializeField] GameObject _introLight1;
     [SerializeField] GameObject _introLight2;
@@ -33,11 +31,11 @@ public class MenuController : MonoBehaviour {
     public int CurrentSlot { get {  return currentSlot; } set {  currentSlot = value; } }
 
     private void Awake() {
-        if (Instance == null) {
-            Instance = this;
+        if (GameBucket.Instance.MenuCtx == null) {
+            GameBucket.Instance.MenuCtx = this;
             DontDestroyOnLoad(gameObject);
         }
-        else { Destroy(gameObject); }
+        else { Destroy(gameObject); }        
 
         _UIinfo.UIMode = UIMode.MainScreen;
     }

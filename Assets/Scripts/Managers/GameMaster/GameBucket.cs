@@ -8,6 +8,7 @@ public class GameBucket : MonoBehaviour {
 
     private PXController _playerCtx;
     private CompanionController _companionCtx;
+    private MenuController _menuCtx;
 
     private GameCanvasHandler _gameCanvasHandler;
     private DialogObject[] _dialogues;
@@ -18,6 +19,7 @@ public class GameBucket : MonoBehaviour {
 
     public PXController PXController { get { return _playerCtx; } set { _playerCtx = value; } }
     public CompanionController CompanionCtx { get {  return _companionCtx; } set { _companionCtx = value; } }
+    public MenuController MenuCtx { get { return _menuCtx; } set { _menuCtx = value; } }
     public GameCanvasHandler GameCanvasHandler { get { return _gameCanvasHandler; } set { _gameCanvasHandler = value; } }  
 
     private void Awake() {
