@@ -189,3 +189,9 @@ public enum AudioManagerMixer {
     Environment,
     SoundFX
 }
+
+public enum EventPriority {
+    High,
+    Medium,
+    Low
+}

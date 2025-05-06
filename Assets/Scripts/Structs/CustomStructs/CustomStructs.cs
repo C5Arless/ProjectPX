@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Timeline;
 
@@ -54,4 +55,15 @@ public struct DialogData {
 
 public class DialogWrapper {
     public DialogObject[] Dialogues;
+}
+
+[System.Serializable]
+public class EventData {
+    public int SlotIndex;
+    public List<int> CompletedEventIndices = new List<int>();
+}
+
+[System.Serializable]
+public class GameEventSaveData {
+    public List<EventData> Slots = new List<EventData>();
 }

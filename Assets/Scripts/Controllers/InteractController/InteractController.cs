@@ -1,12 +1,14 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Threading.Tasks;
+using System.Threading;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-public class InteractController : MonoBehaviour {    
+public class InteractController : MonoBehaviour, IOrchestratedEvent {    
     [SerializeField] GameObject _focusTarget;
     [SerializeField] GameObject _playerTarget;
     [SerializeField] GameObject _companionTarget;
@@ -26,6 +28,12 @@ public class InteractController : MonoBehaviour {
 
     private bool isInteracting;
     private bool isBusy;
+
+    public int EventIndex => throw new System.NotImplementedException();
+
+    public bool IsRepeatable => throw new System.NotImplementedException();
+
+    public EventPriority Priority => throw new System.NotImplementedException();
 
     private void Start() {
         InitializeActions();
@@ -100,6 +108,9 @@ public class InteractController : MonoBehaviour {
         _interactAction.started -= OnInteract;
     }
 
+    public Task FireEvent(CancellationToken token) {
+        throw new System.NotImplementedException();
+    }
 
     public void Interact() {
         if (isBusy) { return; }
@@ -227,7 +238,6 @@ public class InteractController : MonoBehaviour {
             Gizmos.DrawWireSphere(_companionTarget.transform.position, 0.2f);
             UnityEditor.Handles.Label(_companionTarget.transform.position, "InteractCompanionTarget");
         }
-    }
-
-    #endif
+    }    
+#endif
 }

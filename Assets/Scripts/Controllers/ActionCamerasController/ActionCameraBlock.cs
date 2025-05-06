@@ -48,7 +48,7 @@ public class ActionCameraBlock : MonoBehaviour {
 
             if (lockPlayer) {
                 isLocked = true;
-                //TestTask();
+                //TestTask(LockPlayerPosition());
                 StartCoroutine("LockPlayerPosition");
             }
             else {
@@ -67,9 +67,9 @@ public class ActionCameraBlock : MonoBehaviour {
         }
     }
 
-    public async Task TestTask() {
+    public async Task TestTask(IEnumerator coroutine) {
         Debug.Log("Task started");
-        await TaskRoutine.RunCoroutineAsync(this, LockPlayerPosition());
+        await TaskRoutine.RunCoroutineAsync(this, coroutine);
 
         Debug.Log("Task ended");
     }
@@ -84,6 +84,8 @@ public class ActionCameraBlock : MonoBehaviour {
         yield return null;
 
         while (isLocked) {
+            if (GameBucket.Instance.PXController.OnDialog) { continue; }
+
             if (GameBucket.Instance.PXController.CanInteract) {
                 _playerPos.transform.position = GameBucket.Instance.PXController.transform.position;
                 GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);
