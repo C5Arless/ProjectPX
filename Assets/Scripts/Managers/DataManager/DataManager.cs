@@ -1,5 +1,8 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class DataManager : MonoBehaviour {
@@ -14,6 +17,9 @@ public class DataManager : MonoBehaviour {
 
     private string[] _optionsPayload = new string[10];
 
+    private DialogWrapper _dialogObj;
+    private GameEventSaveData _eventsObj;
+
     public DataInfo[] SlotsInfo { get { return slotsInfo; } }
     public PlayerInfo PlayerInfo { get { return playerInfo; } }
 
@@ -27,10 +33,15 @@ public class DataManager : MonoBehaviour {
         FillOptionsPayload();
     }
 
+    private void Start() {
+        InitializeDialogObj();
+        InitializeEventsObj();
+        
+    }
+
     public void InitializeData() {
         InitializeDefaultOptions();
         InitializeCurrentOptions();
-
         InitializePlayerInfo();
 
         CheckData();
@@ -101,7 +112,8 @@ public class DataManager : MonoBehaviour {
 
         DBVault.SetActiveSlot(slotID);
         DBVault.UpdateSlotByIdx(slotID, slotData);
-        DBVault.UpdateCheckpoint(slotID, checkpointData);        
+        DBVault.UpdateCheckpoint(slotID, checkpointData);
+        SaveEventsObj();
     }
 
     public void DeleteData(int slotID) {
@@ -124,12 +136,32 @@ public class DataManager : MonoBehaviour {
         return slotsInfo[slot];
     }
 
+    public DialogWrapper GetDialogObj() {
+        return _dialogObj;
+    }
+
+    public GameEventSaveData GetEventsObj() {
+        return _eventsObj;
+    }
+
     public void SetRecord() {                
         DBVault.SetHighscore(playerInfo.Name, playerInfo.Score);
     }
 
     public void ResetRecords() {
         DBVault.ResetHighscore();
+    }
+
+    public void RegisterEvent(int eventIdx) {
+        if (playerInfo.SlotID == 0) { return; }
+
+        var slot = GetOrCreateSlot(playerInfo.SlotID);
+        if (!slot.EventList.Contains(eventIdx)) {
+            slot.EventList.Add(eventIdx);
+
+            _eventsObj.CompletedEvents[playerInfo.SlotID - 1].EventList = slot.EventList;
+        }
+
     }
 
     public void ApplyCurrentOption(OptionPayload target) {
@@ -344,6 +376,55 @@ public class DataManager : MonoBehaviour {
         _defaultInfo.MouseSens = 300;
         _defaultInfo.PadSens = 100;
     }
+
+    private void InitializeDialogObj() {
+        string path = Path.Combine(Application.streamingAssetsPath, "Dialogues.json");
+
+        if (File.Exists(path)) {
+            string jsonContent = File.ReadAllText(path);
+
+            DialogWrapper dialogWrapper = JsonConvert.DeserializeObject<DialogWrapper>(jsonContent);
+            _dialogObj = dialogWrapper;            
+        }
+        else {
+            Debug.LogError("File JSON non trovato!");
+        }
+    }
+
+    private void InitializeEventsObj() {
+        string path = Path.Combine(Application.streamingAssetsPath, "EventsData.json");
+
+        if (File.Exists(path)) {
+            string jsonContent = File.ReadAllText(path);
+
+            GameEventSaveData target = JsonConvert.DeserializeObject<GameEventSaveData>(jsonContent);
+            _eventsObj = target;
+        }
+        else {
+            _eventsObj = new GameEventSaveData();
+        }
+    }
+
+    private void SaveEventsObj() {
+        string path = Path.Combine(Application.streamingAssetsPath, "EventsData.json");
+        var json = JsonUtility.ToJson(_eventsObj, true);
+
+        File.WriteAllText(path, json);
+    }
+
+    private EventData GetOrCreateSlot(int targetID) {        
+        var found = _eventsObj.CompletedEvents.FirstOrDefault(s => s.SlotID == targetID);
+        if (found == null) {
+            found = new EventData { SlotID = targetID };
+            _eventsObj.CompletedEvents.Add(found);
+        }
+
+        return found;
+    }
+
+    public bool HasEventRun(int eventIndex) {
+        return GetOrCreateSlot(playerInfo.SlotID).EventList.Contains(eventIndex);
+    }    
 
     private IEnumerator RetrieveData() {
         int i = 0;

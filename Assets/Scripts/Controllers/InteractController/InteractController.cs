@@ -19,6 +19,10 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     [SerializeField] InteractionVCameras[] interactionCams;
     [SerializeField] DialogPages[] _DialogPages;
 
+    [SerializeField] int _eventIndex;
+    [SerializeField] bool _isRepeatable;
+    [SerializeField] EventPriority _eventPriority;
+
     [SerializeField] bool hasTrigger;
 
     InputAction _interactAction;
@@ -27,13 +31,11 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     private int pageNumber;
 
     private bool isInteracting;
-    private bool isBusy;
+    private bool isBusy;    
 
-    public int EventIndex => throw new System.NotImplementedException();
-
-    public bool IsRepeatable => throw new System.NotImplementedException();
-
-    public EventPriority Priority => throw new System.NotImplementedException();
+    public int EventIndex { get { return _eventIndex; } }
+    public bool IsRepeatable { get { return _isRepeatable; } }
+    public EventPriority Priority { get { return _eventPriority; } }
 
     private void Start() {
         InitializeActions();
@@ -57,7 +59,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
         if (other.tag == "Player") {
             SubscribeActions();
-            EvaluateInteraction();          
+            EvaluateInteraction();
         }
     }
 

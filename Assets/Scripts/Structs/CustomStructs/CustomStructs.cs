@@ -59,11 +59,11 @@ public class DialogWrapper {
 
 [System.Serializable]
 public class EventData {
-    public int SlotIndex;
-    public List<int> CompletedEventIndices = new List<int>();
+    public int SlotID;
+    public List<int> EventList = new List<int>();
 }
 
 [System.Serializable]
 public class GameEventSaveData {
-    public List<EventData> Slots = new List<EventData>();
+    public List<EventData> CompletedEvents = new List<EventData>();
 }

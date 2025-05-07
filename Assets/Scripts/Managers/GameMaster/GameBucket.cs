@@ -1,6 +1,4 @@
 using UnityEngine;
-using Newtonsoft.Json;
-using System.IO;
 using System.Collections.Generic;
 
 public class GameBucket : MonoBehaviour {
@@ -33,7 +31,8 @@ public class GameBucket : MonoBehaviour {
     }
 
     private void Start() {
-        RetrieveDialogObjects();
+        RetrieveDialogObject();
+        
     }
 
     public DialogObject GetDialogObject(int IDX) {
@@ -58,19 +57,10 @@ public class GameBucket : MonoBehaviour {
         }
     }
 
-    private void RetrieveDialogObjects() {
-        string path = Path.Combine(Application.streamingAssetsPath, "Dialogues.json");
-
-        if (File.Exists(path)) {
-            string jsonContent = File.ReadAllText(path);            
-
-            DialogWrapper dialogWrapper = JsonConvert.DeserializeObject<DialogWrapper>(jsonContent);
-            _dialogues = dialogWrapper.Dialogues;
-            RetrieveDialogData(_dialogues);
-        }
-        else {
-            Debug.LogError("File JSON non trovato!");
-        }
+    private void RetrieveDialogObject() {        
+        DialogWrapper dialogWrapper = DataManager.Instance.GetDialogObj();
+        _dialogues = dialogWrapper.Dialogues;
+        RetrieveDialogData(_dialogues);
     }
 
     private VoiceMood RetrieveMood(DialogObject dialog) {

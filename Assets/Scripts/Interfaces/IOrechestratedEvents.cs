@@ -1,11 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEngine;
 
-public interface IOrchestratedEvent {
-    [SerializeField] int EventIndex { get; }
-    [SerializeField] bool IsRepeatable { get; }
-    [SerializeField] EventPriority Priority { get; }
+public interface IOrchestratedEvent {    
+    public int EventIndex { get; }
+    public bool IsRepeatable { get; }
+    public EventPriority Priority { get; }
 
     Task FireEvent(CancellationToken token);
 }
