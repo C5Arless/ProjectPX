@@ -29,7 +29,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     InputAction _confirmAction;
 
     private int pageNumber;
-
     private bool isInteracting;
     private bool isBusy;    
 
@@ -59,10 +58,13 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
         if (other.tag == "Player") {
             SubscribeActions();
-            EvaluateInteraction();
+            SwitchPopUp(true);
+
+            //Subscribe to orchestrator
         }
     }
 
+    /*
     private void OnTriggerStay(Collider other) {
         if (GameBucket.Instance.PXController.OnDialog) { return; }
 
@@ -70,14 +72,31 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
             //EvaluateInteraction();
         }
     }
+    */
 
     private void OnTriggerExit(Collider other) {
         if (hasTrigger) { return; }
 
         if (other.tag == "Player") {
             UnsubscribeActions();
-            _popUp.SetActive(false);            
+            SwitchPopUp(false);
         }
+    }
+
+    public async Task FireEvent(CancellationToken token) {
+        if (isInteracting) { return; }
+
+        Interact();
+
+        while (isInteracting) {
+            if (token.IsCancellationRequested) { 
+                Exit();
+                break;
+            }
+
+            await Task.Yield();
+        }
+        
     }
 
     public void OnInteract(InputAction.CallbackContext input) {
@@ -110,10 +129,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         _interactAction.started -= OnInteract;
     }
 
-    public Task FireEvent(CancellationToken token) {
-        throw new System.NotImplementedException();
-    }
-
     public void Interact() {
         if (isBusy) { return; }
 
@@ -124,6 +139,13 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         }
     }   
 
+    private void SwitchPopUp(bool state) {
+        if (!hasTrigger) {
+            _popUp.SetActive(state);
+        }
+    }
+
+    /*
     private void EvaluateInteraction() {
         if (isInteracting) { return; }
 
@@ -133,6 +155,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
             _popUp.SetActive(true);
         }
     }
+    */
 
     private void Enter() {
         pageNumber = 1;
@@ -216,7 +239,10 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         transform.GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(2f);
 
-        transform.GetComponent<Collider>().enabled = true;
+        if (_isRepeatable) {
+            transform.GetComponent<Collider>().enabled = true;
+        }
+
         isBusy = false;
         yield break;
     }
