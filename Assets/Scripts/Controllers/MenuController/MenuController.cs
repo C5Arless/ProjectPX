@@ -288,16 +288,13 @@ public class MenuController : MonoBehaviour {
 
     public void DeleteSlot(int saveSlot) {
         if (saveSlot < 0 && saveSlot > 2) { return; }
+        
+        int slotID = slotsInfo[saveSlot].SlotID;
+        DataManager.Instance.DeleteData(slotID);
+        DataManager.Instance.RefreshData();
 
-        if (slotsInfo[saveSlot].Runtime == 0) {
-            int slotID = slotsInfo[saveSlot].SlotID;
-            DataManager.Instance.DeleteData(slotID);
-            DataManager.Instance.RefreshData();
-
-            StartCoroutine("DisplaySlots");
-        } else {
-            Debug.Log("Current slot is active!");
-        }
+        StartCoroutine("DisplaySlots");
+        
     }
 
     public void DeleteAllSlots() {                        

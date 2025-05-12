@@ -97,7 +97,10 @@ public class DataManager : MonoBehaviour {
     }
 
     public void OverwriteData(int slot) {
+        DBVault.DisposeActiveSlot();
+
         int slotID = slotsInfo[slot].SlotID;
+        playerInfo.SlotID = slotID;
 
         object[] slotData = new object[4];
         object[] checkpointData = new object[2];
@@ -117,7 +120,16 @@ public class DataManager : MonoBehaviour {
     }
 
     public void DeleteData(int slotID) {
+        if (DBVault.GetActiveSlotIdx() == slotID) {
+            DBVault.DisposeActiveSlot();
+        }
+
         DBVault.ResetSlotCPByIdx(slotID);
+
+        if (_eventsObj.CompletedEvents.Exists(evt => evt.SlotID == slotID)) {
+            _eventsObj.CompletedEvents[slotID - 1].EventList = null;
+            SaveEventsObj();
+        }
     }
 
     public void AssignSlotInfo(int slot) {
@@ -162,6 +174,7 @@ public class DataManager : MonoBehaviour {
             _eventsObj.CompletedEvents[playerInfo.SlotID - 1].EventList = slot.EventList;
         }
 
+        SaveEventsObj();
     }
 
     public void ApplyCurrentOption(OptionPayload target) {
@@ -410,10 +423,14 @@ public class DataManager : MonoBehaviour {
         var json = JsonUtility.ToJson(_eventsObj, true);
 
         File.WriteAllText(path, json);
+
+        InitializeEventsObj();
     }
 
-    private EventData GetOrCreateSlot(int targetID) {        
-        var found = _eventsObj.CompletedEvents.FirstOrDefault(s => s.SlotID == targetID);
+    private EventData GetOrCreateSlot(int targetID) {
+        if (targetID == 0) { return null; }
+
+        var found = _eventsObj.CompletedEvents.FirstOrDefault(evt => evt.SlotID == targetID);
         if (found == null) {
             found = new EventData { SlotID = targetID };
             _eventsObj.CompletedEvents.Add(found);

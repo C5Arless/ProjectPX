@@ -60,7 +60,9 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
             SubscribeActions();
             SwitchPopUp(true);
 
-            //Subscribe to orchestrator
+            if (hasTrigger) {
+                GetComponentInParent<EventsOrchestrator>().EnqueueEvent(this);
+            }
         }
     }
 
@@ -83,17 +85,12 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         }
     }
 
-    public async Task FireEvent(CancellationToken token) {
+    public async Task FireEvent() {
         if (isInteracting) { return; }
 
         Interact();
 
         while (isInteracting) {
-            if (token.IsCancellationRequested) { 
-                Exit();
-                break;
-            }
-
             await Task.Yield();
         }
         
@@ -103,7 +100,12 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         if (!GameBucket.Instance.PXController.OnInteract) { return; }
 
         if (input.ReadValue<float>() != 0f) {
-            Interact();
+            //Interact();
+
+            if (!hasTrigger) {
+                GetComponentInParent<EventsOrchestrator>().EnqueueEvent(this);
+            }
+
         }
 
     }
@@ -160,7 +162,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     private void Enter() {
         pageNumber = 1;
         
-        _popUp.SetActive(false);
+        SwitchPopUp(false);
         isInteracting = true;
 
         StartCoroutine(EnterRoutine());

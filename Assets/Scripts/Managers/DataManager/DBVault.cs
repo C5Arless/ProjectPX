@@ -24,7 +24,7 @@ public static class DBVault {
     }
 
     //Getters
-    private static int GetActiveSlotIdx() {
+    public static int GetActiveSlotIdx() {
         OpenConnection();
 
         query = "SELECT Slot_ID FROM Slot WHERE Runtime = 1;";
@@ -269,10 +269,10 @@ public static class DBVault {
         UpdateValueByIdx(activeslot, "Slot", column, value);
 
     }  //DEPRECATED
-    private static void DisposeActiveSlot() { 
+    public static void DisposeActiveSlot() { 
         int activeslot = GetActiveSlotIdx();
         UpdateValueByIdx(activeslot, "Slot", "Runtime", 0);
-    }  //DEPRECATED
+    }  
 
     ////Public methods
     public static void UpdateCheckpoint(int activeslot, object[] cpinfo) {

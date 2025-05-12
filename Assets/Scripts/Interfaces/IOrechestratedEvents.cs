@@ -6,5 +6,5 @@ public interface IOrchestratedEvent {
     public bool IsRepeatable { get; }
     public EventPriority Priority { get; }
 
-    Task FireEvent(CancellationToken token);
+    Task FireEvent();
 }

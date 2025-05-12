@@ -334,12 +334,14 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             ValidateContinueButton();
         }
 
-        _selectedButton = target.gameObject;
+        if (target.gameObject.activeSelf) {
+            _selectedButton = target.gameObject;
 
-        _onSelectButton();
+            _onSelectButton();
 
-        if (_UIinfo.UIMode == UIMode.Slots) {
-            _onSaveSlotSelectButton();
+            if (_UIinfo.UIMode == UIMode.Slots) {
+                _onSaveSlotSelectButton();
+            }
         }
     }
 
@@ -393,8 +395,13 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private void OnHighlight(GameObject target) {
         EventSystem.current.SetSelectedGameObject(null);
         //_selectedButton = null;
+        if (CheckContinueButton(target.gameObject)) {
+            ValidateContinueButton();
+        } 
 
-        _highlightedButton = target;        
+        if (target.activeSelf) {
+            _highlightedButton = target;        
+        }
     }    
 
     private void ValidateContinueButton() {
