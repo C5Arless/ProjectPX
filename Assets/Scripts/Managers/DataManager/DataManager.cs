@@ -425,6 +425,12 @@ public class DataManager : MonoBehaviour {
         File.WriteAllText(path, json);
 
         InitializeEventsObj();
+
+        #if UNITY_EDITOR
+
+        UnityEditor.AssetDatabase.Refresh();
+
+        #endif
     }
 
     private EventData GetOrCreateSlot(int targetID) {
@@ -440,7 +446,12 @@ public class DataManager : MonoBehaviour {
     }
 
     public bool HasEventRun(int eventIndex) {
-        return GetOrCreateSlot(playerInfo.SlotID).EventList.Contains(eventIndex);
+        EventData evt = GetOrCreateSlot(playerInfo.SlotID);
+        if (evt == null) {
+            return false;
+        } else {
+            return evt.EventList.Contains(eventIndex);
+        }
     }    
 
     private IEnumerator RetrieveData() {

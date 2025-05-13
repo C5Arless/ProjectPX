@@ -404,7 +404,7 @@ public class CanvasHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }    
 
-    private void ValidateContinueButton() {
+    public void ValidateContinueButton() {
         DataInfo[] slotsInfo = DataManager.Instance.SlotsInfo;
         
         foreach (DataInfo info in slotsInfo) {

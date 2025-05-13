@@ -226,6 +226,7 @@ public class MenuController : MonoBehaviour {
     public void SaveGame() {
         DataManager.Instance.OverwriteData(currentSlot);
         DataManager.Instance.RefreshData();
+        _canvasHandler.ValidateContinueButton();
 
         StartCoroutine("DisplaySlots");
     }
@@ -236,6 +237,7 @@ public class MenuController : MonoBehaviour {
 
         UIMode mode = UIMode.MainMenu;
         _canvasHandler.SwitchUIMode(mode);
+        _canvasHandler.ValidateContinueButton();
 
         CameraManager.Instance.SwitchMenuVCamera(MenuVCameras.Menu);
 
@@ -252,6 +254,7 @@ public class MenuController : MonoBehaviour {
     public void MainMenu() {
         UIMode mode = UIMode.MainMenu;
         _canvasHandler.SwitchUIMode(mode);
+        _canvasHandler.ValidateContinueButton();
 
         CameraManager.Instance.MenuToSlot();
     }
@@ -292,6 +295,7 @@ public class MenuController : MonoBehaviour {
         int slotID = slotsInfo[saveSlot].SlotID;
         DataManager.Instance.DeleteData(slotID);
         DataManager.Instance.RefreshData();
+        _canvasHandler.ValidateContinueButton();
 
         StartCoroutine("DisplaySlots");
         
@@ -302,6 +306,7 @@ public class MenuController : MonoBehaviour {
         DataManager.Instance.DeleteData(2);
         DataManager.Instance.DeleteData(3);
         DataManager.Instance.RefreshData();
+        _canvasHandler.ValidateContinueButton();
 
         StartCoroutine("DisplaySlots");
        

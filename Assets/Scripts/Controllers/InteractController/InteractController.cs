@@ -87,7 +87,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
     public async Task FireEvent() {
         if (isInteracting) { return; }
-
+        
         Interact();
 
         while (isInteracting) {

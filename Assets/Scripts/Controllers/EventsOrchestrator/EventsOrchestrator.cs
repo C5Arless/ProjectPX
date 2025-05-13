@@ -5,13 +5,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class EventsOrchestrator : MonoBehaviour {
+public class EventsOrchestrator : MonoBehaviour {    
     private List<IOrchestratedEvent> eventsQueue = new List<IOrchestratedEvent>();
     private bool isRunning;
     private Task currentTask;
 
     public void EnqueueEvent(IOrchestratedEvent target) {
         if (!eventsQueue.Contains(target)) {
+            Debug.Log(target + " event enqueued");
             eventsQueue.Add(target); 
         }
 
@@ -25,13 +26,20 @@ public class EventsOrchestrator : MonoBehaviour {
 
         while (eventsQueue.Count() > 0) {
             var targetEvent = GetEvent();
+            Debug.Log(targetEvent + " retrieved");
 
-            if (targetEvent == null) { continue; }
-
+            if (targetEvent == null) {
+                eventsQueue.Clear();
+                await Task.Yield();
+                break; 
+            }
+            
             if (DataManager.Instance.HasEventRun(targetEvent.EventIndex)) {
+                Debug.Log(targetEvent + " removed");
                 eventsQueue.Remove(targetEvent);
                 continue;
             } else {
+                Debug.Log(targetEvent + " fired");
                 await targetEvent.FireEvent();
             }
             
