@@ -9,6 +9,9 @@ public class EventsOrchestrator : MonoBehaviour {
     private List<IOrchestratedEvent> eventsQueue = new List<IOrchestratedEvent>();
     private bool isRunning;
     private Task currentTask;
+    private IOrchestratedEvent currentEvent;
+
+    public List<IOrchestratedEvent> EventsQueue { get { return eventsQueue; } }
 
     public void EnqueueEvent(IOrchestratedEvent target) {
         if (!eventsQueue.Contains(target)) {
@@ -16,9 +19,14 @@ public class EventsOrchestrator : MonoBehaviour {
             eventsQueue.Add(target); 
         }
 
+        if (currentEvent?.Priority == EventPriority.Low) {
+            currentEvent.CancelEvent();
+        }
+
         if (!isRunning) {
             currentTask = RunEvents();
         }
+
     }
 
     private async Task RunEvents() {
@@ -40,6 +48,7 @@ public class EventsOrchestrator : MonoBehaviour {
                 continue;
             } else {
                 Debug.Log(targetEvent + " fired");
+                currentEvent = targetEvent;
                 await targetEvent.FireEvent();
             }
             

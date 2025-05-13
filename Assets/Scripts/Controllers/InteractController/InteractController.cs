@@ -96,6 +96,10 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         
     }
 
+    public void CancelEvent() {
+        throw new System.NotImplementedException();
+    }
+
     public void OnInteract(InputAction.CallbackContext input) {
         if (!GameBucket.Instance.PXController.OnInteract) { return; }
 
@@ -268,6 +272,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
             Gizmos.DrawWireSphere(_companionTarget.transform.position, 0.2f);
             UnityEditor.Handles.Label(_companionTarget.transform.position, "InteractCompanionTarget");
         }
-    }    
+    }
+
 #endif
 }

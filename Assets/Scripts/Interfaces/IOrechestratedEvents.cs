@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 public interface IOrchestratedEvent {    
@@ -6,4 +7,5 @@ public interface IOrchestratedEvent {
     public EventPriority Priority { get; }
 
     Task FireEvent();
+    void CancelEvent();
 }
