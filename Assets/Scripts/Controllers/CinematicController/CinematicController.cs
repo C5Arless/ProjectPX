@@ -1,41 +1,68 @@
 using System.Collections;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
-public class CinematicController : MonoBehaviour {
+public class CinematicController : MonoBehaviour, IOrchestratedEvent {
     [SerializeField] CinematicShot[] _cinematicShots;
     [SerializeField] Material _cinematicFrame;
     [SerializeField] bool _isSkippable;
     [SerializeField] bool _destroyWhenDone;
+    [Space]
+    [SerializeField] int _eventIndex;
+    [SerializeField] bool _isRepeatable;
+    [SerializeField] EventPriority _eventPriority;
 
-    private PXController _playerCtx;
-    private CompanionController _companionCtx;
+    private CancellationTokenSource token;
 
     private int shots;
     private int shotNumber;
 
     private bool isInteracting;
-    private bool isBusy;    
+    private bool isBusy;
 
-    public PXController PXController { get { return _playerCtx; } }
-    public CompanionController CompanionController { get { return _companionCtx; } }
+    public int EventIndex { get { return _eventIndex; } }
+    public bool IsRepeatable { get { return _isRepeatable; } }
+    public EventPriority Priority { get { return _eventPriority; } }
 
     private void Awake() {
         shots = _cinematicShots.Length;
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.tag == "Player") {                        
-            OnInteract();
+        if (other.tag == "Player") {
+            GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
         }        
     }
 
-    public void OnInteract() {
-        if (!isBusy) { 
-            _playerCtx = GameBucket.Instance.PXController;
-            _companionCtx = GameBucket.Instance.CompanionCtx;
-        } else {
-            return; 
+    public async Task FireEvent() {
+        token = new CancellationTokenSource();
+
+        isInteracting = true;
+
+        OnInteract();
+        
+        while (isInteracting) {
+            if (token.IsCancellationRequested) {
+                SkipCinematic();
+                await Task.Yield();
+                break;
+            }
+
+            await Task.Yield();
         }
+
+        await Task.Yield();
+    }
+
+    public void CancelEvent() {
+        if (_isSkippable) {
+            token.Cancel();            
+        }
+    }
+
+    public void OnInteract() {
+        if (isBusy) { return; }
 
         if (isInteracting) {
             Continue();
@@ -45,26 +72,22 @@ public class CinematicController : MonoBehaviour {
         }
     }
 
-    public void SkipCinematic() {
-        if (_isSkippable) {
-            StopAllCoroutines();
-            _cinematicFrame.SetFloat("_Transition", 0f);
+    public void SkipCinematic() {       
+        StopAllCoroutines();
+        _cinematicFrame.SetFloat("_Transition", 0f);
 
-            isInteracting = false;
+        isInteracting = false;
 
-            _playerCtx.InteractionExit();
-            _companionCtx.ExitTalkState();
+        GameBucket.Instance.PXController.InteractionExit();
+        GameBucket.Instance.CompanionCtx.ExitTalkState();
 
-            if (_destroyWhenDone) {
-                Destroy(this.gameObject);
-            }
-        }
+        if (_destroyWhenDone) {
+            Destroy(this.gameObject);
+        }        
     }
 
     private void Enter() {
-        shotNumber = 1;
-        
-        isInteracting = true;
+        shotNumber = 1;                
 
         _cinematicShots[shotNumber - 1].Enter();
 
@@ -86,11 +109,11 @@ public class CinematicController : MonoBehaviour {
         StartCoroutine(IterateShot());
     }
 
-    private void Exit() {
-        isInteracting = false;
+    private void Exit() {        
+        GameBucket.Instance.PXController.InteractionExit();
+        GameBucket.Instance.CompanionCtx.ExitTalkState();
         
-        _playerCtx.InteractionExit();
-        _companionCtx.ExitTalkState();
+        isInteracting = false;
 
         if (_cinematicShots[shotNumber - 1].HasTransition) {
             StartCoroutine("FrameOut");

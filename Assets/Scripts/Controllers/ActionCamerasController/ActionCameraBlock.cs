@@ -17,8 +17,7 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent {
     [SerializeField] int eventIndex;
     [SerializeField] bool isRepeatable;
     [SerializeField] EventPriority priority;
-
-    private EventsOrchestrator _eventsOrchestrator;
+    
     private CancellationTokenSource token;
     private bool isLocked;
     private bool onAction;
@@ -29,17 +28,13 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent {
 
     public EventPriority Priority { get { return priority; } }
 
-    private void Start() {
-        _eventsOrchestrator = GetComponentInParent<EventsOrchestrator>();
-    }
-
     private void OnTriggerEnter(Collider other) {
         if (GameBucket.Instance.PXController.OnDialog) { return; }
         if (GameBucket.Instance.PXController.OnAction) { return; }
 
         if (other.tag == "Player") {
 
-            _eventsOrchestrator.EnqueueEvent(this);
+            GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
 
             /*
             onAction = true;
@@ -96,6 +91,8 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent {
 
             await Task.Yield();
         }
+
+        await Task.Yield();
     }
 
     public void CancelEvent() {
@@ -122,8 +119,8 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent {
     }
 
     private void EnqueueContinuous() {
-        if (!_eventsOrchestrator.EventsQueue.Contains(this)) {
-            _eventsOrchestrator.EnqueueEvent(this);
+        if (!GameBucket.Instance.EventsOrchestrator.EventsQueue.Contains(this)) {
+            GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
         }
     }
 

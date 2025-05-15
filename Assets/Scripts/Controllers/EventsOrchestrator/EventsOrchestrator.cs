@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EventsOrchestrator : MonoBehaviour {    
@@ -13,6 +14,10 @@ public class EventsOrchestrator : MonoBehaviour {
 
     public List<IOrchestratedEvent> EventsQueue { get { return eventsQueue; } }
 
+    private void Awake() {
+        GameBucket.Instance.EventsOrchestrator = this;
+    }
+
     public void EnqueueEvent(IOrchestratedEvent target) {
         if (!eventsQueue.Contains(target)) {
             Debug.Log(target + " event enqueued");
@@ -20,17 +25,18 @@ public class EventsOrchestrator : MonoBehaviour {
         }
 
         if (currentEvent?.Priority == EventPriority.Low) {
+            Debug.Log(target + " event canceled");
             currentEvent.CancelEvent();
         }
 
         if (!isRunning) {
-            currentTask = RunEvents();
+            StartCoroutine(BeginOrchestration());
         }
 
     }
 
     private async Task RunEvents() {
-        isRunning = true;
+        //isRunning = true;
 
         while (eventsQueue.Count() > 0) {
             var targetEvent = GetEvent();
@@ -62,6 +68,8 @@ public class EventsOrchestrator : MonoBehaviour {
         }
 
         isRunning = false;
+
+        currentTask = null;
     }
 
     private IOrchestratedEvent GetEvent() {
@@ -79,4 +87,15 @@ public class EventsOrchestrator : MonoBehaviour {
 
         return target;
     }
+
+    private IEnumerator BeginOrchestration() {
+        isRunning = true;
+        yield return new WaitForSeconds(.5f);
+
+        if (currentTask == null) {
+            currentTask = RunEvents();
+        }
+
+        yield break;
+    } 
 }

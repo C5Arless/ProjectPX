@@ -61,7 +61,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
             SwitchPopUp(true);
 
             if (hasTrigger) {
-                GetComponentInParent<EventsOrchestrator>().EnqueueEvent(this);
+                GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
             }
         }
     }
@@ -93,7 +93,8 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         while (isInteracting) {
             await Task.Yield();
         }
-        
+
+        await Task.Yield();
     }
 
     public void CancelEvent() {
@@ -107,7 +108,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
             //Interact();
 
             if (!hasTrigger) {
-                GetComponentInParent<EventsOrchestrator>().EnqueueEvent(this);
+                GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
             }
 
         }
