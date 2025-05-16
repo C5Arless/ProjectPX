@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EventsOrchestrator : MonoBehaviour {    
@@ -36,8 +34,6 @@ public class EventsOrchestrator : MonoBehaviour {
     }
 
     private async Task RunEvents() {
-        //isRunning = true;
-
         while (eventsQueue.Count() > 0) {
             var targetEvent = GetEvent();
             Debug.Log(targetEvent + " retrieved");
@@ -90,7 +86,7 @@ public class EventsOrchestrator : MonoBehaviour {
 
     private IEnumerator BeginOrchestration() {
         isRunning = true;
-        yield return new WaitForSeconds(.5f);
+        yield return null;
 
         if (currentTask == null) {
             currentTask = RunEvents();

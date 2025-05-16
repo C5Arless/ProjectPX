@@ -38,9 +38,9 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
     public async Task FireEvent() {
         token = new CancellationTokenSource();
 
-        isInteracting = true;
-
         OnInteract();
+
+        isInteracting = true;
         
         while (isInteracting) {
             if (token.IsCancellationRequested) {
