@@ -100,6 +100,28 @@ public class DataManager : MonoBehaviour {
         DBVault.DisposeActiveSlot();
 
         int slotID = slotsInfo[slot].SlotID;
+
+        if (playerInfo.SlotID == 0) {
+            EventData targetSlot = GetOrCreateSlot(slotID);
+            EventData sourceSlot = GetOrCreateSlot(0);
+
+            _eventsObj.CompletedEvents.Remove(targetSlot);
+
+            targetSlot.EventList = sourceSlot.EventList;
+
+            _eventsObj.CompletedEvents.Add(targetSlot);
+            _eventsObj.CompletedEvents.Find(evt => evt.SlotID == sourceSlot.SlotID).EventList = null;
+        } else {
+            EventData targetSlot = GetOrCreateSlot(slotID);
+            EventData sourceSlot = GetOrCreateSlot(playerInfo.SlotID);
+
+            _eventsObj.CompletedEvents.Remove(targetSlot);
+
+            targetSlot.EventList = sourceSlot.EventList;
+
+            _eventsObj.CompletedEvents.Add(targetSlot);            
+        }
+
         playerInfo.SlotID = slotID;
 
         object[] slotData = new object[4];
@@ -127,9 +149,14 @@ public class DataManager : MonoBehaviour {
         DBVault.ResetSlotCPByIdx(slotID);
 
         if (_eventsObj.CompletedEvents.Exists(evt => evt.SlotID == slotID)) {
-            _eventsObj.CompletedEvents[slotID - 1].EventList = null;
-            SaveEventsObj();
+            _eventsObj.CompletedEvents.Find(evt => evt.SlotID == slotID).EventList = null;            
         }
+
+        if (_eventsObj.CompletedEvents.Exists(evt => evt.SlotID == 0)) {
+            _eventsObj.CompletedEvents.Find(evt => evt.SlotID == 0).EventList = null;
+        }
+        
+        SaveEventsObj();
     }
 
     public void AssignSlotInfo(int slot) {
@@ -165,16 +192,32 @@ public class DataManager : MonoBehaviour {
     }
 
     public void RegisterEvent(int eventIdx) {
-        if (playerInfo.SlotID == 0) { return; }
-
         var slot = GetOrCreateSlot(playerInfo.SlotID);
         if (!slot.EventList.Contains(eventIdx)) {
             slot.EventList.Add(eventIdx);
 
-            _eventsObj.CompletedEvents[playerInfo.SlotID - 1].EventList = slot.EventList;
+            _eventsObj.CompletedEvents.Find(evt => evt.SlotID == playerInfo.SlotID).EventList = slot.EventList;            
         }
 
         SaveEventsObj();
+    }
+
+    public bool HasEventRun(int eventIndex) {
+        EventData evt = GetOrCreateSlot(playerInfo.SlotID);
+        if (evt == null) {
+            return false;
+        }
+        else {
+            return evt.EventList.Contains(eventIndex);
+        }
+    }
+
+    public void ResetEvents() {
+        if (_eventsObj.CompletedEvents.Exists(evt => evt.SlotID == 0)) {
+            _eventsObj.CompletedEvents.Find(evt => evt.SlotID == 0).EventList = null;
+
+            SaveEventsObj();
+        }
     }
 
     public void ApplyCurrentOption(OptionPayload target) {
@@ -434,8 +477,6 @@ public class DataManager : MonoBehaviour {
     }
 
     private EventData GetOrCreateSlot(int targetID) {
-        if (targetID == 0) { return null; }
-
         var found = _eventsObj.CompletedEvents.FirstOrDefault(evt => evt.SlotID == targetID);
         if (found == null) {
             found = new EventData { SlotID = targetID };
@@ -443,16 +484,7 @@ public class DataManager : MonoBehaviour {
         }
 
         return found;
-    }
-
-    public bool HasEventRun(int eventIndex) {
-        EventData evt = GetOrCreateSlot(playerInfo.SlotID);
-        if (evt == null) {
-            return false;
-        } else {
-            return evt.EventList.Contains(eventIndex);
-        }
-    }    
+    }   
 
     private IEnumerator RetrieveData() {
         int i = 0;

@@ -1,7 +1,19 @@
 {
     "CompletedEvents": [
         {
+            "SlotID": 0,
+            "EventList": []
+        },
+        {
+            "SlotID": 3,
+            "EventList": []
+        },
+        {
             "SlotID": 1,
+            "EventList": []
+        },
+        {
+            "SlotID": 2,
             "EventList": []
         }
     ]

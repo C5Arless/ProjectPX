@@ -52,6 +52,7 @@ public class EventsOrchestrator : MonoBehaviour {
                 Debug.Log(targetEvent + " fired");
                 currentEvent = targetEvent;
                 await targetEvent.FireEvent();
+                Debug.Log(targetEvent + " done!");
             }
             
 
@@ -59,8 +60,7 @@ public class EventsOrchestrator : MonoBehaviour {
                 DataManager.Instance.RegisterEvent(targetEvent.EventIndex);                
             } 
             
-            eventsQueue.Remove(targetEvent);            
-
+            eventsQueue.Remove(targetEvent);
         }
 
         isRunning = false;

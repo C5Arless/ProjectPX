@@ -217,7 +217,7 @@ public class MenuController : MonoBehaviour {
     
     public void NewGame() {
         ScenesManager.Instance.StartGame();
-
+        DataManager.Instance.ResetEvents();
         CameraManager.Instance.StartGame();
         InputManager.Instance.SetActionMap("Player");
     }
