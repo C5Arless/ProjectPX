@@ -184,9 +184,13 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: d5d8147b-ceff-435b-8ded-9279c76390ca
     m_ActionName: Dialog/Confirm[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5d9af531-fd3a-4443-9149-10a80ada1e4f
+    m_ActionName: Player/ShowUI[/Keyboard/tab]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
-  m_DefaultActionMap: MainScreen
+  m_DefaultActionMap: Disabled
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!114 &6068785539659905033
