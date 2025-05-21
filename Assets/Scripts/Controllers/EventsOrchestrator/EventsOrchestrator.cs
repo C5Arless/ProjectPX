@@ -46,21 +46,20 @@ public class EventsOrchestrator : MonoBehaviour {
             
             if (DataManager.Instance.HasEventRun(targetEvent.EventIndex)) {
                 Debug.Log(targetEvent + " removed");
-                eventsQueue.Remove(targetEvent);
-                continue;
+                eventsQueue.Remove(targetEvent);                
             } else {
                 Debug.Log(targetEvent + " fired");
                 currentEvent = targetEvent;
+
                 await targetEvent.FireEvent();
                 Debug.Log(targetEvent + " done!");
-            }
-            
 
-            if (!targetEvent.IsRepeatable) {
-                DataManager.Instance.RegisterEvent(targetEvent.EventIndex);                
-            } 
+                if (!targetEvent.IsRepeatable) {
+                    DataManager.Instance.RegisterEvent(targetEvent.EventIndex);                
+                } 
             
-            eventsQueue.Remove(targetEvent);
+                eventsQueue.Remove(targetEvent);
+            }
         }
 
         isRunning = false;

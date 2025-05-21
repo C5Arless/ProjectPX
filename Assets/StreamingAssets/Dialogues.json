@@ -2,7 +2,7 @@
     "Dialogues": [
         {
             "IDX": 0,
-            "Tag":  "Default",
+            "Tag": "Default",
             "Name": "Default",
             "Mood": "Default",
             "Line": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -42,6 +42,51 @@
             "Name": "FX - 41",
             "Mood": "Default",
             "Line": "When you think you are done, go through that Warp to go ahead.",
+            "Options": null,
+            "NEXT": -1
+        },
+        {
+            "IDX": 5,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Default",
+            "Line": "You know collisions aren't a joke...",
+            "Options": null,
+            "NEXT": -1
+        },
+        {
+            "IDX": 6,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Default",
+            "Line": "Luckily, physics got our back!",
+            "Options": null,
+            "NEXT": -1
+        },
+        {
+            "IDX": 7,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Default",
+            "Line": "This is your capsule, you are the model PX-03",
+            "Options": null,
+            "NEXT": -1
+        },
+        {
+            "IDX": 8,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Default",
+            "Line": "These are the older models but none of them managed to work properly",
+            "Options": null,
+            "NEXT": -1
+        },
+        {
+            "IDX": 9,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Default",
+            "Line": "That's you! You've been designed thanks to a powerful 3D modeling tool called Blender!",
             "Options": null,
             "NEXT": -1
         }
