@@ -12,9 +12,9 @@
         {
             "IDX": 1,
             "Tag": "Companion",
-            "Name": "FX - 41",
+            "Name": "???",
             "Mood": "Default",
-            "Line": "This is a test dialogue line!",
+            "Line": "Welcome! I know you are a bit confused right now, but hear me out",
             "Options": null,
             "NEXT": -1
         },
@@ -23,7 +23,7 @@
             "Tag": "Companion",
             "Name": "FX - 41",
             "Mood": "Default",
-            "Line": "Looks like some scientist drawing",
+            "Line": "I am FX - 41, and I will be your guide in this short platform experience.",
             "Options": null,
             "NEXT": -1
         },
@@ -32,9 +32,18 @@
             "Tag": "Companion",
             "Name": "FX - 41",
             "Mood": "Default",
-            "Line": "Maybe someone worked here before...",
+            "Line": "This is the Lab, feel free to roam around.",
             "Options": null,
-            "NEXT": 2
+            "NEXT": -1
+        },
+        {
+            "IDX": 4,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Default",
+            "Line": "When you think you are done, go through that Warp to go ahead.",
+            "Options": null,
+            "NEXT": -1
         }
     ]
 }
