@@ -41,7 +41,7 @@ public class EventsOrchestrator : MonoBehaviour {
             if (targetEvent == null) {
                 eventsQueue.Clear();
                 await Task.Yield();
-                break; 
+                return; 
             }
             
             if (DataManager.Instance.HasEventRun(targetEvent.EventIndex)) {
@@ -84,10 +84,10 @@ public class EventsOrchestrator : MonoBehaviour {
     }
 
     private IEnumerator BeginOrchestration() {
-        isRunning = true;
         yield return null;
-
+        
         if (currentTask == null) {
+            isRunning = true;
             currentTask = RunEvents();
         }
 
