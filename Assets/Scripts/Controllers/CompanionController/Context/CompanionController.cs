@@ -263,7 +263,9 @@ public class CompanionController : MonoBehaviour {
 
     public void CheckStuckBehaviour() {
         //StopCoroutine("CheckStuckRoutine");
-        StartCoroutine("CheckStuckRoutine");
+        if (!isTalking) {
+            StartCoroutine("CheckStuckRoutine");
+        }
     }
 
     public void CheckOperativeBehaviour() {
@@ -536,7 +538,7 @@ public class CompanionController : MonoBehaviour {
     private IEnumerator CheckStuckRoutine() {
         yield return null;
 
-        if (isTalking || isMoving) { yield break; }
+        if (isMoving) { yield break; }
 
         RaycastHit[] hits = Physics.RaycastAll(transform.position, (_playerHead.position - transform.position).normalized, PlayerDistance);        
 
