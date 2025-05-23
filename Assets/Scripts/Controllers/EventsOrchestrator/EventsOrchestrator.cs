@@ -13,7 +13,11 @@ public class EventsOrchestrator : MonoBehaviour {
     public List<IOrchestratedEvent> EventsQueue { get { return eventsQueue; } }
 
     private void Awake() {
-        GameBucket.Instance.EventsOrchestrator = this;
+        if (GameBucket.Instance.EventsOrchestrator == null) {
+            GameBucket.Instance.EventsOrchestrator = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else { Destroy(gameObject); }        
     }
 
     public void EnqueueEvent(IOrchestratedEvent target) {

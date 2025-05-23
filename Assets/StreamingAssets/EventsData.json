@@ -2,22 +2,22 @@
     "CompletedEvents": [
         {
             "SlotID": 0,
-            "EventList": [
-                101,
-                100
-            ]
+            "EventList": []
         },
         {
             "SlotID": 3,
             "EventList": []
         },
         {
-            "SlotID": 1,
+            "SlotID": 2,
             "EventList": []
         },
         {
-            "SlotID": 2,
-            "EventList": []
+            "SlotID": 1,
+            "EventList": [
+                101,
+                100
+            ]
         }
     ]
 }
