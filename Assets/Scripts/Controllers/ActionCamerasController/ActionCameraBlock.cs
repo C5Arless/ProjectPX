@@ -99,6 +99,10 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent {
         token.Cancel();
     }
 
+    public void DestroyEvent() {       
+        Destroy(gameObject);
+    }
+
     private void ActionEnter() {
         //GameBucket.Instance.PXController.ActionCameraEnter();
         //CameraManager.Instance.SwitchGameVCamera(_actionVCamera);

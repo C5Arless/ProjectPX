@@ -101,6 +101,11 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         throw new System.NotImplementedException();
     }
 
+    public void DestroyEvent() {
+        if (GameBucket.Instance.PXController.OnInteract) GameBucket.Instance.PXController.OnInteract = false;
+        Destroy(gameObject);        
+    }
+
     public void OnInteract(InputAction.CallbackContext input) {
         if (!GameBucket.Instance.PXController.OnInteract) { return; }
 

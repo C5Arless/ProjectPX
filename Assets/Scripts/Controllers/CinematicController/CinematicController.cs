@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CinematicController : MonoBehaviour, IOrchestratedEvent {
@@ -59,6 +60,10 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
         if (_isSkippable) {
             token.Cancel();            
         }
+    }
+
+    public void DestroyEvent() {
+        Destroy(gameObject);
     }
 
     public void OnInteract() {

@@ -1,4 +1,3 @@
-using System.Threading;
 using System.Threading.Tasks;
 
 public interface IOrchestratedEvent {    
@@ -8,4 +7,5 @@ public interface IOrchestratedEvent {
 
     Task FireEvent();
     void CancelEvent();
+    void DestroyEvent();
 }

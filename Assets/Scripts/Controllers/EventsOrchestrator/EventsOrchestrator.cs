@@ -64,7 +64,8 @@ public class EventsOrchestrator : MonoBehaviour {
 
                 if (DataManager.Instance.HasEventRun(targetEvent.EventIndex)) {
                     Debug.Log(targetEvent + " removed");
-                    eventsQueue.Remove(targetEvent);                
+                    eventsQueue.Remove(targetEvent);
+                    targetEvent.DestroyEvent();
                 } else {
                     currentEvent = targetEvent;
 

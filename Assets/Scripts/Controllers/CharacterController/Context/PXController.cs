@@ -117,7 +117,7 @@ public class PXController : MonoBehaviour {
     public bool OnSlope { get { return onSlope; } }
     public bool OnPlatform { get { return onPlatform; } set { onPlatform = value; } }
     public bool OnDialog { get { return onDialog; } }
-    public bool OnInteract { get { return onInteract; } }
+    public bool OnInteract { get { return onInteract; } set { onInteract = value; } }
     public bool OnAction { get { return onAction; } }
     public bool OnKinematic { get { return onKinematic; } set { onKinematic = value; } }
 
