@@ -1,5 +1,7 @@
+using Cinemachine;
 using System;
 using System.Collections;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -79,8 +81,11 @@ public class PXController : MonoBehaviour {
     private int jumpCount = 2;
     private float moveSpeed = 1760f;
 
-    private float xaxis;
-    private float yaxis;
+    private float yaw;
+    private float pitch;
+
+    private float xAxis;
+    private float yAxis;
 
     private float gravity = 9.81f;
 
@@ -188,13 +193,15 @@ public class PXController : MonoBehaviour {
         InitializeActions();
         InitializePowerUps();
         SubscribeCallbacks();
+
     }
 
     // Update is called once per frame
     void Update() {
         EvaluateHealth();
 
-        _forward.transform.position = _asset.transform.position;                       
+        _forward.transform.position = _asset.transform.position;
+        _virtualCamera.transform.position = _asset.transform.position;
     }
 
     void FixedUpdate() {       
@@ -204,10 +211,10 @@ public class PXController : MonoBehaviour {
         }
     }
 
-    private void LateUpdate() {
+    private void LateUpdate() {        
         if (canFreeLook) {
             UpdateCamera(camInput);
-        }
+        }        
     }
 
     public void OnDestroy() {
@@ -215,9 +222,9 @@ public class PXController : MonoBehaviour {
     }
 
     //Input Callbacks
-    public void OnLook(InputAction.CallbackContext input) {
+    public void OnLook(InputAction.CallbackContext input) {        
         if (canFreeLook && input.ReadValue<Vector2>() != Vector2.zero) {
-            camInput = input.ReadValue<Vector2>();
+            camInput = input.ReadValue<Vector2>();            
         } else {
             camInput = Vector2.zero;
         }
@@ -327,7 +334,7 @@ public class PXController : MonoBehaviour {
             canFreeLook = true;
         }
 
-        CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
+        CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
     }
 
     public void ActionCameraEnter() {
@@ -336,7 +343,7 @@ public class PXController : MonoBehaviour {
     }
 
     public void ActionCameraExit() {
-        CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
+        CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
         canFreeLook = true;
         onAction = false;
     }
@@ -517,11 +524,11 @@ public class PXController : MonoBehaviour {
         return distance;
     }
 
-    private Vector3 ComputeForward2D(Transform _a, Transform _b) {
-        Vector2 a = new Vector2(_a.position.x, _a.position.z);
-        Vector2 b = new Vector2(_b.position.x, _b.position.z);
+    private Vector3 ComputeForward2D(Transform _head, Transform _tail) {
+        Vector2 head = new Vector2(_head.position.x, _head.position.z);
+        Vector2 tail = new Vector2(_tail.position.x, _tail.position.z);
 
-        Vector2 targetForward = (a - b).normalized;
+        Vector2 targetForward = (head - tail).normalized;
 
         Vector3 forward = new Vector3(targetForward.x, 0f, targetForward.y);
 
@@ -549,8 +556,9 @@ public class PXController : MonoBehaviour {
             _cam.transform.forward = targetForward; 
             _forward.transform.forward = targetForward;
 
-            yaxis = _cam.transform.rotation.eulerAngles.y;
-            xaxis = _cam.transform.rotation.eulerAngles.x;        
+            //BROKEN?
+            yaw = _cam.transform.rotation.eulerAngles.y;
+            pitch = _cam.transform.rotation.eulerAngles.x;        
         }
     }
 
@@ -560,6 +568,40 @@ public class PXController : MonoBehaviour {
         }        
     }
 
+    /*
+    private void EvaluateCamera(Vector2 camInput) {
+        if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
+            UpdateCamera(camInput, _optionsInfo.MouseSens);
+        }
+        else {
+            UpdateCamera(camInput, _optionsInfo.PadSens);
+        }
+    }
+
+    private void UpdateCamera(Vector2 camInput, float sens) {
+        CalculateCamMotion(camInput, sens);
+        CamRotation(_forward);
+    }
+
+    private void CalculateCamMotion(Vector2 mouseInput, float sens) {
+        yaw += mouseInput.x * sens * Time.deltaTime;
+        pitch -= mouseInput.y * sens * Time.deltaTime;
+        pitch = Mathf.Clamp(pitch, -30f, 60f);
+    }
+
+    private void CamRotation(GameObject forward) {
+        _virtualCamera.m_XAxis.Value = yaw;
+        _virtualCamera.m_YAxis.Value = Mathf.InverseLerp(-30f, 60f, pitch);
+
+        Vector3 camForward = _virtualCamera.gameObject.transform.forward;
+        camForward.y = 0f;
+        camForward.Normalize();
+
+        forward.transform.forward = camForward;
+    }
+    */
+
+    
     private void EvaluateCamera(Vector2 camInput) {
         if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
             UpdateFreeLookMouseCamera(_cam, _forward, camInput, _optionsInfo.MouseSens);
@@ -578,25 +620,19 @@ public class PXController : MonoBehaviour {
             CalculateCamMotion(input, sens);
             CamRotation(cam, forward);
         }
-
-        /*
-        if (Mathf.Abs(input.x) > .005f && Mathf.Abs(input.y) > .001f) {
-            CalculateCamMotion(input, sens);
-            CamRotation(cam, forward);
-        }
-        */
     }
 
     private void CalculateCamMotion(Vector2 mouseInput, float sens) {
-        yaxis += mouseInput.x * sens * Time.deltaTime;
-        xaxis -= mouseInput.y * sens * Time.deltaTime;
-        xaxis = Mathf.Clamp(xaxis, -30f, 60f);
+        yAxis += mouseInput.x * sens * Time.deltaTime;
+        xAxis -= mouseInput.y * sens * Time.deltaTime;
+        xAxis = Mathf.Clamp(xAxis, -30f, 60f);
     }
 
     private void CamRotation(GameObject cam, GameObject forward) {
-        cam.transform.rotation = Quaternion.Euler(xaxis, yaxis, 0f);
-        forward.transform.rotation = Quaternion.Euler(0f, yaxis, 0f);
+        cam.transform.rotation = Quaternion.Euler(xAxis, yAxis, 0f);        
+        forward.transform.rotation = Quaternion.Euler(0f, yAxis, 0f);
     }
+    
 
     private void HandleAttack() {
         _playerRb.velocity.Set(0f, 0f, 0f);
@@ -816,7 +852,7 @@ public class PXController : MonoBehaviour {
         yield return new WaitWhile(() => onDialog);
 
         if (!onAction) {
-            CameraManager.Instance.SwitchGameVCamera(_virtualCamera);
+            CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
         }
 
         onInteract = false;

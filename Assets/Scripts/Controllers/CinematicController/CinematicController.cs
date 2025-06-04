@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
@@ -62,7 +63,14 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
         }
     }
 
+    public void AbortEvent() {
+        if (token != null) {
+            token.Cancel();
+        }
+    }
+
     public void DestroyEvent() {
+        GameBucket.Instance.EventsOrchestrator.DequeueEvent(this);
         Destroy(gameObject);
     }
 
@@ -87,7 +95,7 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
         GameBucket.Instance.CompanionCtx.ExitTalkState();
 
         if (_destroyWhenDone) {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }        
     }
 
@@ -125,7 +133,7 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
         }
 
         if (_destroyWhenDone) {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
 

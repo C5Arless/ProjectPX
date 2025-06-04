@@ -19,24 +19,26 @@ public class WarpController : MonoBehaviour {
 
     private void SwitchTrigger() {
         if (_state) {
+            _exitTrigger.GetComponent<CinematicController>().AbortEvent();
             _exitTrigger.SetActive(false);
             _sceneTrigger.SetActive(true);
             _enterTrigger.SetActive(true);
         } else {
-            _exitTrigger.SetActive(true);
+            _enterTrigger.GetComponent<CinematicController>().AbortEvent();
             _sceneTrigger.SetActive(false);
-            _enterTrigger.SetActive(false);
+            _enterTrigger.SetActive(false);           
+            _exitTrigger.SetActive(true);
         }
     }
     
     private IEnumerator InitializeSwitch() {
-        yield return new WaitForSeconds(1f);
-
         while (GameBucket.Instance.PXController == null) {
             yield return null;
         }
 
-        yield return new WaitUntil(() => GameBucket.Instance.PXController.CanInteract);
+        yield return new WaitWhile(() => GameBucket.Instance.PXController.OnDialog);
+        
+        yield return new WaitForSeconds(1f);
 
         SwitchToEnter();
 

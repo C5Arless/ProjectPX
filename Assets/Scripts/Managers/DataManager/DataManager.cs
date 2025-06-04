@@ -31,12 +31,14 @@ public class DataManager : MonoBehaviour {
         else { Destroy(gameObject); }
 
         FillOptionsPayload();
+        
+        //TESTING
+        InitializeData();
     }
 
     private void Start() {
         InitializeDialogObj();
-        InitializeEventsObj();
-        
+        InitializeEventsObj();        
     }
 
     public void InitializeData() {

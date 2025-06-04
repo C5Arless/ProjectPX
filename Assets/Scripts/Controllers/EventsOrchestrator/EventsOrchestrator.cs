@@ -21,6 +21,10 @@ public class EventsOrchestrator : MonoBehaviour {
     }
 
     public void EnqueueEvent(IOrchestratedEvent target) {
+        if (DataManager.Instance.HasEventRun(target.EventIndex)) {
+            DequeueEvent(target);
+        } 
+
         if (!eventsQueue.Contains(target)) {
             Debug.Log(target + " event enqueued");
             eventsQueue.Add(target); 
@@ -35,6 +39,18 @@ public class EventsOrchestrator : MonoBehaviour {
             currentEvent.CancelEvent();
         }
 
+    }
+
+    public void DequeueEvent(IOrchestratedEvent target) {
+        if (!eventsQueue.Contains(target)) {
+            Debug.Log(target + " event removed");
+
+            if (currentEvent == target) {
+                target.CancelEvent();
+            }
+
+            eventsQueue.Remove(target);
+        }
     }
 
     private async Task RunEvents() {
@@ -65,7 +81,7 @@ public class EventsOrchestrator : MonoBehaviour {
                 if (DataManager.Instance.HasEventRun(targetEvent.EventIndex)) {
                     Debug.Log(targetEvent + " removed");
                     eventsQueue.Remove(targetEvent);
-                    targetEvent.DestroyEvent();
+                    targetEvent.DestroyEvent();                    
                 } else {
                     currentEvent = targetEvent;
 
