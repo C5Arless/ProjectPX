@@ -10,6 +10,8 @@ public class EventsOrchestrator : MonoBehaviour {
     private Task currentTask;
     private IOrchestratedEvent currentEvent;
 
+    public bool IsRunning { get { return isRunning; } }
+
     public List<IOrchestratedEvent> EventsQueue { get { return eventsQueue; } }
 
     private void Awake() {

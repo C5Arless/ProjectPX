@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class CameraManager : MonoBehaviour {
     private GameObject currentMenuVCamera;
 
     private GameObject currentGameVCamera;
+    private Transform gameCamera;
 
     private VCameraMode mode;
 
@@ -27,6 +29,10 @@ public class CameraManager : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
         }
         else { Destroy(gameObject); }        
+    }
+
+    public Transform GetCurrentGameCamera() {
+        return gameCamera;
     }
 
     public void InitializeCameras() {
@@ -93,6 +99,7 @@ public class CameraManager : MonoBehaviour {
             }
 
             currentGameVCamera = target;
+            gameCamera = gameBrain.GetComponent<CinemachineBrain>().OutputCamera.transform;
         }
     }
 
