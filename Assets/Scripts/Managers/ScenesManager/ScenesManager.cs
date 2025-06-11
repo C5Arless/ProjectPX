@@ -245,6 +245,7 @@ public class ScenesManager : MonoBehaviour {
         }
 
         Time.timeScale = 1;
+        GameBucket.Instance.EventsOrchestrator.FlushQueue();
         paused = false;
 
         yield break;

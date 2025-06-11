@@ -43,6 +43,15 @@ public class EventsOrchestrator : MonoBehaviour {
 
     }
 
+    public void FlushQueue() {
+        eventsQueue.Clear();
+        currentTask = null;
+
+        if (isRunning) {
+            isRunning = false;
+        }
+    }
+
     public void DequeueEvent(IOrchestratedEvent target) {
         if (!eventsQueue.Contains(target)) {
             Debug.Log(target + " event removed");
