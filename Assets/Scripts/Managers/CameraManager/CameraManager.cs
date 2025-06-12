@@ -15,7 +15,7 @@ public class CameraManager : MonoBehaviour {
     private GameObject currentMenuVCamera;
 
     private GameObject currentGameVCamera;
-    private Transform gameCamera;
+    private Camera gameCamera;
 
     private VCameraMode mode;
 
@@ -31,7 +31,7 @@ public class CameraManager : MonoBehaviour {
         else { Destroy(gameObject); }        
     }
 
-    public Transform GetCurrentGameCamera() {
+    public Camera GetCurrentViewCamera() {
         return gameCamera;
     }
 
@@ -99,7 +99,7 @@ public class CameraManager : MonoBehaviour {
             }
 
             currentGameVCamera = target;
-            gameCamera = gameBrain.GetComponent<CinemachineBrain>().OutputCamera.transform;
+            gameCamera = gameBrain.GetComponent<CinemachineBrain>().OutputCamera;
         }
     }
 

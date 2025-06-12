@@ -571,39 +571,6 @@ public class PXController : MonoBehaviour {
     /*
     private void EvaluateCamera(Vector2 camInput) {
         if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
-            UpdateCamera(camInput, _optionsInfo.MouseSens);
-        }
-        else {
-            UpdateCamera(camInput, _optionsInfo.PadSens);
-        }
-    }
-
-    private void UpdateCamera(Vector2 camInput, float sens) {
-        CalculateCamMotion(camInput, sens);
-        CamRotation(_forward);
-    }
-
-    private void CalculateCamMotion(Vector2 mouseInput, float sens) {
-        yaw += mouseInput.x * sens * Time.deltaTime;
-        pitch -= mouseInput.y * sens * Time.deltaTime;
-        pitch = Mathf.Clamp(pitch, -30f, 60f);
-    }
-
-    private void CamRotation(GameObject forward) {
-        _virtualCamera.m_XAxis.Value = yaw;
-        _virtualCamera.m_YAxis.Value = Mathf.InverseLerp(-30f, 60f, pitch);
-
-        Vector3 camForward = _virtualCamera.gameObject.transform.forward;
-        camForward.y = 0f;
-        camForward.Normalize();
-
-        forward.transform.forward = camForward;
-    }
-    */
-
-    
-    private void EvaluateCamera(Vector2 camInput) {
-        if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
             UpdateFreeLookMouseCamera(_cam, _forward, camInput, _optionsInfo.MouseSens);
         } else {
             UpdateFreeLookAnalogCamera(_cam, _forward, camInput, _optionsInfo.PadSens);
@@ -624,7 +591,7 @@ public class PXController : MonoBehaviour {
 
     private void CalculateCamMotion(Vector2 mouseInput, float sens) {
         yAxis += mouseInput.x * sens * Time.deltaTime;
-        xAxis -= mouseInput.y * sens * Time.deltaTime;
+        xAxis -= mouseInput.y * sens * Time.deltaTime;        
         xAxis = Mathf.Clamp(xAxis, -30f, 60f);
     }
 
@@ -632,7 +599,40 @@ public class PXController : MonoBehaviour {
         cam.transform.rotation = Quaternion.Euler(xAxis, yAxis, 0f);        
         forward.transform.rotation = Quaternion.Euler(0f, yAxis, 0f);
     }
-    
+    */
+
+    private void EvaluateCamera(Vector2 camInput) {
+        if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
+            UpdateFreeLookMouseCamera(camInput, _optionsInfo.MouseSens);
+        }
+        else {
+            UpdateFreeLookAnalogCamera(camInput, _optionsInfo.PadSens);
+        }
+    }
+
+    private void UpdateFreeLookAnalogCamera(Vector2 input, float sens) {
+        CalculateCamMotion(input, sens);
+    }
+
+    private void UpdateFreeLookMouseCamera(Vector2 input, float sens) {
+        if (input.sqrMagnitude > .005f) {
+            CalculateCamMotion(input, sens);                     
+        }
+    }
+
+    private void CalculateCamMotion(Vector2 mouseInput, float sens) {
+        float targetY = mouseInput.x * sens * Mathf.PI * Time.deltaTime;
+        float targetX = mouseInput.y * sens * Mathf.PI * Time.deltaTime;
+
+        yAxis += targetY;
+        xAxis -= targetX;
+
+        yAxis = Mathf.Repeat(yAxis, 360);
+        xAxis = Mathf.Clamp(xAxis, -30f, 60f);
+
+        _cam.transform.rotation = Quaternion.Euler(xAxis, yAxis, 0f);
+        _forward.transform.rotation = Quaternion.Euler(0f, yAxis, 0f);
+    }
 
     private void HandleAttack() {
         _playerRb.velocity.Set(0f, 0f, 0f);
@@ -813,9 +813,7 @@ public class PXController : MonoBehaviour {
         Vector3 targetForward = ComputeForward2D(playerTarget, _asset.transform);        
 
         while (ComputeDistance2D(_asset.transform, playerTarget) > .15f) {
-
-            targetForward = ComputeForward2D(playerTarget, _asset.transform);
-            _cam.transform.forward = targetForward;
+            _cam.transform.forward = _vcam.transform.forward;            
 
             targetForward = ComputeForward2D(playerTarget, _asset.transform); 
             _forward.transform.forward = targetForward;
@@ -834,22 +832,19 @@ public class PXController : MonoBehaviour {
         _playerRb.ResetInertiaTensor();
 
         _player.transform.position = new Vector3(playerTarget.transform.position.x, _player.transform.position.y, playerTarget.transform.position.z);
-        yield return null;
+        yield return null;        
 
-        targetForward = ComputeForward2D(focusTarget, _asset.transform);
-        _cam.transform.forward = targetForward;
+        targetForward = ComputeForward2D(focusTarget, _player.transform);
+        Quaternion finalRotation = new Quaternion();
+        finalRotation.SetLookRotation(targetForward);
+        _asset.transform.rotation = finalRotation;
 
-        targetForward = ComputeForward2D(focusTarget, _asset.transform);
-        _forward.transform.forward = targetForward;
+        _forward.transform.forward = ComputeForward2D(_player.transform, _vcam.transform);
 
-        //yield return null;
+        yAxis = _forward.transform.rotation.eulerAngles.y;
+        xAxis = _cam.transform.rotation.eulerAngles.x;
 
-
-        yield return null;
-
-        _asset.transform.rotation = _forward.transform.rotation;
-
-        yield return new WaitWhile(() => onDialog);
+        yield return new WaitWhile(() => onDialog);        
 
         if (!onAction) {
             CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
