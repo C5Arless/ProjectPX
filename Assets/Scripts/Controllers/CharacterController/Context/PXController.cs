@@ -810,7 +810,7 @@ public class PXController : MonoBehaviour {
 
         yield return null;
 
-        Vector3 targetForward = ComputeForward2D(playerTarget, _asset.transform);        
+        Vector3 targetForward = ComputeForward2D(playerTarget, _asset.transform);
 
         while (ComputeDistance2D(_asset.transform, playerTarget) > .15f) {
             _cam.transform.forward = _vcam.transform.forward;            
@@ -832,19 +832,18 @@ public class PXController : MonoBehaviour {
         _playerRb.ResetInertiaTensor();
 
         _player.transform.position = new Vector3(playerTarget.transform.position.x, _player.transform.position.y, playerTarget.transform.position.z);
-        yield return null;        
+        yield return null;
 
         targetForward = ComputeForward2D(focusTarget, _player.transform);
-        Quaternion finalRotation = new Quaternion();
-        finalRotation.SetLookRotation(targetForward);
-        _asset.transform.rotation = finalRotation;
+        _asset.transform.forward = targetForward;
 
-        _forward.transform.forward = ComputeForward2D(_player.transform, _vcam.transform);
+        _forward.transform.forward = _cam.transform.forward;
+        //_forward.transform.forward = ComputeForward2D(_player.transform, _vcam.transform);
 
         yAxis = _forward.transform.rotation.eulerAngles.y;
-        xAxis = _cam.transform.rotation.eulerAngles.x;
+        xAxis = _cam.transform.rotation.x;
 
-        yield return new WaitWhile(() => onDialog);        
+        yield return new WaitWhile(() => onDialog);
 
         if (!onAction) {
             CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
