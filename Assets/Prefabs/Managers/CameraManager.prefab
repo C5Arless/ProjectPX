@@ -49,7 +49,7 @@ MonoBehaviour:
   m_ShowDebugText: 1
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 1
-  m_WorldUpOverride: {fileID: 0}
+  m_WorldUpOverride: {fileID: 2057777521354380511}
   m_UpdateMethod: 1
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_ShowDebugText: 0
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 1
-  m_WorldUpOverride: {fileID: 0}
+  m_WorldUpOverride: {fileID: 2057777521354380511}
   m_UpdateMethod: 1
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_ShowDebugText: 1
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 1
-  m_WorldUpOverride: {fileID: 0}
+  m_WorldUpOverride: {fileID: 2057777521354380511}
   m_UpdateMethod: 1
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
@@ -515,7 +515,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8171082787599860330}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.13553399, y: 0, z: 0, w: 0.9907727}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.01, y: 4.5009995, z: -11.66}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -524,7 +524,7 @@ Transform:
   - {fileID: 7952541953669143423}
   - {fileID: 1408670131913578565}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 15.579, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!81 &1585347027326134656
 AudioListener:
   m_ObjectHideFlags: 0
