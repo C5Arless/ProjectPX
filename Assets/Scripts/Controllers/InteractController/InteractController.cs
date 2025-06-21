@@ -30,7 +30,8 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
     private int pageNumber;
     private bool isInteracting;
-    private bool isBusy;    
+    private bool isBusy;
+    private bool canConfirm;
 
     public int EventIndex { get { return _eventIndex; } }
     public bool IsRepeatable { get { return _isRepeatable; } }
@@ -121,6 +122,8 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     }
 
     public void OnConfirm(InputAction.CallbackContext input) {
+        if (!canConfirm) { return; }
+
         if (input.ReadValue<float>() != 0f) {
             Interact();
         }
@@ -144,6 +147,8 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     public void Interact() {
         if (isBusy) { return; }
 
+        //canConfirm = false;
+
         if (isInteracting) {
             Continue();
         } else {
@@ -156,18 +161,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
             _popUp.SetActive(state);
         }
     }
-
-    /*
-    private void EvaluateInteraction() {
-        if (isInteracting) { return; }
-
-        if (hasTrigger) {
-            Interact();
-        } else {
-            _popUp.SetActive(true);
-        }
-    }
-    */
 
     private void Enter() {
         pageNumber = 1;
@@ -216,11 +209,15 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         GameBucket.Instance.GameCanvasHandler.DialogClear();
         GameBucket.Instance.GameCanvasHandler.DialogWrite(_DialogPages[pageNumber - 1].dialogIdx);
 
+        yield return null;
+
+        canConfirm = true;
         isBusy = false;
         yield break;
     }
 
     private IEnumerator EnterRoutine() {
+        canConfirm = false; 
         isBusy = true;
         yield return null;
 
@@ -232,6 +229,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
         GameBucket.Instance.GameCanvasHandler.DialogIn();
         yield return new WaitWhile(() => GameBucket.Instance.GameCanvasHandler.IsTransitioning);
+        canConfirm = true;
 
         GameBucket.Instance.GameCanvasHandler.DialogWrite(_DialogPages[pageNumber - 1].dialogIdx);
         isBusy = false;
@@ -239,6 +237,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     }
 
     private IEnumerator ExitRoutine() {
+        canConfirm = false;
         isBusy = true;
         GameBucket.Instance.PXController.InteractionExit();
         GameBucket.Instance.CompanionCtx.ExitTalkState();

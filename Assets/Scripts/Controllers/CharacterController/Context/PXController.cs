@@ -200,7 +200,7 @@ public class PXController : MonoBehaviour {
         EvaluateHealth();
 
         _forward.transform.position = _asset.transform.position;
-        _virtualCamera.transform.position = _asset.transform.position;
+        //_virtualCamera.transform.position = _asset.transform.position;
     }
 
     void FixedUpdate() {       
