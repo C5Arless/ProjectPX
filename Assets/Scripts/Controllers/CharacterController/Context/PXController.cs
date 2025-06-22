@@ -8,7 +8,7 @@ public class PXController : MonoBehaviour {
     //State reference
     BaseState _currentRootState;
     BaseState _currentSubState;
-    
+
     //Custom Components
     StateHandler _stateHandler;
     AnimHandler _animHandler;
@@ -16,8 +16,8 @@ public class PXController : MonoBehaviour {
     //Player references
     [SerializeField] GameObject _player;
     [SerializeField] GameObject _asset;
-    [SerializeField] GameObject _cam;
-    [SerializeField] GameObject _virtualCamera;
+    [SerializeField] GameObject _camHolder;
+    [SerializeField] CinemachineVirtualCamera _virtualCamera;
     [SerializeField] GameObject _forward;
     [SerializeField] GameObject _playerparent;
     [SerializeField] GameObject _head;
@@ -154,7 +154,7 @@ public class PXController : MonoBehaviour {
 
     public GameObject Player { get { return _player; } }
     public GameObject Asset { get { return _asset; } }
-    public GameObject Camera { get { return _cam; } }
+    public GameObject CameraHolder { get { return _camHolder; } }
     public GameObject PlayerForward { get { return _forward; } }
     public GameObject Head { get { return _head; } }
     public Rigidbody PlayerRb { get { return _playerRb; } }
@@ -548,16 +548,16 @@ public class PXController : MonoBehaviour {
 
         if (currentAngle > 1f) {
             Vector3 lerpForward = Vector3.Lerp(_forward.transform.forward, targetForward, 1f);
-            _cam.transform.forward = lerpForward;
+            _camHolder.transform.forward = lerpForward;
             _forward.transform.forward = lerpForward;            
 
         } else {
-            _cam.transform.forward = targetForward; 
+            _camHolder.transform.forward = targetForward; 
             _forward.transform.forward = targetForward;
 
             //BROKEN?
-            yaw = _cam.transform.rotation.eulerAngles.y;
-            pitch = _cam.transform.rotation.eulerAngles.x;        
+            yaw = _camHolder.transform.rotation.eulerAngles.y;
+            pitch = _camHolder.transform.rotation.eulerAngles.x;        
         }
     }
 
@@ -629,7 +629,7 @@ public class PXController : MonoBehaviour {
         yAxis = Mathf.Repeat(yAxis, 360);
         xAxis = Mathf.Clamp(xAxis, -30f, 60f);
 
-        _cam.transform.rotation = Quaternion.Euler(xAxis, yAxis, 0f);
+        _camHolder.transform.rotation = Quaternion.Euler(xAxis, yAxis, 0f);
         _forward.transform.rotation = Quaternion.Euler(0f, yAxis, 0f);
     }
 
@@ -807,12 +807,17 @@ public class PXController : MonoBehaviour {
     private IEnumerator DialogRoutine(Transform playerTarget, Transform focusTarget, GameObject _vcam) {
         CameraManager.Instance.SwitchGameVCamera(_vcam);
 
+        CinemachineCollider camCollider = _virtualCamera.GetComponent<CinemachineCollider>();
+
+        float damping = camCollider.m_Damping;
+        camCollider.m_Damping = 0f;
+
         yield return null;
 
         Vector3 targetForward = ComputeForward2D(playerTarget, _asset.transform);
 
         while (ComputeDistance2D(_asset.transform, playerTarget) > .15f) {
-            _cam.transform.forward = _vcam.transform.forward;            
+            _camHolder.transform.forward = _vcam.transform.forward;            
 
             targetForward = ComputeForward2D(playerTarget, _asset.transform); 
             _forward.transform.forward = targetForward;
@@ -836,13 +841,15 @@ public class PXController : MonoBehaviour {
         targetForward = ComputeForward2D(focusTarget, _player.transform);
         _asset.transform.forward = targetForward;
 
-        _forward.transform.forward = _cam.transform.forward;
+        _forward.transform.forward = _camHolder.transform.forward;
         //_forward.transform.forward = ComputeForward2D(_player.transform, _vcam.transform);
 
         yAxis = _forward.transform.rotation.eulerAngles.y;
-        xAxis = _cam.transform.rotation.x;
+        xAxis = _camHolder.transform.rotation.x;
 
         yield return new WaitWhile(() => onDialog);
+
+        camCollider.m_Damping = damping;
 
         if (!onAction) {
             CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);

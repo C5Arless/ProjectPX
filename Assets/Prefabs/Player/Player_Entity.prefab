@@ -633,8 +633,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _player: {fileID: 7894794411539438057}
   _asset: {fileID: 8975385871628143155}
-  _cam: {fileID: 654524014220426982}
-  _virtualCamera: {fileID: 6323615956022173221}
+  _camHolder: {fileID: 654524014220426982}
+  _virtualCamera: {fileID: 2824854319394522236}
   _forward: {fileID: 8730485733791130369}
   _playerparent: {fileID: 7584392840918931769}
   _head: {fileID: 2163599683422915163}

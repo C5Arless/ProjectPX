@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CinematicController : MonoBehaviour, IOrchestratedEvent {
@@ -144,7 +142,7 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
         shotNumber++;
         yield return null;
 
-        _cinematicShots[shotNumber - 1].Enter();        
+        _cinematicShots[shotNumber - 1].Enter();
 
         isBusy = false;
         yield break;
