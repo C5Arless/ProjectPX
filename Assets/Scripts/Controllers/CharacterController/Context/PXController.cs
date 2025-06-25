@@ -627,7 +627,7 @@ public class PXController : MonoBehaviour {
         xAxis -= targetX;
 
         yAxis = Mathf.Repeat(yAxis, 360);
-        xAxis = Mathf.Clamp(xAxis, -30f, 60f);
+        xAxis = Mathf.Clamp(xAxis, -30f, 50f);
 
         _camHolder.transform.rotation = Quaternion.Euler(xAxis, yAxis, 0f);
         _forward.transform.rotation = Quaternion.Euler(0f, yAxis, 0f);

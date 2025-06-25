@@ -20,10 +20,14 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
         //Update logic
         Ctx.IsGrounded = false;
 
+        /*
         if (Ctx.MoveInput != Vector2.zero) {
             Ctx.Player.transform.forward = Ctx.PlayerForward.transform.forward;
         }
-        
+        */
+
+        Ctx.Player.transform.forward = Ctx.PlayerForward.transform.forward;
+
         HandleWalk();
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
