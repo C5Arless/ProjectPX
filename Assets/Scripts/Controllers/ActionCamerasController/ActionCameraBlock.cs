@@ -7,12 +7,10 @@ using System.Threading;
 using UnityEditor;
 #endif
 
-public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent {
+public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigger {
     [SerializeField] GameObject _playerPos;
     [SerializeField] GameObject _actionVCamera;
-    //[SerializeField] GameObject _cameraPivot;
-    [SerializeField] bool lockPlayer;
-    //[SerializeField] bool hasFollow;
+    [SerializeField] bool lockPlayer;    
     [Space]
     [SerializeField] int eventIndex;
     [SerializeField] bool isRepeatable;
@@ -28,32 +26,18 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent {
 
     public EventPriority Priority { get { return priority; } }
 
-    private void OnTriggerEnter(Collider other) {
+    public void TriggerEnter(Collider other) {
         if (GameBucket.Instance.PXController.OnDialog) { return; }
         if (GameBucket.Instance.PXController.OnAction) { return; }
 
         if (other.tag == "Player") {
 
             GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
-
-            /*
-            onAction = true;
-
-            GameBucket.Instance.PXController.ActionCameraEnter();
-            CameraManager.Instance.SwitchGameVCamera(_actionVCamera);
             
-            if (lockPlayer) {
-                isLocked = true;
-                //TestTask();
-                StartCoroutine("LockPlayerPosition");
-            } else {
-                StartCoroutine("OnActionRoutine");
-            }
-            */
         }
     }
         
-    private void OnTriggerStay(Collider other) {
+    public void TriggerStay(Collider other) {
         if (GameBucket.Instance.PXController.OnDialog) { return; }
         if (GameBucket.Instance.PXController.OnAction) { return; }
         
@@ -62,7 +46,7 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent {
         }
     }    
 
-    private void OnTriggerExit(Collider other) {
+    public void TriggerExit(Collider other) {
         if (!onAction) { return; }
 
         if (GameBucket.Instance.PXController.OnDialog) { return; }
