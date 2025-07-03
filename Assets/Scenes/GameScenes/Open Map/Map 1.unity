@@ -21432,6 +21432,10 @@ PrefabInstance:
       propertyPath: hasTransition
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6802017204400486863, guid: 7aec31f59d246de42aaac1f4a19c3120, type: 3}
+      propertyPath: sceneNameDisplay
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7375883622800339922, guid: 7aec31f59d246de42aaac1f4a19c3120, type: 3}
       propertyPath: _eventIndex
       value: 200
@@ -29247,6 +29251,7 @@ MonoBehaviour:
   _speed: 16
   hasDolly: 1
   hasTransition: 1
+  sceneNameDisplay: 0
 --- !u!4 &1142377595
 Transform:
   m_ObjectHideFlags: 0
@@ -70175,6 +70180,7 @@ MonoBehaviour:
   _speed: 13
   hasDolly: 1
   hasTransition: 1
+  sceneNameDisplay: 0
 --- !u!1 &1452265011 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6528902819353335669, guid: 21bad670096adfd48af43b36f64dd688, type: 3}
@@ -76119,6 +76125,7 @@ MonoBehaviour:
   _speed: 15
   hasDolly: 1
   hasTransition: 1
+  sceneNameDisplay: 0
 --- !u!4 &1660897855
 Transform:
   m_ObjectHideFlags: 0

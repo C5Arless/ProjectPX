@@ -36,6 +36,12 @@ public class ScenesManager : MonoBehaviour {
         return globalPause;
     }
 
+    public int GetCurrentScene() {
+        int scene = SceneManager.GetActiveScene().buildIndex;        
+
+        return scene;
+    }
+
     public void StartGame() {
         if (paused) { return; }
 
@@ -164,6 +170,8 @@ public class ScenesManager : MonoBehaviour {
         StartCoroutine(TransitionOut(_fade, _fadeSpeed));
         yield return new WaitWhile(() => paused);        
 
+        GameBucket.Instance.GameCanvasHandler.ShowSceneName();
+
         globalPause = false;
         yield break;
     }
@@ -189,6 +197,8 @@ public class ScenesManager : MonoBehaviour {
         StartCoroutine(TransitionOut(_fade, _fadeSpeed));
         yield return new WaitWhile(() => paused);
 
+        GameBucket.Instance.GameCanvasHandler.ShowSceneName();
+
         globalPause = false;
         yield break;
     }
@@ -213,6 +223,8 @@ public class ScenesManager : MonoBehaviour {
         FireSoundTracks((Scenes)n_scene);
         StartCoroutine(TransitionOut(_fade, _fadeSpeed));
         yield return new WaitWhile(() => paused);
+
+        GameBucket.Instance.GameCanvasHandler.ShowSceneName();
 
         globalPause = false;
         InputManager.Instance.SetActionMap(currentActionMap);

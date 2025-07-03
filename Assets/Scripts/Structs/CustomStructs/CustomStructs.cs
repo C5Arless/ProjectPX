@@ -67,3 +67,7 @@ public class EventData {
 public class GameEventSaveData {
     public List<EventData> CompletedEvents = new List<EventData>();
 }
+
+public class DisplaySceneName {
+    public string[] Scenes = { "Main Menu", "The Lab", "Proving Ground", "Test 1 - Double Jump", "Test 2 - Dash", "Final Test" };
+}

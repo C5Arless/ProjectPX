@@ -12,6 +12,10 @@ public class GameCanvasHandler : MonoBehaviour {
     [SerializeField] Slider _lifeDisplay;
     [SerializeField] Image _lifeColor;
     [SerializeField] Image _lifeColorBg;
+    [Space]
+    [SerializeField] GameObject _SNDisplay;
+    [SerializeField] TMP_Text _SNText;
+    [SerializeField] Image _SNBg;
 
     public delegate void OnTransitionInDone();
     public OnTransitionInDone _onTransitionInDone;
@@ -19,6 +23,8 @@ public class GameCanvasHandler : MonoBehaviour {
     private bool _isBusy;
     private bool _isTyping;
     private bool _isTransitioning;
+
+    private float SNOpacity;
 
     public bool IsTransitioning { get { return _isTransitioning; } }
     public bool IsTyping { get { return _isTyping; } }
@@ -31,6 +37,23 @@ public class GameCanvasHandler : MonoBehaviour {
         _onTransitionInDone += () => { };
 
         InitializeRenderCamera();
+    }
+
+    public void ShowSceneName() {
+        if (_isBusy) { return; }
+
+        _isBusy = true;
+
+        SNOpacity = 0f;
+        _SNText.alpha = SNOpacity;
+        _SNBg.material.SetFloat("_Alpha", SNOpacity);
+
+        DisplaySceneName DisplayName = new DisplaySceneName(); 
+        _SNText.text = DisplayName.Scenes[ScenesManager.Instance.GetCurrentScene()];
+
+        _SNDisplay.SetActive(true);
+
+        StartCoroutine(IterateSceneNameOpacity());
     }
 
     public void ShowUI() {
@@ -129,6 +152,40 @@ public class GameCanvasHandler : MonoBehaviour {
 
     private void InitializeRenderCamera() {
         _dialogWindow.GetComponentInParent<Canvas>().worldCamera = CameraManager.Instance.GameBrain.GetComponent<Camera>();
+    }
+
+    private IEnumerator IterateSceneNameOpacity() {
+        float increment = .05f;
+
+        yield return new WaitForSeconds(.5f);
+
+        while (SNOpacity < 1f) {
+            SNOpacity += increment;
+            _SNText.alpha = SNOpacity;
+            _SNBg.material.SetFloat("_Alpha", SNOpacity);
+            yield return null;
+        }
+
+        SNOpacity = 1f;
+        _SNText.alpha = SNOpacity;
+        _SNBg.material.SetFloat("_Alpha", SNOpacity);
+
+        yield return new WaitForSeconds(3f);
+
+        while (SNOpacity > 0f) {
+            SNOpacity -= increment;
+            _SNText.alpha = SNOpacity;
+            _SNBg.material.SetFloat("_Alpha", SNOpacity);
+            yield return null;
+        }
+
+        SNOpacity = 0f;
+        _SNText.alpha = SNOpacity;
+        _SNBg.material.SetFloat("_Alpha", SNOpacity);
+
+        _SNText.text = "";
+
+        yield break;
     }
 
     private IEnumerator IterateUIPosition() {        

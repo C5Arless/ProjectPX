@@ -229,15 +229,15 @@ public class PXController : MonoBehaviour {
         }
     }
 
-    public void OnJump(InputAction.CallbackContext input) {
-        if (onInteract) { return; }
-
+    public void OnJump(InputAction.CallbackContext input) {        
         if (input.ReadValue<float>() != 0f) {
             SetUpJump();
         }
     }
 
     public void OnAttack(InputAction.CallbackContext input) {
+        if (onInteract) { return; }
+
         if (input.ReadValue<float>() != 0f) {
             SetUpAttack();
         }
@@ -567,55 +567,12 @@ public class PXController : MonoBehaviour {
         }        
     }
 
-    /*
     private void EvaluateCamera(Vector2 camInput) {
         if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
-            UpdateFreeLookMouseCamera(_cam, _forward, camInput, _optionsInfo.MouseSens);
-        } else {
-            UpdateFreeLookAnalogCamera(_cam, _forward, camInput, _optionsInfo.PadSens);
-        }
-    }
-
-    private void UpdateFreeLookAnalogCamera(GameObject cam, GameObject forward, Vector2 input, float sens) {
-        CalculateCamMotion(input, sens);
-        CamRotation(cam, forward);        
-    }
-
-    private void UpdateFreeLookMouseCamera(GameObject cam, GameObject forward, Vector2 input, float sens) {
-        if (input.sqrMagnitude > .005f) {
-            CalculateCamMotion(input, sens);
-            CamRotation(cam, forward);
-        }
-    }
-
-    private void CalculateCamMotion(Vector2 mouseInput, float sens) {
-        yAxis += mouseInput.x * sens * Time.deltaTime;
-        xAxis -= mouseInput.y * sens * Time.deltaTime;        
-        xAxis = Mathf.Clamp(xAxis, -30f, 60f);
-    }
-
-    private void CamRotation(GameObject cam, GameObject forward) {
-        cam.transform.rotation = Quaternion.Euler(xAxis, yAxis, 0f);        
-        forward.transform.rotation = Quaternion.Euler(0f, yAxis, 0f);
-    }
-    */
-
-    private void EvaluateCamera(Vector2 camInput) {
-        if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
-            UpdateFreeLookMouseCamera(camInput, _optionsInfo.MouseSens);
+            CalculateCamMotion(camInput, _optionsInfo.MouseSens);
         }
         else {
-            UpdateFreeLookAnalogCamera(camInput, _optionsInfo.PadSens);
-        }
-    }
-
-    private void UpdateFreeLookAnalogCamera(Vector2 input, float sens) {
-        CalculateCamMotion(input, sens);
-    }
-
-    private void UpdateFreeLookMouseCamera(Vector2 input, float sens) {
-        if (input.sqrMagnitude > .005f) {
-            CalculateCamMotion(input, sens);                     
+            CalculateCamMotion(camInput, _optionsInfo.PadSens);
         }
     }
 

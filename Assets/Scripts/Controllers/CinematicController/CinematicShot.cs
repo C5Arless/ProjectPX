@@ -17,7 +17,7 @@ public class CinematicShot : MonoBehaviour {
     [SerializeField] float _shotLenght;
     [SerializeField][Range(.1f, 50f)] float _speed;
     [SerializeField] bool hasDolly;
-    [SerializeField] bool hasTransition;
+    [SerializeField] bool hasTransition;    
 
     private CinematicController _controller;
 

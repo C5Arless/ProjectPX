@@ -111,8 +111,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         if (!GameBucket.Instance.PXController.OnInteract) { return; }
 
         if (input.ReadValue<float>() != 0f) {
-            //Interact();
-
             if (!hasTrigger) {
                 GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
             }
