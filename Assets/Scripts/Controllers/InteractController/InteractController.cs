@@ -39,11 +39,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
     private void Start() {
         InitializeActions();
-        //SubscribeActions();
-    }
-
-    private void OnEnable() {
-        //SubscribeActions();
     }
 
     private void OnDisable() {
@@ -54,28 +49,18 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         UnsubscribeActions();
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if (GameBucket.Instance.PXController.OnDialog) { return; }
-
+    private void OnTriggerEnter(Collider other) {        
         if (other.tag == "Player") {
             SubscribeActions();
-            SwitchPopUp(true);
 
             if (hasTrigger) {
                 GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
+            } else {
+                SwitchPopUp(true);
+                GameBucket.Instance.PXController.OnInteract = true;
             }
         }
     }
-
-    /*
-    private void OnTriggerStay(Collider other) {
-        if (GameBucket.Instance.PXController.OnDialog) { return; }
-
-        if (other.tag == "Player") {
-            //EvaluateInteraction();
-        }
-    }
-    */
 
     private void OnTriggerExit(Collider other) {
         if (hasTrigger) { return; }
@@ -83,17 +68,21 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         if (other.tag == "Player") {
             UnsubscribeActions();
             SwitchPopUp(false);
+            GameBucket.Instance.PXController.OnInteract = false;
         }
     }
 
     public async Task FireEvent() {
         if (isInteracting) { return; }
-        
+
+        GameBucket.Instance.PXController.OnInteract = true;
         Interact();
 
         while (isInteracting) {
             await Task.Yield();
         }
+
+        GameBucket.Instance.PXController.OnInteract = false;
 
         await Task.Yield();
     }

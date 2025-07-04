@@ -362,9 +362,12 @@ public class PXController : MonoBehaviour {
         if (other.tag == "PowerUps") {
             InitializePowerUps();
         }
+
+        /*
         if (other.tag == "Interact") {
             onInteract = true;
         }
+        */
     }
 
     private void OnTriggerExit(Collider other) {
@@ -372,9 +375,12 @@ public class PXController : MonoBehaviour {
             onPlatform = false;
             _playerparent.transform.SetParent(null); //Platform fix (2)
         }
+
+        /*
         if (other.tag == "Interact") {
             onInteract = false;
         }
+        */
     }
 
     private void OnCollisionEnter(Collision collision) {

@@ -25,11 +25,11 @@ public class EventsOrchestrator : MonoBehaviour {
     public void EnqueueEvent(IOrchestratedEvent target) {
         if (DataManager.Instance.HasEventRun(target.EventIndex)) {
             DequeueEvent(target);
-        } 
+        }
 
         if (!eventsQueue.Contains(target)) {
             Debug.Log(target + " event enqueued");
-            eventsQueue.Add(target); 
+            eventsQueue.Add(target);
         }
 
         if (currentTask == null) {            

@@ -13,7 +13,7 @@
             "IDX": 1,
             "Tag": "Companion",
             "Name": "???",
-            "Mood": "Default",
+            "Mood": "Excited",
             "Line": "Welcome! I know you are a bit confused right now, but hear me out",
             "Options": null,
             "NEXT": -1
@@ -49,7 +49,7 @@
             "IDX": 5,
             "Tag": "Companion",
             "Name": "FX - 41",
-            "Mood": "Default",
+            "Mood": "Scared",
             "Line": "You know collisions aren't a joke...",
             "Options": null,
             "NEXT": -1
@@ -58,7 +58,7 @@
             "IDX": 6,
             "Tag": "Companion",
             "Name": "FX - 41",
-            "Mood": "Default",
+            "Mood": "Excited",
             "Line": "Luckily, physics got our back!",
             "Options": null,
             "NEXT": -1
@@ -85,8 +85,35 @@
             "IDX": 9,
             "Tag": "Companion",
             "Name": "FX - 41",
-            "Mood": "Default",
+            "Mood": "Excited",
             "Line": "That's you! You've been designed thanks to a powerful 3D modeling tool called Blender!",
+            "Options": null,
+            "NEXT": -1
+        },
+        {
+            "IDX": 10,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Excited",
+            "Line": "These are the Proving Grounds!",
+            "Options": null,
+            "NEXT": -1
+        },
+        {
+            "IDX": 11,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Default",
+            "Line": "While you roam around, you might stumble upon 3 warps, each one will challenge you with a different scenario",
+            "Options": null,
+            "NEXT": -1
+        },
+        {
+            "IDX": 12,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Default",
+            "Line": "Just be careful to the enemies you will find around!",
             "Options": null,
             "NEXT": -1
         }

@@ -51336,7 +51336,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5660986887816884515, guid: 7aec31f59d246de42aaac1f4a19c3120, type: 3}
       propertyPath: m_Name
-      value: CinematicTrigger (2)
+      value: EnterCinematic
       objectReference: {fileID: 0}
     - target: {fileID: 5660986887816884515, guid: 7aec31f59d246de42aaac1f4a19c3120, type: 3}
       propertyPath: m_IsActive
@@ -51605,7 +51605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5660986887816884515, guid: 7aec31f59d246de42aaac1f4a19c3120, type: 3}
       propertyPath: m_Name
-      value: CinematicTrigger (1)
+      value: ExitCinematic
       objectReference: {fileID: 0}
     - target: {fileID: 5660986887816884515, guid: 7aec31f59d246de42aaac1f4a19c3120, type: 3}
       propertyPath: m_IsActive

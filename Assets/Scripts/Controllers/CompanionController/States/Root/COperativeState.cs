@@ -5,7 +5,7 @@ public class COperativeState : CBaseState {
     public override void EnterState() {
         //Enter logic
 
-        Ctx.InvokeRepeating("CheckStuckBehaviour", 3f, 3f);
+        //Ctx.InvokeRepeating("CheckStuckBehaviour", 3f, 3f);
 
         InitializeContext();
     }
@@ -29,7 +29,7 @@ public class COperativeState : CBaseState {
     }
     public override void ExitState() {
         //Exit logic
-        Ctx.CancelInvoke("CheckStuckBehaviour");
+        //Ctx.CancelInvoke("CheckStuckBehaviour");
     }
     public override void CheckSwitchStates() {
         //Switch logic
