@@ -194,6 +194,7 @@ public class MenuController : MonoBehaviour {
             _canvasHandler.SwitchUIMode(mode);
 
             CameraManager.Instance.PauseOut();
+            AudioManager.Instance.OnPauseEnterFilter();
             Cursor.lockState = CursorLockMode.None;
         }
     }
@@ -202,6 +203,7 @@ public class MenuController : MonoBehaviour {
         if (_UIinfo.UIMode != UIMode.Pause) { return; }
 
         if (input.phase == InputActionPhase.Started) {
+            AudioManager.Instance.OnPauseExitFilter();
             ResumeGameplay();
         }
     }

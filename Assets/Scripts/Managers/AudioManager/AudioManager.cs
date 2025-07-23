@@ -17,6 +17,8 @@ public class AudioManager : MonoBehaviour {
 
     [SerializeField] OptionsInfo _currentInfo;
 
+    [SerializeField] AudioLowPassFilter _lowPassFilter;
+
     private AudioSource _currentMusicSource;
     private PlayableDirector _currentPlaybackTrack;
 
@@ -33,6 +35,14 @@ public class AudioManager : MonoBehaviour {
     private void Start() {
         _currentMusicSource = MusicSource.GetComponent<AudioSource>();
         _currentPlaybackTrack = MusicSource.GetComponent<PlayableDirector>();
+    }
+
+    public void OnPauseEnterFilter() {
+        StartCoroutine(PauseEnterRoutine());
+    }
+
+    public void OnPauseExitFilter() {
+        StartCoroutine(PauseExitRoutine());
     }
 
     public void PlayKeyboardSound() {
@@ -331,6 +341,38 @@ public class AudioManager : MonoBehaviour {
 
         _currentPlaybackTrack.Stop();
         _currentMusicSource.Stop();
+        yield break;
+    }
+
+    private IEnumerator PauseEnterRoutine() {
+        if (_musicPlaying) { 
+            while (_currentMusicSource.volume > .6f) {
+                _currentMusicSource.volume -= .1f;
+                _lowPassFilter.cutoffFrequency -= 4750f;
+                yield return null;
+            }
+
+            _currentMusicSource.volume = .6f;
+            _lowPassFilter.cutoffFrequency = 3000f;
+
+        }
+
+        yield break;
+    }
+
+    private IEnumerator PauseExitRoutine() {
+        if (_musicPlaying) {
+            while (_currentMusicSource.volume < 1f) {
+                _currentMusicSource.volume += .1f;
+                _lowPassFilter.cutoffFrequency += 4750f;
+                yield return null;
+            }
+
+            _currentMusicSource.volume = 1f;
+            _lowPassFilter.cutoffFrequency = 22000f;
+
+        }
+
         yield break;
     }
 }
