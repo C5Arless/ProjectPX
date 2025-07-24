@@ -236,6 +236,7 @@ public class MenuController : MonoBehaviour {
     public void ReturnToMainMenu() {
         ScenesManager.Instance.ReturnToMainMenu();
         DataManager.Instance.RefreshData();
+        AudioManager.Instance.OnPauseExitFilter();
 
         UIMode mode = UIMode.MainMenu;
         _canvasHandler.SwitchUIMode(mode);
