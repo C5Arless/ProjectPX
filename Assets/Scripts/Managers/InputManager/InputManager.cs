@@ -60,7 +60,11 @@ public class InputManager : MonoBehaviour {
     }    
 
     public IEnumerator EvaluateActionMap(string target) {
-        yield return new WaitWhile(() => CameraManager.Instance.GameBrain.GetComponent<CinemachineBrain>().IsBlending);
+        if (CameraManager.Instance != null) {
+            yield return new WaitWhile(() => CameraManager.Instance.GameBrain.GetComponent<CinemachineBrain>().IsBlending);
+        }
+        else yield return null;
+
 
         playerInput.SwitchCurrentActionMap("Disabled");
         _currentActionMap = "Disabled";

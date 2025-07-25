@@ -35,6 +35,13 @@ public class CameraManager : MonoBehaviour {
         return gameCamera;
     }
 
+    public void InitializeDebugMode() {
+        currentBrain = gameBrain;
+        currentBrain.SetActive(true);
+
+        mode = VCameraMode.GameVCameras;
+    }
+
     public void InitializeCameras() {
         try {
             currentMenuVCamera = menuVCameras[(int)MenuVCameras.MainScreen].gameObject;
@@ -42,7 +49,7 @@ public class CameraManager : MonoBehaviour {
 
             currentBrain = menuBrain;
             currentBrain.SetActive(true);
-
+            
             mode = VCameraMode.MenuVCameras;
         }
         catch {
@@ -95,7 +102,7 @@ public class CameraManager : MonoBehaviour {
             try {
                 currentGameVCamera.SetActive(false);
             } catch {
-                //
+                Debug.Log("Current game camera is null!");
             }
 
             currentGameVCamera = target;

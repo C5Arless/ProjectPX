@@ -18,8 +18,7 @@ public class MenuController : MonoBehaviour {
     private int currentSlot = 0;
     private int selectedSlot = 0;    
 
-    private InputAction _navigateAction;
-    private InputAction _submitAction;
+    private InputAction _navigateAction;    
     private InputAction _saveAction;
     private InputAction _quitAction;
     private InputAction _cancelAction;
@@ -104,8 +103,7 @@ public class MenuController : MonoBehaviour {
 
     private void InitializeActions() {
         //UI Actions
-        _navigateAction = InputManager.Instance.GetPlayerInput().actions["Navigate"];
-        _submitAction = InputManager.Instance.GetPlayerInput().actions["Submit"];
+        _navigateAction = InputManager.Instance.GetPlayerInput().actions["Navigate"];       
         _saveAction = InputManager.Instance.GetPlayerInput().actions["Save"];
         _quitAction = InputManager.Instance.GetPlayerInput().actions["Quit"];
         _cancelAction = InputManager.Instance.GetPlayerInput().actions["Cancel"];

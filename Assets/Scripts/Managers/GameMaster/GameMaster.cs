@@ -9,7 +9,6 @@ public class GameMaster : MonoBehaviour {
     private bool gameStarted;
 
     private void Awake() {
-
         if (Instance == null) {
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -42,9 +41,9 @@ public class GameMaster : MonoBehaviour {
 
         VideoManager.Instance.InitializeVideoSettings();
         yield return null;
-
+        
         ScenesManager.Instance.MainMenu();
-        yield return null;
+        yield return null;        
 
         yield break;
     }
