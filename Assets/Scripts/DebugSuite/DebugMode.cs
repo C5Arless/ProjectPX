@@ -109,11 +109,8 @@ public class DebugMode : MonoBehaviour {
     private IEnumerator DeployGameMaster() {
         Instantiate(_gameMaster);
         yield return null;
-
-        gameObject.SetActive(false);
-        yield return null;
-
-        Destroy(gameObject.GetComponentInParent<GameObject>());
+       
+        Destroy(gameObject);
         yield break;
     }
 
