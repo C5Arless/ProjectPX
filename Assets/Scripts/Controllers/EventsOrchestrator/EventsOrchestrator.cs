@@ -40,16 +40,7 @@ public class EventsOrchestrator : MonoBehaviour {
             Debug.Log(currentEvent + " event canceled");
             currentEvent.CancelEvent();
         }
-
-    }
-
-    public void FlushQueue() {
-        eventsQueue.Clear();
-        currentTask = null;
-
-        if (isRunning) {
-            isRunning = false;
-        }
+        
     }
 
     public void DequeueEvent(IOrchestratedEvent target) {
@@ -61,6 +52,21 @@ public class EventsOrchestrator : MonoBehaviour {
             }
 
             eventsQueue.Remove(target);
+        }
+    }
+
+    public void FireAsyncEvent(IOrchestratedEvent _evt) {
+        if (DataManager.Instance.HasEventRun(_evt.EventIndex)) { return; } 
+
+        Task asyncEvent = RunAsyncEvent(_evt);
+    }
+
+    public void FlushQueue() {
+        eventsQueue.Clear();
+        currentTask = null;
+
+        if (isRunning) {
+            isRunning = false;
         }
     }
 
@@ -110,6 +116,17 @@ public class EventsOrchestrator : MonoBehaviour {
 
         isRunning = false;
         currentTask = null;
+    }
+
+    private async Task RunAsyncEvent(IOrchestratedEvent _evt) {
+        Debug.Log("Event running!");
+        await Task.Yield();
+
+        await _evt.FireEvent();
+
+        if (!_evt.IsRepeatable) {
+            DataManager.Instance.RegisterEvent(_evt.EventIndex);
+        }
     }
 
     private IOrchestratedEvent GetEvent() {
