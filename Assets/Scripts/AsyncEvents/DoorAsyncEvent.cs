@@ -21,20 +21,20 @@ public class DoorAsyncEvent : MonoBehaviour, IOrchestratedEvent {
 
     public EventPriority Priority { get { return priority; } }
 
-    public void CancelEvent() {
-        throw new System.NotImplementedException();
-    }
-
-    public void DestroyEvent() {
-        throw new System.NotImplementedException();
-    }
-
     private void OnTriggerEnter(Collider other) {
         if (isRunning) { return; }
 
         if (other.tag == "Player") {
             GameBucket.Instance.EventsOrchestrator.FireAsyncEvent(this);
         }
+    }
+
+    public void CancelEvent() {
+        throw new System.NotImplementedException();
+    }
+
+    public void DestroyEvent() {
+        throw new System.NotImplementedException();
     }
 
     public async Task FireEvent() {
@@ -44,7 +44,7 @@ public class DoorAsyncEvent : MonoBehaviour, IOrchestratedEvent {
             Vector3 currentScale = _doorL.transform.localScale;
 
             currentScale.x += speed * Time.deltaTime;
-
+            
             _doorL.transform.localScale = currentScale;
             _doorR.transform.localScale = currentScale;
 
