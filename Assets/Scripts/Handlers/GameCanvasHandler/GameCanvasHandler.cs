@@ -184,7 +184,9 @@ public class GameCanvasHandler : MonoBehaviour {
         _SNBg.material.SetFloat("_Alpha", SNOpacity);
 
         _SNText.text = "";
+        yield return null;
 
+        _SNDisplay.SetActive(false);
         yield break;
     }
 
