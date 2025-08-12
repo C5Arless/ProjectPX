@@ -200,8 +200,7 @@ public class MenuController : MonoBehaviour {
     public void OnResumeCamera(InputAction.CallbackContext input) {
         if (_UIinfo.UIMode != UIMode.Pause) { return; }
 
-        if (input.phase == InputActionPhase.Started) {
-            AudioManager.Instance.OnPauseExitFilter();
+        if (input.phase == InputActionPhase.Started) {            
             ResumeGameplay();
         }
     }
@@ -286,6 +285,7 @@ public class MenuController : MonoBehaviour {
     }
 
     public void ResumeGameplay() {
+        AudioManager.Instance.OnPauseExitFilter();
         CameraManager.Instance.PauseIn();
         Cursor.lockState = CursorLockMode.Locked;
     }    
