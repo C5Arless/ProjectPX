@@ -116,6 +116,24 @@
             "Line": "Just be careful to the enemies you will find around!",
             "Options": null,
             "NEXT": -1
+        },
+		{
+            "IDX": 13,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Excited",
+            "Line": "This is a Power Up! You can now DOUBLE JUMP!",
+            "Options": null,
+            "NEXT": -1
+        },
+		{
+            "IDX": 14,
+            "Tag": "Companion",
+            "Name": "FX - 41",
+            "Mood": "Excited",
+            "Line": "Press the Jump button again while mid-air and you'll perform a DOUBLE JUMP!",
+            "Options": null,
+            "NEXT": -1
         }
     ]
 }
