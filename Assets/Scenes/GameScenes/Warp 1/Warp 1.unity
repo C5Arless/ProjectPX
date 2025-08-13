@@ -16174,6 +16174,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1706206690}
+    - target: {fileID: 701368122032201989, guid: d2c20be65fbc0fa4688aa34ef0a72135, type: 3}
+      propertyPath: m_Radius
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2198811328616113732, guid: d2c20be65fbc0fa4688aa34ef0a72135, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -16247,6 +16251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c51461f10062604080cb51b0e87d5ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _event: {fileID: 0}
   _playerInfo: {fileID: 11400000, guid: ab9b38bfd6de9aa41bf77144a6371ac0, type: 2}
   _pu: 1
 --- !u!4 &2949359334249233027 stripped

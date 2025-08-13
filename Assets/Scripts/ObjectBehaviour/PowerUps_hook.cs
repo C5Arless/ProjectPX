@@ -1,12 +1,13 @@
 using UnityEngine;
 
-public class PowerUps_hook : MonoBehaviour
-{
+public class PowerUps_hook : MonoBehaviour {
+    [SerializeField] GameObject _event;
     [SerializeField] PlayerInfo _playerInfo;
     [SerializeField] PowerUps _pu;
 
     private void Awake() {
         if (_playerInfo.PowerUps >= (int)_pu) {
+            Destroy(_event);
             Destroy(gameObject);
         }
     }
@@ -14,8 +15,17 @@ public class PowerUps_hook : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if (other.tag != "Player") { return; }
 
-        _playerInfo.PowerUps++;        
+        DeployEvent();
+    }
+
+    private void DeployEvent() {
+        ApplyPowerUp();
+        _event.SetActive(true);
 
         Destroy(gameObject);
+    }
+
+    private void ApplyPowerUp() {
+        _playerInfo.PowerUps++;
     }
 }
