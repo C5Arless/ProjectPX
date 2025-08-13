@@ -85,6 +85,7 @@ public class PXController : MonoBehaviour {
 
     private float xAxis;
     private float yAxis;
+    private const float lerpAxisSpeed = .5f;
 
     private float gravity = 9.81f;
 
@@ -563,14 +564,33 @@ public class PXController : MonoBehaviour {
 
     private void EvaluateCamera(Vector2 camInput) {
         if (InputManager.Instance.GetPlayerInput().currentControlScheme == "Keyboard&Mouse") {
-            CalculateCamMotion(camInput, _optionsInfo.MouseSens);
+            CalculateMouseCamMotion(camInput, _optionsInfo.MouseSens);
         }
         else {
-            CalculateCamMotion(camInput, _optionsInfo.PadSens);
+            CalculatePadCamMotion(camInput, _optionsInfo.PadSens);
         }
     }
 
-    private void CalculateCamMotion(Vector2 mouseInput, float sens) {
+    private void CalculateMouseCamMotion(Vector2 mouseInput, float sens) {
+        yAxis = _forward.transform.rotation.eulerAngles.y;        
+
+        float targetY = mouseInput.x * sens * Mathf.PI * Time.deltaTime;
+        float targetX = mouseInput.y * sens * Mathf.PI * Time.deltaTime;
+
+        yAxis += targetY;
+
+        xAxis -= targetX;
+        xAxis = Mathf.Clamp(xAxis, -30f, 50f);
+
+        float lerpY = _forward.transform.rotation.eulerAngles.y;       
+
+        lerpY = Mathf.LerpAngle(lerpY, yAxis, lerpAxisSpeed);        
+
+        _camHolder.transform.rotation = Quaternion.Euler(xAxis, lerpY, 0f);
+        _forward.transform.rotation = Quaternion.Euler(0f, lerpY, 0f);
+    }
+
+    private void CalculatePadCamMotion(Vector2 mouseInput, float sens) {
         float targetY = mouseInput.x * sens * Mathf.PI * Time.deltaTime;
         float targetX = mouseInput.y * sens * Mathf.PI * Time.deltaTime;
 

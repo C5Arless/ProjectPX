@@ -81,6 +81,7 @@ public class DebugMode : MonoBehaviour {
     private void DeployGame() {
         if (isRunning) { return; }
 
+        UnsubscribeCallbacks();
         StartCoroutine(DeployGameMaster());
     }
 
