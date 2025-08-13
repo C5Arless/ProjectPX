@@ -542,17 +542,16 @@ public class PXController : MonoBehaviour {
         float currentAngle = Vector3.Angle(_forward.transform.forward, targetForward);
 
         if (currentAngle > 1f) {
-            Vector3 lerpForward = Vector3.Lerp(_forward.transform.forward, targetForward, 1f);
+            Vector3 lerpForward = Vector3.Lerp(_forward.transform.forward, targetForward, .05f);
             _camHolder.transform.forward = lerpForward;
             _forward.transform.forward = lerpForward;            
 
         } else {
             _camHolder.transform.forward = targetForward; 
             _forward.transform.forward = targetForward;
-
-            //BROKEN?
-            yaw = _camHolder.transform.rotation.eulerAngles.y;
-            pitch = _camHolder.transform.rotation.eulerAngles.x;        
+            
+            yAxis = _camHolder.transform.rotation.eulerAngles.y;
+            xAxis = _camHolder.transform.rotation.x;        
         }
     }
 
