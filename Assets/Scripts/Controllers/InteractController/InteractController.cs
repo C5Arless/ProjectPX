@@ -33,6 +33,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     private bool isBusy;
     private bool canConfirm;
 
+    public bool IsInteracting { get { return isInteracting; } }
     public int EventIndex { get { return _eventIndex; } }
     public bool IsRepeatable { get { return _isRepeatable; } }
     public EventPriority Priority { get { return _eventPriority; } }

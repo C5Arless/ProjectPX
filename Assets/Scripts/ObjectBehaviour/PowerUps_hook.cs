@@ -1,9 +1,13 @@
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class PowerUps_hook : MonoBehaviour {
     [SerializeField] GameObject _event;
     [SerializeField] PlayerInfo _playerInfo;
     [SerializeField] PowerUps _pu;
+
+    private Task _deployTask;
 
     private void Awake() {
         if (_playerInfo.PowerUps >= (int)_pu) {
@@ -20,12 +24,22 @@ public class PowerUps_hook : MonoBehaviour {
 
     private void DeployEvent() {
         ApplyPowerUp();
-        _event.SetActive(true);
 
-        Destroy(gameObject);
+        _deployTask = DeployTask();        
     }
 
     private void ApplyPowerUp() {
         _playerInfo.PowerUps++;
+    }
+
+    private async Task DeployTask() {
+        _event.SetActive(true);
+        await Task.Yield();
+
+        await await GameBucket.Instance.EventsOrchestrator.GetCurrentEventTask();
+
+        await Task.Yield();
+
+        Destroy(gameObject);
     }
 }

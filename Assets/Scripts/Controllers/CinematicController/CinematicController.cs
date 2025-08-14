@@ -122,19 +122,8 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
         StartCoroutine(IterateShot());
     }
 
-    private void Exit() {        
-        GameBucket.Instance.PXController.InteractionExit();
-        GameBucket.Instance.CompanionCtx.ExitTalkState();
-        
-        isInteracting = false;
-
-        if (_cinematicShots[shotNumber - 1].HasTransition) {
-            StartCoroutine("FrameOut");
-        }
-
-        if (_destroyWhenDone) {
-            Destroy(gameObject);
-        }
+    private void Exit() {
+        StartCoroutine(ExitRoutine());
     }
 
     private IEnumerator IterateShot() {
@@ -176,6 +165,27 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
         }
 
         _cinematicFrame.SetFloat("_Transition", 0f);
+
+        yield break;
+    }
+
+    private IEnumerator ExitRoutine() {
+        isInteracting = false;
+        yield return null;
+
+        GameBucket.Instance.PXController.InteractionExit();
+        GameBucket.Instance.CompanionCtx.ExitTalkState();
+        yield return null;
+
+        if (_cinematicShots[shotNumber - 1].HasTransition) {
+            StartCoroutine("FrameOut");
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        if (_destroyWhenDone) {
+            Destroy(gameObject);
+        }
 
         yield break;
     }

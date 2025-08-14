@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class WarpController : MonoBehaviour {
@@ -9,12 +10,15 @@ public class WarpController : MonoBehaviour {
     private CinematicController _enterCtx;
     private CinematicController _exitCtx;
 
+    private Task _switchTask;
+
     private bool _state;
 
     private void Start() {
         RetrieveControllers();
 
-        StartCoroutine(InitializeSwitch());
+        _switchTask = SwitchTask();
+        //StartCoroutine(InitializeSwitch());
     }
 
     private void RetrieveControllers() {
@@ -41,6 +45,14 @@ public class WarpController : MonoBehaviour {
         }
     }
     
+    private async Task SwitchTask() {
+        await Task.Yield();        
+        await await GameBucket.Instance.EventsOrchestrator.GetCurrentEventTask();
+
+        SwitchToEnter();
+        await Task.Yield();
+    }
+
     private IEnumerator InitializeSwitch() {
         while (GameBucket.Instance.PXController == null) {
             yield return null;
