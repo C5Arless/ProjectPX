@@ -29,7 +29,7 @@ public class PowerUps_hook : MonoBehaviour {
     }
 
     private void ApplyPowerUp() {
-        _playerInfo.PowerUps++;
+        _playerInfo.PowerUps = (int)_pu;
     }
 
     private async Task DeployTask() {
