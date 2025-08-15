@@ -14,9 +14,11 @@ public class AirborneState : BaseState, IContextInit, IPhysics {
     public override void UpdateState() {
         //Update logic
 
+        /*
         if (!Ctx.IsAttacking && !Ctx.IsDashing && !Ctx.IsJumping) {
             Ctx.IsFalling = true;
         }
+        */
 
         if (!Ctx.IsDashing || !Ctx.IsAttacking) {
             HandleGravity(Ctx.PlayerRb);

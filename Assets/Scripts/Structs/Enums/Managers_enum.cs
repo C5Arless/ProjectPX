@@ -79,6 +79,7 @@ public enum AnimatorSignal {
     dashSig = 3,
     k_attackSig = 4,
     s_dashSig = 5,
+    jumpStartSig = 6
 }
 
 public enum MainCanvasButtons {

@@ -230,8 +230,11 @@ public class PXController : MonoBehaviour {
         }
     }
 
-    public void OnJump(InputAction.CallbackContext input) {        
+    public void OnJump(InputAction.CallbackContext input) {
+        if (!canJump) { return; }
+
         if (input.ReadValue<float>() != 0f) {
+            //jumpInput = true;
             SetUpJump();
         }
     }
@@ -401,9 +404,12 @@ public class PXController : MonoBehaviour {
     private void SetUpJump() {
         if (attackInput || dashInput) { return; }
         
-        if (!jumpInput && jumpCount > 0) {
+        jumpInput = true;
+
+        if (jumpCount > 0) {
             SetJumpState();
         } else {
+            jumpInput = false;
             return;
         }
     }
@@ -431,10 +437,14 @@ public class PXController : MonoBehaviour {
     }
 
     private void SetJumpState() {
-        if (jumpCount <= 0 || !canJump || isDamaged) { return; }
+        if (!canJump || isDamaged) {
+            //jumpInput = false;
+            return; 
+        }
 
-        jumpInput = true;
-        isJumping = true;                
+        canJump = false;
+        //jumpInput = false;
+        isJumping = true;             
     }
 
     private void SetDashState() {
@@ -449,7 +459,10 @@ public class PXController : MonoBehaviour {
 
     private void SetAttackState() {
         if (!canAttack || isDashing) { return; }
-        
+
+        //Testing
+        //Time.timeScale = 0.1f;
+
         if (!isDamaged) {
             attackInput = true;
             isAttacking = true;
@@ -658,15 +671,26 @@ public class PXController : MonoBehaviour {
 
                     break;
                 }
+            case (int)AnimatorSignal.jumpStartSig: {
+                    JumpStartSignal();
+
+                    break;
+                }
             default: break;                    
         }
         
     }
 
+    private void JumpStartSignal() {
+        //jumpInput = false;
+        //canJump = true;
+        Debug.Log("JumpStartSignal");
+    }
+
     private void JumpSignal() {
         isJumping = false;
 
-        if (!IsGrounded) { 
+        if (!IsGrounded) {            
             isFalling = true; 
         } else {
             isIdle = true;
@@ -758,13 +782,18 @@ public class PXController : MonoBehaviour {
         yield break;
     }
 
+    /*
     public IEnumerator ResetJump() {
+        jumpInput = false;
         canJump = true;
 
-        yield return new WaitWhile(() => isJumping);
+        yield return null;
+        //yield return new WaitWhile(() => (jumpCount > 0));
+        //canJump = true;        
 
         yield break;
     }
+    */
 
     public IEnumerator ResetDMG() {
         canDMG = false;

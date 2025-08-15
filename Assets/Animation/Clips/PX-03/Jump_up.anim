@@ -97043,7 +97043,14 @@ AnimationClip:
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.13346666
+  - time: 0.033366665
+    functionName: SendSignalToCtx
+    data: jump_start
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 6
+    intParameter: 6
+    messageOptions: 0
+  - time: 0.16683334
     functionName: SendSignalToCtx
     data: jumpUp
     objectReferenceParameter: {fileID: 0}

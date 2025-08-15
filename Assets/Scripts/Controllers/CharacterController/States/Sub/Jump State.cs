@@ -8,12 +8,12 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
     public override void EnterState() {
         //Enter logic
         InitializeContext();
+        //Ctx.StartCoroutine("ResetJump");
 
         InitializeParticles();
         Ctx.AnimHandler.PlayDirect(AnimHandler.Jump());
 
         HandleJump(Ctx.PlayerRb);
-        Ctx.StartCoroutine("ResetJump");
     }
 
     public override void UpdateState() {
@@ -34,7 +34,7 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
 
     public override void ExitState() {
         //Exit logic
-        Ctx.JumpInput = false;
+        //Ctx.JumpInput = false;
     }
 
     public override void CheckSwitchStates() {
@@ -57,7 +57,7 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
         else if (Ctx.IsGrounded && Ctx.IsWalking) {
             SwitchState(StateHandler.Walk());
         }
-        else if (Ctx.IsGrounded && Ctx.IsIdle) {
+        else if (Ctx.IsGrounded && Ctx.IsIdle && !Ctx.IsJumping) {
             SwitchState(StateHandler.Idle());
         }
         else if (Ctx.OnPlatform && Ctx.IsWalking) {
@@ -77,7 +77,15 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
         Ctx.IsDashing = false;
         Ctx.IsAttacking = false;
         Ctx.IsWalking = false;
-        Ctx.IsIdle = false;
+        Ctx.IsIdle = false;        
+
+        Ctx.JumpInput = false;
+
+        if (Ctx.JumpCount > 0) {
+            Ctx.CanJump = true;
+            Ctx.JumpCount--;
+        }
+
     }
 
     public void InitializeParticles() {
@@ -86,11 +94,7 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
     }
     
     private void HandleJump(Rigidbody rb) {
-        //Jump Logic
-        Ctx.JumpCount--;
-        Ctx.JumpInput = false;
-        Ctx.CanJump = false;
-
+        //Jump Logic        
         rb.velocity.Set(rb.velocity.x, -1f, rb.velocity.z);        
         rb.AddForce(Vector3.up * Ctx.JumpHeight * 3.14f, ForceMode.VelocityChange);
     }
