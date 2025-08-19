@@ -233,8 +233,7 @@ public class PXController : MonoBehaviour {
     public void OnJump(InputAction.CallbackContext input) {
         if (!canJump) { return; }
 
-        if (input.ReadValue<float>() != 0f) {
-            //jumpInput = true;
+        if (input.ReadValue<float>() != 0f) {            
             SetUpJump();
         }
     }
@@ -404,11 +403,11 @@ public class PXController : MonoBehaviour {
     private void SetUpJump() {
         if (attackInput || dashInput) { return; }
         
-        jumpInput = true;
-
         if (jumpCount > 0) {
+            jumpInput = true;
             SetJumpState();
         } else {
+            canJump = false;
             jumpInput = false;
             return;
         }
@@ -438,12 +437,10 @@ public class PXController : MonoBehaviour {
 
     private void SetJumpState() {
         if (!canJump || isDamaged) {
-            //jumpInput = false;
+            jumpInput = false;
             return; 
         }
 
-        canJump = false;
-        //jumpInput = false;
         isJumping = true;             
     }
 
@@ -459,9 +456,6 @@ public class PXController : MonoBehaviour {
 
     private void SetAttackState() {
         if (!canAttack || isDashing) { return; }
-
-        //Testing
-        //Time.timeScale = 0.1f;
 
         if (!isDamaged) {
             attackInput = true;
@@ -681,20 +675,22 @@ public class PXController : MonoBehaviour {
         
     }
 
-    private void JumpStartSignal() {
-        //jumpInput = false;
-        //canJump = true;
-        Debug.Log("JumpStartSignal");
+    private void JumpStartSignal() {        
+        //Debug.Log("JumpStartSignal");
     }
 
     private void JumpSignal() {
-        isJumping = false;
+        if (!jumpInput) {
+            isJumping = false;
+            canJump = true;
 
-        if (!IsGrounded) {            
-            isFalling = true; 
-        } else {
-            isIdle = true;
+            if (!IsGrounded) {            
+                isFalling = true; 
+            } else {
+                isIdle = true;
+            }
         }
+
     }
 
     private void AttackSignal() {
@@ -781,19 +777,6 @@ public class PXController : MonoBehaviour {
 
         yield break;
     }
-
-    /*
-    public IEnumerator ResetJump() {
-        jumpInput = false;
-        canJump = true;
-
-        yield return null;
-        //yield return new WaitWhile(() => (jumpCount > 0));
-        //canJump = true;        
-
-        yield break;
-    }
-    */
 
     public IEnumerator ResetDMG() {
         canDMG = false;

@@ -12,14 +12,7 @@ public class AirborneState : BaseState, IContextInit, IPhysics {
     }
 
     public override void UpdateState() {
-        //Update logic
-
-        /*
-        if (!Ctx.IsAttacking && !Ctx.IsDashing && !Ctx.IsJumping) {
-            Ctx.IsFalling = true;
-        }
-        */
-
+        //Update logic        
         if (!Ctx.IsDashing || !Ctx.IsAttacking) {
             HandleGravity(Ctx.PlayerRb);
         }
@@ -44,11 +37,7 @@ public class AirborneState : BaseState, IContextInit, IPhysics {
     public void InitializeContext() {
         if (Ctx.MoveSpeed > 600) {
             Ctx.StartCoroutine("InitializeMoveSpeed");
-        }        
-
-        if (Ctx.IsFalling) {
-            InitializeJumpCount();
-        }
+        }                
     }
     public void HandleGravity(Rigidbody rb) {
         //Gravity logic
@@ -56,13 +45,5 @@ public class AirborneState : BaseState, IContextInit, IPhysics {
             Ctx.Gravity = Ctx.Gravity + Ctx.GravitySpeed;
         }
         rb.AddForce(Vector3.up * -Ctx.Gravity * Time.deltaTime, ForceMode.VelocityChange);
-    }    
-    private void InitializeJumpCount() {
-        if (Ctx.JumpCount > 0) {
-            Ctx.JumpCount--;
-        }
-        else if (Ctx.JumpCount <= 0) {
-            Ctx.JumpCount = 0;
-        }
-    }
+    }        
 }

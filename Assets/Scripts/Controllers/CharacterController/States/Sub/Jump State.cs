@@ -18,13 +18,7 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
 
     public override void UpdateState() {
         //Update logic
-        Ctx.IsGrounded = false;
-
-        /*
-        if (Ctx.MoveInput != Vector2.zero) {
-            Ctx.Player.transform.forward = Ctx.PlayerForward.transform.forward;
-        }
-        */
+        Ctx.IsGrounded = false;        
 
         Ctx.Player.transform.forward = Ctx.PlayerForward.transform.forward;
 
@@ -34,7 +28,7 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
 
     public override void ExitState() {
         //Exit logic
-        //Ctx.JumpInput = false;
+        Ctx.JumpInput = false;
     }
 
     public override void CheckSwitchStates() {
@@ -46,6 +40,7 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
             SwitchState(StateHandler.Damage());
         }        
         else if (Ctx.JumpInput && Ctx.CanJump && (Ctx.JumpCount > 0)) {
+            EvaluateDoubleJump();
             SwitchState(StateHandler.Jump());
         }        
         else if (Ctx.IsDashing) {
@@ -78,14 +73,20 @@ public class JumpState : BaseState, IContextInit, IWalk, IVFXInit {
         Ctx.IsAttacking = false;
         Ctx.IsWalking = false;
         Ctx.IsIdle = false;        
-
+        
         Ctx.JumpInput = false;
 
-        if (Ctx.JumpCount > 0) {
+        if (Ctx.JumpCount >= 1) {
             Ctx.CanJump = true;
             Ctx.JumpCount--;
         }
 
+    }
+
+    private void EvaluateDoubleJump() {
+        Ctx.JumpInput = false;
+        Ctx.CanJump = false;
+        Ctx.IsJumping = false;
     }
 
     public void InitializeParticles() {

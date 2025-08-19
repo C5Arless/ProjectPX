@@ -97050,7 +97050,7 @@ AnimationClip:
     floatParameter: 6
     intParameter: 6
     messageOptions: 0
-  - time: 0.16683334
+  - time: 0.1001
     functionName: SendSignalToCtx
     data: jumpUp
     objectReferenceParameter: {fileID: 0}

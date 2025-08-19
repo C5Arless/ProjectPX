@@ -40,6 +40,7 @@ public class GroundedState : BaseState, IContextInit {
     public override void CheckSwitchStates() {
         //Switch logic
         if (!Ctx.IsGrounded) {
+            EvaluateFalling();
             SwitchState(StateHandler.Airborne());
         }
         else if (Ctx.IsDead) {
@@ -61,6 +62,12 @@ public class GroundedState : BaseState, IContextInit {
             Ctx.JumpCount = 2;
         } else if (Ctx.PlayerInfo.PowerUps <= 0) {
             Ctx.JumpCount = 1;
+        }
+    }
+
+    private void EvaluateFalling() {
+        if (!Ctx.IsJumping && Ctx.JumpCount == 2) {            
+            Ctx.JumpCount--;           
         }
     }
 }
