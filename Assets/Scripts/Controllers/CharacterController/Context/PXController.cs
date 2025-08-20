@@ -80,12 +80,14 @@ public class PXController : MonoBehaviour {
     private int jumpCount = 2;
     private float moveSpeed = 1760f;
 
-    private float yaw;
-    private float pitch;
+    //private float yaw;
+    //private float pitch;
 
     private float xAxis;
     private float yAxis;
     private const float lerpAxisSpeed = .5f;
+    private const float minXAxis = -30f;
+    private const float maxXAxis = 40f;
 
     private float gravity = 9.81f;
 
@@ -578,21 +580,26 @@ public class PXController : MonoBehaviour {
     }
 
     private void CalculateMouseCamMotion(Vector2 mouseInput, float sens) {
-        yAxis = _forward.transform.rotation.eulerAngles.y;        
+        yAxis = _forward.transform.rotation.eulerAngles.y;
+        xAxis = _camHolder.transform.rotation.eulerAngles.x;
 
         float targetY = mouseInput.x * sens * Mathf.PI * Time.deltaTime;
-        float targetX = mouseInput.y * sens * Mathf.PI * Time.deltaTime;
+        float targetX = mouseInput.y * sens * Mathf.PI * Time.deltaTime;        
 
         yAxis += targetY;
-
         xAxis -= targetX;
-        xAxis = Mathf.Clamp(xAxis, -30f, 50f);
 
-        float lerpY = _forward.transform.rotation.eulerAngles.y;       
+        float lerpY = _forward.transform.rotation.eulerAngles.y;
+        float lerpX = _camHolder.transform.rotation.eulerAngles.x;
 
-        lerpY = Mathf.LerpAngle(lerpY, yAxis, lerpAxisSpeed);        
+        lerpY = Mathf.LerpAngle(lerpY, yAxis, lerpAxisSpeed);
+        lerpX = Mathf.LerpAngle(lerpX, xAxis, lerpAxisSpeed);
 
-        _camHolder.transform.rotation = Quaternion.Euler(xAxis, lerpY, 0f);
+        if (lerpX > 180f) lerpX -= 360f;
+
+        lerpX = Mathf.Clamp(lerpX, minXAxis, maxXAxis);
+
+        _camHolder.transform.rotation = Quaternion.Euler(lerpX, lerpY, 0f);
         _forward.transform.rotation = Quaternion.Euler(0f, lerpY, 0f);
     }
 
