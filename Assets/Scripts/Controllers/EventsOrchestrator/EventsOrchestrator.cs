@@ -27,26 +27,29 @@ public class EventsOrchestrator : MonoBehaviour {
     public void EnqueueEvent(IOrchestratedEvent target) {
         if (DataManager.Instance.HasEventRun(target.EventIndex)) {
             DequeueEvent(target);
+        } else {
+
+            if (!eventsQueue.Contains(target)) {
+                Debug.Log(target + " event enqueued");
+                eventsQueue.Add(target);
+            }
+
+            if (currentTask == null) {            
+                StartCoroutine(BeginOrchestration());
+            }
+
+            if (currentEvent?.Priority == EventPriority.Low) {
+                Debug.Log(currentEvent + " event canceled");
+                currentEvent.CancelEvent();
+            }
         }
 
-        if (!eventsQueue.Contains(target)) {
-            Debug.Log(target + " event enqueued");
-            eventsQueue.Add(target);
-        }
 
-        if (currentTask == null) {            
-            StartCoroutine(BeginOrchestration());
-        }
-
-        if (currentEvent?.Priority == EventPriority.Low) {
-            Debug.Log(currentEvent + " event canceled");
-            currentEvent.CancelEvent();
-        }
         
     }
 
     public void DequeueEvent(IOrchestratedEvent target) {
-        if (!eventsQueue.Contains(target)) {
+        if (eventsQueue.Contains(target)) {
             Debug.Log(target + " event dequeued");
 
             if (currentEvent == target) {
@@ -130,12 +133,15 @@ public class EventsOrchestrator : MonoBehaviour {
     }
 
     public async Task<Task> GetCurrentEventTask() {
-        while (!isRunning || currentEventTask == null) {
-            await Task.Yield();
+        if (!isRunning || currentEventTask == null) {
+            await Task.Delay(3000);
+            return Task.CompletedTask;
+
+        } else { 
+            var taskToWait = currentEventTask;
+            return taskToWait;
         }
 
-        var taskToWait = currentEventTask;
-        return taskToWait;
     }
 
     private async Task RunAsyncEvent(IOrchestratedEvent _evt) {

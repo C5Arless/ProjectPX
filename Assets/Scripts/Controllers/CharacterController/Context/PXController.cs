@@ -1,6 +1,7 @@
 using Cinemachine;
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -196,6 +197,8 @@ public class PXController : MonoBehaviour {
         InitializePowerUps();
         SubscribeCallbacks();
 
+        yAxis = _camHolder.transform.rotation.eulerAngles.y;
+        xAxis = _camHolder.transform.rotation.eulerAngles.x;
     }
 
     // Update is called once per frame
@@ -338,7 +341,7 @@ public class PXController : MonoBehaviour {
             canFreeLook = true;
         }
 
-        CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
+        //CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
     }
 
     public void ActionCameraEnter() {
@@ -560,12 +563,12 @@ public class PXController : MonoBehaviour {
             _forward.transform.forward = targetForward;
             
             yAxis = _camHolder.transform.rotation.eulerAngles.y;
-            xAxis = _camHolder.transform.rotation.x;        
+            xAxis = _camHolder.transform.rotation.eulerAngles.x;        
         }
     }
 
     private void UpdateCamera(Vector2 camInput) { 
-        if (!isDead && !onDialog) {
+        if (!isDead && !onDialog && !onInteract) {
             EvaluateCamera(camInput);
         }        
     }
@@ -794,22 +797,31 @@ public class PXController : MonoBehaviour {
     }
 
     private IEnumerator DialogRoutine(Transform playerTarget, Transform focusTarget, GameObject _vcam) {
-        CameraManager.Instance.SwitchGameVCamera(_vcam);
+        Transform _vcamTransform = _vcam.transform;
+        Vector3 targetForward = Vector3.zero;
 
+        CameraManager.Instance.SwitchGameVCamera(_vcam);        
         CinemachineCollider camCollider = _virtualCamera.GetComponent<CinemachineCollider>();
 
-        float damping = camCollider.m_Damping;
+        float colliderDamping = camCollider.m_Damping;        
+        camCollider.enabled = false;
         camCollider.m_Damping = 0f;
 
         yield return null;
 
-        Vector3 targetForward = ComputeForward2D(playerTarget, _asset.transform);
+        yAxis = _camHolder.transform.rotation.eulerAngles.y;
+        xAxis = _camHolder.transform.rotation.eulerAngles.x;
+
+        yield return null;        
 
         while (ComputeDistance2D(_asset.transform, playerTarget) > .15f) {
-            _camHolder.transform.forward = _vcam.transform.forward;            
+            _camHolder.transform.forward = ComputeForward2D(playerTarget, _vcamTransform);
 
             targetForward = ComputeForward2D(playerTarget, _asset.transform); 
             _forward.transform.forward = targetForward;
+
+            yAxis = _camHolder.transform.rotation.eulerAngles.y;
+            xAxis = _camHolder.transform.rotation.eulerAngles.x;
 
             moveInput = new Vector2(0f, 1f);
 
@@ -820,36 +832,53 @@ public class PXController : MonoBehaviour {
         yield return null;
 
         isWalking = false;
+        yield return null;
+
 
         _playerRb.velocity = Vector3.zero;
         _playerRb.ResetInertiaTensor();
 
-        _player.transform.position = new Vector3(playerTarget.transform.position.x, _player.transform.position.y, playerTarget.transform.position.z);
-        yield return null;
+        _player.transform.position = new Vector3(playerTarget.transform.position.x, _player.transform.position.y, playerTarget.transform.position.z);        
 
         targetForward = ComputeForward2D(focusTarget, _player.transform);
         _asset.transform.forward = targetForward;
 
-        _forward.transform.forward = _camHolder.transform.forward;
-        //_forward.transform.forward = ComputeForward2D(_player.transform, _vcam.transform);
-
+        //Forward and camera after reaching the target point
+        
+        targetForward = ComputeForward2D(_asset.transform, _vcamTransform);
+        _forward.transform.forward = targetForward;
+        _camHolder.transform.forward = targetForward;
+        
         yAxis = _forward.transform.rotation.eulerAngles.y;
-        xAxis = _camHolder.transform.rotation.x;
+        xAxis = _camHolder.transform.rotation.eulerAngles.x;
 
-        yield return new WaitWhile(() => onDialog);
+        yield return null;
 
-        camCollider.m_Damping = damping;
+        while (onDialog) {
+            targetForward = ComputeForward2D(_asset.transform, _vcamTransform);
+            _forward.transform.forward = targetForward;
+            _camHolder.transform.forward = targetForward;
+
+            yAxis = _forward.transform.rotation.eulerAngles.y;
+            xAxis = _camHolder.transform.rotation.eulerAngles.x;
+            yield return null;
+        }
+        
+        //Reset                
 
         if (!onAction) {
             CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
         }
 
-        onInteract = false;
-
+        camCollider.enabled = true;
+        camCollider.m_Damping = colliderDamping;
         yield return null;
 
-        canInteract = true;
         InputManager.Instance.SetActionMap("Player");
+
+        yield return null;
+        onInteract = false;
+        canInteract = true;
 
         yield break;
     }

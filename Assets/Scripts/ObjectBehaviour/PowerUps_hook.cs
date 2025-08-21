@@ -9,7 +9,7 @@ public class PowerUps_hook : MonoBehaviour {
 
     private Task _deployTask;
 
-    private void Awake() {
+    private void Start() {
         if (_playerInfo.PowerUps >= (int)_pu) {
             Destroy(_event);
             Destroy(gameObject);
