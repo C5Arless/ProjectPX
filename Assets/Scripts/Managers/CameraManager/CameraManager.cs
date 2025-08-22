@@ -102,7 +102,7 @@ public class CameraManager : MonoBehaviour {
             try {
                 currentGameVCamera.SetActive(false);
             } catch {
-                Debug.Log("Current game camera is null!");
+                //Debug.Log("Current game camera is null!");
             }
 
             currentGameVCamera = target;

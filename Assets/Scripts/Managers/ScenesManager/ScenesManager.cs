@@ -340,7 +340,7 @@ public class ScenesManager : MonoBehaviour {
         foreach (GameObject _obj in _tmp) {
             if (_obj.name == _targetCp.ToString()) {
                 _cpObj = _obj;
-                Debug.Log("Point: " + _cpObj.name + " Found! " + (int)_targetCp);
+                //Debug.Log("Point: " + _cpObj.name + " Found! " + (int)_targetCp);
             }
 
             yield return null;

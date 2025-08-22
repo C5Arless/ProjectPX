@@ -30,7 +30,7 @@ public class EventsOrchestrator : MonoBehaviour {
         } else {
 
             if (!eventsQueue.Contains(target)) {
-                Debug.Log(target + " event enqueued");
+                //Debug.Log(target + " event enqueued");
                 eventsQueue.Add(target);
             }
 
@@ -39,7 +39,7 @@ public class EventsOrchestrator : MonoBehaviour {
             }
 
             if (currentEvent?.Priority == EventPriority.Low) {
-                Debug.Log(currentEvent + " event canceled");
+                //Debug.Log(currentEvent + " event canceled");
                 currentEvent.CancelEvent();
             }
         }
@@ -50,7 +50,7 @@ public class EventsOrchestrator : MonoBehaviour {
 
     public void DequeueEvent(IOrchestratedEvent target) {
         if (eventsQueue.Contains(target)) {
-            Debug.Log(target + " event dequeued");
+            //Debug.Log(target + " event dequeued");
 
             if (currentEvent == target) {
                 target.CancelEvent();
@@ -81,10 +81,10 @@ public class EventsOrchestrator : MonoBehaviour {
 
         while (eventsQueue.Count() > 0) {            
             var targetEvent = GetEvent();
-            Debug.Log(targetEvent + " retrieved");
+            //Debug.Log(targetEvent + " retrieved");
 
             if (targetEvent == null) {
-                Debug.Log(targetEvent + " is null?");
+                //Debug.Log(targetEvent + " is null?");
                 eventsQueue.Clear();
                 await Task.Yield();
                 return; 
@@ -93,10 +93,10 @@ public class EventsOrchestrator : MonoBehaviour {
             if (targetEvent.IsRepeatable) {
                 currentEvent = targetEvent;
                 currentEventTask = currentEvent.FireEvent();
-                Debug.Log(currentEvent + " fired");
+                //Debug.Log(currentEvent + " fired");
 
                 await currentEventTask;
-                Debug.Log(currentEvent + " done!");
+                //Debug.Log(currentEvent + " done!");
                 
                 await Task.Yield();                
 
@@ -105,16 +105,16 @@ public class EventsOrchestrator : MonoBehaviour {
             } else {
 
                 if (DataManager.Instance.HasEventRun(targetEvent.EventIndex)) {
-                    Debug.Log(targetEvent + " removed");
+                    //Debug.Log(targetEvent + " removed");
                     eventsQueue.Remove(targetEvent);
                     targetEvent.DestroyEvent();                    
                 } else {
                     currentEvent = targetEvent;
                     currentEventTask = currentEvent.FireEvent();
-                    Debug.Log(currentEvent + " fired");
+                    //Debug.Log(currentEvent + " fired");
 
                     await currentEventTask;
-                    Debug.Log(currentEvent + " done!");
+                    //Debug.Log(currentEvent + " done!");
                     
                     await Task.Yield();                    
 
@@ -145,7 +145,7 @@ public class EventsOrchestrator : MonoBehaviour {
     }
 
     private async Task RunAsyncEvent(IOrchestratedEvent _evt) {
-        Debug.Log("Event running!");
+        //Debug.Log("Event running!");
         await Task.Yield();
 
         await _evt.FireEvent();
