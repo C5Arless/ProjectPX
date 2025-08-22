@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class WarpController : MonoBehaviour {
 
     private CinematicController _enterCtx;
     private CinematicController _exitCtx;
+    private CinemachineBrain _gameBrain;
 
     private Task _switchTask;
 
@@ -24,6 +26,8 @@ public class WarpController : MonoBehaviour {
     private void RetrieveControllers() {
         _enterCtx = _enterTrigger.GetComponent<CinematicController>();
         _exitCtx = _exitTrigger.GetComponent<CinematicController>();
+
+        _gameBrain = CameraManager.Instance.GameBrain.GetComponent<CinemachineBrain>();
     }
 
     private void SwitchToEnter() {
@@ -33,7 +37,7 @@ public class WarpController : MonoBehaviour {
 
     private void SwitchTrigger() {
         if (_state) {
-            _exitCtx.AbortEvent();
+            _exitCtx.AbortEvent();            
             _exitTrigger.SetActive(false);
             _sceneTrigger.SetActive(true);
             _enterTrigger.SetActive(true);
@@ -47,7 +51,7 @@ public class WarpController : MonoBehaviour {
     
     private async Task SwitchTask() {
         await Task.Yield();        
-        await await GameBucket.Instance.EventsOrchestrator.GetCurrentEventTask();
+        await await GameBucket.Instance.EventsOrchestrator.GetCurrentEventTask();     
 
         SwitchToEnter();
         await Task.Yield();

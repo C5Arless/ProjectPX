@@ -75530,7 +75530,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4879283833513861676, guid: 6592e8794b9523848bdb6e8d28ec4505, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6010282198847598739, guid: 6592e8794b9523848bdb6e8d28ec4505, type: 3}
       propertyPath: m_Lens.FieldOfView

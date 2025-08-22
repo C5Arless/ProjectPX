@@ -1,7 +1,6 @@
 using Cinemachine;
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -196,6 +195,8 @@ public class PXController : MonoBehaviour {
         InitializeActions();
         InitializePowerUps();
         SubscribeCallbacks();
+
+        //CalculateMouseCamMotion(new Vector2(.1f, .1f), _optionsInfo.MouseSens);
     }
 
     // Update is called once per frame
@@ -313,7 +314,9 @@ public class PXController : MonoBehaviour {
     }
 
     //External Callbacks
-    public void DialogEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {        
+    public void DialogEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
+        StopCoroutine("DialogRoutine");
+
         onDialog = true;
         canFreeLook = false;
         canInteract = false;
@@ -323,6 +326,8 @@ public class PXController : MonoBehaviour {
     }
 
     public void CinematicEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
+        StopCoroutine("DialogRoutine");
+
         onDialog = true;
         canFreeLook = false;
         canInteract = false;
@@ -332,11 +337,7 @@ public class PXController : MonoBehaviour {
     }
 
     public void InteractionExit() {
-        onDialog = false;
-
-        if (!onAction) {
-            canFreeLook = true;
-        }
+        onDialog = false;        
 
         //CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
     }
@@ -530,6 +531,17 @@ public class PXController : MonoBehaviour {
     private Vector3 ComputeForward2D(Transform _head, Transform _tail) {
         Vector2 head = new Vector2(_head.position.x, _head.position.z);
         Vector2 tail = new Vector2(_tail.position.x, _tail.position.z);
+
+        Vector2 targetForward = (head - tail).normalized;
+
+        Vector3 forward = new Vector3(targetForward.x, 0f, targetForward.y);
+
+        return forward;
+    }
+
+    private Vector3 ComputeForward2D(Vector3 _head, Vector3 _tail) {
+        Vector2 head = new Vector2(_head.x, _head.z);
+        Vector2 tail = new Vector2(_tail.x, _tail.z);
 
         Vector2 targetForward = (head - tail).normalized;
 
@@ -794,7 +806,7 @@ public class PXController : MonoBehaviour {
     }
 
     private IEnumerator DialogRoutine(Transform playerTarget, Transform focusTarget, GameObject _vcam) {
-        Transform _vcamTransform = _vcam.transform;
+        Transform _vcamTransform = _vcam.transform;        
 
         Vector3 targetForward = ComputeForward2D(_vcamTransform, playerTarget);
         CameraManager.Instance.SwitchGameVCamera(_vcam);
@@ -802,22 +814,14 @@ public class PXController : MonoBehaviour {
         CinemachineHardLockToTarget camBody = _virtualCamera.GetCinemachineComponent<CinemachineHardLockToTarget>();
         CinemachineCollider camCollider = _virtualCamera.GetComponent<CinemachineCollider>();
 
-        float colliderDamping = camCollider.m_Damping;
-        float cameraDamping = camBody.m_Damping;
-
-        Debug.Log("Collider - " + colliderDamping + ": Camera - " + cameraDamping);
+        float colliderDamping = 1f;
+        float cameraDamping = .8f;
 
         camCollider.enabled = false;
         camCollider.m_Damping = 0f;
         camBody.m_Damping = 0f;
 
         yield return null;
-
-        /*
-        yAxis = _camHolder.transform.rotation.eulerAngles.y;
-        xAxis = _camHolder.transform.rotation.eulerAngles.x;
-        yield return null;        
-        */
         
         while (ComputeDistance2D(_asset.transform, playerTarget) > .15f) {
             _camHolder.transform.forward = _vcamTransform.forward;
@@ -833,11 +837,9 @@ public class PXController : MonoBehaviour {
             yield return null;
         }        
 
-        moveInput = new Vector2(0f, 0f);
-        yield return null;
+        moveInput = new Vector2(0f, 0f);        
 
         isWalking = false;
-        yield return null;
 
         _playerRb.velocity = Vector3.zero;
         _playerRb.ResetInertiaTensor();
@@ -846,20 +848,10 @@ public class PXController : MonoBehaviour {
 
         targetForward = ComputeForward2D(focusTarget, _player.transform);
         _asset.transform.forward = targetForward;
-
-        //Forward and camera after reaching the target point
-        
-        /*
-        targetForward = ComputeForward2D(_asset.transform, _vcamTransform);
-        _forward.transform.forward = targetForward;
-        _camHolder.transform.forward = _vcamTransform.forward;
-
-        yAxis = _forward.transform.rotation.eulerAngles.y;
-        xAxis = _camHolder.transform.rotation.eulerAngles.x;
-
         yield return null;
-        */
 
+        //Forward and camera after reaching the target point     
+        
         while (onDialog) {
             targetForward = ComputeForward2D(playerTarget, _vcamTransform);
             _forward.transform.forward = targetForward;
@@ -870,18 +862,21 @@ public class PXController : MonoBehaviour {
             yield return null;
         }
         
-        //Reset                
+
+        //Reset                        
 
         if (!onAction) {
             CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
         }
 
+        
         targetForward = ComputeForward2D(playerTarget, _vcamTransform);
         _forward.transform.forward = targetForward;
         _camHolder.transform.forward = _vcamTransform.forward;
 
         yAxis = _forward.transform.rotation.eulerAngles.y;
         xAxis = _camHolder.transform.rotation.eulerAngles.x;
+        
 
         yield return null;
 
@@ -891,6 +886,10 @@ public class PXController : MonoBehaviour {
         yield return null;
 
         InputManager.Instance.SetActionMap("Player");
+        
+        if (!onAction) {
+            canFreeLook = true;
+        }
 
         yield return null;
         onInteract = false;
