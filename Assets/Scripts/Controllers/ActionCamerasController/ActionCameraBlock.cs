@@ -27,7 +27,7 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
     public EventPriority Priority { get { return priority; } }
 
     public void TriggerEnter(Collider other) {
-        if (GameBucket.Instance.PXController.OnDialog) { return; }
+        if (GameBucket.Instance.PXController.OnCinematic) { return; }
         if (GameBucket.Instance.PXController.OnAction) { return; }
 
         if (other.tag == "Player") {
@@ -38,7 +38,7 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
     }
         
     public void TriggerStay(Collider other) {
-        if (GameBucket.Instance.PXController.OnDialog) { return; }
+        if (GameBucket.Instance.PXController.OnCinematic) { return; }
         if (GameBucket.Instance.PXController.OnAction) { return; }
         
         if (other.tag == "Player") {
@@ -49,7 +49,7 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
     public void TriggerExit(Collider other) {
         if (!onAction) { return; }
 
-        if (GameBucket.Instance.PXController.OnDialog) { return; }
+        if (GameBucket.Instance.PXController.OnCinematic) { return; }
 
         if (other.tag == "Player") {
             ActionExit();
@@ -116,15 +116,20 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
         yield return null;
 
         while (isLocked) {
-            if (GameBucket.Instance.PXController.OnDialog) { continue; }
+            if (GameBucket.Instance.PXController.OnCinematic) { continue; }
 
-            if (GameBucket.Instance.PXController.CanInteract) {
-                _playerPos.transform.position = GameBucket.Instance.PXController.transform.position;
-                GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);
+            _playerPos.transform.position = GameBucket.Instance.PXController.transform.position;
+            GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);
 
+            if (CameraManager.Instance.CurrentGameCamera != _actionVCamera) {
                 CameraManager.Instance.SwitchGameVCamera(_actionVCamera);
-                yield return null;
+            }
+
+            yield return null;
+            /*
+            if (GameBucket.Instance.PXController.CanInteract) {
             } else { yield return null; }
+            */
         }
 
         yield break;
@@ -134,8 +139,12 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
         yield return null;
 
         while (onAction) {            
-            GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);            
-            CameraManager.Instance.SwitchGameVCamera(_actionVCamera);       
+            GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);
+            
+            if (CameraManager.Instance.CurrentGameCamera != _actionVCamera) {
+                CameraManager.Instance.SwitchGameVCamera(_actionVCamera);
+            }
+
             yield return null;
         }
 

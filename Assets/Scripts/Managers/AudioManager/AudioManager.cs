@@ -74,7 +74,7 @@ public class AudioManager : MonoBehaviour {
         _target.x = int.Parse(_signalX);
         _target.y = int.Parse(_signalY);
 
-        Debug.Log("Handling Signal! [" + _target.x + ", " + _target.y + "]");
+        //Debug.Log("Handling Signal! [" + _target.x + ", " + _target.y + "]");
 
         EvaluateSignal(_target);
 

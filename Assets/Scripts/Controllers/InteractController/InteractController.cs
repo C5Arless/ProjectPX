@@ -31,6 +31,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     private int pageNumber;
     private bool isInteracting;
     private bool isBusy;
+    private bool isRunning;
     private bool canConfirm;
 
     public bool IsInteracting { get { return isInteracting; } }
@@ -58,7 +59,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
                 GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
             } else {
                 SwitchPopUp(true);
-                GameBucket.Instance.PXController.OnInteract = true;
+                GameBucket.Instance.PXController.CanInteract = true;
             }
         }
     }
@@ -69,21 +70,27 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         if (other.tag == "Player") {
             UnsubscribeActions();
             SwitchPopUp(false);
-            GameBucket.Instance.PXController.OnInteract = false;
+            GameBucket.Instance.PXController.CanInteract = false;
         }
     }
 
     public async Task FireEvent() {
-        if (isInteracting) { return; }
+        if (isRunning) { return; }
 
-        GameBucket.Instance.PXController.OnInteract = true;
+        GameBucket.Instance.PXController.InteractionEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
+
+        GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
+        GameBucket.Instance.CompanionCtx.VisionSetUpTalkBehaviour(_focusTarget);
+        //GameBucket.Instance.PXController.OnInteract = true;
         Interact();
 
-        while (isInteracting) {
+        while (isRunning) {
             await Task.Yield();
         }
 
-        GameBucket.Instance.PXController.OnInteract = false;
+        GameBucket.Instance.PXController.InteractionExit();
+        GameBucket.Instance.CompanionCtx.ExitTalkState();
+        //GameBucket.Instance.PXController.OnInteract = false;
 
         await Task.Yield();
     }
@@ -93,12 +100,12 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     }
 
     public void DestroyEvent() {
-        if (GameBucket.Instance.PXController.OnInteract) GameBucket.Instance.PXController.OnInteract = false;
+        //if (GameBucket.Instance.PXController.OnInteract) GameBucket.Instance.PXController.OnInteract = false;
         Destroy(gameObject);        
     }
 
     public void OnInteract(InputAction.CallbackContext input) {
-        if (!GameBucket.Instance.PXController.OnInteract) { return; }
+        if (!GameBucket.Instance.PXController.CanInteract) { return; }
 
         if (input.ReadValue<float>() != 0f) {
             if (!hasTrigger) {
@@ -135,7 +142,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     public void Interact() {
         if (isBusy) { return; }
 
-        //canConfirm = false;
+        isRunning = true;
 
         if (isInteracting) {
             Continue();
@@ -209,11 +216,13 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         isBusy = true;
         yield return null;
 
-        GameBucket.Instance.PXController.DialogEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
+        /*
+        GameBucket.Instance.PXController.InteractionEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
 
         GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
         GameBucket.Instance.CompanionCtx.VisionSetUpTalkBehaviour(_focusTarget);
         yield return null;
+        */
 
         GameBucket.Instance.GameCanvasHandler.DialogIn();
         yield return new WaitWhile(() => GameBucket.Instance.GameCanvasHandler.IsTransitioning);
@@ -227,8 +236,8 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     private IEnumerator ExitRoutine() {
         canConfirm = false;
         isBusy = true;
-        GameBucket.Instance.PXController.InteractionExit();
-        GameBucket.Instance.CompanionCtx.ExitTalkState();
+        //GameBucket.Instance.PXController.InteractionExit();
+        //GameBucket.Instance.CompanionCtx.ExitTalkState();
 
         GameBucket.Instance.GameCanvasHandler.DialogOut();
 
@@ -236,6 +245,9 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
         UnsubscribeActions();
         transform.GetComponent<Collider>().enabled = false;
+        yield return null;
+
+        isRunning = false;
         yield return new WaitForSeconds(2f);
 
         if (_isRepeatable) {

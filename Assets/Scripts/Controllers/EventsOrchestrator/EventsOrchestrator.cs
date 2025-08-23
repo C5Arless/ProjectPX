@@ -11,8 +11,8 @@ public class EventsOrchestrator : MonoBehaviour {
     private IOrchestratedEvent currentEvent;
     private Task currentEventTask;
 
-    public Task CurrentEventTask { get { return currentEventTask; } }
     public bool IsRunning { get { return isRunning; } }
+    public Task CurrentEventTask { get { return currentEventTask; } }
     public IOrchestratedEvent CurrentEvent { get { return currentEvent; } }
     public List<IOrchestratedEvent> EventsQueue { get { return eventsQueue; } }
 

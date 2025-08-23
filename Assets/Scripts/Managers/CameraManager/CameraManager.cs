@@ -9,6 +9,9 @@ public class CameraManager : MonoBehaviour {
 
     [SerializeField] GameObject gameBrain;
     [SerializeField] GameObject menuBrain;
+    private CinemachineBrain _gBrain;
+    private CinemachineBrain _mBrain;
+
     private GameObject currentBrain;
 
     private List<GameObject> menuVCameras = new List<GameObject>();
@@ -29,6 +32,11 @@ public class CameraManager : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
         }
         else { Destroy(gameObject); }        
+    }
+
+    private void Start() {
+        _gBrain = gameBrain.GetComponent<CinemachineBrain>();
+        _mBrain = menuBrain.GetComponent<CinemachineBrain>();
     }
 
     public Camera GetCurrentViewCamera() {
@@ -96,6 +104,15 @@ public class CameraManager : MonoBehaviour {
     }    
 
     public void SwitchGameVCamera(GameObject target) {
+        if (currentGameVCamera != null) {
+            if (currentGameVCamera != target) StartCoroutine(SwitchGameCamera(target));
+
+        } else {
+            currentGameVCamera = target;
+            currentGameVCamera.SetActive(true);
+            gameCamera = gameBrain.GetComponent<CinemachineBrain>().OutputCamera;
+        }
+        /*
         if (currentGameVCamera != target) {
             target.SetActive(true);
 
@@ -108,12 +125,14 @@ public class CameraManager : MonoBehaviour {
             currentGameVCamera = target;
             gameCamera = gameBrain.GetComponent<CinemachineBrain>().OutputCamera;
         }
+        */
     }
 
     public void SwitchMenuVCamera(MenuVCameras target) {
         if (currentMenuVCamera != menuVCameras[(int)target]) {
             menuVCameras[(int)target].gameObject.SetActive(true);
             currentMenuVCamera.gameObject.SetActive(false);
+
             currentMenuVCamera = menuVCameras[(int)target].gameObject;
         }
     }
@@ -122,8 +141,7 @@ public class CameraManager : MonoBehaviour {
         if (targetBrain != currentBrain) {
             targetBrain.SetActive(true);
 
-            if (currentBrain != null) { currentBrain.SetActive(false); } // TESTING PURPOSE
-            //currentBrain.SetActive(false); // DEFINITIVE
+            if (currentBrain != null) { currentBrain.SetActive(false); }            
 
             currentBrain = targetBrain;
         }
@@ -173,6 +191,23 @@ public class CameraManager : MonoBehaviour {
         } catch {
             //Debug.Log("Retrieve failed, trying again...");        
         }
+
+        yield break;
+    }
+
+    private IEnumerator SwitchGameCamera(GameObject target) {        
+        target.SetActive(true);
+        yield return null;
+
+        yield return new WaitWhile(() => _gBrain.IsBlending);
+        yield return null;
+
+        currentGameVCamera.SetActive(false);
+        
+        currentGameVCamera = target;
+        currentGameVCamera.SetActive(true);
+
+        gameCamera = gameBrain.GetComponent<CinemachineBrain>().OutputCamera;
 
         yield break;
     }

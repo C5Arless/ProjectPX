@@ -63,7 +63,7 @@ public class PXController : MonoBehaviour {
 
     private bool onPlatform;
     private bool onSlope;    
-    private bool onDialog;
+    private bool onCinematic;
     private bool onInteract;
     private bool onAction;
     private bool onKinematic;
@@ -123,7 +123,7 @@ public class PXController : MonoBehaviour {
 
     public bool OnSlope { get { return onSlope; } }
     public bool OnPlatform { get { return onPlatform; } set { onPlatform = value; } }
-    public bool OnDialog { get { return onDialog; } }
+    public bool OnCinematic { get { return onCinematic; } }
     public bool OnInteract { get { return onInteract; } set { onInteract = value; } }
     public bool OnAction { get { return onAction; } }
     public bool OnKinematic { get { return onKinematic; } set { onKinematic = value; } }
@@ -138,7 +138,7 @@ public class PXController : MonoBehaviour {
     public bool CanJump { get { return canJump; } set { canJump = value; } }
     public float JumpHeight { get { return jumpHeight; } set { jumpHeight = value; } }
     public bool CanFreeLook { get { return canFreeLook; } }
-    public bool CanInteract { get { return canInteract; } }
+    public bool CanInteract { get { return canInteract; } set { canInteract = value; } }
 
     public bool IsDead { get { return isDead; } set { isDead = value; } }
     public bool IsIdle { get { return isIdle; } set { isIdle = value; } }
@@ -242,7 +242,7 @@ public class PXController : MonoBehaviour {
     }
 
     public void OnAttack(InputAction.CallbackContext input) {
-        if (onInteract) { return; }
+        if (canInteract) { return; }
 
         if (input.ReadValue<float>() != 0f) {
             SetUpAttack();
@@ -314,32 +314,48 @@ public class PXController : MonoBehaviour {
     }
 
     //External Callbacks
-    public void DialogEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
-        StopCoroutine("DialogRoutine");
-
-        onDialog = true;
+    public void InteractionEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {        
+        onInteract = true;
         canFreeLook = false;
         canInteract = false;
 
         InputManager.Instance.SetActionMap("Dialog");
-        StartCoroutine(DialogRoutine(playerPos, focusTarget, _vcam));
+        StartCoroutine(InteractRoutine(playerPos, focusTarget, _vcam));
     }
 
-    public void CinematicEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) {
-        StopCoroutine("DialogRoutine");
-
-        onDialog = true;
+    public void CinematicEnter(Transform playerPos, Transform focusTarget, GameObject _vcam) { 
+        onCinematic = true;
         canFreeLook = false;
         canInteract = false;
 
         InputManager.Instance.SetActionMap("Disabled");
-        StartCoroutine(DialogRoutine(playerPos, focusTarget, _vcam));
+        StartCoroutine(CinematicRoutine(playerPos, focusTarget, _vcam));
     }
 
     public void InteractionExit() {
-        onDialog = false;        
-
+        //onDialog = false;
         //CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
+        if (!onAction) {
+            CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
+            canFreeLook = true;
+        }        
+
+        //Debug.Log("Switching inputmap from InteractionExit");
+        InputManager.Instance.SetActionMap("Player");        
+
+        onInteract = false;
+    }
+
+    public void CinematicExit() {
+        if (!onAction) {
+            CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
+            canFreeLook = true;
+        }
+
+        //Debug.Log("Switching inputmap from CinematicExit");
+        InputManager.Instance.SetActionMap("Player");
+
+        onCinematic = false;
     }
 
     public void ActionCameraEnter() {
@@ -539,17 +555,6 @@ public class PXController : MonoBehaviour {
         return forward;
     }
 
-    private Vector3 ComputeForward2D(Vector3 _head, Vector3 _tail) {
-        Vector2 head = new Vector2(_head.x, _head.z);
-        Vector2 tail = new Vector2(_tail.x, _tail.z);
-
-        Vector2 targetForward = (head - tail).normalized;
-
-        Vector3 forward = new Vector3(targetForward.x, 0f, targetForward.y);
-
-        return forward;
-    }
-
     public void SetKinematic() {
         StartCoroutine(EvaluateKinematic());
     }
@@ -557,7 +562,7 @@ public class PXController : MonoBehaviour {
     //Camera Methods
     public void UpdateExternalCamera(Transform playerPos, Transform cameraPivot) {
         //Updates player forward direction while inside ActionCameraBlock
-        if (onDialog) { return; }
+        if (onCinematic) { return; }
 
         Vector3 targetForward = ComputeForward2D(playerPos, cameraPivot);
         float currentAngle = Vector3.Angle(_forward.transform.forward, targetForward);
@@ -577,7 +582,7 @@ public class PXController : MonoBehaviour {
     }
 
     private void UpdateCamera(Vector2 camInput) { 
-        if (!isDead && !onDialog && !onInteract) {
+        if (!isDead && !onCinematic && !onInteract) {
             EvaluateCamera(camInput);
         }        
     }
@@ -805,7 +810,7 @@ public class PXController : MonoBehaviour {
         yield break;
     }
 
-    private IEnumerator DialogRoutine(Transform playerTarget, Transform focusTarget, GameObject _vcam) {
+    private IEnumerator InteractRoutine(Transform playerTarget, Transform focusTarget, GameObject _vcam) {
         Transform _vcamTransform = _vcam.transform;        
 
         Vector3 targetForward = ComputeForward2D(_vcamTransform, playerTarget);
@@ -852,7 +857,7 @@ public class PXController : MonoBehaviour {
 
         //Forward and camera after reaching the target point     
         
-        while (onDialog) {
+        while (onInteract) {
             targetForward = ComputeForward2D(playerTarget, _vcamTransform);
             _forward.transform.forward = targetForward;
             _camHolder.transform.forward = _vcamTransform.forward;
@@ -860,31 +865,33 @@ public class PXController : MonoBehaviour {
             yAxis = _forward.transform.rotation.eulerAngles.y;
             xAxis = _camHolder.transform.rotation.eulerAngles.x;
             yield return null;
-        }
-        
+        }        
 
-        //Reset                        
+        //Reset                                        
+        camCollider.enabled = true;
+        camCollider.m_Damping = colliderDamping;
+        camBody.m_Damping = cameraDamping;
+        yield return null;
 
-        if (!onAction) {
-            CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
-        }
-
-        
+        /*
         targetForward = ComputeForward2D(playerTarget, _vcamTransform);
         _forward.transform.forward = targetForward;
         _camHolder.transform.forward = _vcamTransform.forward;
 
         yAxis = _forward.transform.rotation.eulerAngles.y;
         xAxis = _camHolder.transform.rotation.eulerAngles.x;
-        
+        yield return null;        
+        */
+
+        ////This should be inside an async method (EXIT INTERACTION)
+        /*
+        if (!onAction) {
+            CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
+        }
 
         yield return null;
 
-        camCollider.enabled = true;
-        camCollider.m_Damping = colliderDamping;
-        camBody.m_Damping = cameraDamping;
-        yield return null;
-
+        Debug.Log("Switching inputmap from InteractRoutine");
         InputManager.Instance.SetActionMap("Player");
         
         if (!onAction) {
@@ -893,7 +900,95 @@ public class PXController : MonoBehaviour {
 
         yield return null;
         onInteract = false;
-        canInteract = true;
+        canInteract = true;        
+        */
+
+        yield break;
+    }
+
+    private IEnumerator CinematicRoutine(Transform playerTarget, Transform focusTarget, GameObject _vcam) {
+        Transform _vcamTransform = _vcam.transform;
+
+        Vector3 targetForward = ComputeForward2D(_vcamTransform, playerTarget);        
+        CameraManager.Instance.SwitchGameVCamera(_vcam);
+
+        CinemachineHardLockToTarget camBody = _virtualCamera.GetCinemachineComponent<CinemachineHardLockToTarget>();
+        CinemachineCollider camCollider = _virtualCamera.GetComponent<CinemachineCollider>();
+
+        float colliderDamping = 1f;
+        float cameraDamping = .8f;
+
+        camCollider.enabled = false;
+        camCollider.m_Damping = 0f;
+        camBody.m_Damping = 0f;
+
+        yield return null;
+
+        while (ComputeDistance2D(_asset.transform, playerTarget) > .15f) {
+            _camHolder.transform.forward = _vcamTransform.forward;
+
+            targetForward = ComputeForward2D(playerTarget, _asset.transform);
+            _forward.transform.forward = targetForward;
+
+            yAxis = _camHolder.transform.rotation.eulerAngles.y;
+            xAxis = _camHolder.transform.rotation.eulerAngles.x;
+
+            moveInput = new Vector2(0f, 1f);
+
+            yield return null;
+        }
+
+        moveInput = new Vector2(0f, 0f);
+
+        isWalking = false;
+
+        _playerRb.velocity = Vector3.zero;
+        _playerRb.ResetInertiaTensor();
+
+        _player.transform.position = new Vector3(playerTarget.transform.position.x, _player.transform.position.y, playerTarget.transform.position.z);
+
+        targetForward = ComputeForward2D(focusTarget, _player.transform);
+        _asset.transform.forward = targetForward;
+        yield return null;
+
+        //Forward and camera after reaching the target point     
+
+        while (onCinematic) {
+            targetForward = ComputeForward2D(playerTarget, _vcamTransform);
+            _forward.transform.forward = targetForward;
+            _camHolder.transform.forward = _vcamTransform.forward;
+
+            yAxis = _forward.transform.rotation.eulerAngles.y;
+            xAxis = _camHolder.transform.rotation.eulerAngles.x;
+            yield return null;
+        }
+
+        targetForward = ComputeForward2D(playerTarget, _vcamTransform);
+        _forward.transform.forward = targetForward;
+        _camHolder.transform.forward = _vcamTransform.forward;
+
+        yAxis = _forward.transform.rotation.eulerAngles.y;
+        xAxis = _camHolder.transform.rotation.eulerAngles.x;
+        yield return null;
+
+        //Reset                                        
+        camCollider.enabled = true;
+        camCollider.m_Damping = colliderDamping;
+        camBody.m_Damping = cameraDamping;
+        yield return null;
+
+        //This should be inside an async method (EXIT CINEMATIC)
+        /*
+        if (!onAction) {
+            CameraManager.Instance.SwitchGameVCamera(_virtualCamera.gameObject);
+            canFreeLook = true;
+        }
+
+        yield return null;
+
+        Debug.Log("Switching inputmap from CinematicController");
+        InputManager.Instance.SetActionMap("Player");
+        */
 
         yield break;
     }
