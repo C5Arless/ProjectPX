@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using System.Threading.Tasks;
 using System.Threading;
+using Cinemachine;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,7 +11,9 @@ using UnityEditor;
 public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigger {
     [SerializeField] GameObject _playerPos;
     [SerializeField] GameObject _actionVCamera;
-    [SerializeField] bool lockPlayer;    
+    [SerializeField] bool lockPlayer;
+    [Space]
+    [SerializeField] CinemachineTargetGroup _targetGroup;
     [Space]
     [SerializeField] int eventIndex;
     [SerializeField] bool isRepeatable;
@@ -20,6 +23,9 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
     private bool isLocked;
     private bool onAction;
 
+    public GameObject PlayerPos { get { return _playerPos; } }
+    public CinemachineTargetGroup TargetGroup { get { return _targetGroup; } }
+
     public int EventIndex { get { return eventIndex; } }
 
     public bool IsRepeatable { get { return isRepeatable; } }
@@ -27,17 +33,18 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
     public EventPriority Priority { get { return priority; } }
 
     public void TriggerEnter(Collider other) {
+        if (GameBucket.Instance.PXController == null) { return; }
         if (GameBucket.Instance.PXController.OnCinematic) { return; }
         if (GameBucket.Instance.PXController.OnAction) { return; }
 
         if (other.tag == "Player") {
 
-            GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
-            
+            GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);            
         }
     }
         
     public void TriggerStay(Collider other) {
+        if (GameBucket.Instance.PXController == null) { return; }
         if (GameBucket.Instance.PXController.OnCinematic) { return; }
         if (GameBucket.Instance.PXController.OnAction) { return; }
         
@@ -125,11 +132,7 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
                 CameraManager.Instance.SwitchGameVCamera(_actionVCamera);
             }
 
-            yield return null;
-            /*
-            if (GameBucket.Instance.PXController.CanInteract) {
-            } else { yield return null; }
-            */
+            yield return null;            
         }
 
         yield break;

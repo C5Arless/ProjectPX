@@ -202,7 +202,9 @@ public class CameraManager : MonoBehaviour {
         yield return new WaitWhile(() => _gBrain.IsBlending);
         yield return null;
 
-        currentGameVCamera.SetActive(false);
+        if (currentGameVCamera != null) {
+            currentGameVCamera.SetActive(false);
+        }
         
         currentGameVCamera = target;
         currentGameVCamera.SetActive(true);

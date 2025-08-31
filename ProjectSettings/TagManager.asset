@@ -25,6 +25,8 @@ TagManager:
   - MenuVirtualCamera
   - Interact
   - Companion
+  - GroupableTarget
+  - GroupablePlayer
   layers:
   - Default
   - TransparentFX
@@ -45,7 +47,7 @@ TagManager:
   - PlayerAttacks
   - Pods
   - Camera_2
-  - 
+  - GroupableTarget
   - 
   - 
   - 
