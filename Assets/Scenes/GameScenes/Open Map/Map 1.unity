@@ -197,7 +197,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2673883635406572211, guid: 6592e8794b9523848bdb6e8d28ec4505, type: 3}
       propertyPath: m_Layer
-      value: 19
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2673883635406572211, guid: 6592e8794b9523848bdb6e8d28ec4505, type: 3}
       propertyPath: m_TagString
@@ -388,6 +388,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2673883635406572211, guid: 6592e8794b9523848bdb6e8d28ec4505, type: 3}
       insertIndex: -1
       addedObject: {fileID: 628784528}
+    - targetCorrespondingSourceObject: {fileID: 2673883635406572211, guid: 6592e8794b9523848bdb6e8d28ec4505, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 628784529}
     - targetCorrespondingSourceObject: {fileID: 960901607853443622, guid: 6592e8794b9523848bdb6e8d28ec4505, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5358276}
@@ -586,7 +589,7 @@ SphereCollider:
     m_Bits: 524288
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 524287
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -18354,7 +18357,7 @@ SphereCollider:
     m_Bits: 524288
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 524287
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -18362,6 +18365,33 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.7
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!54 &628784529
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628784526}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 524287
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &636758348 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6528902819353335669, guid: 21bad670096adfd48af43b36f64dd688, type: 3}
@@ -29375,7 +29405,7 @@ SphereCollider:
     m_Bits: 524288
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 524287
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -34114,7 +34144,7 @@ SphereCollider:
     m_Bits: 524288
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 524287
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0

@@ -29,7 +29,7 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (tag == "GroupablePlayer") { return; }
+        if (tag != "GroupableTarget") { return; }
 
         if (other.tag == "GroupablePlayer") {
             if (currentTask == null) {
@@ -40,7 +40,7 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
     }
 
     private void OnTriggerStay(Collider other) {
-        if (tag == "GroupablePlayer") { return; }
+        if (tag != "GroupableTarget") { return; }
 
         if (other.tag == "GroupablePlayer") {              
             if (currentTask == null) {
@@ -51,7 +51,7 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
     }
 
     private void OnTriggerExit(Collider other) {
-        if (tag == "GroupablePlayer") { return; }
+        if (tag != "GroupableTarget") { return; }
 
         if (other.tag == "GroupablePlayer") { 
             if (currentTask != null) {
@@ -60,13 +60,11 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
         }
     }
 
-    private async Task UpdateTargetWeight(CancellationToken _token) {
-        Debug.Log("Enter Task");
-        
+    private async Task UpdateTargetWeight(CancellationToken _token) {        
         var TargetGroup = _actionBlock.TargetGroup;
         int currentIdx = -1;
 
-        while (_token.IsCancellationRequested) {
+        while (!_token.IsCancellationRequested) {
 
             if (TargetGroup.FindMember(transform) < 0) {
                 TargetGroup.AddMember(transform, 0, _radius);
