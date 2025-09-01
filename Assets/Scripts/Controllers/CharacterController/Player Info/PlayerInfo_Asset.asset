@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _slotID: 0
   _name: Default
-  _powerUps: 0
+  _powerUps: 2
   _score: 0
   _currentHp: 3
   _runtime: 0
-  _checkpoint: {x: 0, y: 0}
+  _checkpoint: {x: 2, y: 2}

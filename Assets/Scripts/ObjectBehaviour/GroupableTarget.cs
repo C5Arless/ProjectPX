@@ -9,7 +9,7 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
     private ActionCameraBlock _actionBlock;
 
     private int _weight;
-    private float _radius;
+    private float _drawRadius;
 
     private int _weightCap;
 
@@ -17,17 +17,18 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
     private CancellationTokenSource tokenSrc;
 
     public int Weight { get { return _weight; } }
-    public float Radius { get { return _radius; } }
+    public float Radius { get { return _collider.radius; } }
 
     public Transform Transform => transform;
     public Bounds BoundingBox => _collider.bounds;
-    public BoundingSphere Sphere => new BoundingSphere(_collider.bounds.center, _radius);
+    public BoundingSphere Sphere => new BoundingSphere(_collider.bounds.center, _collider.radius);
     public bool IsEmpty => _weight <= 0;
 
     private void Awake() {
         _actionBlock = GetComponentInParent<ActionCameraBlock>();
 
-        _radius = _collider.bounds.extents.x;
+        _drawRadius = _collider.bounds.extents.x;        
+
         _weightCap = (int)(_actionBlock.TargetGroup.m_Targets[0].weight / 1.5f);
     }
 
@@ -72,9 +73,10 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
         while (!_token.IsCancellationRequested) {
 
             if (TargetGroup.FindMember(transform) < 0) {
-                TargetGroup.AddMember(transform, 0, _radius);
+                TargetGroup.AddMember(transform, 0, _collider.radius);
 
                 currentIdx = TargetGroup.FindMember(transform);
+                TargetGroup.m_Targets[currentIdx].weight = targetWeight;
                 await Task.Yield();
             }
 
@@ -82,7 +84,7 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
             targetWeight = Mathf.Clamp(targetWeight, 0, _weightCap);
             lerpWeight = Mathf.Lerp(TargetGroup.m_Targets[currentIdx].weight, targetWeight, 2);
 
-            TargetGroup.m_Targets[currentIdx].weight = lerpWeight;
+            TargetGroup.m_Targets[currentIdx].weight = (int)lerpWeight;
             await Task.Yield();
 
             //UpdateWeight
@@ -100,7 +102,7 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
         
         float currentDistance = (playerPos - currentPos).magnitude;
 
-        float result = Mathf.Clamp01(_radius / currentDistance);        
+        float result = Mathf.Clamp01(_collider.radius / currentDistance);        
 
         return result;
     }
@@ -113,17 +115,17 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
 
     public Bounds GetViewSpaceBoundingBox(Matrix4x4 observer) {        
         Vector3 center = observer.MultiplyPoint(_collider.bounds.center);
-        Vector3 size = observer.MultiplyVector(Vector3.one * _radius);
+        Vector3 size = observer.MultiplyVector(Vector3.one * _collider.radius);
         return new Bounds(center, size);
     }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos() {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(_collider.bounds.center, _radius);
+        Gizmos.DrawWireSphere(_collider.bounds.center, _drawRadius);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(_collider.bounds.center, Vector3.one * _radius);
+        Gizmos.DrawWireCube(_collider.bounds.center, Vector3.one * _drawRadius);
 
         UnityEditor.Handles.Label(_collider.bounds.center, "GroupableTarget");
     }
