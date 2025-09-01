@@ -11,6 +11,8 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
     private int _weight;
     private float _radius;
 
+    private int _weightCap;
+
     private Task currentTask = null;
     private CancellationTokenSource tokenSrc;
 
@@ -26,6 +28,7 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
         _actionBlock = GetComponentInParent<ActionCameraBlock>();
 
         _radius = _collider.bounds.extents.x;
+        _weightCap = (int)(_actionBlock.TargetGroup.m_Targets[0].weight / 1.5f);
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -63,6 +66,8 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
     private async Task UpdateTargetWeight(CancellationToken _token) {        
         var TargetGroup = _actionBlock.TargetGroup;
         int currentIdx = -1;
+        int targetWeight = 2;
+        float lerpWeight = 0;
 
         while (!_token.IsCancellationRequested) {
 
@@ -73,7 +78,11 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
                 await Task.Yield();
             }
 
-            TargetGroup.m_Targets[currentIdx].weight = (int)TargetGroup.m_Targets[0].weight * EvaluateWeightModifier();
+            targetWeight = (int)(_weightCap * EvaluateWeightModifier());
+            targetWeight = Mathf.Clamp(targetWeight, 0, _weightCap);
+            lerpWeight = Mathf.Lerp(TargetGroup.m_Targets[currentIdx].weight, targetWeight, 2);
+
+            TargetGroup.m_Targets[currentIdx].weight = lerpWeight;
             await Task.Yield();
 
             //UpdateWeight
@@ -91,7 +100,7 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
         
         float currentDistance = (playerPos - currentPos).magnitude;
 
-        float result = _radius / currentDistance;
+        float result = Mathf.Clamp01(_radius / currentDistance);        
 
         return result;
     }
