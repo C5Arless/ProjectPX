@@ -12,6 +12,7 @@ public class GameCanvasHandler : MonoBehaviour {
     [SerializeField] Slider _lifeDisplay;
     [SerializeField] Image _lifeColor;
     [SerializeField] Image _lifeColorBg;
+    [SerializeField] TMP_Text _collectibleText;
     [Space]
     [SerializeField] GameObject _SNDisplay;
     [SerializeField] TMP_Text _SNText;
@@ -20,6 +21,7 @@ public class GameCanvasHandler : MonoBehaviour {
     public delegate void OnTransitionInDone();
     public OnTransitionInDone _onTransitionInDone;
 
+    private bool _isHidden;
     private bool _isBusy;
     private bool _isTyping;
     private bool _isTransitioning;
@@ -63,11 +65,19 @@ public class GameCanvasHandler : MonoBehaviour {
 
         _uiWindow.SetActive(true);
         int targetHp = DataManager.Instance.PlayerInfo.CurrentHp;
+        int targetCollectibles = DataManager.Instance.PlayerInfo.Score;
+
         _lifeDisplay.value = targetHp;
         SetLifeColor(targetHp);
+
+        _collectibleText.text = targetCollectibles.ToString();
         //Add info here
 
         StartCoroutine(IterateUIPosition());
+    }
+
+    public void HideUI() {
+
     }
 
     public void DialogIn() {        
