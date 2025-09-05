@@ -172,6 +172,12 @@ public class ScenesManager : MonoBehaviour {
 
         GameBucket.Instance.GameCanvasHandler.ShowSceneName();
 
+        if (!GameBucket.Instance.EventsOrchestrator.IsRunning) {
+            GameBucket.Instance.GameCanvasHandler.ShowUI();
+
+            yield return null;
+        }
+
         globalPause = false;
         yield break;
     }
@@ -199,6 +205,12 @@ public class ScenesManager : MonoBehaviour {
 
         GameBucket.Instance.GameCanvasHandler.ShowSceneName();
 
+        if (!GameBucket.Instance.EventsOrchestrator.IsRunning) {
+            GameBucket.Instance.GameCanvasHandler.ShowUI();
+
+            yield return null;
+        }
+
         globalPause = false;
         yield break;
     }
@@ -225,6 +237,12 @@ public class ScenesManager : MonoBehaviour {
         yield return new WaitWhile(() => paused);
 
         GameBucket.Instance.GameCanvasHandler.ShowSceneName();
+
+        if (!GameBucket.Instance.EventsOrchestrator.IsRunning) {
+            GameBucket.Instance.GameCanvasHandler.ShowUI();
+
+            yield return null;
+        }
 
         globalPause = false;
         InputManager.Instance.SetActionMap(currentActionMap);

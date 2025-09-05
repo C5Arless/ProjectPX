@@ -55,6 +55,6 @@ public class DamageState : BaseState, IContextInit {
         Ctx.PlayerRb.AddForce(Ctx.Asset.transform.forward * -10f, ForceMode.Impulse);
 
         //TESTING
-        GameBucket.Instance.GameCanvasHandler.ShowUI();
+        //GameBucket.Instance.GameCanvasHandler.ShowUI();
     }
 }

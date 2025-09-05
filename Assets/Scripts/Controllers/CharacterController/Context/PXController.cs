@@ -263,7 +263,7 @@ public class PXController : MonoBehaviour {
         if (onInteract) { return; }
 
         if (input.ReadValue<float>() != 0f) {            
-            GameBucket.Instance.GameCanvasHandler.ShowUI();
+            //GameBucket.Instance.GameCanvasHandler.ShowUI();
         }
     }
 

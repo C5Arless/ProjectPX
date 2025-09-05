@@ -77,6 +77,8 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     public async Task FireEvent() {
         if (isRunning) { return; }
 
+        GameBucket.Instance.GameCanvasHandler.HideUI();        
+
         GameBucket.Instance.PXController.InteractionEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
 
         GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
@@ -91,6 +93,8 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         GameBucket.Instance.PXController.InteractionExit();
         GameBucket.Instance.CompanionCtx.ExitTalkState();
         //GameBucket.Instance.PXController.OnInteract = false;
+
+        StartCoroutine(EvaluateUI());
 
         await Task.Yield();
     }
@@ -186,6 +190,14 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         isInteracting = false;
 
         StartCoroutine(ExitRoutine());
+    }
+
+    private IEnumerator EvaluateUI() {
+        yield return new WaitWhile(() => GameBucket.Instance.EventsOrchestrator.IsRunning);
+
+        GameBucket.Instance.GameCanvasHandler.ShowUI();
+
+        yield break;
     }
 
     private IEnumerator IteratePage() {

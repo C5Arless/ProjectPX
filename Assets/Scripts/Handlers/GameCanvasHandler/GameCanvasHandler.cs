@@ -21,7 +21,7 @@ public class GameCanvasHandler : MonoBehaviour {
     public delegate void OnTransitionInDone();
     public OnTransitionInDone _onTransitionInDone;
 
-    private bool _isHidden;
+    private bool _isHidden = true;
     private bool _isBusy;
     private bool _isTyping;
     private bool _isTransitioning;
@@ -59,11 +59,15 @@ public class GameCanvasHandler : MonoBehaviour {
     }
 
     public void ShowUI() {
+        /*
         if (_isBusy) { return; }
 
         _isBusy = true;
-
         _uiWindow.SetActive(true);
+        */
+
+        //if (!_isHidden) { return; }
+
         int targetHp = DataManager.Instance.PlayerInfo.CurrentHp;
         int targetCollectibles = DataManager.Instance.PlayerInfo.Score;
 
@@ -73,11 +77,14 @@ public class GameCanvasHandler : MonoBehaviour {
         _collectibleText.text = targetCollectibles.ToString();
         //Add info here
 
-        StartCoroutine(IterateUIPosition());
+        StartCoroutine(IterateUIShow());
+        //StartCoroutine(IterateUIPosition());
     }
 
     public void HideUI() {
+        //if (_isHidden) { return; }
 
+        StartCoroutine(IterateUIHide());
     }
 
     public void DialogIn() {        
@@ -197,6 +204,40 @@ public class GameCanvasHandler : MonoBehaviour {
         yield return null;
 
         _SNDisplay.SetActive(false);
+        yield break;
+    }
+
+    private IEnumerator IterateUIShow() {
+        _uiWindow.transform.localPosition = new Vector3(0f, 700f, 0f);
+        yield return null;
+
+        _uiWindow.SetActive(true);
+
+        while (_uiWindow.transform.localPosition.y >= 350f) {
+            Vector3 distance = new Vector3(0f, 50f, 0f);
+            _uiWindow.transform.localPosition -= distance;
+            yield return null;
+        }
+
+        _uiWindow.transform.localPosition = new Vector3(0f, 350f, 0f);
+        _isHidden = true;
+
+        yield break;
+    }
+
+    private IEnumerator IterateUIHide() {
+        _uiWindow.transform.localPosition = new Vector3(0f, 350f, 0f);
+        yield return null;
+
+        while (_uiWindow.transform.localPosition.y <= 700f) {
+            Vector3 distance = new Vector3(0f, 50f, 0f);
+            _uiWindow.transform.localPosition += distance;
+            yield return null;
+        }
+
+        _uiWindow.transform.localPosition = new Vector3(0f, 700f, 0f);
+        _uiWindow.SetActive(false);
+        _isHidden = false;
         yield break;
     }
 
