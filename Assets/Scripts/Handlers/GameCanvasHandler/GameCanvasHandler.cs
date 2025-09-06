@@ -66,8 +66,9 @@ public class GameCanvasHandler : MonoBehaviour {
         _uiWindow.SetActive(true);
         */
 
-        //if (!_isHidden) { return; }
+        if (!_isHidden) { return; }
 
+        _isHidden = false;
         int targetHp = DataManager.Instance.PlayerInfo.CurrentHp;
         int targetCollectibles = DataManager.Instance.PlayerInfo.Score;
 
@@ -82,8 +83,9 @@ public class GameCanvasHandler : MonoBehaviour {
     }
 
     public void HideUI() {
-        //if (_isHidden) { return; }
+        if (_isHidden) { return; }
 
+        _isHidden = true;
         StartCoroutine(IterateUIHide());
     }
 
@@ -219,8 +221,7 @@ public class GameCanvasHandler : MonoBehaviour {
             yield return null;
         }
 
-        _uiWindow.transform.localPosition = new Vector3(0f, 350f, 0f);
-        _isHidden = true;
+        _uiWindow.transform.localPosition = new Vector3(0f, 350f, 0f);        
 
         yield break;
     }
@@ -237,7 +238,7 @@ public class GameCanvasHandler : MonoBehaviour {
 
         _uiWindow.transform.localPosition = new Vector3(0f, 700f, 0f);
         _uiWindow.SetActive(false);
-        _isHidden = false;
+        
         yield break;
     }
 

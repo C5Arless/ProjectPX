@@ -196,18 +196,27 @@ public class CameraManager : MonoBehaviour {
     }
 
     private IEnumerator SwitchGameCamera(GameObject target) {        
-        target.SetActive(true);
-        yield return null;
+        if (target != null) {
+            target.SetActive(true);
+            yield return null;
 
-        yield return new WaitWhile(() => _gBrain.IsBlending);
-        yield return null;
+            yield return new WaitWhile(() => _gBrain.IsBlending);
+            yield return null;
 
-        if (currentGameVCamera != null) {
-            currentGameVCamera.SetActive(false);
-        }
+            if (currentGameVCamera != null) {
+                currentGameVCamera.SetActive(false);            
+            }
         
-        currentGameVCamera = target;
-        currentGameVCamera.SetActive(true);
+            currentGameVCamera = target;
+
+            try {
+                currentGameVCamera.SetActive(true);
+            } catch {
+                //
+            }
+
+            yield return null;
+        }        
 
         gameCamera = gameBrain.GetComponent<CinemachineBrain>().OutputCamera;
 
