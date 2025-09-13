@@ -544,9 +544,9 @@ public class PXController : MonoBehaviour {
         return distance;
     }
 
-    private Vector3 ComputeForward2D(Transform _head, Transform _tail) {
-        Vector2 head = new Vector2(_head.position.x, _head.position.z);
-        Vector2 tail = new Vector2(_tail.position.x, _tail.position.z);
+    private Vector3 ComputeForward2D(Vector3 _head, Vector3 _tail) {
+        Vector2 head = new Vector2(_head.x, _head.z);
+        Vector2 tail = new Vector2(_tail.x, _tail.z);
 
         Vector2 targetForward = (head - tail).normalized;
 
@@ -560,7 +560,7 @@ public class PXController : MonoBehaviour {
     }
 
     //Camera Methods
-    public void UpdateExternalCamera(Transform playerPos, Transform cameraPivot) {
+    public void UpdateExternalCamera(Vector3 playerPos, Vector3 cameraPivot) {
         //Updates player forward direction while inside ActionCameraBlock
         if (onCinematic) { return; }
 
@@ -813,7 +813,7 @@ public class PXController : MonoBehaviour {
     private IEnumerator InteractRoutine(Transform playerTarget, Transform focusTarget, GameObject _vcam) {
         Transform _vcamTransform = _vcam.transform;        
 
-        Vector3 targetForward = ComputeForward2D(_vcamTransform, playerTarget);
+        Vector3 targetForward = ComputeForward2D(_vcamTransform.position, playerTarget.position);
         CameraManager.Instance.SwitchGameVCamera(_vcam);
 
         CinemachineHardLockToTarget camBody = _virtualCamera.GetCinemachineComponent<CinemachineHardLockToTarget>();
@@ -831,7 +831,7 @@ public class PXController : MonoBehaviour {
         while (ComputeDistance2D(_asset.transform, playerTarget) > .15f) {
             _camHolder.transform.forward = _vcamTransform.forward;
 
-            targetForward = ComputeForward2D(playerTarget, _asset.transform); 
+            targetForward = ComputeForward2D(playerTarget.position, _asset.transform.position); 
             _forward.transform.forward = targetForward;
 
             yAxis = _camHolder.transform.rotation.eulerAngles.y;
@@ -851,14 +851,14 @@ public class PXController : MonoBehaviour {
 
         _player.transform.position = new Vector3(playerTarget.transform.position.x, _player.transform.position.y, playerTarget.transform.position.z);        
 
-        targetForward = ComputeForward2D(focusTarget, _player.transform);
+        targetForward = ComputeForward2D(focusTarget.position, _player.transform.position);
         _asset.transform.forward = targetForward;
         yield return null;
 
         //Forward and camera after reaching the target point     
         
         while (onInteract) {
-            targetForward = ComputeForward2D(playerTarget, _vcamTransform);
+            targetForward = ComputeForward2D(playerTarget.position, _vcamTransform.position);
             _forward.transform.forward = targetForward;
             _camHolder.transform.forward = _vcamTransform.forward;
 
@@ -909,7 +909,7 @@ public class PXController : MonoBehaviour {
     private IEnumerator CinematicRoutine(Transform playerTarget, Transform focusTarget, GameObject _vcam) {
         Transform _vcamTransform = _vcam.transform;
 
-        Vector3 targetForward = ComputeForward2D(_vcamTransform, playerTarget);        
+        Vector3 targetForward = ComputeForward2D(_vcamTransform.position, playerTarget.position);        
         CameraManager.Instance.SwitchGameVCamera(_vcam);
 
         CinemachineHardLockToTarget camBody = _virtualCamera.GetCinemachineComponent<CinemachineHardLockToTarget>();
@@ -927,7 +927,7 @@ public class PXController : MonoBehaviour {
         while (ComputeDistance2D(_asset.transform, playerTarget) > .15f) {
             _camHolder.transform.forward = _vcamTransform.forward;
 
-            targetForward = ComputeForward2D(playerTarget, _asset.transform);
+            targetForward = ComputeForward2D(playerTarget.position, _asset.transform.position);
             _forward.transform.forward = targetForward;
 
             yAxis = _camHolder.transform.rotation.eulerAngles.y;
@@ -947,14 +947,14 @@ public class PXController : MonoBehaviour {
 
         _player.transform.position = new Vector3(playerTarget.transform.position.x, _player.transform.position.y, playerTarget.transform.position.z);
 
-        targetForward = ComputeForward2D(focusTarget, _player.transform);
+        targetForward = ComputeForward2D(focusTarget.position, _player.transform.position);
         _asset.transform.forward = targetForward;
         yield return null;
 
         //Forward and camera after reaching the target point     
 
         while (onCinematic) {
-            targetForward = ComputeForward2D(playerTarget, _vcamTransform);
+            targetForward = ComputeForward2D(playerTarget.position, _vcamTransform.position);
             _forward.transform.forward = targetForward;
             _camHolder.transform.forward = _vcamTransform.forward;
 
@@ -963,7 +963,7 @@ public class PXController : MonoBehaviour {
             yield return null;
         }
 
-        targetForward = ComputeForward2D(playerTarget, _vcamTransform);
+        targetForward = ComputeForward2D(playerTarget.position, _vcamTransform.position);
         _forward.transform.forward = targetForward;
         _camHolder.transform.forward = _vcamTransform.forward;
 

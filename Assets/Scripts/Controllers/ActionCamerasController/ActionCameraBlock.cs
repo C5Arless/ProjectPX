@@ -66,7 +66,7 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
     public async Task FireEvent() {        
         token = new CancellationTokenSource();
         
-        onAction = true;        
+        onAction = true;
 
         ActionEnter();
         GameBucket.Instance.PXController.ActionCameraEnter();
@@ -90,7 +90,7 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
         token.Cancel();
     }
 
-    public void DestroyEvent() {       
+    public void DestroyEvent() {
         Destroy(gameObject);
     }
 
@@ -126,13 +126,14 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
             if (GameBucket.Instance.PXController.OnCinematic) { continue; }
 
             _playerPos.transform.position = GameBucket.Instance.PXController.transform.position;
-            GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);
+            Vector3 actionCameraPosition = CameraManager.Instance.GetCurrentViewCamera().transform.position;
+            GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform.position, actionCameraPosition);
 
             if (CameraManager.Instance.CurrentGameCamera != _actionVCamera) {
                 CameraManager.Instance.SwitchGameVCamera(_actionVCamera);
             }
 
-            yield return null;            
+            yield return null;
         }
 
         yield break;
@@ -141,8 +142,9 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
     private IEnumerator OnActionRoutine() {
         yield return null;
 
-        while (onAction) {            
-            GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform, _actionVCamera.transform);
+        while (onAction) {
+            Vector3 actionCameraPosition = CameraManager.Instance.GetCurrentViewCamera().transform.position;
+            GameBucket.Instance.PXController.UpdateExternalCamera(_playerPos.transform.position, actionCameraPosition);
             
             if (CameraManager.Instance.CurrentGameCamera != _actionVCamera) {
                 CameraManager.Instance.SwitchGameVCamera(_actionVCamera);

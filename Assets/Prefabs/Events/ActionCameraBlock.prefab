@@ -145,9 +145,9 @@ GameObject:
   - component: {fileID: 6169047243614474094}
   - component: {fileID: 5646591562377679912}
   - component: {fileID: 6362618825053958468}
-  m_Layer: 1
+  m_Layer: 20
   m_Name: PlayerPos
-  m_TagString: Untagged
+  m_TagString: GroupablePlayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -161,7 +161,7 @@ Transform:
   m_GameObject: {fileID: 2673883635406572211}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.34, y: 0, z: 1.86}
+  m_LocalPosition: {x: -0.06, y: -8.7, z: 0.84}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -246,6 +246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6607915072260993478}
   - component: {fileID: 248760997716204718}
+  - component: {fileID: 8968622965990948145}
   m_Layer: 1
   m_Name: ActionCollider
   m_TagString: Untagged
@@ -280,6 +281,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e46013c825faad24bb4591df9c0315c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!64 &8968622965990948145
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4041945962830222312}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -673806808914266383, guid: 0525c9649f750ca4ab7f37d301d5d520, type: 3}
 --- !u!1 &4186948803839318318
 GameObject:
   m_ObjectHideFlags: 0
