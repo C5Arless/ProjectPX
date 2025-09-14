@@ -95,9 +95,6 @@ public class ActionCameraBlock : MonoBehaviour, IOrchestratedEvent, IParentTrigg
     }
 
     private void ActionEnter() {
-        //GameBucket.Instance.PXController.ActionCameraEnter();
-        //CameraManager.Instance.SwitchGameVCamera(_actionVCamera);
-
         if (lockPlayer) {
             isLocked = true;            
             StartCoroutine("LockPlayerPosition");

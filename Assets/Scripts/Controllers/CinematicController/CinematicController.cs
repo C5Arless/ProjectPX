@@ -131,12 +131,6 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
     }
 
     private IEnumerator EvaluateUI() {
-        /*
-        while (GameBucket.Instance.EventsOrchestrator.CurrentEvent == (IOrchestratedEvent)this &&
-            GameBucket.Instance.EventsOrchestrator.CurrentEvent == null) {
-            yield return null;
-        }
-        */
         yield return new WaitWhile(() => GameBucket.Instance.EventsOrchestrator.IsRunning);
 
         GameBucket.Instance.GameCanvasHandler.ShowUI();

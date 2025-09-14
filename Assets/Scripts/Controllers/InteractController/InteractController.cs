@@ -82,8 +82,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         GameBucket.Instance.PXController.InteractionEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
 
         GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
-        GameBucket.Instance.CompanionCtx.VisionSetUpTalkBehaviour(_focusTarget);
-        //GameBucket.Instance.PXController.OnInteract = true;
+        GameBucket.Instance.CompanionCtx.VisionSetUpTalkBehaviour(_focusTarget);        
         Interact();
 
         while (isRunning) {
@@ -92,7 +91,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
         GameBucket.Instance.PXController.InteractionExit();
         GameBucket.Instance.CompanionCtx.ExitTalkState();
-        //GameBucket.Instance.PXController.OnInteract = false;
 
         StartCoroutine(EvaluateUI());
 
@@ -228,14 +226,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         isBusy = true;
         yield return null;
 
-        /*
-        GameBucket.Instance.PXController.InteractionEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
-
-        GameBucket.Instance.CompanionCtx.TravelSetUpTalkBehaviour(_companionTarget.transform.position);
-        GameBucket.Instance.CompanionCtx.VisionSetUpTalkBehaviour(_focusTarget);
-        yield return null;
-        */
-
         GameBucket.Instance.GameCanvasHandler.DialogIn();
         yield return new WaitWhile(() => GameBucket.Instance.GameCanvasHandler.IsTransitioning);
         canConfirm = true;
@@ -248,8 +238,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
     private IEnumerator ExitRoutine() {
         canConfirm = false;
         isBusy = true;
-        //GameBucket.Instance.PXController.InteractionExit();
-        //GameBucket.Instance.CompanionCtx.ExitTalkState();
 
         GameBucket.Instance.GameCanvasHandler.DialogOut();
 

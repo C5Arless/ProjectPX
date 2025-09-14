@@ -1,7 +1,5 @@
 using Cinemachine;
 using UnityEngine;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Collections;
 
 public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {    
@@ -12,14 +10,10 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
     private float _weight;
     private float _drawRadius;
     private float maxDistance;
-
     private float _weightCap;
-
-    private IEnumerator _weightRoutine;
+    private int currentIdx = -1;
+    
     private bool _isUpdating;
-
-    private Task currentTask = null;
-    private CancellationTokenSource tokenSrc;
 
     public float Weight { get { return _weight; } }
     public float Radius { get { return _collider.radius; } }
@@ -34,8 +28,7 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
 
         _drawRadius = _collider.bounds.extents.x;        
 
-        _weightCap = (_actionBlock.TargetGroup.m_Targets[0].weight * .5f);
-        //_weightRoutine = UpdateWeightRoutine();
+        _weightCap = (_actionBlock.TargetGroup.m_Targets[0].weight * .5f);        
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -45,13 +38,6 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
             if (!_isUpdating) {                
                 StartCoroutine(UpdateWeightRoutine());
             }
-
-            /*
-            if (currentTask == null) {
-                tokenSrc = new CancellationTokenSource();
-                currentTask = UpdateTargetWeight(tokenSrc.Token);                
-            }
-            */
         }
     }
 
@@ -62,13 +48,6 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
             if (!_isUpdating) {                
                 StartCoroutine(UpdateWeightRoutine());
             }
-
-            /*
-            if (currentTask == null) {
-                tokenSrc = new CancellationTokenSource();
-                currentTask = UpdateTargetWeight(tokenSrc.Token);                
-            }
-            */
         }
     }
 
@@ -79,70 +58,17 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
             if (_isUpdating) {
                 _isUpdating = false;
             }
-
-            /*
-            if (currentTask != null) {
-                tokenSrc.Cancel();
-            }
-            */
         }
-    }
-
-    private async Task UpdateTargetWeight(CancellationToken _token) {        
-        var TargetGroup = _actionBlock.TargetGroup;
-        int currentIdx = -1;
-        float targetWeight = 0;
-        float lerpWeight = 0;
-
-        while (!_token.IsCancellationRequested) {
-
-            if (TargetGroup.FindMember(transform) < 0) {
-                TargetGroup.AddMember(transform, 0, _collider.radius);                              
-
-                await Task.Yield();
-            }
-
-
-            currentIdx = TargetGroup.FindMember(transform); 
-            targetWeight = _weightCap * EvaluateWeightModifier();
-            targetWeight = Mathf.Clamp(targetWeight, 0, _weightCap);
-            lerpWeight = Mathf.Lerp(TargetGroup.m_Targets[currentIdx].weight, targetWeight, .1f);
-
-            int rounded = (int)lerpWeight * 1000;
-            lerpWeight = rounded / 1000;
-
-            _weight = lerpWeight;
-            TargetGroup.m_Targets[currentIdx].weight = lerpWeight;
-            await Task.Delay(100);
-
-            //UpdateWeight
-        }
-        
-        targetWeight = 0;
-
-        while (TargetGroup.m_Targets[currentIdx].weight > .1f) {            
-            currentIdx = TargetGroup.FindMember(transform);
-            lerpWeight = Mathf.Lerp(TargetGroup.m_Targets[currentIdx].weight, targetWeight, -.1f);
-            
-            int rounded = (int)lerpWeight * 1000;
-            lerpWeight = rounded / 1000;
-
-            _weight = lerpWeight;            
-            TargetGroup.m_Targets[currentIdx].weight = _weight;
-            await Task.Delay(100);
-        }
-
-        TargetGroup.RemoveMember(transform);
-        currentTask = null;
-
-        await Task.Yield();
-    }
+    }   
 
     private IEnumerator UpdateWeightRoutine() {
         var TargetGroup = _actionBlock.TargetGroup;
-        int currentIdx = -1;
+        var target = new CinemachineTargetGroup.Target();
         float targetWeight = 0;
         float lerpWeight = 0;
+
+        CinemachineTargetGroupExtension._onTargetModified += UpdateTargetIdx;
+        yield return null;
 
         _isUpdating = true;
         yield return null;
@@ -150,53 +76,72 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
         while (_isUpdating) {
 
             if (TargetGroup.FindMember(transform) < 0) {
-                TargetGroup.AddMember(transform, 0, _collider.radius);
-
+                TargetGroup.ModifyTarget(transform, 0, _collider.radius, TargetGroupAction.Add);
                 yield return null;
-            }            
+
+                target = TargetGroup.m_Targets[currentIdx];
+                yield return null;
+            }
 
             currentIdx = TargetGroup.FindMember(transform);
-            targetWeight = _weightCap * EvaluateWeightModifier();
-            targetWeight = Mathf.Clamp(targetWeight, 0, _weightCap);
-            lerpWeight = Mathf.Lerp(TargetGroup.m_Targets[currentIdx].weight, targetWeight, .01f);
+
+            if (currentIdx >= 0) {
+                target = TargetGroup.m_Targets[currentIdx];
+
+                targetWeight = _weightCap * EvaluateWeightModifier();
+                targetWeight = Mathf.Clamp(targetWeight, 0, _weightCap);
+                lerpWeight = Mathf.Lerp(target.weight, targetWeight, .01f);
 
 
-            int rounded = (int)(lerpWeight * Mathf.Pow(10, 3));
-            lerpWeight = rounded * Mathf.Pow(10, -3);
+                int rounded = (int)(lerpWeight * Mathf.Pow(10, 3));
+                lerpWeight = rounded * Mathf.Pow(10, -3);
             
 
-            var target = TargetGroup.m_Targets[currentIdx];
-            target.weight = lerpWeight;
+                target = TargetGroup.m_Targets[currentIdx];
+                target.weight = lerpWeight;
 
-            _weight = target.weight;
-            TargetGroup.m_Targets[currentIdx] = target;
+                _weight = target.weight;
+                TargetGroup.m_Targets[currentIdx] = target;
+            }
+
             yield return null;
-
             //UpdateWeight
         }
 
         targetWeight = 0;
+        //target = TargetGroup.m_Targets[currentIdx];
 
-        while (TargetGroup.m_Targets[currentIdx].weight > .1f) {
+        while (target.weight > .1f) {
             currentIdx = TargetGroup.FindMember(transform);
-            //lerpWeight = Mathf.Lerp(TargetGroup.m_Targets[currentIdx].weight, targetWeight, -.1f);
-            lerpWeight = Mathf.MoveTowards(TargetGroup.m_Targets[currentIdx].weight, targetWeight, .5f);
 
-            int rounded = (int)(lerpWeight * Mathf.Pow(10, 3));
-            lerpWeight = rounded * Mathf.Pow(10, -3);
+            if (currentIdx >= 0) {
+                lerpWeight = Mathf.MoveTowards(target.weight, targetWeight, .5f);
 
-            var target = TargetGroup.m_Targets[currentIdx];
-            target.weight = lerpWeight;
+                int rounded = (int)(lerpWeight * Mathf.Pow(10, 3));
+                lerpWeight = rounded * Mathf.Pow(10, -3);
 
-            _weight = target.weight;
-            TargetGroup.m_Targets[currentIdx] = target;
+
+                target = TargetGroup.m_Targets[currentIdx];
+                target.weight = lerpWeight;
+            
+                _weight = target.weight;
+                TargetGroup.m_Targets[currentIdx] = target;
+            }
+
             yield return null;
         }
 
-        TargetGroup.RemoveMember(transform);
+        TargetGroup.ModifyTarget(transform, 0, 0, TargetGroupAction.Remove);
         _isUpdating = false;
+        yield return null;
+
+        CinemachineTargetGroupExtension._onTargetModified -= UpdateTargetIdx;
 
         yield break;
+    }
+
+    private void UpdateTargetIdx() {
+        currentIdx = _actionBlock.TargetGroup.FindMember(transform);
     }
 
     private float EvaluateWeightModifier() {
