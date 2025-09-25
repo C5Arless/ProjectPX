@@ -141,7 +141,9 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
     }
 
     private void UpdateTargetIdx() {
-        currentIdx = _actionBlock.TargetGroup.FindMember(transform);
+        if (_actionBlock != null) {
+            currentIdx = _actionBlock.TargetGroup.FindMember(transform);
+        }
     }
 
     private float EvaluateWeightModifier() {
