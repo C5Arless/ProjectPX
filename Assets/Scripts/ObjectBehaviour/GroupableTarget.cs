@@ -66,7 +66,7 @@ public class GroupableTarget : MonoBehaviour, ICinemachineTargetGroup {
         var target = new CinemachineTargetGroup.Target();
         float targetWeight = 0;
         float lerpWeight = 0;
-
+        
         CinemachineTargetGroupExtension._onTargetModified += UpdateTargetIdx;
         yield return null;
 
