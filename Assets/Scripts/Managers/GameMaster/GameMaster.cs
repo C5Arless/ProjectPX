@@ -6,7 +6,11 @@ public class GameMaster : MonoBehaviour {
 
     [SerializeField] GameObject[] _managerPrefabs;
 
-    private bool gameStarted;
+    public delegate void OnGamePaused();
+    public OnGamePaused _onGamePaused = () => { };
+
+    public delegate void OnGameUnpaused();
+    public OnGameUnpaused _onGameUnpaused = () => { };
 
     private void Awake() {
         if (Instance == null) {
@@ -14,6 +18,9 @@ public class GameMaster : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
         }
         else { Destroy(gameObject); }
+
+        //_onGamePaused += () => { };
+        //_onGameUnpaused += () => { };
     }
 
     // Start is called before the first frame update
@@ -22,6 +29,18 @@ public class GameMaster : MonoBehaviour {
 
         StartCoroutine(InitializeManagers());
 
+    }
+
+    public void PauseGame() {
+        Time.timeScale = 0f;
+
+        _onGamePaused();
+    }
+
+    public void UnpauseGame() {
+        Time.timeScale = 1f;
+
+        _onGameUnpaused();
     }
     
     private IEnumerator InitializeManagers() {

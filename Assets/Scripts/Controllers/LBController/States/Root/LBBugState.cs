@@ -24,7 +24,9 @@ public class LBBugState : LBBaseState, IContextInit {
 
     public override void CheckSwitchStates() {
         //Switch logic
-
+        if (Ctx.IsBall) {
+            SwitchState(StateHandler.Ball());
+        }
     }
 
     public void InitializeContext() {

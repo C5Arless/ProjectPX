@@ -148,7 +148,7 @@ public class CameraManager : MonoBehaviour {
     }    
 
     private IEnumerator PauseCameraOut() {
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
         InputManager.Instance.SetActionMap("UI");
 
         if (!menuVCameras[(int)MenuVCameras.PauseStart].gameObject.activeSelf) {
@@ -174,7 +174,7 @@ public class CameraManager : MonoBehaviour {
 
         SwitchBrain(gameBrain);
         InputManager.Instance.SetActionMap("Player");
-        Time.timeScale = 1f;
+        //Time.timeScale = 1f;
 
         yield break;
     }

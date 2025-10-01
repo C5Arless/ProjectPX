@@ -24,7 +24,12 @@ public class LBPatrolState : LBBaseState, IContextInit {
 
     public override void CheckSwitchStates() {
         //Switch logic
-
+        if (Ctx.IsPursuing) {
+            SwitchState(StateHandler.Pursue());
+        }
+        else if (Ctx.IsIdle) {
+            SwitchState(StateHandler.Idle());
+        }
     }
 
     public void InitializeContext() {

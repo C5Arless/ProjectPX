@@ -18,13 +18,14 @@ public class LBBallState : LBBaseState, IContextInit {
     }
 
     public override void ExitState() {
-        //Exit logic
-
+        //Exit logic        
     }
 
     public override void CheckSwitchStates() {
         //Switch logic
-
+        if (Ctx.IsBug) {
+            SwitchState(StateHandler.Bug());
+        }
     }
 
     public void InitializeContext() {

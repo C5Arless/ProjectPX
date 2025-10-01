@@ -24,7 +24,9 @@ public class LBAttackState : LBBaseState, IContextInit {
 
     public override void CheckSwitchStates() {
         //Switch logic
-
+        if (Ctx.IsIdle) {
+            SwitchState(StateHandler.Idle());
+        }        
     }
 
     public void InitializeContext() {

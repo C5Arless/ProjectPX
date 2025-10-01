@@ -192,6 +192,8 @@ public class MenuController : MonoBehaviour {
             _canvasHandler.SwitchUIMode(mode);
 
             CameraManager.Instance.PauseOut();
+            //Pause
+            GameMaster.Instance.PauseGame();
             AudioManager.Instance.OnPauseEnterFilter();
             Cursor.lockState = CursorLockMode.None;
         }
@@ -287,6 +289,8 @@ public class MenuController : MonoBehaviour {
     public void ResumeGameplay() {
         AudioManager.Instance.OnPauseExitFilter();
         CameraManager.Instance.PauseIn();
+        //Unpause
+        GameMaster.Instance.UnpauseGame();
         Cursor.lockState = CursorLockMode.Locked;
     }    
 
