@@ -26,6 +26,9 @@ public class LBBallState : LBBaseState, IContextInit {
         if (Ctx.IsBug) {
             SwitchState(StateHandler.Bug());
         }
+        else if (Ctx.IsDead) {
+            SwitchState(StateHandler.Dead());
+        }
     }
 
     public void InitializeContext() {

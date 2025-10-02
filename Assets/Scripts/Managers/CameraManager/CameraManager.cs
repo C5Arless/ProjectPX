@@ -2,7 +2,6 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class CameraManager : MonoBehaviour {
     public static CameraManager Instance { get; private set; }
@@ -147,8 +146,7 @@ public class CameraManager : MonoBehaviour {
         }
     }    
 
-    private IEnumerator PauseCameraOut() {
-        //Time.timeScale = 0f;
+    private IEnumerator PauseCameraOut() {        
         InputManager.Instance.SetActionMap("UI");
 
         if (!menuVCameras[(int)MenuVCameras.PauseStart].gameObject.activeSelf) {
@@ -173,8 +171,7 @@ public class CameraManager : MonoBehaviour {
         yield return new WaitForSecondsRealtime(.25f);
 
         SwitchBrain(gameBrain);
-        InputManager.Instance.SetActionMap("Player");
-        //Time.timeScale = 1f;
+        InputManager.Instance.SetActionMap("Player");        
 
         yield break;
     }
