@@ -11118,7 +11118,7 @@ Transform:
   m_GameObject: {fileID: 1453261922}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.6, y: 3.81, z: 58.5}
+  m_LocalPosition: {x: 2.5, y: 3.81, z: 55.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15013,6 +15013,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: LB-00
       objectReference: {fileID: 0}
+    - target: {fileID: 483427799479800161, guid: aff083ea12ec35246b2ceb807db0ec8d, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7341f2737d18e0b45b8283d933227a57, type: 2}
+    - target: {fileID: 3329195267911321900, guid: aff083ea12ec35246b2ceb807db0ec8d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7341f2737d18e0b45b8283d933227a57, type: 2}
+    - target: {fileID: 3966135280673636122, guid: aff083ea12ec35246b2ceb807db0ec8d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7341f2737d18e0b45b8283d933227a57, type: 2}
     - target: {fileID: 5623717826174698315, guid: aff083ea12ec35246b2ceb807db0ec8d, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -15025,6 +15037,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1879698265}
+    - target: {fileID: 6530066778127507816, guid: aff083ea12ec35246b2ceb807db0ec8d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7341f2737d18e0b45b8283d933227a57, type: 2}
     - target: {fileID: 7159646934414030404, guid: aff083ea12ec35246b2ceb807db0ec8d, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
@@ -15103,6 +15119,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stateText: {fileID: 204615954}
+  materials:
+  - {fileID: 2100000, guid: 7341f2737d18e0b45b8283d933227a57, type: 2}
+  - {fileID: 2100000, guid: 1aa3404a01147f3448cb80373f054f0f, type: 2}
+  - {fileID: 2100000, guid: 530e5c97d23af5a428840cea8375e8d9, type: 2}
+  - {fileID: 2100000, guid: c34086417b112054fac89b6376b048dc, type: 2}
 --- !u!43 &2119343961
 Mesh:
   m_ObjectHideFlags: 0

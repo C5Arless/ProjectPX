@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class LBController : MonoBehaviour, ISpawnable {
     [SerializeField] TMP_Text _stateText;
+    [SerializeField] List<Material> materials;
 
     //State reference
     LBStateHandler _stateHandler;
@@ -25,6 +28,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     private bool isPursuing = false;
     private bool isAttacking = false;
 
+    private Vector3 initialScale;
+
     public Vector3 Position { get { return transform.position; } }
 
     public bool IsReady { get { return isReady; } set { isReady = value; } }
@@ -45,7 +50,8 @@ public class LBController : MonoBehaviour, ISpawnable {
 
     private void Awake() {
         _stateHandler = new LBStateHandler(this);
-        
+
+        initialScale = transform.localScale;
     }
 
     private void Start() {
@@ -57,6 +63,8 @@ public class LBController : MonoBehaviour, ISpawnable {
         if (GameBucket.Instance != null) {
             GameBucket.Instance.SpawnHandler.Register(this);
         }
+
+        transform.localScale = Vector3.zero;
     }
 
     private void OnDisable() {
@@ -91,47 +99,52 @@ public class LBController : MonoBehaviour, ISpawnable {
         }
     }
 
-    public void Spawn() {
-        Debug.Log("Spawning!");
+    public void Spawn() {        
         isSpawning = true;
-
-        //Set initial size
-        //Set initial material mask
-
-        //Routine 0-1
-
-        /*
-        _currentRootState = _stateHandler.Bug();
-        _currentRootState.EnterState();
-
-        _currentSubState = _stateHandler.Idle();
-        _currentSubState.EnterState();
-
-        isRunning = true;
-        */
         StartCoroutine(SpawnRoutine());
-    }
+    }    
 
     private IEnumerator SpawnRoutine() {
-        float initialXSize = transform.localScale.x;
-        float initialYSize = transform.localScale.y;
-        float initialZSize = transform.localScale.z;
-
         float targetScale = 1f;
+        float currentScale = 0f;        
+        
+        SetScale(currentScale);
+        SetMask(currentScale);
 
-        transform.localScale.Set(0f, 0f, 0f);
-        float currentScale = 0f;
+        while (currentScale < targetScale) {
+            currentScale += .05f;
+            
+            SetScale(currentScale);
+            SetMask(currentScale);
 
-        while (currentScale <= targetScale) {
-            currentScale += .02f;
-            Vector3 scale = new Vector3(initialXSize * currentScale, initialYSize * currentScale, initialZSize * currentScale);
-            transform.localScale += scale;
-            Debug.Log(currentScale);
             yield return null;
         }
 
-        transform.localScale = Vector3.one;
+        currentScale = 1f;
 
+        SetMask(currentScale);
+        SetScale(currentScale);
+
+        yield return null;
+
+        InitializeStateMachine();
+
+        yield break;
+    }
+
+    private void SetMask(float maskValue) {
+        float targetValue = maskValue;
+        foreach (var material in materials) {
+            material.SetFloat("_Mask", targetValue);
+        }
+    }
+
+    private void SetScale(float scaleValue) {
+        Vector3 scale = initialScale * scaleValue;
+        transform.localScale = scale;
+    }
+
+    private void InitializeStateMachine() {
         isBug = true;
         _currentRootState = _stateHandler.Bug();
         _currentRootState.EnterState();
@@ -140,9 +153,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         _currentSubState = _stateHandler.Idle();
         _currentSubState.EnterState();
 
-        isRunning = true;
         isSpawning = false;
-
-        yield break;
+        isRunning = true;
     }
 }
