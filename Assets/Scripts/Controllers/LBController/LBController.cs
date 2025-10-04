@@ -27,7 +27,6 @@ public class LBController : MonoBehaviour, ISpawnable {
     private bool isPatrolling = false;
     private bool isPursuing = false;
     private bool isAttacking = false;
-
     private Vector3 initialScale;
 
     public Vector3 Position { get { return transform.position; } }
