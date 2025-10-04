@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using System.Collections;
 using UnityEngine;
@@ -20,9 +21,21 @@ public class InputManager : MonoBehaviour {
         }
         else { Destroy(gameObject); }
 
-        _currentActionMap = playerInput.defaultActionMap;
+        //_currentActionMap = playerInput.defaultActionMap;
     }
 
+    private void Start() {
+        InitializeInput();
+    }
+
+    public void InitializeInput() {
+        foreach (var actionMap in playerInput.actions.actionMaps) {
+            actionMap.Disable();
+        }
+        
+        SetActionMap(playerInput.defaultActionMap);
+    }
+    
     public void StartGame() {
         SetActionMap("Player");
     }
@@ -68,10 +81,13 @@ public class InputManager : MonoBehaviour {
 
         playerInput.SwitchCurrentActionMap("Disabled");
         _currentActionMap = "Disabled";
+        playerInput.currentActionMap.Enable();
         yield return null;
-
+        
+        playerInput.currentActionMap.Disable();
         playerInput.SwitchCurrentActionMap(target);
         _currentActionMap = target;
+        playerInput.currentActionMap.Enable();
         yield break;
     }
 }

@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "InputSystem",
     "maps": [
         {
@@ -1039,7 +1040,7 @@
                     "name": "Confirm",
                     "type": "Button",
                     "id": "d5d8147b-ceff-435b-8ded-9279c76390ca",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -1078,7 +1079,7 @@
                     "name": "AnyButton",
                     "type": "Button",
                     "id": "d1263c13-422f-4c4e-830c-a97ef8b3ef91",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -1150,7 +1151,7 @@
                     "name": "EnableDebug",
                     "type": "Button",
                     "id": "fd5e5fa6-c226-4a83-b17c-d6f20affdf20",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -1178,7 +1179,7 @@
                     "name": "DebugSelector",
                     "type": "Button",
                     "id": "4d896375-47a6-4864-a0ab-3cfb2ce0139d",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

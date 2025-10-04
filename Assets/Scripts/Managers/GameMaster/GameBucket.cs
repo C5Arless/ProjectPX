@@ -35,7 +35,7 @@ public class GameBucket : MonoBehaviour {
     }
 
     private void Start() {
-        //RetrieveDialogObject();
+        RetrieveDialogObject();
         
     }
 

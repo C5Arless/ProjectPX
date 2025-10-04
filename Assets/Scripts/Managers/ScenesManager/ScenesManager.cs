@@ -145,8 +145,8 @@ public class ScenesManager : MonoBehaviour {
         
         StartCoroutine(TransitionOut(_dissolve, _dissolveSpeed));
         yield return new WaitWhile(() => paused);
-
-        InputManager.Instance.SetActionMap("UI");
+        
+        //InputManager.Instance.SetActionMap("UI");
 
         globalPause = false;
         yield break;

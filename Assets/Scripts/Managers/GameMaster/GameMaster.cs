@@ -51,7 +51,10 @@ public class GameMaster : MonoBehaviour {
 
         DataManager.Instance.InitializeData();
         yield return null;
-
+        
+        InputManager.Instance.InitializeInput();
+        yield return null;
+        
         AudioManager.Instance.InitializeMixerVolumes();
         yield return null;
 
