@@ -1596,7 +1596,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Y",
     "m_StageCapability": 3,
-    "m_Value": 0.5,
+    "m_Value": 0.5149999856948853,
     "m_DefaultValue": 0.0,
     "m_Labels": [
         "Y"
@@ -1757,8 +1757,8 @@
     "m_ObjectId": "3f9f5d52dcae49b1b4a9838db9e72096",
     "m_Title": "Slider",
     "m_Position": {
-        "x": -410.39996337890627,
-        "y": -245.60000610351563
+        "x": -410.3999938964844,
+        "y": -245.60003662109376
     }
 }
 
@@ -2912,7 +2912,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "AlphaClipThreshold",
     "m_StageCapability": 2,
-    "m_Value": 0.009999999776482582,
+    "m_Value": 0.0010000000474974514,
     "m_DefaultValue": 0.5,
     "m_Labels": []
 }
@@ -3517,8 +3517,8 @@
     "m_ObjectId": "ba1951e0b3f6425ebe26352674c120c4",
     "m_Title": "Base pattern",
     "m_Position": {
-        "x": 537.5999145507813,
-        "y": -479.1999816894531
+        "x": 537.5999755859375,
+        "y": -479.20001220703127
     }
 }
 
