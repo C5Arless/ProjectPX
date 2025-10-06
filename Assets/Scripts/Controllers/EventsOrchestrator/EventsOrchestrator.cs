@@ -34,13 +34,13 @@ public class EventsOrchestrator : MonoBehaviour {
                 eventsQueue.Add(target);
             }
 
-            if (currentTask == null) {            
-                StartCoroutine(BeginOrchestration());
-            }
-
             if (currentEvent?.Priority == EventPriority.Low) {
                 //Debug.Log(currentEvent + " event canceled");
                 currentEvent.CancelEvent();
+            }
+            
+            if (currentTask == null) {            
+                StartCoroutine(BeginOrchestration());
             }
         }
 

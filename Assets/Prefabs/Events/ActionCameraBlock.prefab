@@ -551,7 +551,7 @@ MonoBehaviour:
   m_Targets:
   - target: {fileID: 2184988432521488582}
     weight: 100
-    radius: 0.3
+    radius: 3
 --- !u!1 &8537975929491967016
 GameObject:
   m_ObjectHideFlags: 0
