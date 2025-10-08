@@ -14,19 +14,19 @@ public class LBController : MonoBehaviour, ISpawnable {
     LBBaseState _currentSubState;
 
     //State vars
-    private bool isReady = false;
+    private bool isReady;
 
-    private bool isRunning = false;
-    private bool isPaused = false;
-    private bool isSpawning = false;
+    private bool isRunning;
+    private bool isPaused;
+    private bool isSpawning;
 
-    private bool isBug = false;
-    private bool isBall = false;
-    private bool isDead = false;
-    private bool isIdle = false;
-    private bool isPatrolling = false;
-    private bool isPursuing = false;
-    private bool isAttacking = false;
+    private bool isBug;
+    private bool isBall;
+    private bool isDead;
+    private bool isIdle;
+    private bool isPatrolling;
+    private bool isPursuing;
+    private bool isAttacking;
     private Vector3 initialScale;
 
     public Vector3 Position { get { return transform.position; } }
@@ -101,8 +101,12 @@ public class LBController : MonoBehaviour, ISpawnable {
     public void Spawn() {        
         isSpawning = true;
         StartCoroutine(SpawnRoutine());
-    }    
+    }
 
+    public void IdleStart() {
+        StartCoroutine(IdleRoutine());
+    }
+    
     private IEnumerator SpawnRoutine() {
         float targetScale = 1f;
         float currentScale = 0f;        
@@ -154,5 +158,14 @@ public class LBController : MonoBehaviour, ISpawnable {
 
         isSpawning = false;
         isRunning = true;
+    }
+    
+    private IEnumerator IdleRoutine() {
+        yield return new WaitForSeconds(2f);
+        
+        isIdle = false;
+        isPatrolling = true;
+        
+        yield return null;
     }
 }

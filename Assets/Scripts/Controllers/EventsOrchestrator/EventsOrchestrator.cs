@@ -43,9 +43,6 @@ public class EventsOrchestrator : MonoBehaviour {
                 StartCoroutine(BeginOrchestration());
             }
         }
-
-
-        
     }
 
     public void DequeueEvent(IOrchestratedEvent target) {

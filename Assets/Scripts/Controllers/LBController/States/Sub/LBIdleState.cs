@@ -7,7 +7,9 @@ public class LBIdleState : LBBaseState, IContextInit {
 
     public override void EnterState() {
         //Enter logic
-
+        Ctx.IdleStart();
+        
+        Debug.Log("LB - Entered IdleState.");
         InitializeContext();
     }
 
@@ -19,7 +21,8 @@ public class LBIdleState : LBBaseState, IContextInit {
 
     public override void ExitState() {
         //Exit logic
-
+        
+        Debug.Log("LB - Exited IdleState.");
     }
 
     public override void CheckSwitchStates() {
