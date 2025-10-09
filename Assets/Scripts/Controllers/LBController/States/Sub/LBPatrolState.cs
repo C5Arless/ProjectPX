@@ -7,6 +7,8 @@ public class LBPatrolState : LBBaseState, IContextInit {
 
     public override void EnterState() {
         //Enter logic
+        
+        Ctx.SetPatrolPosition();
         Debug.Log("LB - Entered PatrolState.");
         InitializeContext();
     }

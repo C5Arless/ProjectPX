@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class LBController : MonoBehaviour, ISpawnable {
     [SerializeField] TMP_Text _stateText;
     [SerializeField] List<Material> materials;
+    [SerializeField] NavMeshAgent navMeshAgent;
+    [SerializeField] GameObject player;
 
     //State reference
     LBStateHandler _stateHandler;
@@ -106,6 +109,35 @@ public class LBController : MonoBehaviour, ISpawnable {
     public void IdleStart() {
         StartCoroutine(IdleRoutine());
     }
+
+    public void SetPatrolPosition() {
+        navMeshAgent.SetDestination(player.transform.position);
+    }
+    
+    private void SetMask(float maskValue) {
+        float targetValue = maskValue;
+        foreach (var material in materials) {
+            material.SetFloat("_Mask", targetValue);
+        }
+    }
+
+    private void SetScale(float scaleValue) {
+        Vector3 scale = initialScale * scaleValue;
+        transform.localScale = scale;
+    }
+    
+    private void InitializeStateMachine() {
+        isBug = true;
+        _currentRootState = _stateHandler.Bug();
+        _currentRootState.EnterState();
+
+        isIdle = true;
+        _currentSubState = _stateHandler.Idle();
+        _currentSubState.EnterState();
+
+        isSpawning = false;
+        isRunning = true;
+    }
     
     private IEnumerator SpawnRoutine() {
         float targetScale = 1f;
@@ -133,31 +165,6 @@ public class LBController : MonoBehaviour, ISpawnable {
         InitializeStateMachine();
 
         yield break;
-    }
-
-    private void SetMask(float maskValue) {
-        float targetValue = maskValue;
-        foreach (var material in materials) {
-            material.SetFloat("_Mask", targetValue);
-        }
-    }
-
-    private void SetScale(float scaleValue) {
-        Vector3 scale = initialScale * scaleValue;
-        transform.localScale = scale;
-    }
-
-    private void InitializeStateMachine() {
-        isBug = true;
-        _currentRootState = _stateHandler.Bug();
-        _currentRootState.EnterState();
-
-        isIdle = true;
-        _currentSubState = _stateHandler.Idle();
-        _currentSubState.EnterState();
-
-        isSpawning = false;
-        isRunning = true;
     }
     
     private IEnumerator IdleRoutine() {
