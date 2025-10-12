@@ -24,11 +24,14 @@ public class LBPursueState : LBBaseState, IContextInit {
 
     public override void CheckSwitchStates() {
         //Switch logic
-        if (Ctx.IsAttacking) {
+        if (Ctx.SubStates[LBSubStates.Attack]) {
             SwitchState(StateHandler.Attack());
         }
-        else if (Ctx.IsIdle) {
+        else if (Ctx.SubStates[LBSubStates.Idle]) {
             SwitchState(StateHandler.Idle());
+        }
+        else if (Ctx.SubStates[LBSubStates.Damaged]) {
+            SwitchState(StateHandler.Damaged());
         }
     }
 

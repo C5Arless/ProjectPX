@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnHandler : MonoBehaviour {
-    [Header("Riferimenti")]
     [SerializeField] private Transform player; //DEBUG
-
-    [Header("Parametri Spawn")]
-    [SerializeField] private float timeToWait = 2f;   // ogni quanto fare il check
-    [SerializeField] private float minDistance = 20f;       // distanza minima dal player
+    
+    [SerializeField] private float timeToWait = 2f;
+    [SerializeField] private float minDistance = 20f;
 
     private readonly List<ISpawnable> spawnables = new List<ISpawnable>();
 

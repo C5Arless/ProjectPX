@@ -24,10 +24,10 @@ public class LBBugState : LBBaseState, IContextInit {
 
     public override void CheckSwitchStates() {
         //Switch logic
-        if (Ctx.IsBall) {
+        if (Ctx.RootStates[LBRootStates.Ball]) {
             SwitchState(StateHandler.Ball());
         }
-        else if (Ctx.IsDead) {
+        else if (Ctx.RootStates[LBRootStates.Dead]) {
             SwitchState(StateHandler.Dead());
         }
     }

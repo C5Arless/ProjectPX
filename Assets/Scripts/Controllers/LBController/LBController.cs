@@ -23,13 +23,9 @@ public class LBController : MonoBehaviour, ISpawnable {
     private bool isPaused;
     private bool isSpawning;
 
-    private bool isBug;
-    private bool isBall;
-    private bool isDead;
-    private bool isIdle;
-    private bool isPatrolling;
-    private bool isPursuing;
-    private bool isAttacking;
+    private Dictionary<LBRootStates, bool> rootStates; 
+    private Dictionary<LBSubStates, bool> subStates;
+    
     private Vector3 initialScale;
 
     public Vector3 Position { get { return transform.position; } }
@@ -38,24 +34,21 @@ public class LBController : MonoBehaviour, ISpawnable {
     public bool IsSpawning { get { return isSpawning; } set { isSpawning = value; } }
     public bool IsRunning { get { return isRunning; } set { isRunning = value; } }
     public bool IsPaused { get { return isPaused; } set { isPaused = value; } }
-
-    public bool IsBug { get { return isBug; } set { isBug = value; } }
-    public bool IsBall { get { return isBall; } set { isBall = value; } }
-    public bool IsDead { get { return isDead; } set { isDead = value; } }
-    public bool IsIdle { get { return isIdle; } set { isIdle = value; } }
-    public bool IsPatrolling { get { return isPatrolling; } set { isPatrolling = value; } }
-    public bool IsPursuing { get { return isPursuing; } set { isPursuing = value; } }
-    public bool IsAttacking { get { return isAttacking; } set { isAttacking = value; } }
+    
+    public Dictionary<LBRootStates, bool>  RootStates { get { return rootStates; } }
+    public Dictionary<LBSubStates, bool>  SubStates { get { return subStates; } }
 
     public LBBaseState CurrentRootState { get { return _currentRootState; } set { _currentRootState = value; } }
     public LBBaseState CurrentSubState { get { return _currentSubState; } set { _currentSubState = value; } }
 
     private void Awake() {
+        InitializeStateKeys();
+        
         _stateHandler = new LBStateHandler(this);
 
         initialScale = transform.localScale;
     }
-
+    
     private void Start() {
         if (GameMaster.Instance != null) {
             GameMaster.Instance._onGamePaused += PauseBehaviour;
@@ -86,6 +79,13 @@ public class LBController : MonoBehaviour, ISpawnable {
         }
     }
 
+    void FixedUpdate() {
+        if (isRunning && !isPaused) {
+            _currentRootState.UpdateState();
+            _currentSubState.UpdateState();
+        }
+    }
+    
     public void PauseBehaviour() {
         isPaused = true;
     }
@@ -93,25 +93,48 @@ public class LBController : MonoBehaviour, ISpawnable {
     public void UnpauseBehaviour() {
         isPaused = false;
     }
-
-    void FixedUpdate() {
-        if (isRunning && !isPaused) {
-            _currentRootState.UpdateState();
-            _currentSubState.UpdateState();
-        }
-    }
-
+    
     public void Spawn() {        
         isSpawning = true;
         StartCoroutine(SpawnRoutine());
     }
 
-    public void IdleStart() {
+    public void IdleStart() { //To be moved to update
         StartCoroutine(IdleRoutine());
     }
 
     public void SetPatrolPosition() {
         navMeshAgent.SetDestination(player.transform.position);
+    }
+
+    public void SetSubState(LBSubStates state) {
+        Dictionary<LBSubStates, bool> target = new Dictionary<LBSubStates, bool>(5);
+        target = InitializeSubStateKeys();
+        
+        foreach (KeyValuePair<LBSubStates, bool> subState in SubStates) {
+            if (subState.Value) {
+                target[subState.Key] = false;
+            }
+        }
+        
+        target[state] = true;
+        
+        subStates = target;
+    }
+
+    public void SetRootState(LBRootStates state) {
+        Dictionary<LBRootStates, bool> target = new Dictionary<LBRootStates, bool>(3);
+        target = InitializeRootStateKeys();
+        
+        foreach (KeyValuePair<LBRootStates, bool> rootState in rootStates) {
+            if (rootState.Value) {
+                target[rootState.Key] = false;
+            }
+        }
+        
+        target[state] = true;
+        
+        rootStates = target;
     }
     
     private void SetMask(float maskValue) {
@@ -125,13 +148,43 @@ public class LBController : MonoBehaviour, ISpawnable {
         Vector3 scale = initialScale * scaleValue;
         transform.localScale = scale;
     }
+
+    private void InitializeStateKeys() {
+        rootStates = new Dictionary<LBRootStates, bool>(3);
+        subStates = new Dictionary<LBSubStates, bool>(5);
+
+        rootStates = InitializeRootStateKeys();
+        subStates = InitializeSubStateKeys();
+    }
+    
+    private Dictionary<LBRootStates, bool> InitializeRootStateKeys() {
+        Dictionary<LBRootStates, bool> target = new Dictionary<LBRootStates, bool>(3);
+        
+        target.Add(LBRootStates.Bug, false);
+        target.Add(LBRootStates.Ball, false);
+        target.Add(LBRootStates.Dead, false);
+        
+        return target;
+    }
+    
+    private Dictionary<LBSubStates, bool> InitializeSubStateKeys() {
+        Dictionary<LBSubStates, bool> target = new Dictionary<LBSubStates, bool>(5);
+        
+        target.Add(LBSubStates.Idle, false);
+        target.Add(LBSubStates.Patrol, false);
+        target.Add(LBSubStates.Pursue, false);
+        target.Add(LBSubStates.Damaged, false);
+        target.Add(LBSubStates.Attack, false);
+        
+        return target;
+    }
     
     private void InitializeStateMachine() {
-        isBug = true;
+        SetRootState(LBRootStates.Bug);
         _currentRootState = _stateHandler.Bug();
         _currentRootState.EnterState();
 
-        isIdle = true;
+        SetSubState(LBSubStates.Idle);
         _currentSubState = _stateHandler.Idle();
         _currentSubState.EnterState();
 
@@ -169,10 +222,11 @@ public class LBController : MonoBehaviour, ISpawnable {
     
     private IEnumerator IdleRoutine() {
         yield return new WaitForSeconds(2f);
-        
-        isIdle = false;
-        isPatrolling = true;
-        
+
+        if (!subStates[LBSubStates.Pursue]) {
+            SetSubState(LBSubStates.Patrol);
+        }
+
         yield return null;
     }
 }

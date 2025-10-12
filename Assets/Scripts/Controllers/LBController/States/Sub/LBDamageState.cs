@@ -1,7 +1,7 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-public class LBAttackState : LBBaseState, IContextInit {
-    public LBAttackState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
+public class LBDamageState : LBBaseState, IContextInit {
+    public LBDamageState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
         //
     }
 
@@ -26,10 +26,7 @@ public class LBAttackState : LBBaseState, IContextInit {
         //Switch logic
         if (Ctx.SubStates[LBSubStates.Idle]) {
             SwitchState(StateHandler.Idle());
-        }
-        else if (Ctx.SubStates[LBSubStates.Damaged]) {
-            SwitchState(StateHandler.Damaged());
-        }
+        }          
     }
 
     public void InitializeContext() {
