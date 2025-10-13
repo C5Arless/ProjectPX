@@ -7,15 +7,16 @@ public class LBPatrolState : LBBaseState, IContextInit {
 
     public override void EnterState() {
         //Enter logic
-        
-        Ctx.SetPatrolPosition();
         Debug.Log("LB - Entered PatrolState.");
+        
         InitializeContext();
     }
 
     public override void UpdateState() {
         //Update logic
-
+        
+        Ctx.UpdatePatrol();
+        
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
 
@@ -38,6 +39,7 @@ public class LBPatrolState : LBBaseState, IContextInit {
     }
 
     public void InitializeContext() {
-        //
+        Ctx.EnterPatrol();
+        Ctx.SetPatrolPosition();
     }
 }

@@ -9,6 +9,7 @@ public class SpawnHandler : MonoBehaviour {
     [SerializeField] private float minDistance = 20f;
 
     private readonly List<ISpawnable> spawnables = new List<ISpawnable>();
+    private readonly List<PatrolZone> patrolZones = new List<PatrolZone>();
 
     private void Awake() {
         if (GameBucket.Instance != null) {
@@ -26,18 +27,45 @@ public class SpawnHandler : MonoBehaviour {
         StartCoroutine(SpawnLoop());
     }
 
-    public void Register(ISpawnable spawnable) {
+    public void RegisterSpawn(ISpawnable spawnable) {
         if (!spawnables.Contains(spawnable)) {
             spawnables.Add(spawnable);
         }
     }
 
-    public void Unregister(ISpawnable spawnable) {
+    public void UnregisterSpawn(ISpawnable spawnable) {
         if (spawnables.Contains(spawnable)) {
             spawnables.Remove(spawnable);
         }
     }
 
+    public void RegisterPatrolZone(PatrolZone patrolZone) {
+        if (!patrolZones.Contains(patrolZone)) {
+            patrolZones.Add(patrolZone);
+        }
+    }
+
+    public void UnregisterPatrolZone(PatrolZone patrolZone) {
+        if (patrolZones.Contains(patrolZone)) {
+            patrolZones.Remove(patrolZone);
+        }
+    }
+
+    public PatrolZone GetPatrolZone(Transform entity) {
+        PatrolZone target = null;
+        float distance = Mathf.Infinity;
+        
+        foreach (PatrolZone patrolZone in patrolZones) {
+            float tempDistance = Vector3.Distance(entity.position, patrolZone.transform.position);
+
+            if (tempDistance < distance) {
+                target = patrolZone;
+            }
+        }
+
+        return target;
+    }
+    
     private IEnumerator SpawnLoop() {
         while (true) {
             if (spawnables.Count > 0) {
