@@ -19,7 +19,7 @@ public class LBDamageState : LBBaseState, IContextInit {
 
     public override void ExitState() {
         //Exit logic
-
+        
     }
 
     public override void CheckSwitchStates() {

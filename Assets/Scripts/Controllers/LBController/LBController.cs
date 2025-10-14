@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,9 +8,12 @@ public class LBController : MonoBehaviour, ISpawnable {
     [SerializeField] TMP_Text _stateText;
     [SerializeField] List<Material> materials;
     [SerializeField] NavMeshAgent navMeshAgent;
+    [SerializeField] int maxHealth;
     
     [SerializeField] GameObject player; //TESTING
 
+    private int currentHp;
+    
     //State reference
     LBStateHandler _stateHandler;
     LBBaseState _currentRootState;
@@ -31,6 +33,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     
     private Vector3 initialScale;
 
+    public int CurrentHealth { get { return currentHp; } }
     public Vector3 Position { get { return transform.position; } }
 
     public bool IsReady { get { return isReady; } set { isReady = value; } }
@@ -45,6 +48,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     public LBBaseState CurrentSubState { get { return _currentSubState; } set { _currentSubState = value; } }
 
     private void Awake() {
+        currentHp =  maxHealth;
+        
         InitializeStateKeys();
         
         _stateHandler = new LBStateHandler(this);
@@ -57,12 +62,8 @@ public class LBController : MonoBehaviour, ISpawnable {
             GameMaster.Instance._onGamePaused += PauseBehaviour;
             GameMaster.Instance._onGameUnpaused += UnpauseBehaviour;
         }
-        
-        InitializePatrolZone();
-        
-        if (patrolZone != null) {
-            GameBucket.Instance.SpawnHandler.RegisterSpawn(this);
-        }
+
+        EvaluateSpawn();
 
         transform.localScale = Vector3.zero;
     }
@@ -80,7 +81,7 @@ public class LBController : MonoBehaviour, ISpawnable {
 
     private void Update() {
         if (isRunning) {
-            _stateText.text = _currentRootState.ToString() + " " + _currentSubState.ToString(); //DEBUG
+            _stateText.text = _currentRootState + " " + _currentSubState; //DEBUG
         }
     }
 
@@ -141,6 +142,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
 
     public void SetRootState(LBRootStates state) {
+        if (state == LBRootStates.Ball && maxHealth < 2) { return; }
+        
         Dictionary<LBRootStates, bool> target = new Dictionary<LBRootStates, bool>(3);
         target = InitializeRootStateKeys();
         
@@ -168,7 +171,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
 
     private Vector3 RetrieveWaypoint() {
-        int waypointIdx = UnityEngine.Random.Range(0, patrolZone.waypoints.Count - 1);
+        int waypointIdx = Random.Range(0, patrolZone.waypoints.Count - 1);
+        
         Vector3 waypoint = patrolZone.waypoints[waypointIdx].position;
         
         return waypoint;
@@ -217,12 +221,23 @@ public class LBController : MonoBehaviour, ISpawnable {
         isRunning = true;
     }
 
-    private void InitializePatrolZone() {
-        patrolZone = GameBucket.Instance.SpawnHandler.GetPatrolZone(transform);
+    private void EvaluateSpawn() {
+        StartCoroutine(InitializeSpawnZone());
+    }
 
+    private IEnumerator InitializeSpawnZone() {
+        yield return null;
+        
+        patrolZone = GameBucket.Instance.SpawnHandler.GetPatrolZone(transform);
+        yield return null;
+        
         if (patrolZone != null) {
             Debug.Log(patrolZone.areaIndex);
+            
+            GameBucket.Instance.SpawnHandler.RegisterSpawn(this);
         }
+        
+        yield break;
     }
     
     private IEnumerator SpawnRoutine() {

@@ -59,6 +59,8 @@ public class SpawnHandler : MonoBehaviour {
             float tempDistance = Vector3.Distance(entity.position, patrolZone.transform.position);
 
             if (tempDistance < distance) {
+
+                distance = tempDistance;
                 target = patrolZone;
             }
         }

@@ -9,12 +9,12 @@ public class PatrolZone : MonoBehaviour{
     [SerializeField] public List<Transform> waypoints;
 
     private void Start() {
-        GameBucket.Instance.SpawnHandler.RegisterPatrolZone(this);
+        GameBucket.Instance.SpawnHandler?.RegisterPatrolZone(this);
     }
 
     private void OnDestroy() {
         if (GameBucket.Instance != null) { 
-            GameBucket.Instance.SpawnHandler.UnregisterPatrolZone(this);   
+            GameBucket.Instance.SpawnHandler?.UnregisterPatrolZone(this);   
         }
     }
 }
