@@ -6,7 +6,6 @@ using UnityEngine.AI;
 
 public class LBController : MonoBehaviour, ISpawnable {
     [SerializeField] TMP_Text _stateText;
-    [SerializeField] List<Material> materials;
     [SerializeField] List<Renderer> renderers;
     [SerializeField] NavMeshAgent navMeshAgent;
     [SerializeField] int maxHealth;
@@ -165,8 +164,6 @@ public class LBController : MonoBehaviour, ISpawnable {
         propertyBlock.SetFloat("_Mask", targetValue);
         
         foreach (var renderer in renderers) {
-            //material.SetFloat("_Mask", targetValue);
-
             for (int i = 0; i < renderer.materials.Length; i++) {
                 if (renderer.materials[i].HasProperty("_Mask")) {
                     renderer.SetPropertyBlock(propertyBlock, i);
@@ -235,8 +232,6 @@ public class LBController : MonoBehaviour, ISpawnable {
         yield return null;
         
         if (patrolZone != null) {
-            //Debug.Log(patrolZone.areaIndex);
-            
             Vector3 spawnPosition = patrolZone.RetrieveWaypoint();
             transform.position = new Vector3(spawnPosition.x, transform.position.y, spawnPosition.z);
             
@@ -275,7 +270,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
     
     private IEnumerator IdleRoutine() {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
 
         if (!subStates[LBSubStates.Pursue]) {
             SetSubState(LBSubStates.Patrol);

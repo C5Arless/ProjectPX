@@ -32,15 +32,11 @@ public class PatrolZone : MonoBehaviour{
     public Vector3 RetrieveWaypoint() {
         List<Transform> targetWaypoints = new List<Transform>();
         List<int> targetIdxs = new List<int>();
-        //int lastTargetIdx = -1;
         
         for (int i = 0; i < visitedWaypoints.Count; i++) {
             if (!visitedWaypoints[i]) {
-                //targetWaypoints.Capacity++;
                 targetWaypoints.Add(waypoints[i]);
                 targetIdxs.Add(i);
-                
-                //Debug.Log(targetWaypoints.Count);
             }
         }
 
@@ -54,13 +50,11 @@ public class PatrolZone : MonoBehaviour{
             }
             
             targetWaypoints = waypoints;
-            //lastTargetIdx = targetWaypoints.Count - 1;
         }
         
         int tempIndex = UnityEngine.Random.Range(0, targetWaypoints.Count);
         
         int targetIndex = targetIdxs[tempIndex];
-        Debug.Log(targetIndex);
         
         visitedWaypoints[targetIndex] = true;
         

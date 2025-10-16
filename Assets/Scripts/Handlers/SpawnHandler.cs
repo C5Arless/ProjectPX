@@ -18,11 +18,9 @@ public class SpawnHandler : MonoBehaviour {
     }
 
     private void Start() {
-        /*
-        if (GameBucket.Instance != null) {
+        if (GameBucket.Instance.PXController != null) {
             player = GameBucket.Instance.PXController.transform;
-        } 
-        */ //DEBUG
+        }
 
         StartCoroutine(SpawnLoop());
     }
@@ -74,7 +72,7 @@ public class SpawnHandler : MonoBehaviour {
                 yield return CheckAndSpawn();
             }
             else {
-                yield return null;
+                yield return new WaitForSeconds(1f);
             }
             
         }
