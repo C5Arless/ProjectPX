@@ -7,6 +7,7 @@ using UnityEngine.AI;
 public class LBController : MonoBehaviour, ISpawnable {
     [SerializeField] TMP_Text _stateText;
     [SerializeField] List<Material> materials;
+    [SerializeField] List<Renderer> renderers;
     [SerializeField] NavMeshAgent navMeshAgent;
     [SerializeField] int maxHealth;
     
@@ -110,7 +111,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
 
     public void SetPatrolPosition() {
-        Vector3 patrolPosition = RetrieveWaypoint();
+        Vector3 patrolPosition = patrolZone.RetrieveWaypoint();
         
         navMeshAgent.SetDestination(patrolPosition);
     }
@@ -159,23 +160,25 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
     
     private void SetMask(float maskValue) {
+        MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
         float targetValue = maskValue;
-        foreach (var material in materials) {
-            material.SetFloat("_Mask", targetValue);
+        propertyBlock.SetFloat("_Mask", targetValue);
+        
+        foreach (var renderer in renderers) {
+            //material.SetFloat("_Mask", targetValue);
+
+            for (int i = 0; i < renderer.materials.Length; i++) {
+                if (renderer.materials[i].HasProperty("_Mask")) {
+                    renderer.SetPropertyBlock(propertyBlock, i);
+                }
+            }
+            
         }
     }
 
     private void SetScale(float scaleValue) {
         Vector3 scale = initialScale * scaleValue;
         transform.localScale = scale;
-    }
-
-    private Vector3 RetrieveWaypoint() {
-        int waypointIdx = Random.Range(0, patrolZone.waypoints.Count - 1);
-        
-        Vector3 waypoint = patrolZone.waypoints[waypointIdx].position;
-        
-        return waypoint;
     }
     
     private void InitializeStateKeys() {
@@ -232,7 +235,10 @@ public class LBController : MonoBehaviour, ISpawnable {
         yield return null;
         
         if (patrolZone != null) {
-            Debug.Log(patrolZone.areaIndex);
+            //Debug.Log(patrolZone.areaIndex);
+            
+            Vector3 spawnPosition = patrolZone.RetrieveWaypoint();
+            transform.position = new Vector3(spawnPosition.x, transform.position.y, spawnPosition.z);
             
             GameBucket.Instance.SpawnHandler.RegisterSpawn(this);
         }

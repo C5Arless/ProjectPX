@@ -7,7 +7,7 @@ public class LBPatrolState : LBBaseState, IContextInit {
 
     public override void EnterState() {
         //Enter logic
-        Debug.Log("LB - Entered PatrolState.");
+        //Debug.Log("LB - Entered PatrolState.");
         
         InitializeContext();
     }
@@ -22,7 +22,7 @@ public class LBPatrolState : LBBaseState, IContextInit {
 
     public override void ExitState() {
         //Exit logic
-        Debug.Log("LB - Exited PatrolState.");
+        //Debug.Log("LB - Exited PatrolState.");
     }
 
     public override void CheckSwitchStates() {

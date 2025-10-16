@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnHandler : MonoBehaviour {
     [SerializeField] private Transform player; //DEBUG
     
-    [SerializeField] private float timeToWait = 2f;
+    [SerializeField] private float timeToWait = 1f;
     [SerializeField] private float minDistance = 20f;
 
     private readonly List<ISpawnable> spawnables = new List<ISpawnable>();
@@ -71,8 +71,7 @@ public class SpawnHandler : MonoBehaviour {
     private IEnumerator SpawnLoop() {
         while (true) {
             if (spawnables.Count > 0) {
-                CheckAndSpawn();
-                yield return new WaitForSeconds(timeToWait);
+                yield return CheckAndSpawn();
             }
             else {
                 yield return null;
@@ -81,8 +80,8 @@ public class SpawnHandler : MonoBehaviour {
         }
     }
 
-    private void CheckAndSpawn() {
-        if (player == null) return;
+    private IEnumerator CheckAndSpawn() {
+        if (player == null) yield break;
         
         foreach (var spawnable in spawnables) {            
             if (spawnable.IsRunning || spawnable.IsReady || spawnable.IsSpawning) continue;
@@ -91,12 +90,17 @@ public class SpawnHandler : MonoBehaviour {
             if (distance <= minDistance) {
                 spawnable.IsReady = true;
             }
+            
+            yield return null;
         }
         
         foreach (var spawnable in spawnables) {
             if (spawnable.IsReady && !spawnable.IsRunning && !spawnable.IsSpawning) {
-                spawnable.Spawn();                
+                spawnable.Spawn();
+                yield return new WaitForSeconds(timeToWait);
             }
         }
+
+        yield break;
     }
 }
