@@ -13,7 +13,9 @@ public class LBBugState : LBBaseState, IContextInit {
 
     public override void UpdateState() {
         //Update logic
-
+        
+        //if Running && !Idle scout
+        
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
 

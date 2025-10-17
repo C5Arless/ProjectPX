@@ -13,7 +13,9 @@ public class LBBallState : LBBaseState, IContextInit {
 
     public override void UpdateState() {
         //Update logic
-
+        
+        //if pursue spin
+        
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
 
