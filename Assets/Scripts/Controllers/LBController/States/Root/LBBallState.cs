@@ -8,6 +8,8 @@ public class LBBallState : LBBaseState, IContextInit {
     public override void EnterState() {
         //Enter logic
         
+        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Morph());
+        
         InitializeContext();        
     }
 

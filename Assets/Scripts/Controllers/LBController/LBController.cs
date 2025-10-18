@@ -29,6 +29,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     private Dictionary<LBRootStates, bool> rootStates; 
     private Dictionary<LBSubStates, bool> subStates;
     
+    private LBAnimHandler animHandler;
     private PatrolZone patrolZone;
     
     private Vector3 initialScale;
@@ -43,7 +44,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     
     public Dictionary<LBRootStates, bool>  RootStates { get { return rootStates; } }
     public Dictionary<LBSubStates, bool>  SubStates { get { return subStates; } }
-
+    
+    public LBAnimHandler AnimHandler { get { return animHandler; } set { animHandler = value; } }
     public LBBaseState CurrentRootState { get { return _currentRootState; } set { _currentRootState = value; } }
     public LBBaseState CurrentSubState { get { return _currentSubState; } set { _currentSubState = value; } }
 
@@ -53,6 +55,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         InitializeStateKeys();
         
         _stateHandler = new LBStateHandler(this);
+        animHandler = GetComponentInChildren<LBAnimHandler>();
 
         initialScale = transform.localScale;
     }
@@ -91,7 +94,11 @@ public class LBController : MonoBehaviour, ISpawnable {
             _currentSubState.UpdateState();
         }
     }
-    
+
+    public void HandleSignal(int signal) {
+        
+    }
+
     public void PauseBehaviour() {
         isPaused = true;
     }
@@ -209,8 +216,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
     
     private void InitializeStateMachine() {
-        SetRootState(LBRootStates.Bug);
-        _currentRootState = _stateHandler.Bug();
+        SetRootState(LBRootStates.Ball);
+        _currentRootState = _stateHandler.Ball();
         _currentRootState.EnterState();
 
         SetSubState(LBSubStates.Idle);

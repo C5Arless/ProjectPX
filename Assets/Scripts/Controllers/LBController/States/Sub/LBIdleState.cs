@@ -8,6 +8,9 @@ public class LBIdleState : LBBaseState, IContextInit {
     public override void EnterState() {
         //Enter logic
         Ctx.IdleStart();
+        if (Ctx.RootStates[LBRootStates.Bug]) {
+            Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Idle());
+        }
         
         //Debug.Log("LB - Entered IdleState.");
         InitializeContext();
