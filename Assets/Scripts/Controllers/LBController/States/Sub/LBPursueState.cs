@@ -7,13 +7,18 @@ public class LBPursueState : LBBaseState, IContextInit {
 
     public override void EnterState() {
         //Enter logic
-
+        
+        Ctx.EnterPursue();
+        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Pursue());
+        
         InitializeContext();
     }
 
     public override void UpdateState() {
         //Update logic
-
+        
+        Ctx.UpdatePursue();
+        
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
 

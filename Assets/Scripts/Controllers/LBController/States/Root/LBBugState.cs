@@ -15,6 +15,9 @@ public class LBBugState : LBBaseState, IContextInit {
         //Update logic
         
         //if Running && !Idle scout
+        if (Ctx.IsRunning && !Ctx.SubStates[LBSubStates.Idle]) {
+            Ctx.Scout();
+        }
         
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }

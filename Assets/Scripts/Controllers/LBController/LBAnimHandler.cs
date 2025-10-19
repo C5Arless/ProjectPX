@@ -27,13 +27,13 @@ public class LBAnimHandler : MonoBehaviour {
     Dictionary<LBAnim, Vector2> animList = new Dictionary<LBAnim, Vector2>(9);
     public LBAnimHandler() {
         animList[LBAnim.dead] = new Vector2(.99f, .99f);                    //0
-        animList[LBAnim.idle] = new Vector2(0f, 0f);                        //1
-        animList[LBAnim.patrol] = new Vector2(0f, .99f);                    //2
-        animList[LBAnim.pursue] = new Vector2(0f, .99f);                    //3
+        animList[LBAnim.idle] = new Vector2(0f, 0f);                        //1 OK
+        animList[LBAnim.patrol] = new Vector2(-.99f, 0f);                   //2 OK
+        animList[LBAnim.pursue] = new Vector2(.99f, 0f);                    //3 OK
         animList[LBAnim.attack1] = new Vector2(-.99f, 0f);                  //4
         animList[LBAnim.attack2] = new Vector2(0f, -.99f);                  //5
-        animList[LBAnim.morph] = new Vector2(-.99f, .99f);                  //6
-        animList[LBAnim.unmorph] = new Vector2(-.99f, -.99f);               //7
+        animList[LBAnim.morph] = new Vector2(-.99f, .99f);                  //6 OK
+        animList[LBAnim.unmorph] = new Vector2(-.99f, -.99f);               //7 OK
         animList[LBAnim.damage] = new Vector2(.99f, -.99f);                 //8
     }
 

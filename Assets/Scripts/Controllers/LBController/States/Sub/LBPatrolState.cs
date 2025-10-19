@@ -8,6 +8,7 @@ public class LBPatrolState : LBBaseState, IContextInit {
     public override void EnterState() {
         //Enter logic
         //Debug.Log("LB - Entered PatrolState.");
+        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Patrol());
         
         InitializeContext();
     }

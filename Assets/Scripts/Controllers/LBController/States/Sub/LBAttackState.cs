@@ -7,7 +7,9 @@ public class LBAttackState : LBBaseState, IContextInit {
 
     public override void EnterState() {
         //Enter logic
-
+        
+        Ctx.EnterAttack();
+        
         InitializeContext();
     }
 

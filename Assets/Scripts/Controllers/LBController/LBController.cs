@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +14,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     [SerializeField] GameObject player; //TESTING
 
     private int currentHp;
+    private const float patrolSpeed = 2f;
+    private const float pursueSpeed = 3f;
     
     //State reference
     LBStateHandler _stateHandler;
@@ -33,6 +36,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     private PatrolZone patrolZone;
     
     private Vector3 initialScale;
+    private Vector3 attackPoint = Vector3.zero;
+    
 
     public int CurrentHealth { get { return currentHp; } }
     public Vector3 Position { get { return transform.position; } }
@@ -96,7 +101,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
 
     public void HandleSignal(int signal) {
-        
+        //
     }
 
     public void PauseBehaviour() {
@@ -123,13 +128,44 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
 
     public void EnterPatrol() {
+        navMeshAgent.speed = patrolSpeed;
         navMeshAgent.isStopped = false;
     }
     
     public void UpdatePatrol() {
         if (navMeshAgent.remainingDistance > navMeshAgent.radius * 2f) { return; }
+
+        if (!subStates[LBSubStates.Pursue]) {
+            navMeshAgent.isStopped = true;
+            SetSubState(LBSubStates.Idle);
+        }
+    }
+
+    public void Scout() {
+        if (CanSeePlayer() && attackPoint == Vector3.zero) {
+            SetSubState(LBSubStates.Pursue);
+        }
+    }
+
+    public void EnterPursue() {
+        navMeshAgent.speed = pursueSpeed;
+        navMeshAgent.isStopped = false;
+    }
+    
+    public void UpdatePursue() {
+        if (navMeshAgent.remainingDistance > navMeshAgent.radius * 2f) {
+            navMeshAgent.SetDestination(player.transform.position);
+        } else {
+            navMeshAgent.isStopped = true;
+            attackPoint =  player.transform.position;
+            SetSubState(LBSubStates.Attack);
+        }
+    }
+
+    public void EnterAttack() {
+        Debug.Log(attackPoint);
         
-        navMeshAgent.isStopped = true;
+        attackPoint = Vector3.zero;
         SetSubState(LBSubStates.Idle);
     }
     
@@ -163,6 +199,20 @@ public class LBController : MonoBehaviour, ISpawnable {
         target[state] = true;
         
         rootStates = target;
+    }
+    
+    private bool CanSeePlayer() {
+        Vector3 dir = (player.transform.position - transform.position);
+        if (dir.magnitude > 10f) { return false; }
+
+        float angle = Vector3.Angle(transform.forward, dir);
+        if (angle > 60f * 0.5f) { return false; }
+
+        if (Physics.Raycast(transform.position + Vector3.up * .5f, dir.normalized, out RaycastHit hit, 10f)) {
+            return hit.collider.CompareTag("Player");
+        }
+
+        return false;
     }
     
     private void SetMask(float maskValue) {
@@ -216,8 +266,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
     
     private void InitializeStateMachine() {
-        SetRootState(LBRootStates.Ball);
-        _currentRootState = _stateHandler.Ball();
+        SetRootState(LBRootStates.Bug);
+        _currentRootState = _stateHandler.Bug();
         _currentRootState.EnterState();
 
         SetSubState(LBSubStates.Idle);
@@ -279,12 +329,19 @@ public class LBController : MonoBehaviour, ISpawnable {
     private IEnumerator IdleRoutine() {
         yield return new WaitForSeconds(3f);
 
-        if (rootStates[LBRootStates.Ball]) { yield break; }
-
         if (!subStates[LBSubStates.Pursue]) {
             SetSubState(LBSubStates.Patrol);
         }
 
         yield return null;
+    }
+
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position + transform.up * .5f, (transform.position + transform.up * .5f) + (transform.forward * 10f));
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere((transform.position + transform.up * .5f) + (transform.forward * 10f), 0.2f);
+        
     }
 }
