@@ -13,9 +13,13 @@ public class LBController : MonoBehaviour, ISpawnable {
     
     [SerializeField] GameObject player; //TESTING
 
-    private int currentHp;
     private const float patrolSpeed = 2f;
     private const float pursueSpeed = 3f;
+    private const float idleTime = 3f;
+    
+    private int currentHp;
+    private float currentTime;
+    private float timer;
     
     //State reference
     LBStateHandler _stateHandler;
@@ -34,10 +38,9 @@ public class LBController : MonoBehaviour, ISpawnable {
     
     private LBAnimHandler animHandler;
     private PatrolZone patrolZone;
-    
+
     private Vector3 initialScale;
     private Vector3 attackPoint = Vector3.zero;
-    
 
     public int CurrentHealth { get { return currentHp; } }
     public Vector3 Position { get { return transform.position; } }
@@ -117,10 +120,27 @@ public class LBController : MonoBehaviour, ISpawnable {
         StartCoroutine(SpawnRoutine());
     }
 
-    public void IdleStart() { //To be moved to update
-        StartCoroutine(IdleRoutine());
+    public void EnterIdle() {
+        currentTime = Time.time;
+        timer = idleTime;
+    }
+    
+    public void UpdateIdle() {
+        //wait
+        float elapsed = Time.time - currentTime;
+        if (timer > 0) {
+            timer -= elapsed * Time.deltaTime;
+        } else {
+            SetSubState(LBSubStates.Patrol);
+            timer = idleTime;
+        }
     }
 
+    public void ExitIdle() {
+        currentTime = 0f;
+        timer = idleTime;
+    }
+    
     public void SetPatrolPosition() {
         Vector3 patrolPosition = patrolZone.RetrieveWaypoint();
         

@@ -8,7 +8,8 @@ public class LBIdleState : LBBaseState, IContextInit {
     public override void EnterState() {
         //Enter logic
         if (Ctx.RootStates[LBRootStates.Bug]) {
-            Ctx.IdleStart();
+            //Ctx.IdleStart();
+            Ctx.EnterIdle();
             Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Idle());
         }
         
@@ -18,12 +19,16 @@ public class LBIdleState : LBBaseState, IContextInit {
 
     public override void UpdateState() {
         //Update logic
-
+        
+        Ctx.UpdateIdle();
+        
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }
 
     public override void ExitState() {
         //Exit logic
+        
+        Ctx.ExitIdle();
         
         //Debug.Log("LB - Exited IdleState.");
     }
