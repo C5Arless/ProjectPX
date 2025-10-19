@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,8 +17,6 @@ public class LBController : MonoBehaviour, ISpawnable {
     private const float idleTime = 3f;
     
     private int currentHp;
-    private float currentTime;
-    private float timer;
     
     //State reference
     LBStateHandler _stateHandler;
@@ -41,9 +38,19 @@ public class LBController : MonoBehaviour, ISpawnable {
 
     private Vector3 initialScale;
     private Vector3 attackPoint = Vector3.zero;
-
-    public int CurrentHealth { get { return currentHp; } }
+    
+    #region Getters and Setters
+    
+    public NavMeshAgent Agent { get { return navMeshAgent; } set {  navMeshAgent = value; } }
+    public int CurrentHealth { get { return currentHp; } set { currentHp = value; } }
     public Vector3 Position { get { return transform.position; } }
+    public Vector3 AttackPoint { get { return attackPoint; } set { attackPoint = value; } }
+    public GameObject Player { get { return player; } } //TESTING
+    
+    public float IdleTime { get { return idleTime; } }
+    public float PatrolSpeed { get { return patrolSpeed; } }
+    public float PursueSpeed { get { return pursueSpeed; } }
+    public PatrolZone PatrolZone { get { return patrolZone; } }
 
     public bool IsReady { get { return isReady; } set { isReady = value; } }
     public bool IsSpawning { get { return isSpawning; } set { isSpawning = value; } }
@@ -56,9 +63,11 @@ public class LBController : MonoBehaviour, ISpawnable {
     public LBAnimHandler AnimHandler { get { return animHandler; } set { animHandler = value; } }
     public LBBaseState CurrentRootState { get { return _currentRootState; } set { _currentRootState = value; } }
     public LBBaseState CurrentSubState { get { return _currentSubState; } set { _currentSubState = value; } }
-
+    
+    #endregion
+    
     private void Awake() {
-        currentHp =  maxHealth;
+        currentHp = maxHealth;
         
         InitializeStateKeys();
         
@@ -120,75 +129,12 @@ public class LBController : MonoBehaviour, ISpawnable {
         StartCoroutine(SpawnRoutine());
     }
 
-    public void EnterIdle() {
-        currentTime = Time.time;
-        timer = idleTime;
-    }
-    
-    public void UpdateIdle() {
-        //wait
-        float elapsed = Time.time - currentTime;
-        if (timer > 0) {
-            timer -= elapsed * Time.deltaTime;
-        } else {
-            SetSubState(LBSubStates.Patrol);
-            timer = idleTime;
-        }
-    }
-
-    public void ExitIdle() {
-        currentTime = 0f;
-        timer = idleTime;
-    }
-    
-    public void SetPatrolPosition() {
-        Vector3 patrolPosition = patrolZone.RetrieveWaypoint();
-        
-        navMeshAgent.SetDestination(patrolPosition);
-    }
-
-    public void EnterPatrol() {
-        navMeshAgent.speed = patrolSpeed;
-        navMeshAgent.isStopped = false;
-    }
-    
-    public void UpdatePatrol() {
-        if (navMeshAgent.remainingDistance > navMeshAgent.radius * 2f) { return; }
-
-        if (!subStates[LBSubStates.Pursue]) {
-            navMeshAgent.isStopped = true;
-            SetSubState(LBSubStates.Idle);
-        }
-    }
-
     public void Scout() {
         if (CanSeePlayer() && attackPoint == Vector3.zero) {
             SetSubState(LBSubStates.Pursue);
         }
     }
 
-    public void EnterPursue() {
-        navMeshAgent.speed = pursueSpeed;
-        navMeshAgent.isStopped = false;
-    }
-    
-    public void UpdatePursue() {
-        if (navMeshAgent.remainingDistance > navMeshAgent.radius * 2f) {
-            navMeshAgent.SetDestination(player.transform.position);
-        } else {
-            navMeshAgent.isStopped = true;
-            attackPoint =  player.transform.position;
-            SetSubState(LBSubStates.Attack);
-        }
-    }
-
-    public void EnterAttack() {
-        Debug.Log(attackPoint);
-        
-        attackPoint = Vector3.zero;
-        SetSubState(LBSubStates.Idle);
-    }
-    
     public void SetSubState(LBSubStates state) {
         Dictionary<LBSubStates, bool> target = new Dictionary<LBSubStates, bool>(5);
         target = InitializeSubStateKeys();
@@ -344,16 +290,6 @@ public class LBController : MonoBehaviour, ISpawnable {
         InitializeStateMachine();
 
         yield break;
-    }
-    
-    private IEnumerator IdleRoutine() {
-        yield return new WaitForSeconds(3f);
-
-        if (!subStates[LBSubStates.Pursue]) {
-            SetSubState(LBSubStates.Patrol);
-        }
-
-        yield return null;
     }
 
     private void OnDrawGizmos() {

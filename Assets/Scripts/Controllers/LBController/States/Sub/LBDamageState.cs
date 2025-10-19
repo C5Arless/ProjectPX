@@ -2,28 +2,23 @@
 
 public class LBDamageState : LBBaseState, IContextInit {
     public LBDamageState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
-        //
+        InitializeContext();
     }
 
     public override void EnterState() {
         //Enter logic
-
-        InitializeContext();
     }
 
     public override void UpdateState() {
-        //Update logic
 
-        CheckSwitchStates(); //MUST BE LAST INSTRUCTION
+        CheckSwitchStates();
     }
 
     public override void ExitState() {
         //Exit logic
-        
     }
 
     public override void CheckSwitchStates() {
-        //Switch logic
         if (Ctx.SubStates[LBSubStates.Idle]) {
             SwitchState(StateHandler.Idle());
         }          

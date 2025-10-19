@@ -2,33 +2,25 @@ using UnityEngine;
 
 public class LBPursueState : LBBaseState, IContextInit {
     public LBPursueState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
-        //
-    }
-
-    public override void EnterState() {
-        //Enter logic
-        
-        Ctx.EnterPursue();
-        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Pursue());
-        
         InitializeContext();
     }
 
+    public override void EnterState() {
+        EnterPursue();
+        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Pursue());
+    }
+
     public override void UpdateState() {
-        //Update logic
+        UpdatePursue();
         
-        Ctx.UpdatePursue();
-        
-        CheckSwitchStates(); //MUST BE LAST INSTRUCTION
+        CheckSwitchStates();
     }
 
     public override void ExitState() {
         //Exit logic
-
     }
 
     public override void CheckSwitchStates() {
-        //Switch logic
         if (Ctx.SubStates[LBSubStates.Attack]) {
             SwitchState(StateHandler.Attack());
         }
@@ -42,5 +34,20 @@ public class LBPursueState : LBBaseState, IContextInit {
 
     public void InitializeContext() {
         //
+    }
+    
+    public void EnterPursue() {
+        Ctx.Agent.speed = Ctx.PursueSpeed;
+        Ctx.Agent.isStopped = false;
+    }
+    
+    public void UpdatePursue() {
+        if (Ctx.Agent.remainingDistance > Ctx.Agent.radius * 2f) {
+            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
+        } else {
+            Ctx.Agent.isStopped = true;
+            Ctx.AttackPoint = Ctx.Player.transform.position;
+            Ctx.SetSubState(LBSubStates.Attack);
+        }
     }
 }

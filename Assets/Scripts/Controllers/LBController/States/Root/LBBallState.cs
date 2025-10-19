@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class LBBallState : LBBaseState, IContextInit {
     public LBBallState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
-        IsRootState = true; 
+        IsRootState = true;
+        
+        InitializeContext(); 
     }
 
     public override void EnterState() {
         //Enter logic
         
         Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Morph());
-        
-        InitializeContext();        
     }
 
     public override void UpdateState() {
@@ -26,7 +26,6 @@ public class LBBallState : LBBaseState, IContextInit {
     }
 
     public override void CheckSwitchStates() {
-        //Switch logic
         if (Ctx.RootStates[LBRootStates.Bug]) {
             SwitchState(StateHandler.Bug());
         }

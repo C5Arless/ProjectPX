@@ -3,23 +3,23 @@ using UnityEngine;
 public class LBBugState : LBBaseState, IContextInit {
     public LBBugState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
         IsRootState = true;
+        
+        InitializeContext();
     }
 
     public override void EnterState() {
         //Enter logic
 
-        InitializeContext();
     }
 
     public override void UpdateState() {
         //Update logic
         
-        //if Running && !Idle scout
         if (Ctx.IsRunning && !Ctx.SubStates[LBSubStates.Idle]) {
             Ctx.Scout();
         }
         
-        CheckSwitchStates(); //MUST BE LAST INSTRUCTION
+        CheckSwitchStates();
     }
 
     public override void ExitState() {
@@ -28,7 +28,6 @@ public class LBBugState : LBBaseState, IContextInit {
     }
 
     public override void CheckSwitchStates() {
-        //Switch logic
         if (Ctx.RootStates[LBRootStates.Ball]) {
             SwitchState(StateHandler.Ball());
         }

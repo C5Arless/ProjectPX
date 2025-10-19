@@ -2,32 +2,25 @@ using UnityEngine;
 
 public class LBPatrolState : LBBaseState, IContextInit {
     public LBPatrolState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
-        //
-    }
-
-    public override void EnterState() {
-        //Enter logic
-        //Debug.Log("LB - Entered PatrolState.");
-        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Patrol());
-        
         InitializeContext();
     }
 
+    public override void EnterState() {
+        EnterPatrol();
+        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Patrol());
+    }
+
     public override void UpdateState() {
-        //Update logic
-        
-        Ctx.UpdatePatrol();
-        
-        CheckSwitchStates(); //MUST BE LAST INSTRUCTION
+        UpdatePatrol();
+
+        CheckSwitchStates();
     }
 
     public override void ExitState() {
         //Exit logic
-        //Debug.Log("LB - Exited PatrolState.");
     }
 
     public override void CheckSwitchStates() {
-        //Switch logic
         if (Ctx.SubStates[LBSubStates.Pursue]) {
             SwitchState(StateHandler.Pursue());
         }
@@ -40,7 +33,23 @@ public class LBPatrolState : LBBaseState, IContextInit {
     }
 
     public void InitializeContext() {
-        Ctx.EnterPatrol();
-        Ctx.SetPatrolPosition();
+        //
+    }
+    
+    public void EnterPatrol() {
+        Ctx.Agent.speed = Ctx.PatrolSpeed;
+        Ctx.Agent.isStopped = false;
+        
+        Vector3 patrolPosition = Ctx.PatrolZone.RetrieveWaypoint();
+        Ctx.Agent.SetDestination(patrolPosition);
+    }
+    
+    public void UpdatePatrol() {
+        if (Ctx.Agent.remainingDistance > Ctx.Agent.radius * 2f) { return; }
+
+        if (!Ctx.SubStates[LBSubStates.Pursue]) {
+            Ctx.Agent.isStopped = true;
+            Ctx.SetSubState(LBSubStates.Idle);
+        }
     }
 }

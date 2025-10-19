@@ -3,12 +3,13 @@ using UnityEngine;
 public class LBDeadState : LBBaseState, IContextInit {
     public LBDeadState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
         IsRootState = true;
+        
+        InitializeContext();
     }
 
     public override void EnterState() {
         //Enter logic
-
-        InitializeContext();
+        
     }
 
     public override void UpdateState() {

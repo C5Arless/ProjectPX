@@ -15,7 +15,7 @@ public class LBStateHandler {
         subStateList[LBSubStates.Idle] = new LBIdleState(_context, this);
         subStateList[LBSubStates.Patrol] = new LBPatrolState(_context, this);
         subStateList[LBSubStates.Pursue] = new LBPursueState(_context, this);
-        subStateList[LBSubStates.Damaged] = new LBPursueState(_context, this);
+        subStateList[LBSubStates.Damaged] = new LBDamageState(_context, this);
         subStateList[LBSubStates.Attack] = new LBAttackState(_context, this);        
     }
 

@@ -1,31 +1,24 @@
 using UnityEngine;
 
 public class LBAttackState : LBBaseState, IContextInit {
-    public LBAttackState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
-        //
-    }
-
-    public override void EnterState() {
-        //Enter logic
-        
-        Ctx.EnterAttack();
-        
+    public LBAttackState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) { 
         InitializeContext();
     }
 
-    public override void UpdateState() {
-        //Update logic
+    public override void EnterState() {
+        EnterAttack();
+    }
 
-        CheckSwitchStates(); //MUST BE LAST INSTRUCTION
+    public override void UpdateState() {
+        
+        CheckSwitchStates();
     }
 
     public override void ExitState() {
         //Exit logic
-
     }
 
     public override void CheckSwitchStates() {
-        //Switch logic
         if (Ctx.SubStates[LBSubStates.Idle]) {
             SwitchState(StateHandler.Idle());
         }
@@ -36,5 +29,10 @@ public class LBAttackState : LBBaseState, IContextInit {
 
     public void InitializeContext() {
         //
+    }
+    
+    public void EnterAttack() {
+        Ctx.AttackPoint = Vector3.zero;
+        Ctx.SetSubState(LBSubStates.Idle);
     }
 }

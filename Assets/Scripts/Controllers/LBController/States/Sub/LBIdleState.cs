@@ -1,40 +1,32 @@
 using UnityEngine;
 
 public class LBIdleState : LBBaseState, IContextInit {
+    private float timer;
+    private float currentTime;
+    
     public LBIdleState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
-        //
-    }
-
-    public override void EnterState() {
-        //Enter logic
-        if (Ctx.RootStates[LBRootStates.Bug]) {
-            //Ctx.IdleStart();
-            Ctx.EnterIdle();
-            Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Idle());
-        }
-        
-        //Debug.Log("LB - Entered IdleState.");
         InitializeContext();
     }
 
+    public override void EnterState() {
+        if (Ctx.RootStates[LBRootStates.Bug]) {
+            EnterIdle();
+            
+            Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Idle());
+        }
+    }
+
     public override void UpdateState() {
-        //Update logic
+        UpdateIdle();
         
-        Ctx.UpdateIdle();
-        
-        CheckSwitchStates(); //MUST BE LAST INSTRUCTION
+        CheckSwitchStates();
     }
 
     public override void ExitState() {
-        //Exit logic
-        
-        Ctx.ExitIdle();
-        
-        //Debug.Log("LB - Exited IdleState.");
+        ExitIdle();
     }
 
     public override void CheckSwitchStates() {
-        //Switch logic
         if (Ctx.SubStates[LBSubStates.Pursue]) {
             SwitchState(StateHandler.Pursue());
         }
@@ -47,6 +39,26 @@ public class LBIdleState : LBBaseState, IContextInit {
     }
 
     public void InitializeContext() {
-        //
+        timer = Ctx.IdleTime;
+    }
+    
+    public void EnterIdle() {
+        currentTime = Time.time;
+        timer = Ctx.IdleTime;
+    }
+    
+    public void UpdateIdle() {
+        float elapsed = Time.time - currentTime;
+        if (timer > 0) {
+            timer -= elapsed * Time.deltaTime;
+        } else {
+            Ctx.SetSubState(LBSubStates.Patrol);
+            timer = Ctx.IdleTime;
+        }
+    }
+
+    public void ExitIdle() {
+        currentTime = 0f;
+        timer = Ctx.IdleTime;
     }
 }
