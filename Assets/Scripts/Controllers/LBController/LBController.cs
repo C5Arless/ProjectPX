@@ -279,6 +279,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     private IEnumerator IdleRoutine() {
         yield return new WaitForSeconds(3f);
 
+        if (rootStates[LBRootStates.Ball]) { yield break; }
+
         if (!subStates[LBSubStates.Pursue]) {
             SetSubState(LBSubStates.Patrol);
         }

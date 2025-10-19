@@ -17,7 +17,10 @@ enum LBAnim {
 public class LBAnimHandler : MonoBehaviour {
     [SerializeField] LBController _ctx;
     [SerializeField] Animator _animator;
-
+    
+    [SerializeField] MeshVisibility _ball;
+    [SerializeField] MeshVisibility _body;
+    
     Vector2 currentclip;
     Vector2 targetclip;    
 
@@ -55,11 +58,23 @@ public class LBAnimHandler : MonoBehaviour {
         _animator.SetFloat("yAxis", targetclip.y);
         currentclip = targetclip;
         
-        _animator.StartPlayback();
+        //_animator.StartPlayback();
     }
 
     public void Stop() {
         _animator.StopPlayback();
+    }
+
+    public void BallVisibility(int state) {
+        if (state != 0) {
+            _ball.Show();
+        } else _ball.Hide();
+    }
+    
+    public void BodyVisibility(int state) {
+        if (state != 0) {
+            _body.Show();
+        } else _body.Hide();
     }
     
     public void SendSignalToCtx(int _sig) {
