@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,7 +9,9 @@ public class LBController : MonoBehaviour, ISpawnable {
     [SerializeField] TMP_Text _stateText;
     [SerializeField] List<Renderer> renderers;
     [SerializeField] NavMeshAgent navMeshAgent;
+    [SerializeField] Rigidbody rigidBody;
     [SerializeField] int maxHealth;
+    [SerializeField] private float visionRange = 10f;
     
     [SerializeField] GameObject player; //TESTING
 
@@ -29,7 +32,9 @@ public class LBController : MonoBehaviour, ISpawnable {
     private bool isRunning;
     private bool isPaused;
     private bool isSpawning;
-
+    
+    private bool isDamaged;
+    
     private Dictionary<LBRootStates, bool> rootStates; 
     private Dictionary<LBSubStates, bool> subStates;
     
@@ -42,6 +47,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     #region Getters and Setters
     
     public NavMeshAgent Agent { get { return navMeshAgent; } set {  navMeshAgent = value; } }
+    public Rigidbody RigidBody { get { return rigidBody; } set {  rigidBody = value; } }
     public int CurrentHealth { get { return currentHp; } set { currentHp = value; } }
     public Vector3 Position { get { return transform.position; } }
     public Vector3 AttackPoint { get { return attackPoint; } set { attackPoint = value; } }
@@ -56,7 +62,8 @@ public class LBController : MonoBehaviour, ISpawnable {
     public bool IsSpawning { get { return isSpawning; } set { isSpawning = value; } }
     public bool IsRunning { get { return isRunning; } set { isRunning = value; } }
     public bool IsPaused { get { return isPaused; } set { isPaused = value; } }
-    
+    public bool IsDamaged { get { return isDamaged; } set { isDamaged = value; } }
+
     public Dictionary<LBRootStates, bool>  RootStates { get { return rootStates; } }
     public Dictionary<LBSubStates, bool>  SubStates { get { return subStates; } }
     
@@ -96,6 +103,14 @@ public class LBController : MonoBehaviour, ISpawnable {
 
         if (GameBucket.Instance != null) {
             GameBucket.Instance.SpawnHandler.UnregisterSpawn(this);
+        }
+    }
+
+    private void OnCollisionEnter(Collision other) {
+        Debug.Log(other.collider.tag);
+        
+        if (other.collider.CompareTag("PlayerAttacks") && !isDamaged) {
+            SetSubState(LBSubStates.Damaged);
         }
     }
 
@@ -174,8 +189,10 @@ public class LBController : MonoBehaviour, ISpawnable {
         float angle = Vector3.Angle(transform.forward, dir);
         if (angle > 60f * 0.5f) { return false; }
 
-        if (Physics.Raycast(transform.position + Vector3.up * .5f, dir.normalized, out RaycastHit hit, 10f)) {
-            return hit.collider.CompareTag("Player");
+        if (Physics.Raycast(transform.position + Vector3.up * .5f, dir.normalized, out RaycastHit hit, visionRange)) {
+            if (hit.collider.CompareTag("Player") || hit.collider.CompareTag("PlayerAttacks")) {
+                return true;
+            }
         }
 
         return false;
@@ -293,11 +310,21 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
 
     private void OnDrawGizmos() {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position + transform.up * .5f, (transform.position + transform.up * .5f) + (transform.forward * 10f));
+        if (!isRunning) { return; }
         
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere((transform.position + transform.up * .5f) + (transform.forward * 10f), 0.2f);
-        
+        if (!subStates[LBSubStates.Pursue]) {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position + transform.up * .5f, (transform.position + transform.up * .5f) + (transform.forward * 10f));
+            
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere((transform.position + transform.up * .5f) + (transform.forward * 10f), 0.2f);
+        }
+        else {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine(transform.position + transform.up * .5f, player.transform.position);
+            
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(player.transform.position, 0.2f);
+        }
     }
 }
