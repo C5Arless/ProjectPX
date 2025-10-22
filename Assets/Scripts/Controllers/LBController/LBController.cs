@@ -74,12 +74,13 @@ public class LBController : MonoBehaviour, ISpawnable {
     #endregion
     
     private void Awake() {
+        _stateHandler = new LBStateHandler(this);
+        animHandler = GetComponentInChildren<LBAnimHandler>();
+        
         currentHp = maxHealth;
         
         InitializeStateKeys();
         
-        _stateHandler = new LBStateHandler(this);
-        animHandler = GetComponentInChildren<LBAnimHandler>();
 
         initialScale = transform.localScale;
     }
@@ -181,6 +182,10 @@ public class LBController : MonoBehaviour, ISpawnable {
         
         rootStates = target;
     }
+
+    public void InitializeFSM() {
+        
+    }
     
     private bool CanSeePlayer() {
         Vector3 dir = (player.transform.position - transform.position);
@@ -248,7 +253,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         return target;
     }
     
-    private void InitializeStateMachine() {
+    private void InitializeStateFlow() {
         SetRootState(LBRootStates.Bug);
         _currentRootState = _stateHandler.Bug();
         _currentRootState.EnterState();
@@ -273,7 +278,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         
         if (patrolZone != null) {
             Vector3 spawnPosition = patrolZone.RetrieveWaypoint();
-            transform.position = new Vector3(spawnPosition.x, transform.position.y, spawnPosition.z);
+            transform.position = new Vector3(spawnPosition.x, spawnPosition.y, spawnPosition.z);
             
             GameBucket.Instance.SpawnHandler.RegisterSpawn(this);
         }
@@ -304,7 +309,7 @@ public class LBController : MonoBehaviour, ISpawnable {
 
         yield return null;
 
-        InitializeStateMachine();
+        InitializeStateFlow();
 
         yield break;
     }

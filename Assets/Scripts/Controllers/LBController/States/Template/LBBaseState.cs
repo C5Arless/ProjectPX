@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public abstract class LBBaseState {
     private bool _isRootState = false;
@@ -29,5 +30,5 @@ public abstract class LBBaseState {
             _ctx.CurrentSubState = newState;
             _ctx.CurrentSubState.EnterState();
         }
-    } 
+    }
 }

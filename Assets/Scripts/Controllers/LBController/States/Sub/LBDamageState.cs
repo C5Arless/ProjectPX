@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class LBDamageState : LBBaseState, IContextInit {
     private float timer;
@@ -10,7 +11,7 @@ public class LBDamageState : LBBaseState, IContextInit {
 
     public override void EnterState() {
         //Enter logic
-        EnterDamage();
+        Ctx.StartCoroutine(DamageEnterRoutine());
     }
 
     public override void UpdateState() {
@@ -32,18 +33,6 @@ public class LBDamageState : LBBaseState, IContextInit {
 
     public void InitializeContext() {
         timer = Ctx.IdleTime;
-    }
-
-    private void EnterDamage() {
-        currentTime = Time.time;
-        timer = Ctx.IdleTime;
-        
-        Ctx.CurrentHealth--;
-        Ctx.Agent.isStopped = true;
-        Ctx.Agent.enabled = false;
-        
-        Ctx.RigidBody.isKinematic = false;
-        Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.forward * -10f, ForceMode.Impulse);
     }
     
     public void UpdateDamage() {
@@ -71,5 +60,22 @@ public class LBDamageState : LBBaseState, IContextInit {
         
         currentTime = 0f;
         timer = Ctx.IdleTime;
+    }
+
+    private IEnumerator DamageEnterRoutine() {
+        currentTime = Time.time;
+        timer = Ctx.IdleTime;
+        yield return null;
+        
+        Ctx.CurrentHealth--;
+        Ctx.Agent.isStopped = true;
+        Ctx.Agent.enabled = false;
+        Ctx.RigidBody.isKinematic = false;
+        yield return null;
+        
+        //To be moved to a collisionSolver
+        Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.forward * -10f, ForceMode.Impulse);
+        Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.up * 2f, ForceMode.Impulse);
+        yield break;
     }
 }
