@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[ExecuteAlways]
 public class MeshVisibility : MonoBehaviour {
     [Tooltip("True => Show; False => Hide")]
     [SerializeField] private bool initialState;

@@ -108,8 +108,6 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
 
     private void OnCollisionEnter(Collision other) {
-        Debug.Log(other.collider.tag);
-        
         if (other.collider.CompareTag("PlayerAttacks") && !isDamaged) {
             SetSubState(LBSubStates.Damaged);
         }
@@ -129,7 +127,13 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
 
     public void HandleSignal(int signal) {
-        //
+        switch (signal) {
+            case 0: {
+                RigidBody.AddForce(RigidBody.transform.forward * 5f, ForceMode.Impulse);
+                RigidBody.AddForce(RigidBody.transform.up * 4f, ForceMode.Impulse);
+                break;
+            }
+        }
     }
 
     public void PauseBehaviour() {
@@ -278,7 +282,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         
         if (patrolZone != null) {
             Vector3 spawnPosition = patrolZone.RetrieveWaypoint();
-            transform.position = new Vector3(spawnPosition.x, spawnPosition.y, spawnPosition.z);
+            transform.position = new Vector3(spawnPosition.x, spawnPosition.y + 1f, spawnPosition.z);
             
             GameBucket.Instance.SpawnHandler.RegisterSpawn(this);
         }

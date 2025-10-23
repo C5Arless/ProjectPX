@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class LBAttackState : LBBaseState, IContextInit {
     public LBAttackState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) { 
@@ -6,7 +7,8 @@ public class LBAttackState : LBBaseState, IContextInit {
     }
 
     public override void EnterState() {
-        EnterAttack();
+        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Attack());
+        Ctx.StartCoroutine(EnterAttackRoutine());
     }
 
     public override void UpdateState() {
@@ -15,7 +17,7 @@ public class LBAttackState : LBBaseState, IContextInit {
     }
 
     public override void ExitState() {
-        //Exit logic
+        ExitAttack();
     }
 
     public override void CheckSwitchStates() {
@@ -31,8 +33,23 @@ public class LBAttackState : LBBaseState, IContextInit {
         //
     }
     
-    public void EnterAttack() {
+    public void ExitAttack() {
         Ctx.AttackPoint = Vector3.zero;
+        
+        Ctx.RigidBody.isKinematic = true;
+        
+        Ctx.Agent.enabled = true;
+        Ctx.Agent.isStopped = true;
+        
         Ctx.SetSubState(LBSubStates.Idle);
+    }
+
+    private IEnumerator EnterAttackRoutine() {
+        Ctx.Agent.isStopped = true;
+        Ctx.Agent.enabled = false;
+        yield return null;
+        
+        Ctx.RigidBody.isKinematic = false;
+        yield break;
     }
 }

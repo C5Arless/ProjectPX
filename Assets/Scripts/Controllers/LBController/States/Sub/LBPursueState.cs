@@ -42,7 +42,7 @@ public class LBPursueState : LBBaseState, IContextInit {
     }
     
     public void UpdatePursue() {
-        if (Ctx.Agent.remainingDistance > Ctx.Agent.radius * 2f) {
+        if (Ctx.Agent.remainingDistance > 3f) {
             Ctx.Agent.SetDestination(Ctx.Player.transform.position);
         } else {
             Ctx.Agent.isStopped = true;
