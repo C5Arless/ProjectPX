@@ -46,10 +46,7 @@ public class LBAttackState : LBBaseState, IContextInit {
 
     private IEnumerator EnterAttackRoutine() {
         Ctx.Agent.isStopped = true;
-        Ctx.Agent.enabled = false;
-        yield return null;
-        
-        Ctx.RigidBody.isKinematic = false;
+        Ctx.Agent.speed = 0f;
         yield break;
     }
 }

@@ -13,11 +13,11 @@ public class LBController : MonoBehaviour, ISpawnable {
     [SerializeField] int maxHealth;
     [SerializeField] private float visionRange = 10f;
     
+    [SerializeField] float patrolSpeed = 2f;
+    [SerializeField] float pursueSpeed = 3f;
+    [SerializeField] float idleTime = 3f;
+    
     [SerializeField] GameObject player; //TESTING
-
-    private const float patrolSpeed = 2f;
-    private const float pursueSpeed = 3f;
-    private const float idleTime = 3f;
     
     private int currentHp;
     
@@ -129,8 +129,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     public void HandleSignal(int signal) {
         switch (signal) {
             case 0: {
-                RigidBody.AddForce(RigidBody.transform.forward * 5f, ForceMode.Impulse);
-                RigidBody.AddForce(RigidBody.transform.up * 4f, ForceMode.Impulse);
+                StartCoroutine(BugAttackRoutine());
                 break;
             }
         }
@@ -274,6 +273,20 @@ public class LBController : MonoBehaviour, ISpawnable {
         StartCoroutine(InitializeSpawnZone());
     }
 
+    private IEnumerator BugAttackRoutine() {
+        navMeshAgent.enabled = false;
+        yield return null;
+        
+        rigidBody.isKinematic = false;
+        rigidBody.ResetInertiaTensor();
+        rigidBody.velocity = Vector3.zero;
+        yield return null;
+        
+        RigidBody.AddForce(RigidBody.transform.forward * 5f, ForceMode.Impulse);
+        RigidBody.AddForce(RigidBody.transform.up * 4f, ForceMode.Impulse);
+        yield break;
+    }
+    
     private IEnumerator InitializeSpawnZone() {
         yield return null;
         

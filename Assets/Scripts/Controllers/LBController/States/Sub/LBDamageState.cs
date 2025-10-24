@@ -68,14 +68,18 @@ public class LBDamageState : LBBaseState, IContextInit {
         yield return null;
         
         Ctx.CurrentHealth--;
+        Ctx.Agent.speed = 0f;
         Ctx.Agent.isStopped = true;
         Ctx.Agent.enabled = false;
+        yield return null;
+        
+        Ctx.RigidBody.ResetInertiaTensor();
         Ctx.RigidBody.isKinematic = false;
         yield return null;
         
         //To be moved to a collisionSolver
-        Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.forward * -10f, ForceMode.Impulse);
-        Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.up * 2f, ForceMode.Impulse);
+        Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.forward * -5f, ForceMode.Impulse);
+        Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.up * 4f, ForceMode.Impulse);
         yield break;
     }
 }

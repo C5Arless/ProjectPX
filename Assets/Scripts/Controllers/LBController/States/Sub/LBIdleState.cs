@@ -45,6 +45,8 @@ public class LBIdleState : LBBaseState, IContextInit {
     public void EnterIdle() {
         currentTime = Time.time;
         timer = Ctx.IdleTime;
+
+        Ctx.Agent.speed = 0f;
     }
     
     public void UpdateIdle() {
