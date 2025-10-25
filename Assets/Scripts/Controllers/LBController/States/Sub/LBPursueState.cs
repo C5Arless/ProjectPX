@@ -6,12 +6,12 @@ public class LBPursueState : LBBaseState, IContextInit {
     }
 
     public override void EnterState() {
-        EnterPursue();
+        EnterBugPursue();
         Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Pursue());
     }
 
     public override void UpdateState() {
-        UpdatePursue();
+        UpdateBugPursue();
         
         CheckSwitchStates();
     }
@@ -36,12 +36,12 @@ public class LBPursueState : LBBaseState, IContextInit {
         //
     }
     
-    public void EnterPursue() {
+    public void EnterBugPursue() {
         Ctx.Agent.speed = Ctx.PursueSpeed;
         Ctx.Agent.isStopped = false;
     }
     
-    public void UpdatePursue() {
+    public void UpdateBugPursue() {
         if (Ctx.Agent.remainingDistance > 3f) {
             Ctx.Agent.SetDestination(Ctx.Player.transform.position);
         } else {

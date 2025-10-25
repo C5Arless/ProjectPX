@@ -12,10 +12,11 @@ public class LBDamageState : LBBaseState, IContextInit {
     public override void EnterState() {
         //Enter logic
         Ctx.StartCoroutine(DamageEnterRoutine());
+        //Ctx.StartCoroutine(EvaluateDeath());
     }
 
     public override void UpdateState() {
-        UpdateDamage();
+        //UpdateDamage();
         
         CheckSwitchStates();
     }
@@ -28,7 +29,7 @@ public class LBDamageState : LBBaseState, IContextInit {
     public override void CheckSwitchStates() {
         if (Ctx.SubStates[LBSubStates.Idle]) {
             SwitchState(StateHandler.Idle());
-        }          
+        } 
     }
 
     public void InitializeContext() {
@@ -65,7 +66,6 @@ public class LBDamageState : LBBaseState, IContextInit {
     private IEnumerator DamageEnterRoutine() {
         currentTime = Time.time;
         timer = Ctx.IdleTime;
-        yield return null;
         
         Ctx.CurrentHealth--;
         Ctx.Agent.speed = 0f;
@@ -73,13 +73,32 @@ public class LBDamageState : LBBaseState, IContextInit {
         Ctx.Agent.enabled = false;
         yield return null;
         
-        Ctx.RigidBody.ResetInertiaTensor();
         Ctx.RigidBody.isKinematic = false;
+        Ctx.RigidBody.ResetInertiaTensor();
         yield return null;
         
         //To be moved to a collisionSolver
         Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.forward * -5f, ForceMode.Impulse);
         Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.up * 4f, ForceMode.Impulse);
+        yield return new  WaitForSeconds(.5f);
+
+        if (Ctx.CurrentHealth <= 0) {
+            Ctx.SetRootState(LBRootStates.Dead);    
+        } else {
+            Ctx.SetSubState(LBSubStates.Idle);  
+        }
+        
+        yield break;
+    }
+
+    private IEnumerator EvaluateDeath() {
+        while (Ctx.SubStates[LBSubStates.Damaged]) {
+            if (Ctx.RootStates[LBRootStates.Dead]) {
+                ExitDamage();
+                yield break;
+            } else yield return null;
+        }
+
         yield break;
     }
 }

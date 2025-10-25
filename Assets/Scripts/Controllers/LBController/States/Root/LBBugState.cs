@@ -14,9 +14,10 @@ public class LBBugState : LBBaseState, IContextInit {
 
     public override void UpdateState() {
         //Update logic
-        
-        if (Ctx.IsRunning && !Ctx.SubStates[LBSubStates.Idle]) {
-            Ctx.Scout();
+        if (!Ctx.IsRunning) { return; }
+
+        if (!Ctx.RootStates[LBRootStates.Dead]) {
+            if (Ctx.SubStates[LBSubStates.Patrol] || Ctx.SubStates[LBSubStates.Idle]) Ctx.Scout();
         }
         
         CheckSwitchStates();

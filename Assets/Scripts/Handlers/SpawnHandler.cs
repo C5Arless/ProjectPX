@@ -74,12 +74,13 @@ public class SpawnHandler : MonoBehaviour {
             else {
                 yield return new WaitForSeconds(1f);
             }
-            
         }
     }
 
     private IEnumerator CheckAndSpawn() {
         if (player == null) yield break;
+        
+        List<ISpawnable> spawns = new List<ISpawnable>();
         
         foreach (var spawnable in spawnables) {            
             if (spawnable.IsRunning || spawnable.IsReady || spawnable.IsSpawning) continue;
@@ -95,10 +96,16 @@ public class SpawnHandler : MonoBehaviour {
         foreach (var spawnable in spawnables) {
             if (spawnable.IsReady && !spawnable.IsRunning && !spawnable.IsSpawning) {
                 spawnable.Spawn();
+                spawns.Add(spawnable);
                 yield return new WaitForSeconds(timeToWait);
             }
         }
 
+        foreach (var spawn in spawns) {
+            UnregisterSpawn(spawn);
+            yield return null;
+        }
+        
         yield break;
     }
 }

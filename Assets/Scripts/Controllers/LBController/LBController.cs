@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class LBController : MonoBehaviour, ISpawnable {
-    [SerializeField] TMP_Text _stateText;
+    [SerializeField] GameObject ballShell;
     [SerializeField] List<Renderer> renderers;
     [SerializeField] NavMeshAgent navMeshAgent;
     [SerializeField] Rigidbody rigidBody;
@@ -28,11 +28,9 @@ public class LBController : MonoBehaviour, ISpawnable {
 
     //State vars
     private bool isReady;
-
     private bool isRunning;
     private bool isPaused;
     private bool isSpawning;
-    
     private bool isDamaged;
     
     private Dictionary<LBRootStates, bool> rootStates; 
@@ -45,9 +43,11 @@ public class LBController : MonoBehaviour, ISpawnable {
     private Vector3 attackPoint = Vector3.zero;
     
     #region Getters and Setters
-    
+
+    public GameObject BallShell { get { return ballShell; } set { ballShell = value; } }
     public NavMeshAgent Agent { get { return navMeshAgent; } set {  navMeshAgent = value; } }
     public Rigidbody RigidBody { get { return rigidBody; } set {  rigidBody = value; } }
+    public int MaxHealth { get { return maxHealth; } }
     public int CurrentHealth { get { return currentHp; } set { currentHp = value; } }
     public Vector3 Position { get { return transform.position; } }
     public Vector3 AttackPoint { get { return attackPoint; } set { attackPoint = value; } }
@@ -77,11 +77,6 @@ public class LBController : MonoBehaviour, ISpawnable {
         _stateHandler = new LBStateHandler(this);
         animHandler = GetComponentInChildren<LBAnimHandler>();
         
-        currentHp = maxHealth;
-        
-        InitializeStateKeys();
-        
-
         initialScale = transform.localScale;
     }
     
@@ -91,9 +86,7 @@ public class LBController : MonoBehaviour, ISpawnable {
             GameMaster.Instance._onGameUnpaused += UnpauseBehaviour;
         }
 
-        EvaluateSpawn();
-
-        transform.localScale = Vector3.zero;
+        InitializeFSM();
     }
 
     private void OnDisable() {
@@ -111,18 +104,18 @@ public class LBController : MonoBehaviour, ISpawnable {
         if (other.collider.CompareTag("PlayerAttacks") && !isDamaged) {
             SetSubState(LBSubStates.Damaged);
         }
-    }
-
-    private void Update() {
-        if (isRunning) {
-            _stateText.text = _currentRootState + " " + _currentSubState; //DEBUG
+        else if (!rigidBody.isKinematic && other.collider.CompareTag("Ground") && subStates[LBSubStates.Attack]) {
+            SetSubState(LBSubStates.Idle);
         }
     }
-
+    
     void FixedUpdate() {
         if (isRunning && !isPaused) {
             _currentRootState.UpdateState();
-            _currentSubState.UpdateState();
+
+            if (!rootStates[LBRootStates.Dead]) {
+                _currentSubState.UpdateState();
+            }
         }
     }
 
@@ -187,7 +180,15 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
 
     public void InitializeFSM() {
+        isReady = false;
+        isRunning = false;
+        isPaused = false;
+        isSpawning = false;
+        isDamaged = false;
         
+        InitializeStateKeys();
+        
+        EvaluateSpawn();
     }
     
     private bool CanSeePlayer() {
@@ -206,7 +207,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         return false;
     }
     
-    private void SetMask(float maskValue) {
+    public void SetMask(float maskValue) {
         MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
         float targetValue = maskValue;
         propertyBlock.SetFloat("_Mask", targetValue);
@@ -221,7 +222,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         }
     }
 
-    private void SetScale(float scaleValue) {
+    public void SetScale(float scaleValue) {
         Vector3 scale = initialScale * scaleValue;
         transform.localScale = scale;
     }
@@ -294,10 +295,24 @@ public class LBController : MonoBehaviour, ISpawnable {
         yield return null;
         
         if (patrolZone != null) {
-            Vector3 spawnPosition = patrolZone.RetrieveWaypoint();
-            transform.position = new Vector3(spawnPosition.x, spawnPosition.y + 1f, spawnPosition.z);
-            
-            GameBucket.Instance.SpawnHandler.RegisterSpawn(this);
+            Vector3 waypointPosition = patrolZone.RetrieveWaypoint();
+
+            if (NavMesh.SamplePosition(waypointPosition, out NavMeshHit hit, 5f, NavMesh.AllAreas)) {
+                Vector3 spawnPosition = hit.position;
+                transform.position = spawnPosition;
+                
+                currentHp = maxHealth;
+                rigidBody.isKinematic = true;
+                yield return null;
+                
+                navMeshAgent.enabled = true;
+                navMeshAgent.Warp(spawnPosition);
+                navMeshAgent.speed = 0f;
+                yield return null;
+                
+                transform.localScale = Vector3.zero;
+                GameBucket.Instance.SpawnHandler.RegisterSpawn(this);
+            }
         }
         
         yield break;
@@ -311,7 +326,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         SetMask(currentScale);
 
         while (currentScale < targetScale) {
-            currentScale += .05f;
+            currentScale += .01f;
             
             SetScale(currentScale);
             SetMask(currentScale);
