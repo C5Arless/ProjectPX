@@ -32,6 +32,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     private bool isPaused;
     private bool isSpawning;
     private bool isDamaged;
+    private bool isMorphing;
     
     private Dictionary<LBRootStates, bool> rootStates; 
     private Dictionary<LBSubStates, bool> subStates;
@@ -63,6 +64,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     public bool IsRunning { get { return isRunning; } set { isRunning = value; } }
     public bool IsPaused { get { return isPaused; } set { isPaused = value; } }
     public bool IsDamaged { get { return isDamaged; } set { isDamaged = value; } }
+    public bool IsMorphing { get { return isMorphing; } set { isMorphing = value; }}
 
     public Dictionary<LBRootStates, bool>  RootStates { get { return rootStates; } }
     public Dictionary<LBSubStates, bool>  SubStates { get { return subStates; } }
@@ -104,9 +106,10 @@ public class LBController : MonoBehaviour, ISpawnable {
         if (other.collider.CompareTag("PlayerAttacks") && !isDamaged) {
             SetSubState(LBSubStates.Damaged);
         }
-        else if (!rigidBody.isKinematic && other.collider.CompareTag("Ground") && subStates[LBSubStates.Attack]) {
+        else if (!rigidBody.isKinematic && other.collider.CompareTag("Ground") && subStates[LBSubStates.Attack] && rootStates[LBRootStates.Bug]) {
             SetSubState(LBSubStates.Idle);
         }
+
     }
     
     void FixedUpdate() {
@@ -123,6 +126,14 @@ public class LBController : MonoBehaviour, ISpawnable {
         switch (signal) {
             case 0: {
                 StartCoroutine(BugAttackRoutine());
+                break;
+            }
+            case 1: {
+                isMorphing = true;
+                break;
+            }
+            case 2: {
+                isMorphing = false;
                 break;
             }
         }
@@ -163,8 +174,6 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
 
     public void SetRootState(LBRootStates state) {
-        if (state == LBRootStates.Ball && maxHealth < 2) { return; }
-        
         Dictionary<LBRootStates, bool> target = new Dictionary<LBRootStates, bool>(3);
         target = InitializeRootStateKeys();
         

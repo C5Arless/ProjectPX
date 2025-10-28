@@ -54,7 +54,7 @@ public class LBDeadState : LBBaseState, IContextInit {
         Ctx.SetMask(currentScale);
         Ctx.SetScale(currentScale);
 
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(15f);
         
         Ctx.InitializeFSM();
         yield break;

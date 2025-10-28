@@ -1,17 +1,28 @@
 using UnityEngine;
+using System.Collections;
 
 public class LBPursueState : LBBaseState, IContextInit {
+    private float timer;
+    private float currentTime;
+    
     public LBPursueState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
         InitializeContext();
     }
 
     public override void EnterState() {
-        EnterBugPursue();
-        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Pursue());
+        if (Ctx.MaxHealth == 2 && Ctx.CurrentHealth < Ctx.MaxHealth) {
+            Ctx.StartCoroutine(EnterBallRoutine());
+        }
+        else {
+            EnterBugPursue();
+            Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Pursue());
+        }
     }
 
     public override void UpdateState() {
-        UpdateBugPursue();
+        if (Ctx.RootStates[LBRootStates.Bug]) {
+            UpdateBugPursue();
+        }
         
         CheckSwitchStates();
     }
@@ -33,7 +44,7 @@ public class LBPursueState : LBBaseState, IContextInit {
     }
 
     public void InitializeContext() {
-        //
+        timer = Ctx.IdleTime;
     }
     
     public void EnterBugPursue() {
@@ -49,5 +60,43 @@ public class LBPursueState : LBBaseState, IContextInit {
             Ctx.AttackPoint = Ctx.Player.transform.position;
             Ctx.SetSubState(LBSubStates.Attack);
         }
+    }
+
+    private IEnumerator EnterBallRoutine() {
+        Ctx.SetRootState(LBRootStates.Ball);
+        Ctx.Agent.speed = 0f;
+        Ctx.Agent.isStopped = true;
+        
+        yield return new WaitUntil(() => Ctx.IsMorphing);
+        yield return new WaitWhile(() => Ctx.IsMorphing);
+        
+        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Spin());
+        yield return null;
+
+        timer = Ctx.IdleTime;
+        Ctx.Agent.isStopped = false;
+        
+        while (timer > 0) {
+            timer -= Time.deltaTime;
+            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
+            yield return null;
+        } 
+        
+        timer = Ctx.IdleTime * 0.8f;
+        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.FASTER());
+        
+        while (timer > 0) {
+            timer -= Time.deltaTime;
+            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
+            yield return null;
+        } 
+        
+        timer = Ctx.IdleTime;
+        Ctx.AttackPoint = Ctx.Player.transform.position;
+        Ctx.Agent.SetDestination(Ctx.AttackPoint);
+        yield return null;
+        
+        Ctx.SetSubState(LBSubStates.Attack);
+        yield break;
     }
 }

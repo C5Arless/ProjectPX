@@ -7,8 +7,10 @@ public class LBAttackState : LBBaseState, IContextInit {
     }
 
     public override void EnterState() {
-        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Attack());
-        Ctx.StartCoroutine(EnterAttackRoutine());
+        if (Ctx.RootStates[LBRootStates.Bug]) {
+            Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Attack());
+            Ctx.StartCoroutine(EnterAttackRoutine());
+        }
     }
 
     public override void UpdateState() {
@@ -17,7 +19,9 @@ public class LBAttackState : LBBaseState, IContextInit {
     }
 
     public override void ExitState() {
-        ExitAttack();
+        if (Ctx.RootStates[LBRootStates.Bug]) {
+            ExitAttack();
+        }
     }
 
     public override void CheckSwitchStates() {

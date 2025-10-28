@@ -6,7 +6,7 @@ public class LBPatrolState : LBBaseState, IContextInit {
     }
 
     public override void EnterState() {
-        EnterPatrol();
+        EnterBugPatrol();
         Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Patrol());
     }
 
@@ -36,7 +36,7 @@ public class LBPatrolState : LBBaseState, IContextInit {
         //
     }
     
-    public void EnterPatrol() {
+    private void EnterBugPatrol() {
         Ctx.Agent.speed = Ctx.PatrolSpeed;
         Ctx.Agent.isStopped = false;
         
@@ -44,7 +44,7 @@ public class LBPatrolState : LBBaseState, IContextInit {
         Ctx.Agent.SetDestination(patrolPosition);
     }
     
-    public void UpdatePatrol() {
+    private void UpdatePatrol() {
         if (Ctx.Agent.remainingDistance > Ctx.Agent.radius * 2f) { return; }
 
         if (!Ctx.SubStates[LBSubStates.Pursue]) {

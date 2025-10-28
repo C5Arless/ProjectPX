@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 enum LBAnim {
-    dead,
+    spin,
+    FASTER,
     idle,
     patrol,
     pursue,
     attack,
+    shot,
     morph,
     unmorph,
-    damage
 }
 
 public class LBAnimHandler : MonoBehaviour {
@@ -20,18 +21,19 @@ public class LBAnimHandler : MonoBehaviour {
     [SerializeField] MeshVisibility _ball;
     [SerializeField] MeshVisibility _body;
     
-    Dictionary<LBAnim, Vector2> animList = new Dictionary<LBAnim, Vector2>(8);
+    Dictionary<LBAnim, Vector2> animList = new Dictionary<LBAnim, Vector2>(9);
     Vector2 targetclip;
 
     public LBAnimHandler() {
-        animList[LBAnim.dead] = new Vector2(.99f, .99f);                    //0
-        animList[LBAnim.idle] = new Vector2(0f, 0f);                        //1 OK
-        animList[LBAnim.patrol] = new Vector2(-.99f, 0f);                   //2 OK
-        animList[LBAnim.pursue] = new Vector2(.99f, 0f);                    //3 OK
-        animList[LBAnim.attack] = new Vector2(0f, -.99f);                   //4 OK
-        animList[LBAnim.morph] = new Vector2(-.99f, .99f);                  //5 OK
-        animList[LBAnim.unmorph] = new Vector2(-.99f, -.99f);               //6 OK
-        animList[LBAnim.damage] = new Vector2(.99f, -.99f);                 //7
+        animList[LBAnim.spin] = new Vector2(0f, .99f);                      //0 OK
+        animList[LBAnim.FASTER] = new Vector2(.99f, .99f);                  //1 OK
+        animList[LBAnim.idle] = new Vector2(0f, 0f);                        //2 OK
+        animList[LBAnim.patrol] = new Vector2(-.99f, 0f);                   //3 OK
+        animList[LBAnim.pursue] = new Vector2(.99f, 0f);                    //4 OK
+        animList[LBAnim.attack] = new Vector2(0f, -.99f);                   //5 OK
+        animList[LBAnim.shot] = new Vector2(.99f, -.99f);                   //6
+        animList[LBAnim.morph] = new Vector2(-.99f, .99f);                  //7 OK
+        animList[LBAnim.unmorph] = new Vector2(-.99f, -.99f);               //8 OK
     }
 
     public void PlayDirect(Vector2 clip) {
@@ -70,8 +72,11 @@ public class LBAnimHandler : MonoBehaviour {
         _animator.speed = 1f;
     }
 
-    public Vector2 Dead() {
-        return animList[LBAnim.dead];
+    public Vector2 Spin() {
+        return animList[LBAnim.spin];
+    }
+    public Vector2 FASTER() {
+        return animList[LBAnim.FASTER];
     }
     public Vector2 Idle() {
         return animList[LBAnim.idle];
@@ -85,13 +90,13 @@ public class LBAnimHandler : MonoBehaviour {
     public Vector2 Attack() {
         return animList[LBAnim.attack];
     }
+    public Vector2 Shot() {
+        return animList[LBAnim.shot];
+    }
     public Vector2 Morph() {
         return animList[LBAnim.morph];
     }
     public Vector2 Unmorph() {
         return animList[LBAnim.unmorph];
-    }
-    public Vector2 Damage() {
-        return animList[LBAnim.damage];
     }
 }

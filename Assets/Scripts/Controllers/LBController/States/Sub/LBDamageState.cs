@@ -12,7 +12,6 @@ public class LBDamageState : LBBaseState, IContextInit {
     public override void EnterState() {
         //Enter logic
         Ctx.StartCoroutine(DamageEnterRoutine());
-        //Ctx.StartCoroutine(EvaluateDeath());
     }
 
     public override void UpdateState() {
@@ -80,7 +79,7 @@ public class LBDamageState : LBBaseState, IContextInit {
         //To be moved to a collisionSolver
         Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.forward * -5f, ForceMode.Impulse);
         Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.up * 4f, ForceMode.Impulse);
-        yield return new  WaitForSeconds(.5f);
+        yield return new WaitForSeconds(2f);
 
         if (Ctx.CurrentHealth <= 0) {
             Ctx.SetRootState(LBRootStates.Dead);    
@@ -88,17 +87,6 @@ public class LBDamageState : LBBaseState, IContextInit {
             Ctx.SetSubState(LBSubStates.Idle);  
         }
         
-        yield break;
-    }
-
-    private IEnumerator EvaluateDeath() {
-        while (Ctx.SubStates[LBSubStates.Damaged]) {
-            if (Ctx.RootStates[LBRootStates.Dead]) {
-                ExitDamage();
-                yield break;
-            } else yield return null;
-        }
-
         yield break;
     }
 }

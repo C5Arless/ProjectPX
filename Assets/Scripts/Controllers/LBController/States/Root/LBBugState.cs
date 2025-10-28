@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class LBBugState : LBBaseState, IContextInit {
     public LBBugState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
@@ -9,17 +10,20 @@ public class LBBugState : LBBaseState, IContextInit {
 
     public override void EnterState() {
         //Enter logic
-
+        if (Ctx.CurrentHealth < Ctx.MaxHealth) {
+            Ctx.IsMorphing = true;
+            Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Unmorph());
+        }
     }
 
     public override void UpdateState() {
         //Update logic
-        if (!Ctx.IsRunning) { return; }
-
-        if (!Ctx.RootStates[LBRootStates.Dead]) {
-            if (Ctx.SubStates[LBSubStates.Patrol] || Ctx.SubStates[LBSubStates.Idle]) Ctx.Scout();
+        if (!Ctx.IsRunning || Ctx.IsMorphing) { return; }
+            
+        if (Ctx.SubStates[LBSubStates.Patrol]) {
+            Ctx.Scout();
         }
-        
+
         CheckSwitchStates();
     }
 

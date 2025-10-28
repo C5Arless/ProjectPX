@@ -3,12 +3,15 @@ using UnityEngine;
 public class LBIdleState : LBBaseState, IContextInit {
     private float timer;
     private float currentTime;
+    private bool isOperative;
     
     public LBIdleState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
         InitializeContext();
     }
 
     public override void EnterState() {
+        isOperative = false;
+        
         if (Ctx.RootStates[LBRootStates.Bug]) {
             EnterIdle();
             
@@ -18,8 +21,10 @@ public class LBIdleState : LBBaseState, IContextInit {
 
     public override void UpdateState() {
         UpdateIdle();
-        
-        CheckSwitchStates();
+
+        if (isOperative) {
+            CheckSwitchStates();
+        }
     }
 
     public override void ExitState() {
@@ -53,6 +58,10 @@ public class LBIdleState : LBBaseState, IContextInit {
         float elapsed = Time.time - currentTime;
         if (timer > 0) {
             timer -= elapsed * Time.deltaTime;
+            
+            if (timer > Ctx.IdleTime / 2f) {
+                isOperative = true;
+            }
         } else {
             Ctx.SetSubState(LBSubStates.Patrol);
             timer = Ctx.IdleTime;
