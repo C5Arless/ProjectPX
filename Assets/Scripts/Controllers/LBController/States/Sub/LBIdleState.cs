@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class LBIdleState : LBBaseState, IContextInit {
     private float timer;
@@ -11,17 +12,21 @@ public class LBIdleState : LBBaseState, IContextInit {
 
     public override void EnterState() {
         isOperative = false;
-        
+
         if (Ctx.RootStates[LBRootStates.Bug]) {
-            EnterIdle();
-            
+            EnterBugIdle();
             Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Idle());
         }
-    }
+        else if (Ctx.RootStates[LBRootStates.Ball] && Ctx.CurrentHealth < Ctx.MaxHealth) {
+            Ctx.StartCoroutine(EnterBallIdleRoutine());
+        }
+}
 
     public override void UpdateState() {
-        UpdateIdle();
-
+        if (Ctx.RootStates[LBRootStates.Bug] && !Ctx.IsMorphing) {
+            UpdateBugIdle();
+        }
+        
         if (isOperative) {
             CheckSwitchStates();
         }
@@ -47,14 +52,14 @@ public class LBIdleState : LBBaseState, IContextInit {
         timer = Ctx.IdleTime;
     }
     
-    public void EnterIdle() {
+    public void EnterBugIdle() {
         currentTime = Time.time;
         timer = Ctx.IdleTime;
 
         Ctx.Agent.speed = 0f;
     }
     
-    public void UpdateIdle() {
+    public void UpdateBugIdle() {
         float elapsed = Time.time - currentTime;
         if (timer > 0) {
             timer -= elapsed * Time.deltaTime;
@@ -71,5 +76,15 @@ public class LBIdleState : LBBaseState, IContextInit {
     public void ExitIdle() {
         currentTime = 0f;
         timer = Ctx.IdleTime;
+    }
+
+    private IEnumerator EnterBallIdleRoutine() {
+        Ctx.SetRootState(LBRootStates.Bug);
+
+        yield return new WaitUntil(() => Ctx.IsMorphing);
+        yield return new WaitWhile(() => Ctx.IsMorphing);
+        
+        EnterBugIdle();
+        yield break;
     }
 }

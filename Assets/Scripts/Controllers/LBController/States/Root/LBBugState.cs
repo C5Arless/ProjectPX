@@ -11,8 +11,7 @@ public class LBBugState : LBBaseState, IContextInit {
     public override void EnterState() {
         //Enter logic
         if (Ctx.CurrentHealth < Ctx.MaxHealth) {
-            Ctx.IsMorphing = true;
-            Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Unmorph());
+            Ctx.AnimHandler.PlayUnmorph();
         }
     }
 

@@ -29,6 +29,7 @@ public class LBPursueState : LBBaseState, IContextInit {
 
     public override void ExitState() {
         //Exit logic
+        
     }
 
     public override void CheckSwitchStates() {
@@ -64,39 +65,22 @@ public class LBPursueState : LBBaseState, IContextInit {
 
     private IEnumerator EnterBallRoutine() {
         Ctx.SetRootState(LBRootStates.Ball);
-        Ctx.Agent.speed = 0f;
-        Ctx.Agent.isStopped = true;
+        Ctx.Agent.enabled = true;
+        yield return null;
+        
+        Ctx.Agent.speed = 0.01f;
         
         yield return new WaitUntil(() => Ctx.IsMorphing);
         yield return new WaitWhile(() => Ctx.IsMorphing);
         
-        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Spin());
-        yield return null;
-
-        timer = Ctx.IdleTime;
-        Ctx.Agent.isStopped = false;
-        
-        while (timer > 0) {
-            timer -= Time.deltaTime;
-            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
-            yield return null;
-        } 
-        
-        timer = Ctx.IdleTime * 0.8f;
-        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.FASTER());
-        
-        while (timer > 0) {
-            timer -= Time.deltaTime;
-            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
-            yield return null;
-        } 
-        
-        timer = Ctx.IdleTime;
-        Ctx.AttackPoint = Ctx.Player.transform.position;
-        Ctx.Agent.SetDestination(Ctx.AttackPoint);
+        Ctx.AnimHandler.PlaySpin();
         yield return null;
         
-        Ctx.SetSubState(LBSubStates.Attack);
+        while (Ctx.SubStates[LBSubStates.Pursue]) {
+            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
+            yield return null;
+        }
+        
         yield break;
     }
 }

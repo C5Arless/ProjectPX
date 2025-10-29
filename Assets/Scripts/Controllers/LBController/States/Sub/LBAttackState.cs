@@ -7,9 +7,13 @@ public class LBAttackState : LBBaseState, IContextInit {
     }
 
     public override void EnterState() {
+        Ctx.IsReady = false;
         if (Ctx.RootStates[LBRootStates.Bug]) {
-            Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Attack());
+            Ctx.AnimHandler.PlayAttack();
             Ctx.StartCoroutine(EnterAttackRoutine());
+        }
+        else {
+            Ctx.StartCoroutine(EnterBallAttackRoutine());
         }
     }
 
@@ -19,9 +23,7 @@ public class LBAttackState : LBBaseState, IContextInit {
     }
 
     public override void ExitState() {
-        if (Ctx.RootStates[LBRootStates.Bug]) {
-            ExitAttack();
-        }
+        ExitAttack();
     }
 
     public override void CheckSwitchStates() {
@@ -44,13 +46,35 @@ public class LBAttackState : LBBaseState, IContextInit {
         
         Ctx.Agent.enabled = true;
         Ctx.Agent.isStopped = true;
-        
-        Ctx.SetSubState(LBSubStates.Idle);
-    }
 
+        if (Ctx.RootStates[LBRootStates.Bug]) {
+            Ctx.AnimHandler.StopAttack();
+            Ctx.SetSubState(LBSubStates.Idle);
+        }
+        else {
+            Ctx.AnimHandler.StopSpin();
+            Ctx.SetSubState(LBSubStates.Idle);
+        }
+    }
+    
+    private IEnumerator EnterBallAttackRoutine() {
+        Ctx.AttackPoint = Ctx.Player.transform.position;
+        Ctx.Agent.enabled = false;
+        yield return null;
+        
+        Ctx.RigidBody.isKinematic = false;
+        yield return new WaitForSeconds(.1f);
+        
+        Ctx.IsReady = true;
+        yield break;
+    }
+    
     private IEnumerator EnterAttackRoutine() {
         Ctx.Agent.isStopped = true;
         Ctx.Agent.speed = 0f;
+        yield return new WaitForSeconds(.25f);
+        
+        Ctx.IsReady = true;
         yield break;
     }
 }

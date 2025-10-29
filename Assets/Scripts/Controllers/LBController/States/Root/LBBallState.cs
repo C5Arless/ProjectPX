@@ -10,8 +10,7 @@ public class LBBallState : LBBaseState, IContextInit {
     public override void EnterState() {
         //Enter logic
 
-        Ctx.IsMorphing = true;
-        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Morph());
+        Ctx.AnimHandler.PlayMorph();
     }
 
     public override void UpdateState() {
@@ -25,8 +24,6 @@ public class LBBallState : LBBaseState, IContextInit {
     public override void ExitState() {
         //Exit logic
         
-        //Ctx.IsMorphing = true;
-        //Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Unmorph());
     }
 
     public override void CheckSwitchStates() {

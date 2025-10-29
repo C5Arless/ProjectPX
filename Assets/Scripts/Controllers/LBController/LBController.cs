@@ -64,7 +64,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     public bool IsRunning { get { return isRunning; } set { isRunning = value; } }
     public bool IsPaused { get { return isPaused; } set { isPaused = value; } }
     public bool IsDamaged { get { return isDamaged; } set { isDamaged = value; } }
-    public bool IsMorphing { get { return isMorphing; } set { isMorphing = value; }}
+    public bool IsMorphing { get { return isMorphing; } set { isMorphing = value; } }
 
     public Dictionary<LBRootStates, bool>  RootStates { get { return rootStates; } }
     public Dictionary<LBSubStates, bool>  SubStates { get { return subStates; } }
@@ -106,7 +106,8 @@ public class LBController : MonoBehaviour, ISpawnable {
         if (other.collider.CompareTag("PlayerAttacks") && !isDamaged) {
             SetSubState(LBSubStates.Damaged);
         }
-        else if (!rigidBody.isKinematic && other.collider.CompareTag("Ground") && subStates[LBSubStates.Attack] && rootStates[LBRootStates.Bug]) {
+        else if (!rigidBody.isKinematic && other.collider.CompareTag("Ground") && subStates[LBSubStates.Attack] && isReady) {
+            rigidBody.isKinematic = true;
             SetSubState(LBSubStates.Idle);
         }
 
@@ -124,16 +125,25 @@ public class LBController : MonoBehaviour, ISpawnable {
 
     public void HandleSignal(int signal) {
         switch (signal) {
-            case 0: {
+            case 1: {
                 StartCoroutine(BugAttackRoutine());
                 break;
             }
-            case 1: {
+            case 2: {
                 isMorphing = true;
                 break;
             }
-            case 2: {
+            case 3: {
                 isMorphing = false;
+                break;
+            }
+            case 4: {
+                SetSubState(LBSubStates.Attack);
+                break;
+            }
+            case 5: {
+                rigidBody.AddForce(rigidBody.transform.up * 10f, ForceMode.Impulse);
+                rigidBody.AddForce(rigidBody.transform.forward * 15f, ForceMode.Impulse);
                 break;
             }
         }
@@ -149,6 +159,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     
     public void Spawn() {
         isSpawning = true;
+        animHandler.PlayDirect(animHandler.Idle());
         StartCoroutine(SpawnRoutine());
     }
 
@@ -194,6 +205,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         isPaused = false;
         isSpawning = false;
         isDamaged = false;
+        isMorphing = false;
         
         InitializeStateKeys();
         
@@ -205,7 +217,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         if (dir.magnitude > 10f) { return false; }
 
         float angle = Vector3.Angle(transform.forward, dir);
-        if (angle > 60f * 0.5f) { return false; }
+        if (angle > 90f * 0.5f) { return false; }
 
         if (Physics.Raycast(transform.position + Vector3.up * .5f, dir.normalized, out RaycastHit hit, visionRange)) {
             if (hit.collider.CompareTag("Player") || hit.collider.CompareTag("PlayerAttacks")) {
@@ -227,7 +239,6 @@ public class LBController : MonoBehaviour, ISpawnable {
                     renderer.SetPropertyBlock(propertyBlock, i);
                 }
             }
-            
         }
     }
 
@@ -354,7 +365,7 @@ public class LBController : MonoBehaviour, ISpawnable {
 
         yield break;
     }
-
+    
     private void OnDrawGizmos() {
         if (!isRunning) { return; }
         
