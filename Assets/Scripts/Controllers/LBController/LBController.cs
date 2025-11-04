@@ -52,6 +52,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     public int CurrentHealth { get { return currentHp; } set { currentHp = value; } }
     public Vector3 Position { get { return transform.position; } }
     public Vector3 AttackPoint { get { return attackPoint; } set { attackPoint = value; } }
+    public float VisionRange { get => visionRange; }
     public GameObject Player { get { return player; } } //TESTING
     
     public float IdleTime { get { return idleTime; } }
@@ -142,7 +143,7 @@ public class LBController : MonoBehaviour, ISpawnable {
                 break;
             }
             case 5: {
-                rigidBody.AddForce(rigidBody.transform.up * 10f, ForceMode.Impulse);
+                rigidBody.AddForce(rigidBody.transform.up * 8f, ForceMode.Impulse);
                 rigidBody.AddForce(rigidBody.transform.forward * 15f, ForceMode.Impulse);
                 break;
             }
@@ -159,6 +160,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     
     public void Spawn() {
         isSpawning = true;
+        animHandler.ResetAnimator();
         animHandler.PlayDirect(animHandler.Idle());
         StartCoroutine(SpawnRoutine());
     }
@@ -303,7 +305,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         rigidBody.velocity = Vector3.zero;
         yield return null;
         
-        RigidBody.AddForce(RigidBody.transform.forward * 5f, ForceMode.Impulse);
+        RigidBody.AddForce(RigidBody.transform.forward * 6f, ForceMode.Impulse);
         RigidBody.AddForce(RigidBody.transform.up * 4f, ForceMode.Impulse);
         yield break;
     }

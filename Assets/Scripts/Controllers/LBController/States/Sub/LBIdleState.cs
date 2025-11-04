@@ -76,6 +76,8 @@ public class LBIdleState : LBBaseState, IContextInit {
     public void ExitIdle() {
         currentTime = 0f;
         timer = Ctx.IdleTime;
+        
+        Ctx.Scout();
     }
 
     private IEnumerator EnterBallIdleRoutine() {

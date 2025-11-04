@@ -3,26 +3,21 @@ using System.Collections;
 
 public class LBPursueState : LBBaseState, IContextInit {
     private float timer;
-    private float currentTime;
     
     public LBPursueState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
         InitializeContext();
     }
 
     public override void EnterState() {
-        if (Ctx.MaxHealth == 2 && Ctx.CurrentHealth < Ctx.MaxHealth) {
+        if (Ctx.CurrentHealth < Ctx.MaxHealth) {
             Ctx.StartCoroutine(EnterBallRoutine());
         }
         else {
-            EnterBugPursue();
-            Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Pursue());
+            Ctx.StartCoroutine(EnterBugRoutine());
         }
     }
 
     public override void UpdateState() {
-        if (Ctx.RootStates[LBRootStates.Bug]) {
-            UpdateBugPursue();
-        }
         
         CheckSwitchStates();
     }
@@ -47,28 +42,40 @@ public class LBPursueState : LBBaseState, IContextInit {
     public void InitializeContext() {
         timer = Ctx.IdleTime;
     }
-    
-    public void EnterBugPursue() {
+
+    private IEnumerator EnterBugRoutine() {
         Ctx.Agent.speed = Ctx.PursueSpeed;
         Ctx.Agent.isStopped = false;
+        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Pursue());
+        yield return null;
+        
+        while (Ctx.Agent.remainingDistance > 3.5f) {
+            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
+            yield return null;
+        }
+        
+        Ctx.Agent.isStopped = true;
+        Ctx.AttackPoint = Ctx.Player.transform.position;
+        Ctx.SetSubState(LBSubStates.Attack);
+        yield break;
     }
     
-    public void UpdateBugPursue() {
-        if (Ctx.Agent.remainingDistance > 3f) {
-            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
-        } else {
-            Ctx.Agent.isStopped = true;
-            Ctx.AttackPoint = Ctx.Player.transform.position;
-            Ctx.SetSubState(LBSubStates.Attack);
-        }
-    }
-
     private IEnumerator EnterBallRoutine() {
+        Ctx.Agent.speed = Ctx.PursueSpeed;
+        Ctx.Agent.isStopped = false;
+        Ctx.AnimHandler.PlayDirect(Ctx.AnimHandler.Pursue());
+        yield return null;
+        
+        while (Ctx.Agent.remainingDistance > Ctx.VisionRange / 2) {
+            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
+            yield return null;
+        }
+        
         Ctx.SetRootState(LBRootStates.Ball);
         Ctx.Agent.enabled = true;
         yield return null;
         
-        Ctx.Agent.speed = 0.01f;
+        Ctx.Agent.isStopped = true;
         
         yield return new WaitUntil(() => Ctx.IsMorphing);
         yield return new WaitWhile(() => Ctx.IsMorphing);
@@ -76,10 +83,32 @@ public class LBPursueState : LBBaseState, IContextInit {
         Ctx.AnimHandler.PlaySpin();
         yield return null;
         
-        while (Ctx.SubStates[LBSubStates.Pursue]) {
-            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
+        Vector3 targetPos = Vector3.zero;
+        Vector3 selfPos = Vector3.zero;
+        Vector3 direction = Vector3.zero;
+        timer =  Ctx.IdleTime * .8f;
+        
+        while (timer > 0f) {
+            timer -= Time.deltaTime;
+            targetPos = Ctx.Player.transform.position;
+            selfPos = Ctx.transform.position;
+            
+            direction = new Vector3(targetPos.x - selfPos.x, 0f, targetPos.z - selfPos.z);
+
+            if (direction.sqrMagnitude > 0.01f) {
+                Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+                
+                Ctx.transform.rotation = Quaternion.RotateTowards(
+                    Ctx.transform.rotation,
+                    targetRotation,
+                    720f * Time.deltaTime
+                );
+            }
+            
             yield return null;
         }
+        
+        timer = Ctx.IdleTime * .8f;
         
         yield break;
     }

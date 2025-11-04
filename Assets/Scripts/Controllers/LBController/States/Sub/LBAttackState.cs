@@ -58,7 +58,6 @@ public class LBAttackState : LBBaseState, IContextInit {
     }
     
     private IEnumerator EnterBallAttackRoutine() {
-        Ctx.AttackPoint = Ctx.Player.transform.position;
         Ctx.Agent.enabled = false;
         yield return null;
         

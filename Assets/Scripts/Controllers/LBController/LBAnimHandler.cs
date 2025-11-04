@@ -37,7 +37,19 @@ public class LBAnimHandler : MonoBehaviour {
 
         _animator.speed = 1f;
     }
-
+    
+    public void ResetAnimator() {
+        _animator.SetBool("isAttacking", false);
+        _animator.SetBool("isMorphing", false);
+        _animator.SetBool("isUnmorphing", false);
+        _animator.SetBool("isSpinning", false);
+        
+        _animator.SetFloat("xAxis", targetclip.x);
+        _animator.SetFloat("yAxis", targetclip.y);
+        _animator.Play("AnimationsTree", 0, 0);
+        _animator.speed = 0f;
+    }
+    
     public void PlayAttack() {
         _animator.SetFloat("xAxis", 0f);
         _animator.SetFloat("yAxis", 0f);
