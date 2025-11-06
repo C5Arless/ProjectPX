@@ -28,7 +28,7 @@ public class PatrolZone : MonoBehaviour{
             GameBucket.Instance.SpawnHandler?.UnregisterPatrolZone(this);   
         }
     }
-
+    
     public Vector3 RetrieveWaypoint() {
         List<Transform> targetWaypoints = new List<Transform>();
         List<int> targetIdxs = new List<int>();

@@ -50,7 +50,7 @@ public class LBPursueState : LBBaseState, IContextInit {
         yield return null;
         
         while (Ctx.Agent.remainingDistance > 3.5f) {
-            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
+            Ctx.PursueTarget();
             yield return null;
         }
         
@@ -67,8 +67,13 @@ public class LBPursueState : LBBaseState, IContextInit {
         yield return null;
         
         while (Ctx.Agent.remainingDistance > Ctx.VisionRange / 2) {
-            Ctx.Agent.SetDestination(Ctx.Player.transform.position);
-            yield return null;
+            if (Ctx.ValidateTarget()) {
+                yield return null;
+            }
+            else {
+                Ctx.SetSubState(LBSubStates.Idle);
+                yield break;
+            }
         }
         
         Ctx.SetRootState(LBRootStates.Ball);
@@ -101,11 +106,18 @@ public class LBPursueState : LBBaseState, IContextInit {
                 Ctx.transform.rotation = Quaternion.RotateTowards(
                     Ctx.transform.rotation,
                     targetRotation,
-                    720f * Time.deltaTime
+                    180f * Time.deltaTime
                 );
             }
+
+            if (Ctx.ValidateTarget()) {
+                yield return null;
+            }
+            else {
+                timer = 0;
+                Ctx.SetSubState(LBSubStates.Idle);
+            }
             
-            yield return null;
         }
         
         timer = Ctx.IdleTime * .8f;

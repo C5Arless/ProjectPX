@@ -214,6 +214,16 @@ public class LBController : MonoBehaviour, ISpawnable {
         EvaluateSpawn();
     }
     
+    public void PursueTarget() {
+        if (ValidateTarget()) {
+            navMeshAgent.SetDestination(player.transform.position);
+        }
+        else {
+            attackPoint = Vector3.zero;
+            SetSubState(LBSubStates.Idle);
+        }
+    }
+    
     private bool CanSeePlayer() {
         Vector3 dir = (player.transform.position - transform.position);
         if (dir.magnitude > 10f) { return false; }
@@ -223,11 +233,18 @@ public class LBController : MonoBehaviour, ISpawnable {
 
         if (Physics.Raycast(transform.position + Vector3.up * .5f, dir.normalized, out RaycastHit hit, visionRange)) {
             if (hit.collider.CompareTag("Player") || hit.collider.CompareTag("PlayerAttacks")) {
-                return true;
+                return ValidateTarget();
             }
         }
 
         return false;
+    }
+
+    public bool ValidateTarget() {
+        bool result = NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 1f, patrolZone.patrolArea.agentTypeID);
+        //bool result = patrolZone.patrolArea.navMeshData.sourceBounds.Contains(player.transform.position);
+        Debug.Log(result);
+        return result;
     }
     
     public void SetMask(float maskValue) {
