@@ -24,7 +24,8 @@ public class LBPursueState : LBBaseState, IContextInit {
 
     public override void ExitState() {
         //Exit logic
-        
+        Ctx.StopCoroutine(EnterBugRoutine());
+        Ctx.StopCoroutine(EnterBallRoutine());
     }
 
     public override void CheckSwitchStates() {
@@ -50,7 +51,7 @@ public class LBPursueState : LBBaseState, IContextInit {
         yield return null;
         
         while (Ctx.Agent.remainingDistance > 3.5f) {
-            Ctx.PursueTarget();
+            if (!Ctx.PursueTarget()) yield break;
             yield return null;
         }
         
@@ -67,13 +68,8 @@ public class LBPursueState : LBBaseState, IContextInit {
         yield return null;
         
         while (Ctx.Agent.remainingDistance > Ctx.VisionRange / 2) {
-            if (Ctx.ValidateTarget()) {
-                yield return null;
-            }
-            else {
-                Ctx.SetSubState(LBSubStates.Idle);
-                yield break;
-            }
+            if (!Ctx.PursueTarget()) yield break;
+            yield return null;
         }
         
         Ctx.SetRootState(LBRootStates.Ball);
@@ -110,7 +106,7 @@ public class LBPursueState : LBBaseState, IContextInit {
                 );
             }
 
-            if (Ctx.ValidateTarget()) {
+            if (Ctx.PatrolZone.ValidateTarget(Ctx.Player)) {
                 yield return null;
             }
             else {

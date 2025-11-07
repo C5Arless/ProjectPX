@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class LBBallState : LBBaseState, IContextInit {
     public LBBallState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
         IsRootState = true;
@@ -17,6 +15,10 @@ public class LBBallState : LBBaseState, IContextInit {
         //Update logic
         
         //if pursue spin
+        
+        if (!Ctx.PatrolZone.ValidateTarget(Ctx.gameObject)) {
+            Ctx.SetRootState(LBRootStates.Dead);
+        }
         
         CheckSwitchStates(); //MUST BE LAST INSTRUCTION
     }

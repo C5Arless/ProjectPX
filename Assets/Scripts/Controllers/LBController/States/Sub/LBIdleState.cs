@@ -34,6 +34,7 @@ public class LBIdleState : LBBaseState, IContextInit {
 
     public override void ExitState() {
         ExitIdle();
+        Ctx.StopCoroutine(EnterBallIdleRoutine());
     }
 
     public override void CheckSwitchStates() {
@@ -77,7 +78,7 @@ public class LBIdleState : LBBaseState, IContextInit {
         currentTime = 0f;
         timer = Ctx.IdleTime;
         
-        Ctx.Scout();
+        //Ctx.Scout();
     }
 
     private IEnumerator EnterBallIdleRoutine() {

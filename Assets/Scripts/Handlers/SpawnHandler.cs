@@ -8,17 +8,19 @@ public class SpawnHandler : MonoBehaviour {
     [SerializeField] private float timeToWait = 1f;
     [SerializeField] private float minDistance = 20f;
 
-    private readonly List<ISpawnable> spawnables = new List<ISpawnable>();
     private readonly List<PatrolZone> patrolZones = new List<PatrolZone>();
+    
+    private List<ISpawnable> spawnables = new List<ISpawnable>();
+    private List<ISpawnable> spawnBuffer = new List<ISpawnable>();
 
     private void Awake() {
-        if (GameBucket.Instance != null) {
+        if (GameBucket.Instance is not null) {
             GameBucket.Instance.SpawnHandler = this;
         }
     }
 
     private void Start() {
-        if (GameBucket.Instance.PXController != null) {
+        if (GameBucket.Instance.PXController is not null) {
             player = GameBucket.Instance.PXController.transform;
         }
 
@@ -26,14 +28,14 @@ public class SpawnHandler : MonoBehaviour {
     }
 
     public void RegisterSpawn(ISpawnable spawnable) {
-        if (!spawnables.Contains(spawnable)) {
-            spawnables.Add(spawnable);
+        if (!spawnBuffer.Contains(spawnable)) {
+            spawnBuffer.Add(spawnable);
         }
     }
 
     public void UnregisterSpawn(ISpawnable spawnable) {
-        if (spawnables.Contains(spawnable)) {
-            spawnables.Remove(spawnable);
+        if (spawnBuffer.Contains(spawnable)) {
+            spawnBuffer.Remove(spawnable);
         }
     }
 
@@ -68,17 +70,30 @@ public class SpawnHandler : MonoBehaviour {
     
     private IEnumerator SpawnLoop() {
         while (true) {
+            yield return Sync();
+            
             if (spawnables.Count > 0) {
                 yield return CheckAndSpawn();
             }
             else {
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(.5f);
             }
         }
     }
 
+    private IEnumerator Sync() {
+        List<ISpawnable> targets = new List<ISpawnable>();
+        yield return null;
+
+        targets = spawnBuffer;
+        yield return null;
+        
+        spawnables = targets;
+        yield break;
+    }
+    
     private IEnumerator CheckAndSpawn() {
-        if (player == null) yield break;
+        if (player is null) yield break;
         
         List<ISpawnable> spawns = new List<ISpawnable>();
         

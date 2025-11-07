@@ -7321,7 +7321,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &891915113
 Transform:
   m_ObjectHideFlags: 0
@@ -7385,7 +7385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5867b629645b2084aa828d53bda227a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areaIndex: 0
   patrolArea: {fileID: 891915114}
   waypoints:
   - {fileID: 873185369}
@@ -11425,7 +11424,7 @@ Transform:
   m_GameObject: {fileID: 1453261922}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.1, y: 3.81, z: 64.64}
+  m_LocalPosition: {x: 0.29, y: 3.81, z: 64.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -17695,6 +17694,10 @@ PrefabInstance:
     - target: {fileID: 707223052947873511, guid: 1bf52b5352171524b970175bd069d78d, type: 3}
       propertyPath: m_Name
       value: PatrolZone (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4387529129491253474, guid: 1bf52b5352171524b970175bd069d78d, type: 3}
+      propertyPath: areaIndex
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8571915873588246438, guid: 1bf52b5352171524b970175bd069d78d, type: 3}
       propertyPath: m_LocalPosition.x

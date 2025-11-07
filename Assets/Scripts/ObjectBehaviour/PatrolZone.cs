@@ -1,17 +1,25 @@
-using System;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using UnityEngine.AI;
+using Unity.Collections;
 using UnityEngine;
-using Random = System.Random;
+using UnityEngine.Experimental.AI;
 
 public class PatrolZone : MonoBehaviour{
-    [SerializeField] public int areaIndex;
     [SerializeField] public NavMeshSurface patrolArea;
     [SerializeField] public List<Transform> waypoints;
 
     public List<bool> visitedWaypoints;
+    private NavMeshQuery navQuery;
+    private NavMeshWorld navWorld;
+    private Bounds areaBounds;
 
     private void Awake() {
+        navWorld = NavMeshWorld.GetDefaultWorld();
+        navQuery = new NavMeshQuery(navWorld, Allocator.Persistent);
+        areaBounds = patrolArea.navMeshData.sourceBounds;
+        areaBounds.center = transform.position;
+        
         visitedWaypoints = new List<bool>(waypoints.Count);
 
         foreach (var visitedWaypoint in waypoints) {
@@ -27,6 +35,27 @@ public class PatrolZone : MonoBehaviour{
         if (GameBucket.Instance != null) { 
             GameBucket.Instance.SpawnHandler?.UnregisterPatrolZone(this);   
         }
+
+        navQuery.Dispose();
+    }
+    
+    public bool ValidateTarget(GameObject target) {
+        Vector3 targetPos = target.transform.position;
+        
+        if (!areaBounds.Contains(targetPos)) {
+            return false;
+        }
+        
+        NavMeshLocation location = navQuery.MapLocation(
+            targetPos,
+            Vector3.one * 3f,
+            NavMesh.AllAreas
+        );
+        
+        if (location.polygon.IsNull()) return false;
+
+        return true;
+
     }
     
     public Vector3 RetrieveWaypoint() {
@@ -52,7 +81,7 @@ public class PatrolZone : MonoBehaviour{
             targetWaypoints = waypoints;
         }
         
-        int tempIndex = UnityEngine.Random.Range(0, targetWaypoints.Count);
+        int tempIndex = Random.Range(0, targetWaypoints.Count);
         
         int targetIndex = targetIdxs[tempIndex];
         

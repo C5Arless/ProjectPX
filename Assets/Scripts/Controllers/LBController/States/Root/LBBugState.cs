@@ -1,6 +1,3 @@
-using UnityEngine;
-using System.Collections;
-
 public class LBBugState : LBBaseState, IContextInit {
     public LBBugState(LBController currentContext, LBStateHandler stateHandler) : base(currentContext, stateHandler) {
         IsRootState = true;
@@ -23,6 +20,10 @@ public class LBBugState : LBBaseState, IContextInit {
             Ctx.Scout();
         }
 
+        if (!Ctx.PatrolZone.ValidateTarget(Ctx.gameObject)) {
+            Ctx.SetRootState(LBRootStates.Dead);
+        }
+        
         CheckSwitchStates();
     }
 
