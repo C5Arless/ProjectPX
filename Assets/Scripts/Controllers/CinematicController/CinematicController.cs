@@ -44,7 +44,8 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
 
         isInteracting = true;
 
-        GameBucket.Instance.GameCanvasHandler.HideUI();        
+        GameMaster.Instance.CutscenePause();
+        GameBucket.Instance.GameCanvasHandler.HideUI();
 
         while (isInteracting) {
             if (token.IsCancellationRequested) {
@@ -134,6 +135,7 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
         yield return new WaitWhile(() => GameBucket.Instance.EventsOrchestrator.IsRunning);
 
         GameBucket.Instance.GameCanvasHandler.ShowUI();
+        GameMaster.Instance.CutscenePause();
 
         yield break;
     }

@@ -15,7 +15,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     [SerializeField] float pursueSpeed = 3f;
     [SerializeField] float idleTime = 3f;
     
-    [SerializeField] GameObject player; //TESTING
+    //[SerializeField] GameObject player; //TESTING
     
     private int currentHp;
     
@@ -51,7 +51,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     public Vector3 Position { get { return transform.position; } }
     public Vector3 AttackPoint { get { return attackPoint; } set { attackPoint = value; } }
     public float VisionRange { get => visionRange; }
-    public GameObject Player { get { return player; } } //TESTING
+    //public GameObject Player { get { return player; } } //TESTING
     
     public float IdleTime { get { return idleTime; } }
     public float PatrolSpeed { get { return patrolSpeed; } }
@@ -82,21 +82,21 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
     
     private void Start() {
-        if (GameMaster.Instance != null) {
-            GameMaster.Instance._onGamePaused += PauseBehaviour;
-            GameMaster.Instance._onGameUnpaused += UnpauseBehaviour;
+        if (GameMaster.Instance is not null) {
+            GameMaster.Instance._OnCutscenePause += PauseBehaviour;
+            GameMaster.Instance._OnCutsceneUnpause += UnpauseBehaviour;
         }
 
         InitializeFSM();
     }
 
     private void OnDisable() {
-        if (GameMaster.Instance != null) {
-            GameMaster.Instance._onGamePaused -= PauseBehaviour;
-            GameMaster.Instance._onGameUnpaused -= UnpauseBehaviour;
+        if (GameMaster.Instance is not null) {
+            GameMaster.Instance._OnCutscenePause -= PauseBehaviour;
+            GameMaster.Instance._OnCutsceneUnpause -= UnpauseBehaviour;
         }
 
-        if (GameBucket.Instance != null) {
+        if (GameBucket.Instance is not null) {
             GameBucket.Instance.SpawnHandler.UnregisterSpawn(this);
         }
     }
@@ -150,10 +150,16 @@ public class LBController : MonoBehaviour, ISpawnable {
 
     public void PauseBehaviour() {
         isPaused = true;
+        
+        navMeshAgent.isStopped = true;
+        animHandler.Stop();
     }
 
     public void UnpauseBehaviour() {
         isPaused = false;
+        
+        navMeshAgent.isStopped = false;
+        animHandler.Resume();
     }
     
     public void Spawn() {
@@ -213,10 +219,10 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
     
     public bool PursueTarget() {
-        bool result = patrolZone.ValidateTarget(player);
+        bool result = patrolZone.ValidateTarget(GameBucket.Instance.PXController.gameObject);
         
         if (result) {
-            navMeshAgent.SetDestination(player.transform.position);
+            navMeshAgent.SetDestination(GameBucket.Instance.PXController.transform.position);
         }
         else {
             attackPoint = Vector3.zero;
@@ -227,11 +233,11 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
     
     private bool CanSeePlayer() {
-        if (!patrolZone.ValidateTarget(player)) {
+        if (!patrolZone.ValidateTarget(GameBucket.Instance.PXController.gameObject)) {
             return false;
         }
         
-        Vector3 dir = (player.transform.position - transform.position);
+        Vector3 dir = (GameBucket.Instance.PXController.transform.position - transform.position);
         if (dir.magnitude > 10f) { return false; }
 
         float angle = Vector3.Angle(transform.forward, dir);
@@ -350,6 +356,7 @@ public class LBController : MonoBehaviour, ISpawnable {
             yield return null;
                 
             transform.localScale = Vector3.zero;
+            
             GameBucket.Instance.SpawnHandler.RegisterSpawn(this);
         }
         
@@ -396,10 +403,10 @@ public class LBController : MonoBehaviour, ISpawnable {
         }
         else {
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(transform.position + transform.up * .5f, player.transform.position);
+            Gizmos.DrawLine(transform.position + transform.up * .5f, GameBucket.Instance.PXController.transform.position);
             
             Gizmos.color = Color.green;
-            Gizmos.DrawSphere(player.transform.position, 0.2f);
+            Gizmos.DrawSphere(GameBucket.Instance.PXController.transform.position, 0.2f);
         }
     }
 }

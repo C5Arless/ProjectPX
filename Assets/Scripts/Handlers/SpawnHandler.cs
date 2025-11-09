@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnHandler : MonoBehaviour {
-    [SerializeField] private Transform player; //DEBUG
+    //[SerializeField] private Transform player; //DEBUG
     
     [SerializeField] private float timeToWait = 1f;
     [SerializeField] private float minDistance = 20f;
@@ -20,9 +20,6 @@ public class SpawnHandler : MonoBehaviour {
     }
 
     private void Start() {
-        if (GameBucket.Instance.PXController is not null) {
-            player = GameBucket.Instance.PXController.transform;
-        }
 
         StartCoroutine(SpawnLoop());
     }
@@ -93,14 +90,18 @@ public class SpawnHandler : MonoBehaviour {
     }
     
     private IEnumerator CheckAndSpawn() {
-        if (player is null) yield break;
+        yield return null;
+        
+        if (GameBucket.Instance.PXController is null) {
+            yield break;
+        }
         
         List<ISpawnable> spawns = new List<ISpawnable>();
         
         foreach (var spawnable in spawnables) {            
             if (spawnable.IsRunning || spawnable.IsReady || spawnable.IsSpawning) continue;
 
-            float distance = Vector3.Distance(player.position, spawnable.Position);
+            float distance = Vector3.Distance(GameBucket.Instance.PXController.transform.position, spawnable.Position);
             if (distance <= minDistance) {
                 spawnable.IsReady = true;
             }

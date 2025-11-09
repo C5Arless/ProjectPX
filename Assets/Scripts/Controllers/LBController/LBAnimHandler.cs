@@ -121,6 +121,10 @@ public class LBAnimHandler : MonoBehaviour {
     public void Stop() {
         _animator.speed = 0f;
     }
+
+    public void Resume() {
+        _animator.speed = 1f;
+    }
     
     public void BallVisibility(int state) {
         if (state != 0) {

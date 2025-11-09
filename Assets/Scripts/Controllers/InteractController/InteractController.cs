@@ -76,7 +76,8 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
     public async Task FireEvent() {
         if (isRunning) { return; }
-
+        
+        GameMaster.Instance.CutscenePause();
         GameBucket.Instance.GameCanvasHandler.HideUI();        
 
         GameBucket.Instance.PXController.InteractionEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
@@ -194,7 +195,8 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         yield return new WaitWhile(() => GameBucket.Instance.EventsOrchestrator.IsRunning);
 
         GameBucket.Instance.GameCanvasHandler.ShowUI();
-
+        GameMaster.Instance.CutsceneUnpause();
+        
         yield break;
     }
 

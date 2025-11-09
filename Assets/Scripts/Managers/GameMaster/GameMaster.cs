@@ -8,9 +8,13 @@ public class GameMaster : MonoBehaviour {
 
     public delegate void OnGamePaused();
     public OnGamePaused _onGamePaused = () => { };
-
     public delegate void OnGameUnpaused();
     public OnGameUnpaused _onGameUnpaused = () => { };
+    
+    public delegate void OnCutscenePause();
+    public OnCutscenePause _OnCutscenePause = () => { };
+    public delegate void OnCutsceneUnpause();
+    public OnCutsceneUnpause _OnCutsceneUnpause = () => { };
 
     private void Awake() {
         if (Instance == null) {
@@ -18,12 +22,8 @@ public class GameMaster : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
         }
         else { Destroy(gameObject); }
-
-        //_onGamePaused += () => { };
-        //_onGameUnpaused += () => { };
     }
-
-    // Start is called before the first frame update
+    
     void Start() {
         Debug.Log("Game Master Start");
 
@@ -41,6 +41,14 @@ public class GameMaster : MonoBehaviour {
         Time.timeScale = 1f;
 
         _onGameUnpaused();
+    }
+
+    public void CutscenePause() {
+        _OnCutscenePause();        
+    }
+
+    public void CutsceneUnpause() {
+        _OnCutsceneUnpause();
     }
     
     private IEnumerator InitializeManagers() {
