@@ -56,7 +56,7 @@ public class LBPursueState : LBBaseState, IContextInit {
         }
         
         Ctx.Agent.isStopped = true;
-        Ctx.AttackPoint = GameBucket.Instance.PXController.transform.position;
+        Ctx.AttackPoint = GameBucket.Instance.PXController.Asset.transform.position;
         Ctx.SetSubState(LBSubStates.Attack);
         yield break;
     }
@@ -91,7 +91,7 @@ public class LBPursueState : LBBaseState, IContextInit {
         
         while (timer > 0f) {
             timer -= Time.deltaTime;
-            targetPos = GameBucket.Instance.PXController.transform.position;
+            targetPos = GameBucket.Instance.PXController.Asset.transform.position;
             selfPos = Ctx.transform.position;
             
             direction = new Vector3(targetPos.x - selfPos.x, 0f, targetPos.z - selfPos.z);
@@ -106,7 +106,7 @@ public class LBPursueState : LBBaseState, IContextInit {
                 );
             }
 
-            if (Ctx.PatrolZone.ValidateTarget(GameBucket.Instance.PXController.gameObject)) {
+            if (Ctx.PatrolZone.ValidateTarget(GameBucket.Instance.PXController.Asset.gameObject)) {
                 yield return null;
             }
             else {

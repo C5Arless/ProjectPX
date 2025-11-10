@@ -219,10 +219,10 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
     
     public bool PursueTarget() {
-        bool result = patrolZone.ValidateTarget(GameBucket.Instance.PXController.gameObject);
+        bool result = patrolZone.ValidateTarget(GameBucket.Instance.PXController.Asset.gameObject);
         
         if (result) {
-            navMeshAgent.SetDestination(GameBucket.Instance.PXController.transform.position);
+            navMeshAgent.SetDestination(GameBucket.Instance.PXController.Asset.transform.position);
         }
         else {
             attackPoint = Vector3.zero;
@@ -233,11 +233,11 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
     
     private bool CanSeePlayer() {
-        if (!patrolZone.ValidateTarget(GameBucket.Instance.PXController.gameObject)) {
+        if (!patrolZone.ValidateTarget(GameBucket.Instance.PXController.Asset.gameObject)) {
             return false;
         }
         
-        Vector3 dir = (GameBucket.Instance.PXController.transform.position - transform.position);
+        Vector3 dir = (GameBucket.Instance.PXController.Asset.transform.position - transform.position);
         if (dir.magnitude > 10f) { return false; }
 
         float angle = Vector3.Angle(transform.forward, dir);
@@ -403,10 +403,10 @@ public class LBController : MonoBehaviour, ISpawnable {
         }
         else {
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(transform.position + transform.up * .5f, GameBucket.Instance.PXController.transform.position);
+            Gizmos.DrawLine(transform.position + transform.up * .5f, GameBucket.Instance.PXController.Asset.transform.position);
             
             Gizmos.color = Color.green;
-            Gizmos.DrawSphere(GameBucket.Instance.PXController.transform.position, 0.2f);
+            Gizmos.DrawSphere(GameBucket.Instance.PXController.Asset.transform.position, 0.2f);
         }
     }
 }

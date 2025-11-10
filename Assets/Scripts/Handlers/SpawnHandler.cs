@@ -83,8 +83,6 @@ public class SpawnHandler : MonoBehaviour {
         yield return null;
 
         targets = spawnBuffer;
-        yield return null;
-        
         spawnables = targets;
         yield break;
     }
@@ -101,7 +99,7 @@ public class SpawnHandler : MonoBehaviour {
         foreach (var spawnable in spawnables) {            
             if (spawnable.IsRunning || spawnable.IsReady || spawnable.IsSpawning) continue;
 
-            float distance = Vector3.Distance(GameBucket.Instance.PXController.transform.position, spawnable.Position);
+            float distance = Vector3.Distance(GameBucket.Instance.PXController.Asset.transform.position, spawnable.Position);
             if (distance <= minDistance) {
                 spawnable.IsReady = true;
             }
