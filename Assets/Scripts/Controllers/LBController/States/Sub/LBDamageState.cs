@@ -49,8 +49,10 @@ public class LBDamageState : LBBaseState, IContextInit {
         
         Ctx.CurrentHealth--;
         Ctx.Agent.speed = 0f;
-        Ctx.Agent.isStopped = true;
-        Ctx.Agent.enabled = false;
+        if (Ctx.Agent.enabled) {
+            Ctx.Agent.isStopped = true;
+            Ctx.Agent.enabled = false;
+        }
         yield return null;
         
         Ctx.RigidBody.isKinematic = false;

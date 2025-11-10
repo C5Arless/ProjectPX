@@ -356,6 +356,7 @@ public class LBController : MonoBehaviour, ISpawnable {
             yield return null;
                 
             transform.localScale = Vector3.zero;
+            yield return new WaitForSeconds(2f);
             
             GameBucket.Instance.SpawnHandler.RegisterSpawn(this);
         }

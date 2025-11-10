@@ -544,7 +544,7 @@ public class PXController : MonoBehaviour {
         return distance;
     }
 
-    private Vector3 ComputeForward2D(Vector3 _head, Vector3 _tail) {
+    public Vector3 ComputeForward2D(Vector3 _head, Vector3 _tail) {
         Vector2 head = new Vector2(_head.x, _head.z);
         Vector2 tail = new Vector2(_tail.x, _tail.z);
 
@@ -989,11 +989,12 @@ public class PXController : MonoBehaviour {
         Debug.Log("Switching inputmap from CinematicController");
         InputManager.Instance.SetActionMap("Player");
         */
-        //
-        //
-        //
-        //
-        //
         yield break;
     }
+    private void OnDrawGizmos() {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(_asset.transform.position, 2f);
+    }
+    //
+    //
 } // 1000 lines of code!
