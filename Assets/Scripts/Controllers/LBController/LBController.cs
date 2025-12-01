@@ -302,6 +302,9 @@ public class LBController : MonoBehaviour, ISpawnable {
     }
     
     private void InitializeStateFlow() {
+        isSpawning = false;
+        isRunning = true;
+        
         SetRootState(LBRootStates.Bug);
         _currentRootState = _stateHandler.Bug();
         _currentRootState.EnterState();
@@ -309,9 +312,6 @@ public class LBController : MonoBehaviour, ISpawnable {
         SetSubState(LBSubStates.Idle);
         _currentSubState = _stateHandler.Idle();
         _currentSubState.EnterState();
-
-        isSpawning = false;
-        isRunning = true;
     }
 
     private void EvaluateSpawn() {

@@ -59,8 +59,11 @@ public class LBDamageState : LBBaseState, IContextInit {
         Ctx.RigidBody.ResetInertiaTensor();
         yield return null;
         
-        Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.forward * -5f, ForceMode.Impulse);
-        Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.up * 4f, ForceMode.Impulse);
+        Vector3 playerPos = GameBucket.Instance.PXController.Asset.transform.position;
+        Vector3 bumpDirection = (Ctx.transform.position - playerPos).normalized + Ctx.transform.up;
+        
+        //Ctx.RigidBody.AddForce(Ctx.RigidBody.transform.forward * -5f, ForceMode.Impulse);
+        Ctx.RigidBody.AddForce(bumpDirection * 5f, ForceMode.Impulse);
         yield return new WaitForSeconds(2f);
 
         if (Ctx.CurrentHealth <= 0) {

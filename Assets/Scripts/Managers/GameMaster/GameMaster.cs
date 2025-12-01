@@ -6,6 +6,9 @@ public class GameMaster : MonoBehaviour {
 
     [SerializeField] GameObject[] _managerPrefabs;
 
+    public bool CinematicPause;
+    public bool GamePause;
+
     public delegate void OnGamePaused();
     public OnGamePaused _onGamePaused = () => { };
     public delegate void OnGameUnpaused();
@@ -33,21 +36,27 @@ public class GameMaster : MonoBehaviour {
 
     public void PauseGame() {
         Time.timeScale = 0f;
+        GamePause = true;
 
         _onGamePaused();
     }
 
     public void UnpauseGame() {
         Time.timeScale = 1f;
+        GamePause = false;
 
         _onGameUnpaused();
     }
 
     public void CutscenePause() {
+        CinematicPause = true;
+        
         _OnCutscenePause();        
     }
 
     public void CutsceneUnpause() {
+        CinematicPause = false;
+        
         _OnCutsceneUnpause();
     }
     
