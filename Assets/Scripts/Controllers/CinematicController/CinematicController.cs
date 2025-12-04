@@ -43,10 +43,7 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
         OnInteract();
 
         isInteracting = true;
-
-        GameMaster.Instance.CutscenePause();
-        GameBucket.Instance.GameCanvasHandler.HideUI();
-
+        
         while (isInteracting) {
             if (token.IsCancellationRequested) {
                 SkipCinematic();
@@ -56,9 +53,7 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
 
             await Task.Yield();
         }
-
-        StartCoroutine(EvaluateUI());
-
+        
         await Task.Yield();
     }
 
@@ -129,15 +124,6 @@ public class CinematicController : MonoBehaviour, IOrchestratedEvent {
 
     private void Exit() {
         StartCoroutine(ExitRoutine());
-    }
-
-    private IEnumerator EvaluateUI() {
-        yield return new WaitWhile(() => GameBucket.Instance.EventsOrchestrator.IsRunning);
-
-        GameBucket.Instance.GameCanvasHandler.ShowUI();
-        GameMaster.Instance.CutscenePause();
-
-        yield break;
     }
 
     private IEnumerator IterateShot() {

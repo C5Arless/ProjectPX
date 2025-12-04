@@ -30,12 +30,10 @@ public class EventsOrchestrator : MonoBehaviour {
         } else {
 
             if (!eventsQueue.Contains(target)) {
-                //Debug.Log(target + " event enqueued");
                 eventsQueue.Add(target);
             }
 
             if (currentEvent?.Priority == EventPriority.Low) {
-                //Debug.Log(currentEvent + " event canceled");
                 currentEvent.CancelEvent();
             }
             
@@ -47,8 +45,6 @@ public class EventsOrchestrator : MonoBehaviour {
 
     public void DequeueEvent(IOrchestratedEvent target) {
         if (eventsQueue.Contains(target)) {
-            //Debug.Log(target + " event dequeued");
-
             if (currentEvent == target) {
                 target.CancelEvent();
             }
@@ -78,10 +74,8 @@ public class EventsOrchestrator : MonoBehaviour {
 
         while (eventsQueue.Count() > 0) {            
             var targetEvent = GetEvent();
-            //Debug.Log(targetEvent + " retrieved");
 
             if (targetEvent == null) {
-                //Debug.Log(targetEvent + " is null?");
                 eventsQueue.Clear();
                 await Task.Yield();
                 return; 
@@ -90,10 +84,17 @@ public class EventsOrchestrator : MonoBehaviour {
             if (targetEvent.IsRepeatable) {
                 currentEvent = targetEvent;
                 currentEventTask = currentEvent.FireEvent();
-                //Debug.Log(currentEvent + " fired");
 
-                await currentEventTask;
-                //Debug.Log(currentEvent + " done!");
+                if (currentEvent.Priority < EventPriority.Low) {
+                    GameMaster.Instance.CutscenePause();
+                    GameBucket.Instance.GameCanvasHandler.HideUI();
+
+                    await currentEventTask;
+                    GameMaster.Instance.CutsceneUnpause();
+                }
+                else {
+                    await currentEventTask;
+                }
                 
                 await Task.Yield();                
 
@@ -102,16 +103,22 @@ public class EventsOrchestrator : MonoBehaviour {
             } else {
 
                 if (DataManager.Instance.HasEventRun(targetEvent.EventIndex)) {
-                    //Debug.Log(targetEvent + " removed");
                     eventsQueue.Remove(targetEvent);
                     targetEvent.DestroyEvent();                    
                 } else {
                     currentEvent = targetEvent;
                     currentEventTask = currentEvent.FireEvent();
-                    //Debug.Log(currentEvent + " fired");
+                    
+                    if (currentEvent.Priority < EventPriority.Low) {
+                        GameMaster.Instance.CutscenePause();
+                        GameBucket.Instance.GameCanvasHandler.HideUI();
 
-                    await currentEventTask;
-                    //Debug.Log(currentEvent + " done!");
+                        await currentEventTask;
+                        GameMaster.Instance.CutsceneUnpause();
+                    }
+                    else {
+                        await currentEventTask;
+                    }
                     
                     await Task.Yield();                    
 
@@ -124,7 +131,13 @@ public class EventsOrchestrator : MonoBehaviour {
             currentEventTask = null;
             //WhileEnd
         }
-
+        
+        GameMaster.Instance.CutsceneUnpause();
+        
+        if (GameBucket.Instance.GameCanvasHandler.IsHidden) {
+            GameBucket.Instance.GameCanvasHandler.ShowUI();
+        }
+        
         isRunning = false;
         currentTask = null;
     }
@@ -142,7 +155,6 @@ public class EventsOrchestrator : MonoBehaviour {
     }
 
     private async Task RunAsyncEvent(IOrchestratedEvent _evt) {
-        //Debug.Log("Event running!");
         await Task.Yield();
 
         await _evt.FireEvent();

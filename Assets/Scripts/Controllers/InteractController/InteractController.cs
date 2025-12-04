@@ -76,9 +76,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
     public async Task FireEvent() {
         if (isRunning) { return; }
-        
-        GameMaster.Instance.CutscenePause();
-        GameBucket.Instance.GameCanvasHandler.HideUI();        
 
         GameBucket.Instance.PXController.InteractionEnter(_playerTarget.transform, _focusTarget.transform, interactionCams[0].vcamera);
 
@@ -92,8 +89,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
 
         GameBucket.Instance.PXController.InteractionExit();
         GameBucket.Instance.CompanionCtx.ExitTalkState();
-
-        StartCoroutine(EvaluateUI());
 
         await Task.Yield();
     }
@@ -114,9 +109,7 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
             if (!hasTrigger) {
                 GameBucket.Instance.EventsOrchestrator.EnqueueEvent(this);
             }
-
         }
-
     }
 
     public void OnConfirm(InputAction.CallbackContext input) {
@@ -189,15 +182,6 @@ public class InteractController : MonoBehaviour, IOrchestratedEvent {
         isInteracting = false;
 
         StartCoroutine(ExitRoutine());
-    }
-
-    private IEnumerator EvaluateUI() {
-        yield return new WaitWhile(() => GameBucket.Instance.EventsOrchestrator.IsRunning);
-
-        GameBucket.Instance.GameCanvasHandler.ShowUI();
-        GameMaster.Instance.CutsceneUnpause();
-        
-        yield break;
     }
 
     private IEnumerator IteratePage() {

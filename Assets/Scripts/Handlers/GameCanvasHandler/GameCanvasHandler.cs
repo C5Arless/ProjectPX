@@ -30,6 +30,7 @@ public class GameCanvasHandler : MonoBehaviour {
 
     public bool IsTransitioning { get { return _isTransitioning; } }
     public bool IsTyping { get { return _isTyping; } }
+    public bool IsHidden { get { return _isHidden; } }
 
     private void Awake() {
         GameBucket.Instance.GameCanvasHandler = this;
@@ -59,13 +60,6 @@ public class GameCanvasHandler : MonoBehaviour {
     }
 
     public void ShowUI() {
-        /*
-        if (_isBusy) { return; }
-
-        _isBusy = true;
-        _uiWindow.SetActive(true);
-        */
-
         if (!_isHidden) { return; }
 
         _isHidden = false;
