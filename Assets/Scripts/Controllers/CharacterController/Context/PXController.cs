@@ -636,7 +636,7 @@ public class PXController : MonoBehaviour {
 
     private void HandleAttack() {
         _playerRb.velocity.Set(0f, 0f, 0f);
-        _playerRb.AddForce(DashDirection() * 5f, ForceMode.Impulse);
+        _playerRb.AddForce(DashDirection() * 8f, ForceMode.Impulse);
         
         if (!isGrounded) {
             _playerRb.AddForce(Vector3.up * 1.5f, ForceMode.Impulse);

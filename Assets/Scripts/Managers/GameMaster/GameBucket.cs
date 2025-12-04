@@ -36,7 +36,6 @@ public class GameBucket : MonoBehaviour {
 
     private void Start() {
         RetrieveDialogObject();
-        
     }
 
     public DialogObject GetDialogObject(int IDX) {
