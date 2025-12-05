@@ -32,7 +32,7 @@
             "Tag": "Companion",
             "Name": "FX - 41",
             "Mood": "Default",
-            "Line": "This is the Lab, feel free to roam around.",
+            "Line": "This is the Lab. You can find useful stuff around so feel free to explore",
             "Options": null,
             "NEXT": -1
         },
@@ -49,8 +49,8 @@
             "IDX": 5,
             "Tag": "Companion",
             "Name": "FX - 41",
-            "Mood": "Scared",
-            "Line": "You know collisions aren't a joke...",
+            "Mood": "Default",
+            "Line": "These are the commands! Press these buttons to perform actions",
             "Options": null,
             "NEXT": -1
         },
@@ -59,7 +59,7 @@
             "Tag": "Companion",
             "Name": "FX - 41",
             "Mood": "Excited",
-            "Line": "Luckily, physics got our back!",
+            "Line": "You can find the buttons for both GamePad and Keyboard/Mouse!",
             "Options": null,
             "NEXT": -1
         },
