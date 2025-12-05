@@ -58,22 +58,28 @@ public class InputManager : MonoBehaviour {
         if (playerInput.currentControlScheme == "Gamepad") {
             Cursor.lockState = CursorLockMode.Locked;
 
-            if (_controlsChangedResolver != null) {
-                _controlsChangedResolver();
+            if (_controlsChangedResolver is not null) {
+                StartCoroutine(InvokeControlsChangedNextFrame());
             }
 
         } 
         else if (playerInput.currentControlScheme == "Keyboard&Mouse") {
             Cursor.lockState = CursorLockMode.None;
 
-            if (_controlsChangedResolver != null) {
-                _controlsChangedResolver();
+            if (_controlsChangedResolver is not null) {
+                StartCoroutine(InvokeControlsChangedNextFrame());
             }
         }
     }    
+    
+    private IEnumerator InvokeControlsChangedNextFrame() {
+        yield return null;
 
+        _controlsChangedResolver?.Invoke();
+    }
+    
     public IEnumerator EvaluateActionMap(string target) {
-        if (CameraManager.Instance != null) {
+        if (CameraManager.Instance is not null) {
             yield return new WaitWhile(() => CameraManager.Instance.GameBrain.GetComponent<CinemachineBrain>().IsBlending);
         }
         else yield return null;

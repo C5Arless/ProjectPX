@@ -1075,6 +1075,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3843698708107635593}
   - component: {fileID: 8957632141821036211}
+  - component: {fileID: 3729434226717516482}
   m_Layer: 0
   m_Name: Icon
   m_TagString: Untagged
@@ -1153,3 +1154,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3729434226717516482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9048815684820771958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bf67caf1b9401749b2b748ce53ba935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gamePad: {fileID: 21300000, guid: 134b8d5a1e903f247ad778956345eb20, type: 3}
+  keyboard: {fileID: 21300000, guid: 43e1952eccd11b749b23f563bba9c4b3, type: 3}
+  button: {fileID: 8957632141821036211}
