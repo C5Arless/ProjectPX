@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -44,6 +45,12 @@ public class GameCanvasHandler : MonoBehaviour {
         InitializeRenderCamera();
     }
 
+    private void Update() {
+        if (!_isHidden) {
+            RefreshUI();
+        }
+    }
+
     public void ShowCameraLocked() {
         lockedCameraUI.SetActive(true);
     }
@@ -73,6 +80,14 @@ public class GameCanvasHandler : MonoBehaviour {
         if (!_isHidden) { return; }
 
         _isHidden = false;
+        RefreshUI();
+        //Add info here
+
+        StartCoroutine(IterateUIShow());
+        //StartCoroutine(IterateUIPosition());
+    }
+
+    private void RefreshUI() {
         int targetHp = DataManager.Instance.PlayerInfo.CurrentHp;
         int targetCollectibles = DataManager.Instance.PlayerInfo.Score;
 
@@ -80,12 +95,8 @@ public class GameCanvasHandler : MonoBehaviour {
         SetLifeColor(targetHp);
 
         _collectibleText.text = targetCollectibles.ToString();
-        //Add info here
-
-        StartCoroutine(IterateUIShow());
-        //StartCoroutine(IterateUIPosition());
     }
-
+    
     public void HideUI() {
         if (_isHidden) { return; }
 
@@ -210,7 +221,6 @@ public class GameCanvasHandler : MonoBehaviour {
         yield return null;
 
         _SNDisplay.SetActive(false);
-        yield break;
     }
 
     private IEnumerator IterateUIShow() {
@@ -226,8 +236,6 @@ public class GameCanvasHandler : MonoBehaviour {
         }
 
         _uiWindow.transform.localPosition = new Vector3(0f, 350f, 0f);        
-
-        yield break;
     }
 
     private IEnumerator IterateUIHide() {
@@ -242,8 +250,6 @@ public class GameCanvasHandler : MonoBehaviour {
 
         _uiWindow.transform.localPosition = new Vector3(0f, 700f, 0f);
         _uiWindow.SetActive(false);
-        
-        yield break;
     }
 
     private IEnumerator IterateUIPosition() {        
@@ -268,8 +274,6 @@ public class GameCanvasHandler : MonoBehaviour {
         
         yield return null;
         _isBusy = false;
-
-        yield break;
     }
 
     private IEnumerator IteratePosition(Vector3 startPos, Vector3 targetPos) {
@@ -294,7 +298,6 @@ public class GameCanvasHandler : MonoBehaviour {
 
             _isTransitioning = false;
             _isBusy = false;
-            yield break;
 
         } else {            
             Vector3 position = startPos;
@@ -315,7 +318,6 @@ public class GameCanvasHandler : MonoBehaviour {
 
             _isTransitioning = false;
             _isBusy = false;
-            yield break;
         }
     }
 
@@ -333,7 +335,6 @@ public class GameCanvasHandler : MonoBehaviour {
 
         _isTyping = true;
 
-        string mood = GameBucket.Instance.GetDialogObject(IDX).Mood;
         VoiceMood moodData = GameBucket.Instance.GetDialogData(IDX).Mood;
 
         Vector2 targetMood = GetMood(moodData);
@@ -367,6 +368,5 @@ public class GameCanvasHandler : MonoBehaviour {
 
         _isTyping = false;
         _isBusy = false;
-        yield break;
     }
 }
