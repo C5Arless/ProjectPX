@@ -17,6 +17,8 @@ public class GameCanvasHandler : MonoBehaviour {
     [SerializeField] GameObject _SNDisplay;
     [SerializeField] TMP_Text _SNText;
     [SerializeField] Image _SNBg;
+    [Space] 
+    [SerializeField] private GameObject lockedCameraUI;
 
     public delegate void OnTransitionInDone();
     public OnTransitionInDone _onTransitionInDone;
@@ -42,6 +44,14 @@ public class GameCanvasHandler : MonoBehaviour {
         InitializeRenderCamera();
     }
 
+    public void ShowCameraLocked() {
+        lockedCameraUI.SetActive(true);
+    }
+
+    public void HideCameraLocked() {
+        lockedCameraUI.SetActive(false);
+    }
+    
     public void ShowSceneName() {
         if (_isBusy) { return; }
 

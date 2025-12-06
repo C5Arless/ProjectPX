@@ -993,7 +993,7 @@ public class PXController : MonoBehaviour {
     }
     private void OnDrawGizmos() {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(_asset.transform.position, 2f);
+        Gizmos.DrawWireSphere(_asset.transform.position, 3f);
     }
     //
     //

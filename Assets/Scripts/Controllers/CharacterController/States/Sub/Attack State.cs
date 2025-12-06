@@ -109,7 +109,7 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
 
     private void CheckEnemy() {
         Collider[] entities = new Collider[15];
-        int hits = Physics.OverlapSphereNonAlloc(Ctx.Asset.transform.position, 2f, entities, LayerMask.GetMask("Enemy"));
+        int hits = Physics.OverlapSphereNonAlloc(Ctx.Asset.transform.position, 3f, entities, LayerMask.GetMask("Enemy"));
         
         if (hits > 0) {
             float distance = Single.PositiveInfinity;

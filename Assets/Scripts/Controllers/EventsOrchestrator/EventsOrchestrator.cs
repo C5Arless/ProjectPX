@@ -93,7 +93,10 @@ public class EventsOrchestrator : MonoBehaviour {
                     GameMaster.Instance.CutsceneUnpause();
                 }
                 else {
+                    GameBucket.Instance.GameCanvasHandler.ShowCameraLocked();
                     await currentEventTask;
+                    
+                    GameBucket.Instance.GameCanvasHandler.HideCameraLocked();
                 }
                 
                 await Task.Yield();                
@@ -117,7 +120,10 @@ public class EventsOrchestrator : MonoBehaviour {
                         GameMaster.Instance.CutsceneUnpause();
                     }
                     else {
+                        GameBucket.Instance.GameCanvasHandler.ShowCameraLocked();
                         await currentEventTask;
+                        
+                        GameBucket.Instance.GameCanvasHandler.HideCameraLocked();
                     }
                     
                     await Task.Yield();                    
