@@ -47,6 +47,7 @@ public class CompanionController : MonoBehaviour {
     private Transform visionDiscoveryTransform;
     private Vector3 visionFocusPoint;    
     private bool visionLocked;
+    private LayerMask stuckMask;
 
     //TRAVEL MODULE
     private Vector3[] travelDestinations = new Vector3[8];
@@ -96,6 +97,7 @@ public class CompanionController : MonoBehaviour {
     public float PlayerDistance { get { return playerDistance; } set { playerDistance = value; } }
 
     void Awake() {
+        stuckMask = LayerMask.GetMask("Walls", "Ground", "Level", "Player");
         _stateHandler = new CompanionStateHandler(this);        
 
         limitDistanceMax = limitDistance * 2.5f;
@@ -540,7 +542,7 @@ public class CompanionController : MonoBehaviour {
 
         if (isMoving) { yield break; }
 
-        RaycastHit[] hits = Physics.RaycastAll(transform.position, (_playerHead.position - transform.position).normalized, PlayerDistance);        
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, (_playerHead.position - transform.position).normalized, playerDistance, stuckMask);        
 
         foreach (RaycastHit hit in hits) {
             if (hit.collider.tag != "Player" && hit.collider.tag != "PlayerAttacks" && hit.collider.tag != "Interact") {
@@ -548,31 +550,6 @@ public class CompanionController : MonoBehaviour {
                 yield break;
             }
         }
-
-        /*
-        if (Physics.Raycast(transform.position, (_playerHead.position - transform.position).normalized, out RaycastHit hitInfo, playerDistance + horizontalOffset)) {
-            yield return null;
-            
-            //if (hitInfo.collider.tag != "Player" && hitInfo.collider.tag != "PlayerAttacks" && hitInfo.collider.tag != "Interact") {
-            //    isStuck = true;
-            //}            
-            
-            if (hitInfo.collider.tag != "Player") {
-                if (hitInfo.collider.tag != "PlayerAttacks") {
-                    isStuck = true;
-                }
-                else if (hitInfo.collider.tag != "Interact") {
-                    isStuck = true;
-                }
-                else if (hitInfo.collider.tag != "PlayerVirtualCamera") {
-                    isStuck = true;
-                }
-            }
-            
-
-            yield break;            
-        }
-        */
 
         yield break;
     }
