@@ -40,6 +40,8 @@ public class LBController : MonoBehaviour, ISpawnable {
 
     private Vector3 initialScale;
     private Vector3 attackPoint = Vector3.zero;
+
+    private LayerMask scoutMask;
     
     #region Getters and Setters
 
@@ -79,6 +81,8 @@ public class LBController : MonoBehaviour, ISpawnable {
         animHandler = GetComponentInChildren<LBAnimHandler>();
         
         initialScale = transform.localScale;
+        
+        scoutMask = LayerMask.GetMask("Player", "PlayerAttacks", "Ground", "Walls", "Level");
     }
     
     private void Start() {
@@ -243,7 +247,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         float angle = Vector3.Angle(transform.forward, dir);
         if (angle > 90f * 0.5f) { return false; }
 
-        if (Physics.Raycast(transform.position + Vector3.up * .5f, dir.normalized, out RaycastHit hit, visionRange)) {
+        if (Physics.Raycast(transform.position + Vector3.up * .5f, dir.normalized, out RaycastHit hit, visionRange, scoutMask)) {
             if (hit.collider.CompareTag("Player") || hit.collider.CompareTag("PlayerAttacks")) {
                 return true;
             }
