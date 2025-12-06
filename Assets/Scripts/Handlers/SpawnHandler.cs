@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnHandler : MonoBehaviour {
-    //[SerializeField] private Transform player; //DEBUG
-    
     [SerializeField] private float timeToWait = 1f;
     [SerializeField] private float minDistance = 20f;
 
@@ -83,11 +81,11 @@ public class SpawnHandler : MonoBehaviour {
 
     private IEnumerator Sync() {
         isBusy = true;
-        List<ISpawnable> targets = new List<ISpawnable>();
+        List<ISpawnable> targets = new List<ISpawnable>(spawnBuffer);
         yield return null;
 
-        targets = spawnBuffer;
-        spawnables = targets;
+        //targets = spawnBuffer;
+        spawnables = new List<ISpawnable>(targets);
         yield return new WaitForSeconds(.5f);
 
         isBusy = false;
