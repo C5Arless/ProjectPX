@@ -94,6 +94,10 @@ public class EventsOrchestrator : MonoBehaviour {
                 }
                 else {
                     GameBucket.Instance.GameCanvasHandler.ShowCameraLocked();
+                    if (GameBucket.Instance.GameCanvasHandler.IsHidden) {
+                        GameBucket.Instance.GameCanvasHandler.ShowUI();
+                    }
+
                     await currentEventTask;
                     
                     GameBucket.Instance.GameCanvasHandler.HideCameraLocked();
@@ -121,6 +125,10 @@ public class EventsOrchestrator : MonoBehaviour {
                     }
                     else {
                         GameBucket.Instance.GameCanvasHandler.ShowCameraLocked();
+                        if (GameBucket.Instance.GameCanvasHandler.IsHidden) {
+                            GameBucket.Instance.GameCanvasHandler.ShowUI();
+                        }
+                        
                         await currentEventTask;
                         
                         GameBucket.Instance.GameCanvasHandler.HideCameraLocked();
