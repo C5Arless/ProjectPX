@@ -5,9 +5,14 @@ using UnityEngine.VFX;
 public class Collectables : MonoBehaviour {
     [SerializeField] PlayerInfo playerInfo;
 
-    private void OnTriggerEnter(Collider other) {
-        if (other.tag == "Player") {
+    private bool gathered = false;
 
+    private void OnTriggerEnter(Collider other) {
+        if (gathered) return;
+        
+        if (other.tag == "Player") {
+            
+            gathered = true;
             StartCoroutine(GatherRoutine());
         }
     }
