@@ -15,8 +15,8 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
         CheckEnemy();
         
         InitializeContext();
-
-        ColliderOn(Ctx.AttackCollider);
+        Ctx.AttackCollider.SetActive(true);
+        //ColliderOn(Ctx.AttackCollider);
         
         if (!Ctx.IsGrounded && !Ctx.IsDashing) {
             Ctx.OnKinematic = true;
@@ -66,7 +66,8 @@ public class AttackState : BaseState, IContextInit, IVFXInit {
         Ctx.PlayerRb.constraints = RigidbodyConstraints.FreezeRotation;
         Ctx.PlayerRb.ResetInertiaTensor();
 
-        ColliderOff(Ctx.AttackCollider);
+        //ColliderOff(Ctx.AttackCollider);
+        Ctx.AttackCollider.SetActive(false);
         GravityOn();
     }
 

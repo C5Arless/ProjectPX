@@ -42,7 +42,7 @@ public class PXController : MonoBehaviour {
     InputAction _dashAction;
     InputAction _showUIAction;
 
-    [SerializeField] SphereCollider _attackCollider;
+    [SerializeField] GameObject _attackCollider;
     [SerializeField] SphereCollider _dashCollider;
 
     //Root States
@@ -162,7 +162,7 @@ public class PXController : MonoBehaviour {
     public GameObject Head { get { return _head; } }
     public Rigidbody PlayerRb { get { return _playerRb; } }
     public Animator Animator { get { return _animator; } }
-    public SphereCollider AttackCollider { get { return _attackCollider; } set { _attackCollider = value; } }
+    public GameObject AttackCollider { get { return _attackCollider; } set { _attackCollider = value; } }
     public SphereCollider DashCollider { get { return _dashCollider; } set { _dashCollider = value; } }
 
     public BaseState CurrentRootState { get { return _currentRootState; } set { _currentRootState = value; } }

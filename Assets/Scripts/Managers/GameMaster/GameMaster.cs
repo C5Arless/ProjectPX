@@ -8,6 +8,7 @@ public class GameMaster : MonoBehaviour {
 
     public bool CinematicPause;
     public bool GamePause;
+    private bool isHitting;
 
     public delegate void OnGamePaused();
     public OnGamePaused _onGamePaused = () => { };
@@ -18,6 +19,9 @@ public class GameMaster : MonoBehaviour {
     public OnCutscenePause _OnCutscenePause = () => { };
     public delegate void OnCutsceneUnpause();
     public OnCutsceneUnpause _OnCutsceneUnpause = () => { };
+
+    public delegate void OnHitStop();
+    public OnHitStop _OnHitStop = () => { };
 
     private void Awake() {
         if (Instance == null) {
@@ -33,7 +37,7 @@ public class GameMaster : MonoBehaviour {
         StartCoroutine(InitializeManagers());
 
     }
-
+    
     public void PauseGame() {
         Time.timeScale = 0f;
         GamePause = true;
@@ -85,5 +89,18 @@ public class GameMaster : MonoBehaviour {
         yield return null;        
 
         yield break;
+    }
+
+    public IEnumerator ResolveHitStop() {
+        if (isHitting) yield break;
+        isHitting = true;
+        
+        _OnHitStop();
+        
+        Time.timeScale = .2f;
+        yield return new WaitForSecondsRealtime(.1f);
+        
+        Time.timeScale = 1f;
+        isHitting = false;
     }
 }

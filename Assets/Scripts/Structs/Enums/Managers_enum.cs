@@ -14,7 +14,7 @@ public enum EnvVFX {
     Shock,
     Smoke,
     Splash,
-    Boom
+    Hit
 }
 public enum Scenes {
     MainMenu,
