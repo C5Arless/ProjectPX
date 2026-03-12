@@ -301,7 +301,7 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: fee0b46462cfb244b9a6d60c8c30409b, type: 2}
     m_Threshold: 0.71428573
     m_Position: {x: -0, y: -1}
-    m_TimeScale: 0.4
+    m_TimeScale: 0.7
     m_CycleOffset: 0
     m_DirectBlendParameter: yAxis
     m_Mirror: 0
@@ -378,7 +378,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Attack
-  m_Speed: 0.4
+  m_Speed: 0.7
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 6536085167125594515}

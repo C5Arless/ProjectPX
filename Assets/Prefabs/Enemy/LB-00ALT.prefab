@@ -3540,8 +3540,8 @@ MonoBehaviour:
   rigidBody: {fileID: 6591245348160566314}
   maxHealth: 2
   visionRange: 12
-  patrolSpeed: 2.5
-  pursueSpeed: 3.5
+  patrolSpeed: 3.5
+  pursueSpeed: 4.5
   idleTime: 3
 --- !u!195 &7746544574955369650
 NavMeshAgent:

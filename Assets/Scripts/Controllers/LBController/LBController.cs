@@ -376,7 +376,7 @@ public class LBController : MonoBehaviour, ISpawnable {
         SetMask(currentScale);
 
         while (currentScale < targetScale) {
-            currentScale += .01f;
+            currentScale += .025f;
             
             SetScale(currentScale);
             SetMask(currentScale);
