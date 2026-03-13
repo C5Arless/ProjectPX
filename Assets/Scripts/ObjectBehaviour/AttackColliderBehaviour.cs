@@ -7,16 +7,18 @@ public class AttackColliderBehaviour : MonoBehaviour {
     
     private void OnCollisionEnter(Collision other) {
         if (isBusy) return;
-        Debug.Log("Collision detected: "  + other.collider.name);
-
-        isBusy = true;
-        contact = Vector3.zero;
+        
         if (other.collider.CompareTag("Enemy")) {
-            contact = other.contacts[0].point;
+            Debug.Log("Collision detected: "  + other.collider.name);
+            isBusy = true;
+            contact = Vector3.zero;
+
+            var enemy = other.gameObject.GetComponent<IDamageable>();
+            Debug.Log("Enemy: "  + enemy);
+            if (enemy.IsDamaged || enemy.IsDead) return;
             
-            if (isBusy) {
-                StartCoroutine(TriggerHitStop());
-            }
+            contact = other.contacts[0].point;
+            StartCoroutine(TriggerHitStop());
         }
     }
     
@@ -31,6 +33,7 @@ public class AttackColliderBehaviour : MonoBehaviour {
         yield return StartCoroutine(GameMaster.Instance.ResolveHitStop());
         
         GameMaster.Instance._OnHitStop -= ResolveVFX;
+        yield return new WaitForSeconds(.3f);
         isBusy = false;
     }
 }

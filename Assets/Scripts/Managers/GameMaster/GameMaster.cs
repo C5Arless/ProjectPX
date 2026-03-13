@@ -97,8 +97,8 @@ public class GameMaster : MonoBehaviour {
         
         _OnHitStop();
         
-        Time.timeScale = .2f;
-        yield return new WaitForSecondsRealtime(.1f);
+        Time.timeScale = .01f;
+        yield return new WaitForSecondsRealtime(.2f);
         
         Time.timeScale = 1f;
         isHitting = false;

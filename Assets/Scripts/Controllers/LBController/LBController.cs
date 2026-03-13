@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class LBController : MonoBehaviour, ISpawnable {
+public interface IDamageable {
+    public bool IsDamaged { get; }
+    public bool IsDead { get; }
+}
+
+public class LBController : MonoBehaviour, ISpawnable, IDamageable {
     [SerializeField] GameObject ballShell;
     [SerializeField] List<Renderer> renderers;
     [SerializeField] NavMeshAgent navMeshAgent;
@@ -66,6 +71,7 @@ public class LBController : MonoBehaviour, ISpawnable {
     public bool IsPaused { get { return isPaused; } set { isPaused = value; } }
     public bool IsDamaged { get { return isDamaged; } set { isDamaged = value; } }
     public bool IsMorphing { get { return isMorphing; } set { isMorphing = value; } }
+    public bool IsDead { get { return rootStates[LBRootStates.Dead]; } }
 
     public Dictionary<LBRootStates, bool>  RootStates { get { return rootStates; } }
     public Dictionary<LBSubStates, bool>  SubStates { get { return subStates; } }
