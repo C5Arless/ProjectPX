@@ -1,7 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using System;
-using Unity.VisualScripting;
 
 #if UNITY_EDITOR
 using UnityEditor;
