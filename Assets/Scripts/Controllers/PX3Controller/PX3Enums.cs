@@ -20,3 +20,13 @@ public enum PX3RootStates {
     Airborne,
     Holding
 }
+
+public enum PX3SignalTarget {
+    CTX,
+    CTXAUDIO,
+    CTXVFX,
+    STATE,
+    ANIM,
+    INPUT,
+    SENSOR
+}
