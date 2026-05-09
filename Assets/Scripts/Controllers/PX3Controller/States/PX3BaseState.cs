@@ -3,30 +3,36 @@ using UnityEngine;
 public abstract class PX3BaseState {
     private bool _isRootState = false;
 
-    private PX3Controller _ctx;
-    private PX3StateHandler _stateHandler;
+    PX3Controller _ctx;
+    PX3StateHandler _stateHandler;
+    PX3AnimHandler _animHandler;
+    PX3InputHandler _inputHandler;
+    PX3SensorHandler _sensorHandler;
 
     protected bool IsRootState { set { _isRootState = value; } }
-    protected PX3Controller Ctx { get { return _ctx; } }
-    protected PX3StateHandler StateHandler { get { return _stateHandler; } }
 
-    public PX3BaseState(PX3Controller currentContext, PX3StateHandler stateHandler) {
+    public PX3BaseState(PX3Controller currentContext, PX3StateHandler stateHandler, 
+        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler) {
         _ctx = currentContext;
         _stateHandler = stateHandler;
+        _animHandler = animHandler;
+        _inputHandler = inputHandler;
+        _sensorHandler = sensorHandler;
     }
     public abstract void EnterState();
     public abstract void UpdateState();
     public abstract void ExitState();
+    public abstract void HandleSignal(int sig);
     public abstract void CheckSwitchStates();
     protected void SwitchState(PX3BaseState newState) {
         if (newState._isRootState) {
-            _ctx.CurrentRootState.ExitState();
-            _ctx.CurrentRootState = newState;
-            _ctx.CurrentRootState.EnterState();
+            _stateHandler.CurrentRootState.ExitState();
+            _stateHandler.CurrentRootState = newState;
+            _stateHandler.CurrentRootState.EnterState();
         } else {
-            _ctx.CurrentSubState.ExitState();
-            _ctx.CurrentSubState = newState;
-            _ctx.CurrentSubState.EnterState();
+            _stateHandler.CurrentSubState.ExitState();
+            _stateHandler.CurrentSubState = newState;
+            _stateHandler.CurrentSubState.EnterState();
         }
     }
 }

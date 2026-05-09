@@ -9,18 +9,19 @@ public class PX3StateHandler {
     PX3BaseState currentRootState;
     PX3BaseState currentSubState;
     
-    
     Dictionary<PX3RootStates, PX3BaseState> rootStateList = new Dictionary<PX3RootStates, PX3BaseState>(4); 
     Dictionary<PX3SubStates, PX3BaseState> subStateList = new Dictionary<PX3SubStates, PX3BaseState>(13);
     
     Dictionary<PX3RootStates, bool> rootMask = new Dictionary<PX3RootStates, bool>(4); 
     Dictionary<PX3SubStates, bool> subMask = new Dictionary<PX3SubStates, bool>(13);
     
-    public Dictionary<PX3RootStates, bool> rootStates = new Dictionary<PX3RootStates, bool>(4); 
-    public Dictionary<PX3SubStates, bool> subStates = new Dictionary<PX3SubStates, bool>(13);
+    Dictionary<PX3RootStates, bool> rootStates = new Dictionary<PX3RootStates, bool>(4); 
+    Dictionary<PX3SubStates, bool> subStates = new Dictionary<PX3SubStates, bool>(13);
     
-    public PX3BaseState CurrentRootState { get { return currentRootState; } }
-    public PX3BaseState CurrentSubState { get { return currentSubState; } }
+    public Dictionary<PX3RootStates, bool> RootStates { get { return rootStates; } }
+    public Dictionary<PX3SubStates, bool> SubStates { get { return subStates; } }
+    public PX3BaseState CurrentRootState { get { return currentRootState; } set { currentRootState = value; } }
+    public PX3BaseState CurrentSubState { get { return currentSubState; } set { currentSubState = value; } }
     
     public PX3StateHandler(PX3Controller ctx, PX3AnimHandler animHandler, 
         PX3InputHandler inputHandler, PX3SensorHandler sensorHandler) {
@@ -30,15 +31,14 @@ public class PX3StateHandler {
         _sensorHandler = sensorHandler;
 
         InitializeStateMask();
+        InitializeStates();
+    }
 
+    private void InitializeStates() {
         //fill state lists
     }
 
-    public void InitializeStates() {
-        
-    }
-
-    public void InitializeStateMask() {
+    private void InitializeStateMask() {
         rootMask.Add(PX3RootStates.Dead, false);
         rootMask.Add(PX3RootStates.Grounded, false);
         rootMask.Add(PX3RootStates.Airborne, false);
@@ -88,6 +88,4 @@ public class PX3StateHandler {
         
         rootStates = target;
     }
-    
-    //StateFactory
 }
