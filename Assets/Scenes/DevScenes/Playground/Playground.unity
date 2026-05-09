@@ -1947,9 +1947,9 @@ Transform:
   m_LocalScale: {x: 1, y: 0.625, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 59721119}
-  - {fileID: 1218318482}
   - {fileID: 658722646}
+  - {fileID: 1218318482}
+  - {fileID: 59721119}
   m_Father: {fileID: 1051933823}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &427883979
@@ -3323,7 +3323,7 @@ Transform:
   m_GameObject: {fileID: 658722645}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.217, y: 0.576, z: 0}
+  m_LocalPosition: {x: -0.21700001, y: 0.57600003, z: 0}
   m_LocalScale: {x: 0.98, y: 0.4, z: 0.98}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3622,7 +3622,7 @@ GameObject:
   - component: {fileID: 707121606}
   - component: {fileID: 707121605}
   m_Layer: 0
-  m_Name: TestController
+  m_Name: PX-03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
