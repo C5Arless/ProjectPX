@@ -35,7 +35,24 @@ public class PX3StateHandler {
     }
 
     private void InitializeStates() {
-        //fill state lists
+        rootStateList[PX3RootStates.Dead] = new PX3DeadState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        rootStateList[PX3RootStates.Grounded] = new PX3GroundedState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        rootStateList[PX3RootStates.Airborne] = new PX3AirborneState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        rootStateList[PX3RootStates.Holding] = new PX3HoldingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        
+        subStateList[PX3SubStates.Attacking] = new PX3AttackingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Dashing] = new PX3DashingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Diving] = new PX3DivingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Falling] = new PX3FallingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Damaged] = new PX3DamagedState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Idle] = new PX3IdleState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Jumping] = new PX3JumpingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Walking] = new PX3WalkingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Running] = new PX3RunningState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Sprinting] = new PX3SprintingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Grabbing] = new PX3GrabbingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.WallSliding] = new PX3WallSlidingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Thumbling] = new PX3ThumblingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
     }
 
     private void InitializeStateMask() {
