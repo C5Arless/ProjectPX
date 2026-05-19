@@ -1927,6 +1927,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 403018503}
+  - component: {fileID: 403018504}
   m_Layer: 0
   m_Name: Sensors
   m_TagString: Untagged
@@ -1952,6 +1953,18 @@ Transform:
   - {fileID: 59721119}
   m_Father: {fileID: 1051933823}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &403018504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403018502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc00c40cf40a4582a09f85e5024a0b4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &427883979
 GameObject:
   m_ObjectHideFlags: 0
@@ -3672,6 +3685,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 707121607}
   _animHandler: {fileID: 1051933825}
+  _sensorHandler: {fileID: 403018504}
+  _playerInput: {fileID: 707121605}
 --- !u!54 &707121607
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7513,6 +7528,10 @@ PrefabInstance:
     - target: {fileID: 36408388038211400, guid: aff083ea12ec35246b2ceb807db0ec8d, type: 3}
       propertyPath: m_Name
       value: LB-00
+      objectReference: {fileID: 0}
+    - target: {fileID: 36408388038211400, guid: aff083ea12ec35246b2ceb807db0ec8d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6018610201571571548, guid: aff083ea12ec35246b2ceb807db0ec8d, type: 3}
       propertyPath: m_Mesh
@@ -37994,6 +38013,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   _animHandler: {fileID: 0}
+  _sensorHandler: {fileID: 0}
+  _playerInput: {fileID: 0}
 --- !u!114 &8809352779333027468
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -34,6 +34,14 @@ public class PX3StateHandler {
         InitializeStates();
     }
 
+    public void Initialize() {
+        currentRootState = rootStateList[PX3RootStates.Grounded];
+        currentRootState.EnterState();
+        
+        currentSubState = subStateList[PX3SubStates.Idle];
+        currentSubState.EnterState();
+    }
+    
     private void InitializeStates() {
         rootStateList[PX3RootStates.Dead] = new PX3DeadState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
         rootStateList[PX3RootStates.Grounded] = new PX3GroundedState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);

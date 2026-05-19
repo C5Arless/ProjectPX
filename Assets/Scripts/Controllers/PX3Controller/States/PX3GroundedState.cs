@@ -11,7 +11,7 @@ public class PX3GroundedState : PX3BaseState {
     }
 
     public override void EnterState() {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void UpdateState() {
@@ -20,14 +20,14 @@ public class PX3GroundedState : PX3BaseState {
     }
 
     public override void ExitState() {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void HandleSignal(int sig) {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void CheckSwitchStates() {
-        throw new System.NotImplementedException();
+        
     }
 }

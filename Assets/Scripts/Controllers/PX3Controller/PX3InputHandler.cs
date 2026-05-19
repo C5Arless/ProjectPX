@@ -37,7 +37,7 @@ public class PX3InputHandler {
     public Vector2 CamInput { get => camInput; }
     public Vector2 MoveInput { get => moveInput; }
     public bool JumpInput { get => jumpInput; }
-    public bool Attack { get => attackInput; }
+    public bool AttackInput { get => attackInput; }
     public bool DashInput { get => dashInput; }
     public bool CrouchInput { get => crouchInput; }
     public bool SprintInput { get => sprintInput; }

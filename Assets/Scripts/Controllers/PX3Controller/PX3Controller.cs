@@ -28,14 +28,37 @@ public class PX3Controller : MonoBehaviour {
         
         _animHandler.Initialize(this, _stateHandler);
         //_sensorHandler.Initialize();
-        //_stateHandler.Initialize();
+        _stateHandler.Initialize();
     }
 
     private void Start() {
         _inputHandler.SubscribeCallbacks();
+
+        _inputHandler._onAttack += CallbackTest;
+        _inputHandler._onDash += CallbackTest;
+        _inputHandler._onJump += CallbackTest;
+        _inputHandler._onCrouch += CallbackTest;
+        _inputHandler._onSprint += CallbackTest;
+    }
+
+    private void Update() {
+        //Debug.Log("CamInput: " + _inputHandler.CamInput + "; MoveInput: " + _inputHandler.MoveInput);
     }
 
     public void OnDestroy() {
+        _inputHandler._onAttack -= CallbackTest;
+        _inputHandler._onDash -= CallbackTest;
+        _inputHandler._onJump -= CallbackTest;
+        _inputHandler._onCrouch -= CallbackTest;
+        _inputHandler._onSprint -= CallbackTest;
+        
         _inputHandler.UnsubscribeCallbacks();
     }
+
+    public void CallbackTest() {
+        Debug.Log("Input Received! A: " + _inputHandler.AttackInput + 
+                  "; D: " + _inputHandler.DashInput + "; J: " + _inputHandler.JumpInput +
+                  "; C: " + _inputHandler.CrouchInput + "; S: " + _inputHandler.SprintInput);
+    }
+    
  }
