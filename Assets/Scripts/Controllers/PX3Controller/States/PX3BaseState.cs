@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public abstract class PX3BaseState {
-    private bool _isRootState = false;
+    bool _isRootState = false;
 
     PX3Controller _ctx;
     PX3StateHandler _stateHandler;
@@ -9,8 +9,12 @@ public abstract class PX3BaseState {
     PX3InputHandler _inputHandler;
     PX3SensorHandler _sensorHandler;
 
-    protected bool IsRootState { set { _isRootState = value; } }
-
+    protected bool IsRootState { get => _isRootState; set => _isRootState = value; }
+    protected PX3StateHandler StateHandler { get => _stateHandler; set => _stateHandler = value; }
+    protected PX3AnimHandler AnimHandler { get => _animHandler; set => _animHandler = value; }
+    protected PX3InputHandler InputHandler { get => _inputHandler; set => _inputHandler = value; }
+    protected PX3SensorHandler SensorHandler { get => _sensorHandler; set => _sensorHandler = value; }
+    
     public PX3BaseState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler) {
         _ctx = currentContext;

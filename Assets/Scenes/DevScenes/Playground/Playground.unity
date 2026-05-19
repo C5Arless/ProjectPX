@@ -3671,6 +3671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 707121607}
+  _animHandler: {fileID: 1051933825}
 --- !u!54 &707121607
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4994,6 +4995,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1051933823}
   - component: {fileID: 1051933824}
+  - component: {fileID: 1051933825}
   m_Layer: 0
   m_Name: Asset
   m_TagString: Untagged
@@ -5014,8 +5016,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1977937624}
   - {fileID: 403018503}
+  - {fileID: 1977937624}
   m_Father: {fileID: 707121611}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1051933824
@@ -5039,6 +5041,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1051933825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1051933822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 356a7623da4e4823abac748afae1e941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1087481390
 GameObject:
   m_ObjectHideFlags: 0
@@ -37979,6 +37993,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  _animHandler: {fileID: 0}
 --- !u!114 &8809352779333027468
 MonoBehaviour:
   m_ObjectHideFlags: 0

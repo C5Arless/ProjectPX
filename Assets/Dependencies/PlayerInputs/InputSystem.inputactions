@@ -64,16 +64,16 @@
                     "name": "Interact",
                     "type": "Button",
                     "id": "a81a53d0-c23a-447f-8d31-58e1718b046c",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ShowUI",
+                    "name": "Crouch",
                     "type": "Button",
                     "id": "5d9af531-fd3a-4443-9149-10a80ada1e4f",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -391,22 +391,33 @@
                 {
                     "name": "",
                     "id": "0e2c206c-d2b1-4086-b54f-9230198b52a9",
-                    "path": "<Keyboard>/tab",
+                    "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "ShowUI",
+                    "action": "Crouch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "0120ca5d-91f8-4056-bfa9-d3a4262f82c9",
-                    "path": "<Gamepad>/buttonNorth",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "ShowUI",
+                    "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2460eb0-a557-4ae6-ad3a-bb3d2cf5bf0e",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Crouch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

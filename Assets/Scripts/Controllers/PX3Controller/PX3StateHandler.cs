@@ -10,13 +10,13 @@ public class PX3StateHandler {
     PX3BaseState currentSubState;
     
     Dictionary<PX3RootStates, PX3BaseState> rootStateList = new Dictionary<PX3RootStates, PX3BaseState>(4); 
-    Dictionary<PX3SubStates, PX3BaseState> subStateList = new Dictionary<PX3SubStates, PX3BaseState>(13);
+    Dictionary<PX3SubStates, PX3BaseState> subStateList = new Dictionary<PX3SubStates, PX3BaseState>(14);
     
     Dictionary<PX3RootStates, bool> rootMask = new Dictionary<PX3RootStates, bool>(4); 
-    Dictionary<PX3SubStates, bool> subMask = new Dictionary<PX3SubStates, bool>(13);
+    Dictionary<PX3SubStates, bool> subMask = new Dictionary<PX3SubStates, bool>(14);
     
     Dictionary<PX3RootStates, bool> rootStates = new Dictionary<PX3RootStates, bool>(4); 
-    Dictionary<PX3SubStates, bool> subStates = new Dictionary<PX3SubStates, bool>(13);
+    Dictionary<PX3SubStates, bool> subStates = new Dictionary<PX3SubStates, bool>(14);
     
     public Dictionary<PX3RootStates, bool> RootStates { get { return rootStates; } }
     public Dictionary<PX3SubStates, bool> SubStates { get { return subStates; } }
@@ -53,6 +53,7 @@ public class PX3StateHandler {
         subStateList[PX3SubStates.Grabbing] = new PX3GrabbingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
         subStateList[PX3SubStates.WallSliding] = new PX3WallSlidingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
         subStateList[PX3SubStates.Thumbling] = new PX3ThumblingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Crouching] = new PX3CrouchingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
     }
 
     private void InitializeStateMask() {
@@ -74,6 +75,7 @@ public class PX3StateHandler {
         subMask.Add(PX3SubStates.Grabbing, false);
         subMask.Add(PX3SubStates.WallSliding, false);
         subMask.Add(PX3SubStates.Thumbling, false);
+        subMask.Add(PX3SubStates.Crouching, false);
     }
     
     public void SetSubState(PX3SubStates state) {

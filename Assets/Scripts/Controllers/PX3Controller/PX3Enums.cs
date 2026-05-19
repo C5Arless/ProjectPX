@@ -11,7 +11,8 @@ public enum PX3SubStates {
     Sprinting,
     Grabbing,
     WallSliding,
-    Thumbling
+    Thumbling,
+    Crouching
 }
 
 public enum PX3RootStates {
