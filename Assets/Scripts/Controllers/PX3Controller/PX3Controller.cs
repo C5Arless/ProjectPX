@@ -43,8 +43,9 @@ public class PX3Controller : MonoBehaviour {
 
     private void Update() {
         //Debug.Log("CamInput: " + _inputHandler.CamInput + "; MoveInput: " + _inputHandler.MoveInput);
+        
     }
-
+    
     public void OnDestroy() {
         _inputHandler._onAttack -= CallbackTest;
         _inputHandler._onDash -= CallbackTest;
@@ -55,10 +56,15 @@ public class PX3Controller : MonoBehaviour {
         _inputHandler.UnsubscribeCallbacks();
     }
 
+    public void HandleSignal(int sig) {
+        
+    }
+    
     public void CallbackTest() {
         Debug.Log("Input Received! A: " + _inputHandler.AttackInput + 
                   "; D: " + _inputHandler.DashInput + "; J: " + _inputHandler.JumpInput +
                   "; C: " + _inputHandler.CrouchInput + "; S: " + _inputHandler.SprintInput);
     }
+    
     
  }

@@ -11,7 +11,8 @@ public class PX3IdleState : PX3BaseState {
     }
 
     public override void EnterState() {
-        throw new System.NotImplementedException();
+        AnimHandler.PlayClip(PX3A_GroundSet.IRC);
+        AnimHandler.SetIRCBlend(0);
     }
 
     public override void UpdateState() {
@@ -20,14 +21,14 @@ public class PX3IdleState : PX3BaseState {
     }
 
     public override void ExitState() {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void HandleSignal(int sig) {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void CheckSwitchStates() {
-        throw new System.NotImplementedException();
+        
     }
 }

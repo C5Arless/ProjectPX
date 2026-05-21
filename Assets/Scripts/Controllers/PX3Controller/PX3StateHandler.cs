@@ -41,6 +41,10 @@ public class PX3StateHandler {
         currentSubState = subStateList[PX3SubStates.Idle];
         currentSubState.EnterState();
     }
+
+    public void SendSignal(int sig) {
+        currentSubState.HandleSignal(sig);
+    }
     
     private void InitializeStates() {
         rootStateList[PX3RootStates.Dead] = new PX3DeadState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);

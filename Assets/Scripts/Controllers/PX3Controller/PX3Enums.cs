@@ -22,12 +22,36 @@ public enum PX3RootStates {
     Holding
 }
 
-public enum PX3SignalTarget {
-    CTX,
-    CTXAUDIO,
-    CTXVFX,
-    STATE,
-    ANIM,
-    INPUT,
-    SENSOR
+public enum PX3A_RootSet {
+    Ground,
+    Mixed,
+    Air,
+    Death
+}
+
+public enum PX3A_GroundSet {
+    IRC,
+    Thumbling,
+    Sprint_S,
+    Sprint_Loop
+}
+
+public enum PX3A_MixedSet {
+    Ledge_Grab,
+    WallSlide,
+    Dashing,
+    Diving,
+    Attack1,
+    Charged_S,
+    Ledge_Jump,
+    Charged_E,
+    Attack2,
+    Attack3
+}
+
+public enum PX3A_AirSet {
+    Falling,
+    Jump1,
+    Jump2,
+    Jump3
 }
