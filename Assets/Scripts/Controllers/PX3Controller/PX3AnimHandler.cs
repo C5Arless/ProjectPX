@@ -75,7 +75,7 @@ public class PX3AnimHandler : MonoBehaviour {
     
     private void SetRootset(PX3A_RootSet target) {
         currentRootset = target;
-        _animator.SetInteger("Subset", (int)currentRootset);
+        _animator.SetInteger("RootSet", (int)currentRootset);
     }
 
     private void SetSubset(PX3A_GroundSet target) {
