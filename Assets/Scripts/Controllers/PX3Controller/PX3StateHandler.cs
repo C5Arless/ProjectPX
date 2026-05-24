@@ -12,8 +12,8 @@ public class PX3StateHandler {
     Dictionary<PX3RootStates, PX3BaseState> rootStateList = new Dictionary<PX3RootStates, PX3BaseState>(4); 
     Dictionary<PX3SubStates, PX3BaseState> subStateList = new Dictionary<PX3SubStates, PX3BaseState>(14);
     
-    Dictionary<PX3RootStates, bool> rootMasks = new Dictionary<PX3RootStates, bool>(4); 
-    Dictionary<PX3SubStates, bool> subMasks = new Dictionary<PX3SubStates, bool>(14);
+    Dictionary<PX3RootStates, bool> rootMask = new Dictionary<PX3RootStates, bool>(4); 
+    Dictionary<PX3SubStates, bool> subMask = new Dictionary<PX3SubStates, bool>(14);
     
     Dictionary<PX3RootStates, bool> rootStates = new Dictionary<PX3RootStates, bool>(4); 
     Dictionary<PX3SubStates, bool> subStates = new Dictionary<PX3SubStates, bool>(14);
@@ -32,15 +32,12 @@ public class PX3StateHandler {
 
         InitializeStateMask();
         InitializeStates();
-        InitializeConcreteStates();
     }
 
     public void Initialize() {
-        SetRootState(PX3RootStates.Grounded);
         currentRootState = rootStateList[PX3RootStates.Grounded];
         currentRootState.EnterState();
         
-        SetSubState(PX3SubStates.Idle);
         currentSubState = subStateList[PX3SubStates.Idle];
         currentSubState.EnterState();
     }
@@ -48,38 +45,8 @@ public class PX3StateHandler {
     public void SendSignal(int sig) {
         currentSubState.HandleSignal(sig);
     }
-
-    private void InitializeStateMask() {
-        rootMasks.Add(PX3RootStates.Dead, false);
-        rootMasks.Add(PX3RootStates.Grounded, false);
-        rootMasks.Add(PX3RootStates.Airborne, false);
-        rootMasks.Add(PX3RootStates.Holding, false);
-
-        subMasks.Add(PX3SubStates.Attacking, false);
-        subMasks.Add(PX3SubStates.Dashing, false);
-        subMasks.Add(PX3SubStates.Diving, false);
-        subMasks.Add(PX3SubStates.Falling, false);
-        subMasks.Add(PX3SubStates.Damaged, false);
-        subMasks.Add(PX3SubStates.Idle, false);
-        subMasks.Add(PX3SubStates.Jumping, false);
-        subMasks.Add(PX3SubStates.Walking, false);
-        subMasks.Add(PX3SubStates.Running, false);
-        subMasks.Add(PX3SubStates.Sprinting, false);
-        subMasks.Add(PX3SubStates.Grabbing, false);
-        subMasks.Add(PX3SubStates.WallSliding, false);
-        subMasks.Add(PX3SubStates.Thumbling, false);
-        subMasks.Add(PX3SubStates.Crouching, false);
-    }
+    
     private void InitializeStates() {
-        foreach (var root in rootMasks) {
-            rootStates.Add(root.Key, root.Value);
-        }
-        
-        foreach (var sub in subMasks) {
-            subStates.Add(sub.Key, sub.Value);
-        }
-    }
-    private void InitializeConcreteStates() {
         rootStateList[PX3RootStates.Dead] = new PX3DeadState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
         rootStateList[PX3RootStates.Grounded] = new PX3GroundedState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
         rootStateList[PX3RootStates.Airborne] = new PX3AirborneState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
@@ -100,28 +67,56 @@ public class PX3StateHandler {
         subStateList[PX3SubStates.Thumbling] = new PX3ThumblingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
         subStateList[PX3SubStates.Crouching] = new PX3CrouchingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
     }
-    
-    public PX3BaseState GetState(PX3SubStates state) {
-        return subStateList[state];
-    }
-    
-    public PX3BaseState GetState(PX3RootStates state) {
-        return rootStateList[state];
+
+    private void InitializeStateMask() {
+        rootMask.Add(PX3RootStates.Dead, false);
+        rootMask.Add(PX3RootStates.Grounded, false);
+        rootMask.Add(PX3RootStates.Airborne, false);
+        rootMask.Add(PX3RootStates.Holding, false);
+
+        subMask.Add(PX3SubStates.Attacking, false);
+        subMask.Add(PX3SubStates.Dashing, false);
+        subMask.Add(PX3SubStates.Diving, false);
+        subMask.Add(PX3SubStates.Falling, false);
+        subMask.Add(PX3SubStates.Damaged, false);
+        subMask.Add(PX3SubStates.Idle, false);
+        subMask.Add(PX3SubStates.Jumping, false);
+        subMask.Add(PX3SubStates.Walking, false);
+        subMask.Add(PX3SubStates.Running, false);
+        subMask.Add(PX3SubStates.Sprinting, false);
+        subMask.Add(PX3SubStates.Grabbing, false);
+        subMask.Add(PX3SubStates.WallSliding, false);
+        subMask.Add(PX3SubStates.Thumbling, false);
+        subMask.Add(PX3SubStates.Crouching, false);
     }
     
     public void SetSubState(PX3SubStates state) {
-        foreach (var subMask in subMasks) {
-            subStates[subMask.Key] = subMask.Value;
+        Dictionary<PX3SubStates, bool> target = new Dictionary<PX3SubStates, bool>(13);
+        target = subMask;
+        
+        foreach (KeyValuePair<PX3SubStates, bool> subState in subStates) {
+            if (subState.Value) {
+                target[subState.Key] = false;
+            }
         }
         
-        subStates[state] = true;
+        target[state] = true;
+        
+        subStates = target;
     }
 
     public void SetRootState(PX3RootStates state) {
-        foreach (var rootMask in rootMasks) {
-            rootStates[rootMask.Key] = rootMask.Value;
+        Dictionary<PX3RootStates, bool> target = new Dictionary<PX3RootStates, bool>(4);
+        target = rootMask;
+        
+        foreach (KeyValuePair<PX3RootStates, bool> rootState in rootStates) {
+            if (rootState.Value) {
+                target[rootState.Key] = false;
+            }
         }
         
-        rootStates[state] = true;
+        target[state] = true;
+        
+        rootStates = target;
     }
 }
