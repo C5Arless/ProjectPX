@@ -55,3 +55,15 @@ public enum PX3A_AirSet {
     Jump2,
     Jump3
 }
+
+public enum PX3SensorType {
+    Body,
+    Ground,
+    Ledge
+}
+
+public enum PX3SensorStage {
+    Enter, 
+    Stay,
+    Exit
+}
