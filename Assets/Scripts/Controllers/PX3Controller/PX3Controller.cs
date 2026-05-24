@@ -27,7 +27,6 @@ public class PX3Controller : MonoBehaviour {
         _stateHandler = new PX3StateHandler(this, _animHandler, _inputHandler, _sensorHandler);
         
         _animHandler.Initialize(this, _stateHandler);
-        //_sensorHandler.Initialize();
         _stateHandler.Initialize();
     }
 
@@ -41,9 +40,11 @@ public class PX3Controller : MonoBehaviour {
         _inputHandler._onSprint += CallbackTest;
     }
 
-    private void Update() {
-        //Debug.Log("CamInput: " + _inputHandler.CamInput + "; MoveInput: " + _inputHandler.MoveInput);
+    private void LateUpdate() {
+        if (StateHandler.RootStates[PX3RootStates.Dead]) return;
         
+        StateHandler.CurrentRootState.UpdateState();
+        StateHandler.CurrentSubState.UpdateState();
     }
     
     public void OnDestroy() {
@@ -61,9 +62,9 @@ public class PX3Controller : MonoBehaviour {
     }
     
     public void CallbackTest() {
-        Debug.Log("Input Received! A: " + _inputHandler.AttackInput + 
-                  "; D: " + _inputHandler.DashInput + "; J: " + _inputHandler.JumpInput +
-                  "; C: " + _inputHandler.CrouchInput + "; S: " + _inputHandler.SprintInput);
+        //Debug.Log("Input Received! A: " + _inputHandler.AttackInput + 
+        //          "; D: " + _inputHandler.DashInput + "; J: " + _inputHandler.JumpInput +
+        //          "; C: " + _inputHandler.CrouchInput + "; S: " + _inputHandler.SprintInput);
     }
     
     

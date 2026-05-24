@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public abstract class PX3BaseState {
     bool _isRootState = false;
@@ -10,6 +11,7 @@ public abstract class PX3BaseState {
     PX3SensorHandler _sensorHandler;
 
     protected bool IsRootState { get => _isRootState; set => _isRootState = value; }
+    protected PX3Controller Context { get => _ctx; set => _ctx = value; }
     protected PX3StateHandler StateHandler { get => _stateHandler; set => _stateHandler = value; }
     protected PX3AnimHandler AnimHandler { get => _animHandler; set => _animHandler = value; }
     protected PX3InputHandler InputHandler { get => _inputHandler; set => _inputHandler = value; }
@@ -38,5 +40,11 @@ public abstract class PX3BaseState {
             _stateHandler.CurrentSubState = newState;
             _stateHandler.CurrentSubState.EnterState();
         }
+    }
+    protected void StartCoroutine(IEnumerator routine) {
+        _ctx.StartCoroutine(routine);
+    }
+    protected void StopCoroutine(IEnumerator routine) {
+        _ctx.StopCoroutine(routine);
     }
 }
