@@ -11,10 +11,13 @@ public class PX3CrouchingState : PX3BaseState {
     }
 
     public override void EnterState() {
-        StartCoroutine(LerpCrouchAnimation());
+        AnimHandler.PlayClip(PX3A_GroundSet.IRC);
+        StartCoroutine(LerpCrouchAnimation(-1f));
     }
 
     public override void UpdateState() {
+        if (!InputHandler.CrouchInput) StartCoroutine(ExitRoutine());
+        
         
         CheckSwitchStates();
     }
@@ -28,29 +31,54 @@ public class PX3CrouchingState : PX3BaseState {
     }
 
     public override void CheckSwitchStates() {
-        //if (StateHandler.SubStates[PX3SubStates.Attacking]) {
-        //    SwitchState(StateHandler.GetState(PX3SubStates.Attacking));
-        //} //syntax test
+        if (StateHandler.SubStates[PX3SubStates.Falling]) SwitchState(StateHandler.GetState(PX3SubStates.Falling));
+        else if (StateHandler.SubStates[PX3SubStates.Jumping]) SwitchState(StateHandler.GetState(PX3SubStates.Jumping));
+        else if (StateHandler.SubStates[PX3SubStates.Idle]) SwitchState(StateHandler.GetState(PX3SubStates.Idle));
+        else if (StateHandler.SubStates[PX3SubStates.Running]) SwitchState(StateHandler.GetState(PX3SubStates.Running));
     }
 
     private void OnCrouch() {
         if (StateHandler.CurrentSubState == this) return;
         
         if (StateHandler.RootStates[PX3RootStates.Grounded]) {
-            StateHandler.SetSubState(PX3SubStates.Crouching);
+            if (StateHandler.SubStates[PX3SubStates.Running]) {
+                StateHandler.SetSubState(PX3SubStates.Thumbling);
+            } else StateHandler.SetSubState(PX3SubStates.Crouching);
         }
     }
     
-    private IEnumerator LerpCrouchAnimation() {
-        float value = 0f;
+    private IEnumerator LerpCrouchAnimation(float target) {
+        float value;
+        
+        if (target < 0) {
+            value = 0f;
+            
+            while (value > -1f) {
+                AnimHandler.SetIRCBlend(value);
+                value -= .2f;
+                yield return null;
+            }
 
-        while (value > -1f) {
-            AnimHandler.SetIRCBlend(value);
-            value -= .1f;
-            yield return null;
+            value = -1f;
         }
+        else {
+            value = -1f;
+            
+            while (value < 0) {
+                AnimHandler.SetIRCBlend(value);
+                value += .2f;
+                yield return null;
+            }
 
-        value = -1f;
+            value = 0;
+        }
+        
         AnimHandler.SetIRCBlend(value);
+    }
+
+    private IEnumerator ExitRoutine() {
+        yield return Context.StartCoroutine(LerpCrouchAnimation(0f));
+        
+        StateHandler.SetSubState(PX3SubStates.Idle);
     }
 }

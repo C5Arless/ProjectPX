@@ -11,7 +11,7 @@ public class PX3ThumblingState : PX3BaseState {
     }
 
     public override void EnterState() {
-        throw new System.NotImplementedException();
+        AnimHandler.PlayClip(PX3A_GroundSet.Thumbling);
     }
 
     public override void UpdateState() {
@@ -20,14 +20,17 @@ public class PX3ThumblingState : PX3BaseState {
     }
 
     public override void ExitState() {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void HandleSignal(int sig) {
-        throw new System.NotImplementedException();
+        
     }
 
     public override void CheckSwitchStates() {
-        throw new System.NotImplementedException();
+        if (StateHandler.SubStates[PX3SubStates.Crouching]) SwitchState(StateHandler.GetState(PX3SubStates.Crouching));
+        else if (StateHandler.SubStates[PX3SubStates.Jumping]) SwitchState(StateHandler.GetState(PX3SubStates.Jumping));
+        else if (StateHandler.SubStates[PX3SubStates.Idle]) SwitchState(StateHandler.GetState(PX3SubStates.Idle));
+        else if (StateHandler.SubStates[PX3SubStates.Running]) SwitchState(StateHandler.GetState(PX3SubStates.Running));
     }
 }

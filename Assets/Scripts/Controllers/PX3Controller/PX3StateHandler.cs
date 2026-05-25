@@ -110,7 +110,7 @@ public class PX3StateHandler {
     }
     
     public void SetSubState(PX3SubStates state) {
-        foreach (KeyValuePair<PX3SubStates, bool> subMask in subMasks) {
+        foreach (var subMask in subMasks) {
             subStates[subMask.Key] = subMask.Value;
         }
         
@@ -118,7 +118,7 @@ public class PX3StateHandler {
     }
 
     public void SetRootState(PX3RootStates state) {
-        foreach (KeyValuePair<PX3RootStates, bool> rootMask in rootMasks) {
+        foreach (var rootMask in rootMasks) {
             rootStates[rootMask.Key] = rootMask.Value;
         }
         

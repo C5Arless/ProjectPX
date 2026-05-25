@@ -66,6 +66,5 @@ public class PX3Controller : MonoBehaviour {
         //          "; D: " + _inputHandler.DashInput + "; J: " + _inputHandler.JumpInput +
         //          "; C: " + _inputHandler.CrouchInput + "; S: " + _inputHandler.SprintInput);
     }
-    
-    
- }
+
+}
