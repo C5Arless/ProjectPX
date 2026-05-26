@@ -24,6 +24,13 @@ public class PX3GroundedState : PX3BaseState {
                 StateHandler.SetSubState(PX3SubStates.Running);
             }
         }
+
+        if (InputHandler.SprintInput) {
+            if (StateHandler.SubStates[PX3SubStates.Idle] || StateHandler.SubStates[PX3SubStates.Running]) {
+                StateHandler.SetSubState(PX3SubStates.Sprinting);
+            }
+        }
+
         
         CheckSwitchStates();
     }
