@@ -38,7 +38,7 @@ public class PX3PhysicsHandler {
     }
     
     public void FixedUpdate() {
-        if (IsFrozen) {
+        if (isFrozen) {
             rb.velocity = Vector3.zero;
             currentVelocity = Vector3.zero;
             return;
@@ -71,20 +71,20 @@ public class PX3PhysicsHandler {
     }
     
     public void SetVelocity(Vector3 newVelocity) {
-        if (IsFrozen) return;
+        if (isFrozen) return;
         
         rb.velocity = newVelocity;
         currentVelocity = newVelocity; 
     }
 
     public void AddVelocityChange(Vector3 force) {
-        if (IsFrozen) return;
+        if (isFrozen) return;
         
         rb.AddForce(force, ForceMode.VelocityChange);
     }
 
     public void ApplyCustomGravity(float gravityMagnitude) {
-        if (IsFrozen) return;
+        if (isFrozen) return;
 
         if (isGrounded && CurrentVelocity.y <= 0) {
             SetVelocity(new Vector3(CurrentVelocity.x, -0.5f, CurrentVelocity.z));
@@ -94,7 +94,7 @@ public class PX3PhysicsHandler {
     }
 
     public void ApplyLinearMovement(Vector3 moveDirection, float maxSpeed, float acceleration) {
-        if (IsFrozen) return;
+        if (isFrozen) return;
         
         Vector3 targetVelocity = moveDirection * maxSpeed;
         Vector3 velocityChange = Vector3.MoveTowards(HorizontalVelocity, targetVelocity, acceleration * Time.fixedDeltaTime) - HorizontalVelocity;

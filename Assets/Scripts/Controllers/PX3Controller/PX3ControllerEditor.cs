@@ -37,6 +37,8 @@ public class PX3ControllerEditor : Editor {
 
         EditorGUILayout.LabelField("Current Root State:", rootStateStr, EditorStyles.boldLabel);
         EditorGUILayout.LabelField("Current Sub State:", subStateStr, EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("Current velocity:", controller.PhysicsHandler.CurrentVelocity.ToString(), EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("Previous velocity:", controller.PhysicsHandler.PreviousVelocity.ToString(), EditorStyles.boldLabel);
         
         EditorGUILayout.EndVertical();
 

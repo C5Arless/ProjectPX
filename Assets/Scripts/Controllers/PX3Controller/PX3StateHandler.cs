@@ -5,6 +5,7 @@ public class PX3StateHandler {
     PX3AnimHandler _animHandler;
     PX3InputHandler _inputHandler;
     PX3SensorHandler _sensorHandler;
+    PX3PhysicsHandler _physicsHandler;
     
     PX3BaseState currentRootState;
     PX3BaseState currentSubState;
@@ -24,11 +25,12 @@ public class PX3StateHandler {
     public PX3BaseState CurrentSubState { get { return currentSubState; } set { currentSubState = value; } }
     
     public PX3StateHandler(PX3Controller ctx, PX3AnimHandler animHandler, 
-        PX3InputHandler inputHandler, PX3SensorHandler sensorHandler) {
+        PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) {
         _ctx = ctx;
         _animHandler = animHandler;
         _inputHandler = inputHandler;
         _sensorHandler = sensorHandler;
+        _physicsHandler = physicsHandler;
 
         InitializeStateMask();
         InitializeStates();
@@ -80,25 +82,25 @@ public class PX3StateHandler {
         }
     }
     private void InitializeConcreteStates() {
-        rootStateList[PX3RootStates.Dead] = new PX3DeadState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        rootStateList[PX3RootStates.Grounded] = new PX3GroundedState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        rootStateList[PX3RootStates.Airborne] = new PX3AirborneState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        rootStateList[PX3RootStates.Holding] = new PX3HoldingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        rootStateList[PX3RootStates.Dead] = new PX3DeadState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        rootStateList[PX3RootStates.Grounded] = new PX3GroundedState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        rootStateList[PX3RootStates.Airborne] = new PX3AirborneState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        rootStateList[PX3RootStates.Holding] = new PX3HoldingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         
-        subStateList[PX3SubStates.Attacking] = new PX3AttackingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Dashing] = new PX3DashingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Diving] = new PX3DivingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Falling] = new PX3FallingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Damaged] = new PX3DamagedState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Idle] = new PX3IdleState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Jumping] = new PX3JumpingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Walking] = new PX3WalkingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Running] = new PX3RunningState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Sprinting] = new PX3SprintingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Grabbing] = new PX3GrabbingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.WallSliding] = new PX3WallSlidingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Thumbling] = new PX3ThumblingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
-        subStateList[PX3SubStates.Crouching] = new PX3CrouchingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler);
+        subStateList[PX3SubStates.Attacking] = new PX3AttackingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Dashing] = new PX3DashingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Diving] = new PX3DivingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Falling] = new PX3FallingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Damaged] = new PX3DamagedState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Idle] = new PX3IdleState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Jumping] = new PX3JumpingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Walking] = new PX3WalkingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Running] = new PX3RunningState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Sprinting] = new PX3SprintingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Grabbing] = new PX3GrabbingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.WallSliding] = new PX3WallSlidingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Thumbling] = new PX3ThumblingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Crouching] = new PX3CrouchingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
     }
     
     public PX3BaseState GetState(PX3SubStates state) {

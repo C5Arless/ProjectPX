@@ -26,8 +26,8 @@ public class PX3Controller : MonoBehaviour {
 
     private void Awake() {
         _inputHandler = new PX3InputHandler(_playerInput);
-        _stateHandler = new PX3StateHandler(this, _animHandler, _inputHandler, _sensorHandler);
         _physicsHandler = new PX3PhysicsHandler(_rb, _sensorHandler);
+        _stateHandler = new PX3StateHandler(this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         
         _animHandler.Initialize(this, _stateHandler);
         _stateHandler.Initialize();
