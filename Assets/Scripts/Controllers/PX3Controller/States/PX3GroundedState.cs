@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PX3GroundedState : PX3BaseState {
     public PX3GroundedState(PX3Controller currentContext, PX3StateHandler stateHandler, 
-        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler) : 
-        base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler) {
+        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
+        base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         IsRootState = true;
 
@@ -17,22 +17,14 @@ public class PX3GroundedState : PX3BaseState {
     }
 
     public override void UpdateState() {
-        if (!InputHandler.CrouchInput) {
-            if (InputHandler.MoveInput == Vector2.zero) {
-                StateHandler.SetSubState(PX3SubStates.Idle);
-            } else {
-                StateHandler.SetSubState(PX3SubStates.Running);
-            }
-        }
-
-        if (InputHandler.SprintInput) {
-            if (StateHandler.SubStates[PX3SubStates.Idle] || StateHandler.SubStates[PX3SubStates.Running]) {
-                StateHandler.SetSubState(PX3SubStates.Sprinting);
-            }
-        }
-
+        CheckCrouch();
+        CheckSprint();
         
         CheckSwitchStates();
+    }
+
+    public override void LateUpdateState() {
+        
     }
 
     public override void ExitState() {
@@ -57,6 +49,24 @@ public class PX3GroundedState : PX3BaseState {
         }
         else if (stage == PX3SensorStage.Exit) {
             StateHandler.SetRootState(PX3RootStates.Airborne);
+        }
+    }
+
+    private void CheckSprint() {
+        if (InputHandler.SprintInput && InputHandler.MoveInput != Vector2.zero) {
+            if (StateHandler.SubStates[PX3SubStates.Idle] || StateHandler.SubStates[PX3SubStates.Running]) {
+                StateHandler.SetSubState(PX3SubStates.Sprinting);
+            }
+        }
+    }
+
+    private void CheckCrouch() {
+        if (!InputHandler.CrouchInput) {
+            if (InputHandler.MoveInput == Vector2.zero) {
+                StateHandler.SetSubState(PX3SubStates.Idle);
+            } else {
+                StateHandler.SetSubState(PX3SubStates.Running);
+            }
         }
     }
 }

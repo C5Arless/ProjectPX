@@ -3711,7 +3711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 416510245f208d8429ea83dc1b10c786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 707121607}
+  _rb: {fileID: 0}
   _animHandler: {fileID: 1051933825}
   _sensorHandler: {fileID: 403018504}
   _playerInput: {fileID: 707121605}
@@ -3741,7 +3741,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!4 &707121611
 Transform:
   m_ObjectHideFlags: 0
@@ -38053,7 +38053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 416510245f208d8429ea83dc1b10c786, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
+  _rb: {fileID: 0}
   _animHandler: {fileID: 0}
   _sensorHandler: {fileID: 0}
   _playerInput: {fileID: 0}

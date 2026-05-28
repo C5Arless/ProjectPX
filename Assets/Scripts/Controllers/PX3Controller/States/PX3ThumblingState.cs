@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PX3ThumblingState : PX3BaseState {
     public PX3ThumblingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
-        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler) : 
-        base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler) {
+        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
+        base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         //
     }
@@ -18,7 +18,11 @@ public class PX3ThumblingState : PX3BaseState {
         
         CheckSwitchStates();
     }
-
+    
+    public override void LateUpdateState() {
+        
+    }
+    
     public override void ExitState() {
         
     }

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PX3HoldingState : PX3BaseState {
     public PX3HoldingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
-        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler) : 
-        base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler) {
+        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
+        base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         IsRootState = true;
         SensorHandler.OnSensorsTrigger += OnLedgeTrigger;
@@ -19,7 +19,11 @@ public class PX3HoldingState : PX3BaseState {
         
         CheckSwitchStates();
     }
-
+    
+    public override void LateUpdateState() {
+        
+    }
+    
     public override void ExitState() {
 
     }

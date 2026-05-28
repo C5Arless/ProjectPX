@@ -6,15 +6,15 @@ public class PX3SprintingState : PX3BaseState {
     private bool windUp;
     
     public PX3SprintingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
-        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler) : 
-        base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler) {
+        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
+        base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         InputHandler._onSprint += OnSprint;
     }
 
     public override void EnterState() {
-        if (windUp) AnimHandler.PlayClip(PX3A_GroundSet.Sprint_S);
-        else AnimHandler.PlayClip(PX3A_GroundSet.Sprint_Loop);
+        if (windUp) WindUpEnter();
+        else LoopEnter();
     }
 
     public override void UpdateState() {
@@ -22,7 +22,11 @@ public class PX3SprintingState : PX3BaseState {
         
         CheckSwitchStates();
     }
-
+    
+    public override void LateUpdateState() {
+        
+    }
+    
     public override void ExitState() {
         windUp = false;
     }
@@ -46,5 +50,13 @@ public class PX3SprintingState : PX3BaseState {
         }
         
         StateHandler.SetSubState(PX3SubStates.Sprinting);
+    }
+
+    private void WindUpEnter() {
+        AnimHandler.PlayClip(PX3A_GroundSet.Sprint_S);
+    }
+
+    private void LoopEnter() {
+        AnimHandler.PlayClip(PX3A_GroundSet.Sprint_Loop);
     }
 }

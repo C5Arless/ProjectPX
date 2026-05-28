@@ -4,30 +4,34 @@ using UnityEngine;
 
 public class PX3FallingState : PX3BaseState {
     public PX3FallingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
-        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler) : 
-        base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler) {
+        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
+        base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         //
     }
 
     public override void EnterState() {
-        throw new System.NotImplementedException();
+
     }
 
     public override void UpdateState() {
         
         CheckSwitchStates();
     }
+    
+    public override void LateUpdateState() {
+        
+    }
 
     public override void ExitState() {
-        throw new System.NotImplementedException();
+
     }
 
     public override void HandleSignal(int sig) {
-        throw new System.NotImplementedException();
+
     }
 
     public override void CheckSwitchStates() {
-        throw new System.NotImplementedException();
+
     }
 }

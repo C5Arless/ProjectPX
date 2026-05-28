@@ -9,6 +9,7 @@ public abstract class PX3BaseState {
     PX3AnimHandler _animHandler;
     PX3InputHandler _inputHandler;
     PX3SensorHandler _sensorHandler;
+    PX3PhysicsHandler _physicsHandler;
 
     protected bool IsRootState { get => _isRootState; set => _isRootState = value; }
     protected PX3Controller Context { get => _ctx; set => _ctx = value; }
@@ -16,17 +17,21 @@ public abstract class PX3BaseState {
     protected PX3AnimHandler AnimHandler { get => _animHandler; set => _animHandler = value; }
     protected PX3InputHandler InputHandler { get => _inputHandler; set => _inputHandler = value; }
     protected PX3SensorHandler SensorHandler { get => _sensorHandler; set => _sensorHandler = value; }
+    protected PX3PhysicsHandler PhysicsHandler { get => _physicsHandler; set => _physicsHandler = value; }
     
     public PX3BaseState(PX3Controller currentContext, PX3StateHandler stateHandler, 
-        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler) {
+        PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, 
+        PX3PhysicsHandler physicsHandler) {
         _ctx = currentContext;
         _stateHandler = stateHandler;
         _animHandler = animHandler;
         _inputHandler = inputHandler;
         _sensorHandler = sensorHandler;
+        _physicsHandler = physicsHandler;
     }
     public abstract void EnterState();
     public abstract void UpdateState();
+    public abstract void LateUpdateState();
     public abstract void ExitState();
     public abstract void HandleSignal(int sig);
     public abstract void CheckSwitchStates();
