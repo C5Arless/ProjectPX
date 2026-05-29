@@ -3,19 +3,19 @@ public class PX3PhysicsHandler {
     private Rigidbody rb;
     private PX3SensorHandler sensorHandler;
 
-    private bool isGrounded;
     private bool isFrozen;
 
     private Vector3 currentVelocity;
     private Vector3 previousVelocity;
     private Vector3 velocityBeforeFreeze;
     
+    #region GetSet
     public Vector3 CurrentVelocity { get => currentVelocity; }
     public Vector3 PreviousVelocity { get => previousVelocity; }
     public Vector3 HorizontalVelocity => new Vector3(currentVelocity.x, 0, currentVelocity.z);
     public Vector3 PreviousHorizontalVelocity => new Vector3(previousVelocity.x, 0, previousVelocity.z);
     public bool IsFrozen { get => isFrozen; }
-
+    #endregion
 
     public PX3PhysicsHandler(Rigidbody _rb, PX3SensorHandler _sensorHandler) {
         rb = _rb;
@@ -24,17 +24,6 @@ public class PX3PhysicsHandler {
         rb.useGravity = false; 
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
-
-        sensorHandler.OnSensorsTrigger += OnGrounded;
-    }
-
-    private void OnGrounded(Collider other, PX3SensorType type, PX3SensorStage stage) {
-        if (!other.CompareTag("Ground")) return;
-
-        if (type == PX3SensorType.Ground) {
-            if (stage == PX3SensorStage.Enter) isGrounded = true;
-            else if (stage == PX3SensorStage.Exit) isGrounded = false;
-        }
     }
     
     public void FixedUpdate() {
@@ -85,12 +74,8 @@ public class PX3PhysicsHandler {
 
     public void ApplyCustomGravity(float gravityMagnitude) {
         if (isFrozen) return;
-
-        if (isGrounded && CurrentVelocity.y <= 0) {
-            SetVelocity(new Vector3(CurrentVelocity.x, -0.5f, CurrentVelocity.z));
-        } else {
-            rb.AddForce(Vector3.down * gravityMagnitude, ForceMode.Acceleration);
-        }
+        
+        rb.AddForce(Vector3.down * gravityMagnitude, ForceMode.Acceleration);
     }
 
     public void ApplyLinearMovement(Vector3 moveDirection, float maxSpeed, float acceleration) {

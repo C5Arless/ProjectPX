@@ -13,7 +13,6 @@ public class PX3CrouchingState : PX3BaseState {
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.IRC);
         StartCoroutine(LerpCrouchAnimation(-1f));
-        PhysicsHandler.SetVelocity(Vector3.up * 10f);
     }
 
     public override void UpdateState() {

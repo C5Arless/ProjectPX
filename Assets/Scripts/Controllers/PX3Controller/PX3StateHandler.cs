@@ -38,8 +38,8 @@ public class PX3StateHandler {
     }
 
     public void Initialize() {
-        SetRootState(PX3RootStates.Grounded);
-        currentRootState = rootStateList[PX3RootStates.Grounded];
+        SetRootState(PX3RootStates.Airborne);
+        currentRootState = rootStateList[PX3RootStates.Airborne];
         currentRootState.EnterState();
         
         SetSubState(PX3SubStates.Idle);
