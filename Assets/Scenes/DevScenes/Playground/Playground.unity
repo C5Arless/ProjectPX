@@ -3728,7 +3728,7 @@ MonoBehaviour:
   _sensorHandler: {fileID: 403018504}
   _playerInput: {fileID: 707121605}
   maxGravity: 20
-  jumpHeight: 8
+  jumpHeight: 6
 --- !u!54 &707121607
 Rigidbody:
   m_ObjectHideFlags: 0

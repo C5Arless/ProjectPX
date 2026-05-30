@@ -12,8 +12,6 @@ public class PX3Controller : MonoBehaviour {
     [Space]
     [SerializeField]
     [Range(2f, 30f)] float maxGravity;
-    [SerializeField]
-    [Range(2f, 15f)] float jumpHeight;
     
     PX3StateHandler _stateHandler;
     PX3InputHandler _inputHandler;
@@ -28,8 +26,7 @@ public class PX3Controller : MonoBehaviour {
     public PX3PhysicsHandler PhysicsHandler { get => _physicsHandler; set => _physicsHandler = value; }
 
     public float MaxGravity { get => maxGravity; }
-    public float JumpHeight { get => jumpHeight; }
-
+    
     #endregion
 
     private void Awake() {
