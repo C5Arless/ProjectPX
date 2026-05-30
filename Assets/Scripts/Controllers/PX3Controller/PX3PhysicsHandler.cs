@@ -46,14 +46,14 @@ public class PX3PhysicsHandler {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         currentVelocity = Vector3.zero;
-        rb.isKinematic = true;
+        //rb.isKinematic = true;
     }
     
     public void Unfreeze(bool resumeVelocity) {
         if (!isFrozen) return;
 
         isFrozen = false;
-        rb.isKinematic = false; 
+        //rb.isKinematic = false; 
 
         if (resumeVelocity) SetVelocity(velocityBeforeFreeze);
         else SetVelocity(Vector3.zero);

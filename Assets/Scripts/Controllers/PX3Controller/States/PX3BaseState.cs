@@ -31,7 +31,7 @@ public abstract class PX3BaseState {
     }
     public abstract void EnterState();
     public abstract void UpdateState();
-    public abstract void LateUpdateState();
+    public abstract void FixedUpdateState();
     public abstract void ExitState();
     public abstract void HandleSignal(int sig);
     public abstract void CheckSwitchStates();

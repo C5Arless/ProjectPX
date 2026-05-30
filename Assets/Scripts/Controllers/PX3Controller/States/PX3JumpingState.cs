@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PX3JumpingState : PX3BaseState {
     private int phase;
+    private float gravity;
     
     public PX3JumpingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
@@ -14,29 +15,47 @@ public class PX3JumpingState : PX3BaseState {
 
     public override void EnterState() {
         phase = 0;
-        AnimHandler.PlayClip(PX3A_AirSet.Jump1);
+        gravity = Context.MaxGravity / 5;
         
+        AnimHandler.PlayClip(PX3A_AirSet.Jump1);
     }
 
     public override void UpdateState() {
-        if (phase == 2) PhysicsHandler.ApplyCustomGravity(10f);
         
         CheckSwitchStates();
     }
     
-    public override void LateUpdateState() {
-        
+    public override void FixedUpdateState() {
+        switch (phase) {
+            case 1: {
+                if (gravity < Context.MaxGravity) {
+                    gravity += Context.MaxGravity / 5;
+                    PhysicsHandler.ApplyCustomGravity(gravity);
+                } else PhysicsHandler.ApplyCustomGravity(Context.MaxGravity);
+
+                break;
+            }
+            case 2: {
+                PhysicsHandler.ApplyCustomGravity(Context.MaxGravity * 2);
+                break;
+            }
+            case 3: {
+                PhysicsHandler.ApplyCustomGravity(Context.MaxGravity / 2);
+                break;
+            }
+        }
     }
 
     public override void ExitState() {
-
+        gravity = Context.MaxGravity / 5;
     }
 
     public override void HandleSignal(int sig) {
         switch (sig) {
             case 0: {
-                PhysicsHandler.SetVelocity(Vector3.up * 10f);
                 phase = 1;
+                PhysicsHandler.Unfreeze(true);
+                PhysicsHandler.AddVelocityChange(Vector3.up * Context.JumpHeight);
                 break;
             }
             case 1: {
@@ -44,6 +63,10 @@ public class PX3JumpingState : PX3BaseState {
                 break;
             }
             case 2: {
+                phase = 3;
+                break;
+            }
+            case 3: {
                 ExitJump();
                 break;
             }
@@ -63,6 +86,7 @@ public class PX3JumpingState : PX3BaseState {
         if (StateHandler.CurrentSubState == this) return;
         
         StateHandler.SetSubState(PX3SubStates.Jumping);
+        PhysicsHandler.Freeze();
     }
 
     public void ExitJump() {

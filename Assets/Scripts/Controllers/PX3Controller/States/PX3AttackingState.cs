@@ -19,7 +19,7 @@ public class PX3AttackingState : PX3BaseState {
         CheckSwitchStates();
     }
     
-    public override void LateUpdateState() {
+    public override void FixedUpdateState() {
         
     }
     

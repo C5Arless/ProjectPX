@@ -20,7 +20,7 @@ public class PX3IdleState : PX3BaseState {
         CheckSwitchStates();
     }
     
-    public override void LateUpdateState() {
+    public override void FixedUpdateState() {
         
     }
     

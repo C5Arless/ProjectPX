@@ -19,7 +19,7 @@ public class PX3ThumblingState : PX3BaseState {
         CheckSwitchStates();
     }
     
-    public override void LateUpdateState() {
+    public override void FixedUpdateState() {
         
     }
     

@@ -19,8 +19,8 @@ public class PX3AirborneState : PX3BaseState {
         CheckSwitchStates();
     }
     
-    public override void LateUpdateState() {
-        PhysicsHandler.ApplyCustomGravity(9.81f);
+    public override void FixedUpdateState() {
+        //PhysicsHandler.ApplyCustomGravity(9.81f);
     }
     
     public override void ExitState() {

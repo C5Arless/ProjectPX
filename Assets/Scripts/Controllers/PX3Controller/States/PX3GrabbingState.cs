@@ -19,7 +19,7 @@ public class PX3GrabbingState : PX3BaseState {
         CheckSwitchStates();
     }
     
-    public override void LateUpdateState() {
+    public override void FixedUpdateState() {
         
     }
     

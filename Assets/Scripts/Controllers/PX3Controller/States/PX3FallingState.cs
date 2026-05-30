@@ -19,8 +19,8 @@ public class PX3FallingState : PX3BaseState {
         CheckSwitchStates();
     }
     
-    public override void LateUpdateState() {
-        
+    public override void FixedUpdateState() {
+        PhysicsHandler.ApplyCustomGravity(Context.MaxGravity);
     }
 
     public override void ExitState() {

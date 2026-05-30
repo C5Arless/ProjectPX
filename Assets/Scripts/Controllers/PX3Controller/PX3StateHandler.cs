@@ -42,8 +42,8 @@ public class PX3StateHandler {
         currentRootState = rootStateList[PX3RootStates.Airborne];
         currentRootState.EnterState();
         
-        SetSubState(PX3SubStates.Idle);
-        currentSubState = subStateList[PX3SubStates.Idle];
+        SetSubState(PX3SubStates.Falling);
+        currentSubState = subStateList[PX3SubStates.Falling];
         currentSubState.EnterState();
     }
 

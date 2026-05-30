@@ -9,6 +9,11 @@ public class PX3Controller : MonoBehaviour {
     [SerializeField] PX3AnimHandler _animHandler;
     [SerializeField] PX3SensorHandler _sensorHandler;
     [SerializeField] PlayerInput _playerInput;
+    [Space]
+    [SerializeField]
+    [Range(2f, 30f)] float maxGravity;
+    [SerializeField]
+    [Range(2f, 15f)] float jumpHeight;
     
     PX3StateHandler _stateHandler;
     PX3InputHandler _inputHandler;
@@ -21,6 +26,9 @@ public class PX3Controller : MonoBehaviour {
     public PX3InputHandler InputHandler { get => _inputHandler; set => _inputHandler = value; }
     public PX3SensorHandler SensorHandler { get => _sensorHandler; set => _sensorHandler = value; }
     public PX3PhysicsHandler PhysicsHandler { get => _physicsHandler; set => _physicsHandler = value; }
+
+    public float MaxGravity { get => maxGravity; }
+    public float JumpHeight { get => jumpHeight; }
 
     #endregion
 
@@ -43,18 +51,13 @@ public class PX3Controller : MonoBehaviour {
         _stateHandler.CurrentRootState.UpdateState();
         _stateHandler.CurrentSubState.UpdateState();
     }
-    
-    private void LateUpdate() {
-        if (_stateHandler.RootStates[PX3RootStates.Dead]) return;
-        
-        _stateHandler.CurrentRootState.LateUpdateState();
-        _stateHandler.CurrentSubState.LateUpdateState();
-    }
 
     private void FixedUpdate() {
         if (_stateHandler.RootStates[PX3RootStates.Dead]) return;
         
         _physicsHandler.FixedUpdate();
+        _stateHandler.CurrentRootState.FixedUpdateState();
+        _stateHandler.CurrentSubState.FixedUpdateState();
     }
 
     public void OnDestroy() {

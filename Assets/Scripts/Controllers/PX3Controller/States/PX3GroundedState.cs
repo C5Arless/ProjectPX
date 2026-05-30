@@ -23,7 +23,7 @@ public class PX3GroundedState : PX3BaseState {
         CheckSwitchStates();
     }
 
-    public override void LateUpdateState() {
+    public override void FixedUpdateState() {
         PhysicsHandler.ApplyCustomGravity(.5f);
     }
 

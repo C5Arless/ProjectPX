@@ -3727,6 +3727,8 @@ MonoBehaviour:
   _animHandler: {fileID: 1051933825}
   _sensorHandler: {fileID: 403018504}
   _playerInput: {fileID: 707121605}
+  maxGravity: 20
+  jumpHeight: 8
 --- !u!54 &707121607
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -38238,6 +38240,8 @@ MonoBehaviour:
   _animHandler: {fileID: 0}
   _sensorHandler: {fileID: 0}
   _playerInput: {fileID: 0}
+  maxGravity: 0
+  jumpHeight: 0
 --- !u!114 &8809352779333027468
 MonoBehaviour:
   m_ObjectHideFlags: 0
