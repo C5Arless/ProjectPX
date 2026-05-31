@@ -94,10 +94,10 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Move"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""c292752f-ee2b-4a64-9225-b0ed77f4ed69"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": ""Normalize(min=0.02,max=1)"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
