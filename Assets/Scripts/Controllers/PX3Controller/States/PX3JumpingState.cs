@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3JumpingState : PX3BaseState {
-    private int phase;
     private float gravity;
-    private int minHeight = 6;
+    private float holdMeter;
+    private int mode;
+    
+    private int phase;
+    private int baseHeight = 8;
     private int maxHeight = 12;
-    private float holdMeter = 0f;
     
     public PX3JumpingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
@@ -17,11 +19,9 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     public override void EnterState() {
-        phase = 0;
-        gravity = Context.MaxGravity / 5;
-        holdMeter = 0f;
-        
-        AnimHandler.PlayClip(PX3A_AirSet.Jump1);
+        ResetState();
+
+        EnterJumpState();
     }
 
     public override void UpdateState() {
@@ -35,7 +35,7 @@ public class PX3JumpingState : PX3BaseState {
     
     public override void FixedUpdateState() {
         if (InputHandler.JumpInput && phase != 0 && phase < 3) {
-            float diff = maxHeight - minHeight;
+            float diff = maxHeight - baseHeight;
             float height = (1 - holdMeter) * diff / maxHeight;
             
             PhysicsHandler.AddVelocityChange(Vector3.up * height);
@@ -45,17 +45,15 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     public override void ExitState() {
-        gravity = Context.MaxGravity / 5;
-        holdMeter = 0f;
-        phase = 0;
+        ResetState();
     }
 
     public override void HandleSignal(int sig) {
         switch (sig) {
             case 0: {
                 phase = 1;
-                PhysicsHandler.Unfreeze(true);
-                PhysicsHandler.AddVelocityChange(Vector3.up * minHeight);
+                PhysicsHandler.Unfreeze(false);
+                PhysicsHandler.AddVelocityChange(Vector3.up * baseHeight);
                 break;
             }
             case 1: {
@@ -67,11 +65,10 @@ public class PX3JumpingState : PX3BaseState {
                 break;
             }
             case 3: {
-                ExitJump();
+                ExitJumpState();
                 break;
             }
         }
-
     }
 
     public override void CheckSwitchStates() {
@@ -85,11 +82,44 @@ public class PX3JumpingState : PX3BaseState {
     private void OnJump() {
         if (StateHandler.CurrentSubState == this) return;
         
+        if (StateHandler.SubStates[PX3SubStates.Crouching]) mode = 1;
+        else if (StateHandler.SubStates[PX3SubStates.Thumbling]) mode = 2;
+        else mode = 0;
+        
         StateHandler.SetSubState(PX3SubStates.Jumping);
         PhysicsHandler.Freeze();
     }
 
-    private void ExitJump() {
+    private void EnterJumpState() {
+        switch (mode) {
+            case 0: {
+                baseHeight = 8;
+                maxHeight = 12;
+                AnimHandler.PlayClip(PX3A_AirSet.Jump1);
+                break;
+            }
+            case 1: {
+                baseHeight = 12;
+                maxHeight = 14;
+                AnimHandler.PlayClip(PX3A_AirSet.Jump3);
+                break;
+            }
+            case 2: {
+                baseHeight = 12;
+                maxHeight = 16;
+                AnimHandler.PlayClip(PX3A_AirSet.Jump2);
+                break;
+            }
+        }
+    }
+    
+    private void ResetState() {
+        gravity = Context.MaxGravity / 5;
+        holdMeter = 0f;
+        phase = 0;
+    }
+    
+    private void ExitJumpState() {
         if (StateHandler.RootStates[PX3RootStates.Airborne]) StateHandler.SetSubState(PX3SubStates.Falling);
     }
 

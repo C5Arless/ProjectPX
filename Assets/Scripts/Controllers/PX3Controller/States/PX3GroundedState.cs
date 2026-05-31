@@ -63,7 +63,7 @@ public class PX3GroundedState : PX3BaseState {
     private void CheckMove() {
         if (InputHandler.JumpInput || StateHandler.SubStates[PX3SubStates.Jumping]) return;
         
-        if (!InputHandler.CrouchInput) {
+        if (!InputHandler.CrouchInput || StateHandler.SubStates[PX3SubStates.Falling]) {
             if (InputHandler.MoveInput == Vector2.zero) {
                 StateHandler.SetSubState(PX3SubStates.Idle);
             } else {
