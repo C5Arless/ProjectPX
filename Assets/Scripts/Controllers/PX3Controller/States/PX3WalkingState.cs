@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3WalkingState : PX3BaseState {
+    private Vector3 direction;
     public PX3WalkingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
@@ -13,6 +14,7 @@ public class PX3WalkingState : PX3BaseState {
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.IRC);
         AnimHandler.SetIRCBlend(InputHandler.MoveInput.magnitude);
+        
     }
 
     public override void UpdateState() {
@@ -22,7 +24,7 @@ public class PX3WalkingState : PX3BaseState {
     }
     
     public override void FixedUpdateState() {
-        
+
     }
     
     public override void ExitState() {

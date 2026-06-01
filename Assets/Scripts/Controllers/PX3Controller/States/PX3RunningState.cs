@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3RunningState : PX3BaseState {
+    private Vector3 direction;
+    private Vector3 input;
+    
     public PX3RunningState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
@@ -13,6 +16,10 @@ public class PX3RunningState : PX3BaseState {
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.IRC);
         AnimHandler.SetIRCBlend(InputHandler.MoveInput.magnitude);
+        
+        input = new Vector3(InputHandler.MoveInput.x, 0f, InputHandler.MoveInput.y);
+        direction = new Vector3(Context.transform.forward.x * input.x, 0f, Context.transform.forward.z * input.z);
+        PhysicsHandler.SetVelocity(Context.MaxSpeed * direction);
     }
 
     public override void UpdateState() {
@@ -23,10 +30,16 @@ public class PX3RunningState : PX3BaseState {
     
     public override void FixedUpdateState() {
         
+        input = new Vector3(InputHandler.MoveInput.x, 0f, InputHandler.MoveInput.y);
+        direction = new Vector3(Context.transform.forward.x * input.x, 0f, Context.transform.forward.z * input.z);
+        PhysicsHandler.SetVelocity(Context.MaxSpeed * direction);
     }
     
     public override void ExitState() {
         
+        input = new Vector3(InputHandler.MoveInput.x, 0f, InputHandler.MoveInput.y);
+        direction = new Vector3(Context.transform.forward.x * input.x, 0f, Context.transform.forward.z * input.z);
+        PhysicsHandler.SetVelocity(Context.MaxSpeed * direction);
     }
 
     public override void HandleSignal(int sig) {

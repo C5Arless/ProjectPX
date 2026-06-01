@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 public class PX3PhysicsHandler {
     private Rigidbody rb;
-    private PX3SensorHandler sensorHandler;
 
     private bool isFrozen;
 
@@ -17,13 +16,10 @@ public class PX3PhysicsHandler {
     public bool IsFrozen { get => isFrozen; }
     #endregion
 
-    public PX3PhysicsHandler(Rigidbody _rb, PX3SensorHandler _sensorHandler) {
+    public PX3PhysicsHandler(Rigidbody _rb) {
         rb = _rb;
-        sensorHandler = _sensorHandler;
         
         rb.useGravity = false; 
-        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        rb.interpolation = RigidbodyInterpolation.Interpolate;
     }
     
     public void FixedUpdate() {
