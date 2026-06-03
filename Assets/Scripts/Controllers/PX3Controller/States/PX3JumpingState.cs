@@ -21,6 +21,10 @@ public class PX3JumpingState : PX3BaseState {
     public override void EnterState() {
         ResetState();
 
+        Vector3 direction = PhysicsHandler.PreviousHorizontalVelocity - PhysicsHandler.CurrentVelocity;
+        direction.y = 0;
+        Context.Asset.transform.forward = direction.normalized;
+        
         EnterJumpState();
     }
 
@@ -53,6 +57,9 @@ public class PX3JumpingState : PX3BaseState {
             case 0: {
                 phase = 1;
                 PhysicsHandler.Unfreeze(false);
+                
+                Vector3 jumpVelocity = new Vector3(PhysicsHandler.PreviousVelocity.x, 0f, PhysicsHandler.PreviousVelocity.z);
+                PhysicsHandler.SetVelocity(jumpVelocity);
                 PhysicsHandler.AddVelocityChange(Vector3.up * baseHeight);
                 break;
             }

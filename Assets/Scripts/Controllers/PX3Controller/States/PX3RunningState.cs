@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PX3RunningState : PX3BaseState {
     private Vector3 direction;
-    private Vector3 input;
+    private float acceleration;
     
     public PX3RunningState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
@@ -16,10 +16,11 @@ public class PX3RunningState : PX3BaseState {
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.IRC);
         AnimHandler.SetIRCBlend(InputHandler.MoveInput.magnitude);
+        acceleration = Context.MaxSpeed / (InputHandler.MoveInput.magnitude * 2);
         
-        input = new Vector3(InputHandler.MoveInput.x, 0f, InputHandler.MoveInput.y);
-        direction = new Vector3(Context.transform.forward.x * input.x, 0f, Context.transform.forward.z * input.z);
-        PhysicsHandler.SetVelocity(Context.MaxSpeed * direction);
+        direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
+        Context.Asset.transform.forward = direction;
+        //PhysicsHandler.SetVelocity(InputHandler.MoveInput.magnitude * Context.MaxSpeed * direction);
     }
 
     public override void UpdateState() {
@@ -30,19 +31,23 @@ public class PX3RunningState : PX3BaseState {
     
     public override void FixedUpdateState() {
         
-        input = new Vector3(InputHandler.MoveInput.x, 0f, InputHandler.MoveInput.y);
-        direction = new Vector3(Context.transform.forward.x * input.x, 0f, Context.transform.forward.z * input.z);
-        PhysicsHandler.SetVelocity(Context.MaxSpeed * direction);
+        direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
+        Context.Asset.transform.forward = direction;
+        
+        PhysicsHandler.ApplyLinearMovement(direction, Context.MaxSpeed, acceleration);
     }
     
     public override void ExitState() {
         
-        input = new Vector3(InputHandler.MoveInput.x, 0f, InputHandler.MoveInput.y);
-        direction = new Vector3(Context.transform.forward.x * input.x, 0f, Context.transform.forward.z * input.z);
-        PhysicsHandler.SetVelocity(Context.MaxSpeed * direction);
+        //Context.Asset.transform.forward = direction;
+        Vector3 exitVelocity = new Vector3(0f, PhysicsHandler.PreviousVelocity.y, 0f);
+        PhysicsHandler.SetVelocity(exitVelocity);
     }
 
     public override void HandleSignal(int sig) {
+        if (sig == 0) {
+            PhysicsHandler.AddVelocityChange(direction * Context.MaxSpeed * 0.1f);
+        }
         
     }
 

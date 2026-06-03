@@ -3731,7 +3731,7 @@ MonoBehaviour:
   _sensorHandler: {fileID: 403018504}
   _playerInput: {fileID: 707121605}
   maxGravity: 20
-  maxSpeed: 2.8
+  maxSpeed: 8
 --- !u!54 &707121607
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3754,7 +3754,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
@@ -3768,7 +3768,7 @@ Transform:
   m_GameObject: {fileID: 707121604}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1.51, y: 2.76, z: 2.23}
+  m_LocalPosition: {x: 1.51, y: 1.32, z: 2.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

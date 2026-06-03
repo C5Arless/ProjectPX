@@ -27,13 +27,6 @@ public class PX3SensorHandler : MonoBehaviour {
     }
 
     private void OnDestroy() {
-        /*
-        foreach (var sensor in sensors) {
-            sensor.OnSensorTrigger -= HandleTrigger;
-            sensor.OnSensorCollision -= HandleCollision;
-        }
-        */
-        
         OnSensorsCollision = null;
         OnSensorsTrigger = null;
     }
