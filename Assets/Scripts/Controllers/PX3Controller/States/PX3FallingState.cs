@@ -20,7 +20,7 @@ public class PX3FallingState : PX3BaseState {
     }
     
     public override void FixedUpdateState() {
-        PhysicsHandler.ApplyCustomGravity(Context.MaxGravity);
+
     }
 
     public override void ExitState() {

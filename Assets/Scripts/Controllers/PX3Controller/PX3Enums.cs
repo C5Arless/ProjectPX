@@ -12,7 +12,8 @@ public enum PX3SubStates {
     Grabbing,
     WallSliding,
     Thumbling,
-    Crouching
+    Crouching,
+    Brake
 }
 
 public enum PX3RootStates {
@@ -33,7 +34,8 @@ public enum PX3A_GroundSet {
     IRC,
     Thumbling,
     Sprint_S,
-    Sprint_Loop
+    Sprint_Loop,
+    Brake
 }
 
 public enum PX3A_MixedSet {

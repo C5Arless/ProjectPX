@@ -42,6 +42,9 @@ public class PX3AnimHandler : MonoBehaviour {
     }
 
     public void PlayClip(PX3A_GroundSet target) {
+        if (currentRootset == PX3A_RootSet.Ground &&
+            currentSubset == (int)target) return; 
+        
         Stop();
         
         SetSubset(target);
@@ -50,6 +53,9 @@ public class PX3AnimHandler : MonoBehaviour {
     }
     
     public void PlayClip(PX3A_AirSet target) {
+        if (currentRootset == PX3A_RootSet.Air &&
+            currentSubset == (int)target) return; 
+        
         Stop();
         
         SetSubset(target);
@@ -58,6 +64,9 @@ public class PX3AnimHandler : MonoBehaviour {
     }
     
     public void PlayClip(PX3A_MixedSet target) {
+        if (currentRootset == PX3A_RootSet.Mixed &&
+            currentSubset == (int)target) return; 
+        
         Stop();
         
         SetSubset(target);

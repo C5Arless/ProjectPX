@@ -7,19 +7,16 @@ using UnityEngine.InputSystem;
 public class PX3Controller : MonoBehaviour {
     [SerializeField] Rigidbody _rb;
     [SerializeField] GameObject _asset;
-    [SerializeField] private GameObject _forward;
+    [SerializeField] GameObject _forward;
     [SerializeField] GameObject _camera;
     [SerializeField] PX3AnimHandler _animHandler;
     [SerializeField] PX3SensorHandler _sensorHandler;
+    [SerializeField] PX3InputHandler _inputHandler;
+    [Space] 
     [SerializeField] PlayerInput _playerInput;
-    [Space]
-    [SerializeField]
-    [Range(2f, 30f)] float maxGravity;
-    [SerializeField]
-    [Range(2f, 10f)] float maxSpeed;
+    [SerializeField] PhysicsInfo _physicsData;
     
     PX3StateHandler _stateHandler;
-    PX3InputHandler _inputHandler;
     PX3PhysicsHandler _physicsHandler;
     
     #region GetSet
@@ -33,17 +30,16 @@ public class PX3Controller : MonoBehaviour {
     public GameObject Camera { get => _camera; }
     public GameObject Asset { get => _asset; set => _asset = value; }
     public GameObject Forward { get => _forward; set => _forward = value; }
-
-    public float MaxGravity { get => maxGravity; }
-    public float MaxSpeed { get => maxSpeed; set => maxSpeed = value; }
+    
+    public PhysicsInfo PhysicsData { get => _physicsData; set => _physicsData = value; }
 
     #endregion
 
     private void Awake() {
-        _inputHandler = new PX3InputHandler(_playerInput);
-        _physicsHandler = new PX3PhysicsHandler(_rb);
+        _physicsHandler = new PX3PhysicsHandler(_rb, this, _inputHandler);
         _stateHandler = new PX3StateHandler(this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         
+        _inputHandler.Initialize(_playerInput);
         _animHandler.Initialize(this, _stateHandler);
         _stateHandler.Initialize();
     }

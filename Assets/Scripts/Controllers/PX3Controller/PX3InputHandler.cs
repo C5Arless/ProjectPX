@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PX3InputHandler {
+public class PX3InputHandler : MonoBehaviour {
     PlayerInput _playerInput;
     
     InputAction _lookAction;
@@ -16,18 +16,26 @@ public class PX3InputHandler {
     
     private Vector2 camInput;
     private Vector2 moveInput;
+    private Vector2 rawMoveInput;
+    
     private bool jumpInput;
     private bool attackInput;
     private bool dashInput;
     private bool crouchInput;
     private bool sprintInput;
     
+    private bool onMoveInput;
+
+    public delegate void OnCamAction();
+    public delegate void OnMoveAction();
     public delegate void OnJumpAction();
     public delegate void OnAttackAction();
     public delegate void OnDashAction();
     public delegate void OnCrouchAction();
     public delegate void OnSprintAction();
-    
+
+    public OnCamAction _onCam = () => { };
+    public OnMoveAction _onMove = () => { };
     public OnJumpAction _onJump = () => { };
     public OnAttackAction _onAttack = () => { };
     public OnDashAction _onDash = () => { };
@@ -35,6 +43,7 @@ public class PX3InputHandler {
     public OnSprintAction _onSprint = () => { };
     
     public Vector2 CamInput { get => camInput; }
+    public Vector2 RawMoveInput { get => rawMoveInput; }
     public Vector2 MoveInput { get => moveInput; }
     public bool JumpInput { get => jumpInput; }
     public bool AttackInput { get => attackInput; }
@@ -42,7 +51,7 @@ public class PX3InputHandler {
     public bool CrouchInput { get => crouchInput; }
     public bool SprintInput { get => sprintInput; }
 
-    public PX3InputHandler(PlayerInput playerInput) {
+    public void Initialize(PlayerInput playerInput) {
         _playerInput = playerInput;
         
         InitializeActions();
@@ -117,7 +126,20 @@ public class PX3InputHandler {
         _crouchAction = _playerInput.actions.FindAction("Crouch");
         _sprintAction = _playerInput.actions.FindAction("Sprint");
     }
-    
+
+    private void Update() {
+        if (onMoveInput) {
+            moveInput = Vector2.MoveTowards(moveInput, rawMoveInput, 15f * Time.deltaTime);
+
+            _onMove?.Invoke();
+        }
+        else {
+            if (moveInput != Vector2.zero) {
+                moveInput = Vector2.MoveTowards(moveInput, Vector2.zero, 15f * Time.deltaTime);
+            } 
+        }
+    }
+
     public void OnLook(InputAction.CallbackContext input) {
         if (input.ReadValue<Vector2>() != Vector2.zero) {
             camInput = input.ReadValue<Vector2>();            
@@ -127,7 +149,13 @@ public class PX3InputHandler {
     }
     
     public void OnMove(InputAction.CallbackContext input) {
-        moveInput = input.ReadValue<Vector2>();
+        if (input.performed) {
+            rawMoveInput = input.ReadValue<Vector2>();
+            onMoveInput = true;
+        } else if (input.canceled) {
+            rawMoveInput = Vector2.zero;
+            onMoveInput = false;
+        }
     }
     
     public void OnJump(InputAction.CallbackContext input) {

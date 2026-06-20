@@ -13,8 +13,6 @@ public class PX3IdleState : PX3BaseState {
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.IRC);
         AnimHandler.SetIRCBlend(0);
-        
-        PhysicsHandler.SetVelocity(Vector3.zero);
     }
 
     public override void UpdateState() {

@@ -3,14 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3JumpingState : PX3BaseState {
-    private float gravity;
-    private float holdMeter;
-    private int mode;
-    
-    private int phase;
-    private int baseHeight = 8;
-    private int maxHeight = 12;
-    
     public PX3JumpingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
@@ -19,63 +11,25 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     public override void EnterState() {
-        ResetState();
-
-        Vector3 direction = PhysicsHandler.PreviousHorizontalVelocity - PhysicsHandler.CurrentVelocity;
-        direction.y = 0;
-        Context.Asset.transform.forward = direction.normalized;
         
-        EnterJumpState();
     }
 
     public override void UpdateState() {
-        if (InputHandler.JumpInput && phase != 0 && phase < 3) {
-            if (holdMeter < 1) holdMeter += .05f;
-            else holdMeter = 1f;
-        }
+        
         
         CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
-        if (InputHandler.JumpInput && phase != 0 && phase < 3) {
-            float diff = maxHeight - baseHeight;
-            float height = (1 - holdMeter) * diff / maxHeight;
-            
-            PhysicsHandler.AddVelocityChange(Vector3.up * height);
-        }
-
-        HandleGravity();
+        
     }
 
     public override void ExitState() {
-        ResetState();
+        
     }
 
     public override void HandleSignal(int sig) {
-        switch (sig) {
-            case 0: {
-                phase = 1;
-                PhysicsHandler.Unfreeze(false);
-                
-                Vector3 jumpVelocity = new Vector3(PhysicsHandler.PreviousVelocity.x, 0f, PhysicsHandler.PreviousVelocity.z);
-                PhysicsHandler.SetVelocity(jumpVelocity);
-                PhysicsHandler.AddVelocityChange(Vector3.up * baseHeight);
-                break;
-            }
-            case 1: {
-                phase = 2;
-                break;
-            }
-            case 2: {
-                phase = 3;
-                break;
-            }
-            case 3: {
-                ExitJumpState();
-                break;
-            }
-        }
+        
     }
 
     public override void CheckSwitchStates() {
@@ -89,65 +43,8 @@ public class PX3JumpingState : PX3BaseState {
     private void OnJump() {
         if (StateHandler.CurrentSubState == this) return;
         
-        if (StateHandler.SubStates[PX3SubStates.Crouching]) mode = 1;
-        else if (StateHandler.SubStates[PX3SubStates.Thumbling]) mode = 2;
-        else mode = 0;
         
         StateHandler.SetSubState(PX3SubStates.Jumping);
-        PhysicsHandler.Freeze();
-    }
-
-    private void EnterJumpState() {
-        switch (mode) {
-            case 0: {
-                baseHeight = 8;
-                maxHeight = 12;
-                AnimHandler.PlayClip(PX3A_AirSet.Jump1);
-                break;
-            }
-            case 1: {
-                baseHeight = 12;
-                maxHeight = 14;
-                AnimHandler.PlayClip(PX3A_AirSet.Jump3);
-                break;
-            }
-            case 2: {
-                baseHeight = 12;
-                maxHeight = 16;
-                AnimHandler.PlayClip(PX3A_AirSet.Jump2);
-                break;
-            }
-        }
-    }
-    
-    private void ResetState() {
-        gravity = Context.MaxGravity / 5;
-        holdMeter = 0f;
-        phase = 0;
-    }
-    
-    private void ExitJumpState() {
-        if (StateHandler.RootStates[PX3RootStates.Airborne]) StateHandler.SetSubState(PX3SubStates.Falling);
-    }
-
-    private void HandleGravity() {
-        switch (phase) {
-            case 1: {
-                if (gravity < Context.MaxGravity) {
-                    gravity += Context.MaxGravity / 5;
-                    PhysicsHandler.ApplyCustomGravity(gravity);
-                } else PhysicsHandler.ApplyCustomGravity(Context.MaxGravity);
-
-                break;
-            }
-            case 2: {
-                PhysicsHandler.ApplyCustomGravity(Context.MaxGravity * 2);
-                break;
-            }
-            case 3: {
-                PhysicsHandler.ApplyCustomGravity(Context.MaxGravity / 2);
-                break;
-            }
-        }
+        //PhysicsHandler.Freeze();
     }
 }

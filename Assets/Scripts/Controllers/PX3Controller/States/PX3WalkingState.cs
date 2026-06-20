@@ -9,6 +9,7 @@ public class PX3WalkingState : PX3BaseState {
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         //
+        InputHandler._onMove += OnMove;
     }
 
     public override void EnterState() {
@@ -42,5 +43,9 @@ public class PX3WalkingState : PX3BaseState {
         else if (StateHandler.SubStates[PX3SubStates.Thumbling]) SwitchState(StateHandler.GetState(PX3SubStates.Thumbling));
         else if (StateHandler.SubStates[PX3SubStates.Sprinting]) SwitchState(StateHandler.GetState(PX3SubStates.Sprinting));
         else if (StateHandler.SubStates[PX3SubStates.Running]) SwitchState(StateHandler.GetState(PX3SubStates.Running));
+    }
+    
+    private void OnMove() {
+        if (InputHandler.MoveInput.magnitude >= 0.5f) StateHandler.SetSubState(PX3SubStates.Running);
     }
 }

@@ -17,14 +17,14 @@ public class PX3GroundedState : PX3BaseState {
     }
 
     public override void UpdateState() {
-        CheckMove();
-        CheckSprint();
         
         CheckSwitchStates();
+        CheckMove();
+        CheckSprint();
     }
 
     public override void FixedUpdateState() {
-        PhysicsHandler.ApplyCustomGravity(.5f);
+        //PhysicsHandler.ApplyCustomGravity(.5f);
     }
 
     public override void ExitState() {
@@ -67,8 +67,8 @@ public class PX3GroundedState : PX3BaseState {
             if (InputHandler.MoveInput == Vector2.zero) {
                 StateHandler.SetSubState(PX3SubStates.Idle);
             } else {
-                if (InputHandler.MoveInput.magnitude < 0.5f) StateHandler.SetSubState(PX3SubStates.Walking);
-                else if (InputHandler.MoveInput.magnitude >= 0.5f) StateHandler.SetSubState(PX3SubStates.Running);
+                //if (InputHandler.MoveInput.magnitude < 0.5f) StateHandler.SetSubState(PX3SubStates.Walking);
+                //else if (InputHandler.MoveInput.magnitude >= 0.5f) StateHandler.SetSubState(PX3SubStates.Running);
             }
         }
     }

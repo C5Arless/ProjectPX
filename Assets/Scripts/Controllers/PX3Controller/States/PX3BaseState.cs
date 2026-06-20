@@ -36,6 +36,8 @@ public abstract class PX3BaseState {
     public abstract void HandleSignal(int sig);
     public abstract void CheckSwitchStates();
     protected void SwitchState(PX3BaseState newState) {
+        if (newState == this) return;
+        
         if (newState._isRootState) {
             _stateHandler.CurrentRootState.ExitState();
             _stateHandler.CurrentRootState = newState;
