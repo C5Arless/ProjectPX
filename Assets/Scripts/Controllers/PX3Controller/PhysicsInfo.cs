@@ -9,5 +9,8 @@ public class PhysicsInfo : ScriptableObject {
     [Range(2, 50f)] public float JumpHeightCap;
     [SerializeField] 
     [Range(0, 50f)] public float MaxSpeed;
-    
+    [SerializeField] 
+    [Range(0, 50f)] public float MaxAcceleration;
+    [SerializeField] 
+    [Range(0, 50f)] public float Gravity;
 }

@@ -20,7 +20,9 @@ public class PX3AirborneState : PX3BaseState {
     }
     
     public override void FixedUpdateState() {
-        //PhysicsHandler.ApplyCustomGravity(9.81f);
+        if (!StateHandler.SubStates[PX3SubStates.Jumping]) {
+            PhysicsHandler.UpdateGravity(Context.PhysicsData.Gravity);
+        }
     }
     
     public override void ExitState() {

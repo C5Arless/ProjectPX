@@ -36,7 +36,7 @@ public class PX3PhysicsHandler {
     public void UpdateGravity(float gravity) {
         if (isFrozen) return;
         
-        float verticalVelocity = currentVelocity.y - gravity * Time.deltaTime;
+        float verticalVelocity = currentVelocity.y - gravity * rb.mass * Time.deltaTime;
         SetVelocity(new Vector3(currentVelocity.x, verticalVelocity, currentVelocity.z));
     }
 

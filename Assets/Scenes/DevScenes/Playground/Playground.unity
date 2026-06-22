@@ -3836,8 +3836,7 @@ MonoBehaviour:
   _sensorHandler: {fileID: 403018504}
   _inputHandler: {fileID: 707121612}
   _playerInput: {fileID: 707121605}
-  maxGravity: 20
-  maxSpeed: 8
+  _physicsData: {fileID: 11400000, guid: 2e6a0277c4290b4448aa94b7be5194b6, type: 2}
 --- !u!54 &707121607
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3846,7 +3845,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 707121604}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -3874,7 +3873,7 @@ Transform:
   m_GameObject: {fileID: 707121604}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 1.51, y: 1.32, z: 2.23}
+  m_LocalPosition: {x: 1.51, y: 5.55, z: 2.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -38397,8 +38396,7 @@ MonoBehaviour:
   _sensorHandler: {fileID: 0}
   _inputHandler: {fileID: 0}
   _playerInput: {fileID: 0}
-  maxGravity: 0
-  maxSpeed: 0
+  _physicsData: {fileID: 0}
 --- !u!114 &8809352779333027468
 MonoBehaviour:
   m_ObjectHideFlags: 0

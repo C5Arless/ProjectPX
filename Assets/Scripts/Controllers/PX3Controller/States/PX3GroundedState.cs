@@ -19,12 +19,12 @@ public class PX3GroundedState : PX3BaseState {
     public override void UpdateState() {
         
         CheckSwitchStates();
-        CheckMove();
-        CheckSprint();
+        //CheckMove();
+        //CheckSprint();
     }
 
     public override void FixedUpdateState() {
-        //PhysicsHandler.ApplyCustomGravity(.5f);
+        PhysicsHandler.UpdateGravity(.5f);
     }
 
     public override void ExitState() {
