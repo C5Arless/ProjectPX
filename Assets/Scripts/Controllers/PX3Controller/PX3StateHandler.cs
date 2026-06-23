@@ -102,7 +102,7 @@ public class PX3StateHandler {
         subStateList[PX3SubStates.WallSliding] = new PX3WallSlidingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         subStateList[PX3SubStates.Thumbling] = new PX3ThumblingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         subStateList[PX3SubStates.Crouching] = new PX3CrouchingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
-        subStateList[PX3SubStates.Crouching] = new PX3BrakeState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Brake] = new PX3BrakeState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
     }
     
     public PX3BaseState GetState(PX3SubStates state) {

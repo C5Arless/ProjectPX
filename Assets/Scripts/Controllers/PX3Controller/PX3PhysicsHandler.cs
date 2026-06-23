@@ -10,6 +10,8 @@ public class PX3PhysicsHandler {
     private Vector3 currentVelocity;
     private Vector3 previousVelocity;
 
+    private Vector3 proxyVelocity;
+
 #region GetSet
     public Vector3 CurrentVelocity { get => currentVelocity; }
     public Vector3 PreviousVelocity { get => previousVelocity; }
@@ -29,39 +31,53 @@ public class PX3PhysicsHandler {
     public void UpdateMovement(Vector3 velocity, float acceleration) {
         if (isFrozen) return;
 
-        Vector3 targetVelocity = Vector3.MoveTowards(HorizontalVelocity, velocity, acceleration * Time.deltaTime);
-        SetVelocity(targetVelocity);
+        Vector3 targetVelocity = Vector3.MoveTowards(HorizontalVelocity, velocity, acceleration);
+        
+        proxyVelocity.x = targetVelocity.x;
+        proxyVelocity.z = targetVelocity.z;
     }
     
     public void UpdateGravity(float gravity) {
         if (isFrozen) return;
-        
-        float verticalVelocity = currentVelocity.y - gravity * rb.mass * Time.deltaTime;
-        SetVelocity(new Vector3(currentVelocity.x, verticalVelocity, currentVelocity.z));
+
+        if (gravity > 0) {
+            float verticalVelocity = currentVelocity.y - gravity * rb.mass * Time.deltaTime;
+            proxyVelocity.y = verticalVelocity;
+        } else proxyVelocity.y = -.05f;
     }
 
     public void ApplyImpulse(Vector3 direction, float intensity) {
         if (isFrozen) return;
         
         Vector3 targetVelocity = direction * intensity;
-        SetVelocity(targetVelocity);
+        
+        previousVelocity = currentVelocity;
+        rb.velocity = targetVelocity;
+        currentVelocity = rb.velocity;
     }
 
     public void ApplyBrake() {
         if (isFrozen) return;
         
-        SetVelocity(Vector3.zero);
+        previousVelocity = currentVelocity;
+        currentVelocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
     }
     
     public void FixedUpdate() {
         if (isFrozen) {
             rb.velocity = Vector3.zero;
             currentVelocity = Vector3.zero;
+            proxyVelocity = Vector3.zero;
             return;
         }
-
+        
+        rb.velocity = proxyVelocity;
+        
         previousVelocity = currentVelocity;
         currentVelocity = rb.velocity;
+        
+        proxyVelocity = currentVelocity;
     }
     
     public void Freeze() {
@@ -73,6 +89,7 @@ public class PX3PhysicsHandler {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         currentVelocity = Vector3.zero;
+        proxyVelocity = Vector3.zero;
     }
     
     public void Unfreeze(bool resumeVelocity) {
@@ -80,14 +97,6 @@ public class PX3PhysicsHandler {
 
         isFrozen = false;
         
-        if (resumeVelocity) SetVelocity(previousVelocity);
-        else SetVelocity(Vector3.zero);
-    }
-    
-    private void SetVelocity(Vector3 newVelocity) {
-        if (isFrozen) return;
-        
-        rb.velocity = newVelocity;
-        currentVelocity = newVelocity; 
+        proxyVelocity = resumeVelocity ? previousVelocity : Vector3.zero;
     }
 }

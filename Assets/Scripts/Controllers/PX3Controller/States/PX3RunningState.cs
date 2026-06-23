@@ -39,6 +39,7 @@ public class PX3RunningState : PX3BaseState {
             SwitchState(StateHandler.GetState(PX3SubStates.Brake));
         } else if (dot < .5f) {
             //curve
+            PhysicsHandler.UpdateMovement(targetVelocity, acceleration); 
         } else {
             PhysicsHandler.UpdateMovement(targetVelocity, acceleration);  
         }
