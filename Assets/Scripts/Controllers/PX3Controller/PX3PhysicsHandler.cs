@@ -52,16 +52,16 @@ public class PX3PhysicsHandler {
         Vector3 targetVelocity = direction * intensity;
         
         previousVelocity = currentVelocity;
-        rb.velocity = targetVelocity;
-        currentVelocity = rb.velocity;
+        proxyVelocity = targetVelocity;
     }
 
-    public void ApplyBrake() {
+    public void ApplyStop() {
         if (isFrozen) return;
         
         previousVelocity = currentVelocity;
-        currentVelocity = Vector3.zero;
-        rb.velocity = Vector3.zero;
+
+        proxyVelocity.x = 0f;
+        proxyVelocity.z = 0f;
     }
     
     public void FixedUpdate() {
@@ -72,12 +72,10 @@ public class PX3PhysicsHandler {
             return;
         }
         
-        rb.velocity = proxyVelocity;
-        
         previousVelocity = currentVelocity;
-        currentVelocity = rb.velocity;
         
-        proxyVelocity = currentVelocity;
+        rb.velocity = proxyVelocity;
+        currentVelocity = rb.velocity;
     }
     
     public void Freeze() {
