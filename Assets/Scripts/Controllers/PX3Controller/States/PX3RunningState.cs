@@ -67,7 +67,7 @@ public class PX3RunningState : PX3BaseState {
     }
 
     private void EvaluateBrake(Vector3 fallbackVelocity) {
-        if (Context.PhysicsData.Acceleration >= Context.PhysicsData.MaxAcceleration * .85f) {
+        if (Context.PhysicsData.Acceleration >= Context.PhysicsData.MaxAcceleration * .8f) {
             StateHandler.SetSubState(PX3SubStates.Brake);
         }
         else {

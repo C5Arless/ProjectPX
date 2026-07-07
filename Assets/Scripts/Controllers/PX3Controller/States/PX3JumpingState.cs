@@ -11,7 +11,7 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     public override void EnterState() {
-        
+        AnimHandler.PlayClip(PX3A_AirSet.Jump1);
     }
 
     public override void UpdateState() {
@@ -29,7 +29,21 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     public override void HandleSignal(int sig) {
-        
+        switch (sig) {
+            case 0: {
+                PhysicsHandler.ApplyImpulse(Vector3.up, Context.PhysicsData.JumpHeightCap);
+                break;
+            }
+            case 1: {
+                break;
+            }
+            case 2: {
+                break;
+            }
+            case 4: {
+                break;
+            }
+        }
     }
 
     public override void CheckSwitchStates() {

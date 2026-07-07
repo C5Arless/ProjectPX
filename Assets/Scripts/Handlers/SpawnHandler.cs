@@ -11,7 +11,7 @@ public class SpawnHandler : MonoBehaviour {
     private List<ISpawnable> spawnables = new List<ISpawnable>();
     private List<ISpawnable> spawnBuffer = new List<ISpawnable>();
 
-    private bool isBusy;
+    //private bool isBusy;
 
     private void Awake() {
         if (GameBucket.Instance is not null) {
@@ -80,7 +80,7 @@ public class SpawnHandler : MonoBehaviour {
     }
 
     private IEnumerator Sync() {
-        isBusy = true;
+        //isBusy = true;
         List<ISpawnable> targets = new List<ISpawnable>(spawnBuffer);
         yield return null;
 
@@ -88,12 +88,12 @@ public class SpawnHandler : MonoBehaviour {
         spawnables = new List<ISpawnable>(targets);
         yield return new WaitForSeconds(.5f);
 
-        isBusy = false;
+        //isBusy = false;
         yield break;
     }
     
     private IEnumerator CheckAndSpawn() {
-        isBusy = true;
+        //isBusy = true;
         yield return null;
         
         if (GameBucket.Instance.PXController is null) {
@@ -126,7 +126,7 @@ public class SpawnHandler : MonoBehaviour {
             yield return null;
         }
         
-        isBusy = false;
+        //isBusy = false;
         yield break;
     }
     

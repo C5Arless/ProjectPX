@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpeedCap: 15
   JumpHeightCap: 2
-  MaxSpeed: 10
+  MaxSpeed: 12
   MaxAcceleration: 6
   Gravity: 9.9
-  Acceleration: 6
+  Acceleration: 5.218028
