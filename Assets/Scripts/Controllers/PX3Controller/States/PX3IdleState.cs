@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3IdleState : PX3BaseState {
+    private bool isBraking;
+    
     public PX3IdleState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
@@ -13,13 +15,19 @@ public class PX3IdleState : PX3BaseState {
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.IRC);
         AnimHandler.SetIRCBlend(0);
-        
-        PhysicsHandler.ApplyStop();
+
+        if (PhysicsHandler.HorizontalVelocity.magnitude > Context.PhysicsData.MaxSpeed * .5f) {
+            isBraking = true;
+            Context.Asset.transform.forward = -PhysicsHandler.HorizontalVelocity.normalized;
+            StateHandler.SetSubState(PX3SubStates.Brake);
+            SwitchState(StateHandler.GetState(PX3SubStates.Brake));
+        } else PhysicsHandler.ApplyStop();
     }
 
     public override void UpdateState() {
-        
-        CheckSwitchStates();
+        if (!isBraking) {
+            CheckSwitchStates();
+        }
     }
     
     public override void FixedUpdateState() {
@@ -27,7 +35,7 @@ public class PX3IdleState : PX3BaseState {
     }
     
     public override void ExitState() {
-        
+        isBraking = false;
     }
 
     public override void HandleSignal(int sig) {

@@ -17,4 +17,4 @@ MonoBehaviour:
   MaxSpeed: 10
   MaxAcceleration: 6
   Gravity: 9.9
-  Acceleration: 1.8187436
+  Acceleration: 6

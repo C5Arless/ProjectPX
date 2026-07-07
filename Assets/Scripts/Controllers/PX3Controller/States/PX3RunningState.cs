@@ -7,13 +7,12 @@ public class PX3RunningState : PX3BaseState {
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
-        //
         InputHandler._onMove += OnMove;
     }
 
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.IRC);
-        Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration * .1f;
+        Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration * .25f;
     }
 
     public override void UpdateState() {
@@ -34,8 +33,8 @@ public class PX3RunningState : PX3BaseState {
         if (direction != Vector3.zero) {
             Context.Asset.transform.forward = direction;
             
-            if (dot < -.5f && PhysicsHandler.PreviousHorizontalVelocity.magnitude > Context.PhysicsData.MaxSpeed * .8f) {
-                SwitchState(StateHandler.GetState(PX3SubStates.Brake));
+            if (dot < -.5f) {
+                EvaluateBrake(targetVelocity);
             } else {
                 PhysicsHandler.UpdateMovement(targetVelocity, Context.PhysicsData.Acceleration);  
             }
@@ -60,10 +59,20 @@ public class PX3RunningState : PX3BaseState {
         else if (StateHandler.SubStates[PX3SubStates.Thumbling]) SwitchState(StateHandler.GetState(PX3SubStates.Thumbling));
         else if (StateHandler.SubStates[PX3SubStates.Sprinting]) SwitchState(StateHandler.GetState(PX3SubStates.Sprinting));
         else if (StateHandler.SubStates[PX3SubStates.Walking]) SwitchState(StateHandler.GetState(PX3SubStates.Walking));
-        else if (StateHandler.SubStates[PX3SubStates.Running]) SwitchState(StateHandler.GetState(PX3SubStates.Running));
+        else if (StateHandler.SubStates[PX3SubStates.Brake]) SwitchState(StateHandler.GetState(PX3SubStates.Brake));
     }
 
     private void OnMove() {
         if (InputHandler.RawMoveInput.magnitude < 0.5f) StateHandler.SetSubState(PX3SubStates.Walking);
+    }
+
+    private void EvaluateBrake(Vector3 fallbackVelocity) {
+        if (Context.PhysicsData.Acceleration >= Context.PhysicsData.MaxAcceleration * .85f) {
+            StateHandler.SetSubState(PX3SubStates.Brake);
+        }
+        else {
+            Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration * .25f;
+            PhysicsHandler.UpdateMovement(fallbackVelocity, Context.PhysicsData.Acceleration);
+        }
     }
 }

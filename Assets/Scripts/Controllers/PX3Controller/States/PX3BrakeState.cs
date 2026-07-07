@@ -12,7 +12,7 @@ public class PX3BrakeState : PX3BaseState {
 
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.Brake);
-
+        Context.PhysicsData.Acceleration = 0;
     }
 
     public override void UpdateState() {
@@ -21,9 +21,9 @@ public class PX3BrakeState : PX3BaseState {
     }
     
     public override void FixedUpdateState() {
-        PhysicsHandler.UpdateMovement(Vector3.zero, Context.PhysicsData.MaxAcceleration * Time.deltaTime);
+        PhysicsHandler.UpdateMovement(Vector3.zero, Context.PhysicsData.MaxAcceleration * .1f);
         
-        if (PhysicsHandler.HorizontalVelocity == Vector3.zero) StateHandler.SetSubState(PX3SubStates.Idle);
+        //if (PhysicsHandler.HorizontalVelocity.magnitude < 1f) StateHandler.SetSubState(PX3SubStates.Idle);
     }
     
     public override void ExitState() {
@@ -32,7 +32,7 @@ public class PX3BrakeState : PX3BaseState {
 
     public override void HandleSignal(int sig) {
         if (sig == 0) {
-            //StateHandler.SetSubState(PX3SubStates.Idle);
+            StateHandler.SetSubState(PX3SubStates.Idle);
         }
     }
 
