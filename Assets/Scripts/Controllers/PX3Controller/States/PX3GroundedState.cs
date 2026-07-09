@@ -42,10 +42,9 @@ public class PX3GroundedState : PX3BaseState {
     }
 
     private void OnGroundTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {
-        if (!StateHandler.SubStates[PX3SubStates.Jumping]) return;
         if (!other.CompareTag("Ground") && type != PX3SensorType.Ground) return;
         
-        if (stage == PX3SensorStage.Stay) {
+        if (stage == PX3SensorStage.Exit) {
             StateHandler.SetRootState(PX3RootStates.Airborne);
         }
     }

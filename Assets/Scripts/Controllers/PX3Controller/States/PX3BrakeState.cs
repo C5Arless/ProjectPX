@@ -23,7 +23,7 @@ public class PX3BrakeState : PX3BaseState {
         dampFactor = Context.PhysicsData.Acceleration / Context.PhysicsData.MaxAcceleration;
         
         if (dampFactor < 1f) {
-            Context.PhysicsData.Acceleration += Context.PhysicsData.MaxAcceleration * (Time.deltaTime * 2) ;
+            Context.PhysicsData.Acceleration += Context.PhysicsData.MaxAcceleration * (Time.deltaTime * Mathf.PI) ;
         } else Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration;
         
         CheckSwitchStates();

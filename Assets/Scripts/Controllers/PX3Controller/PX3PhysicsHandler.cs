@@ -46,10 +46,10 @@ public class PX3PhysicsHandler {
         } else proxyVelocity.y = -.05f;
     }
 
-    public void ApplyImpulse(Vector3 direction, float intensity) {
+    public void ApplyVerticalImpulse(float intensity) {
         if (isFrozen) return;
         
-        Vector3 targetVelocity = direction * intensity;
+        Vector3 targetVelocity = HorizontalVelocity + Vector3.up * intensity;
         
         previousVelocity = currentVelocity;
         proxyVelocity = targetVelocity;

@@ -63,7 +63,11 @@ public class PX3RunningState : PX3BaseState {
     }
 
     private void OnMove() {
-        if (InputHandler.RawMoveInput.magnitude < 0.5f) StateHandler.SetSubState(PX3SubStates.Walking);
+        //if (StateHandler.RootStates[PX3RootStates.Airborne]) return;
+
+        if (StateHandler.RootStates[PX3RootStates.Grounded] && !StateHandler.SubStates[PX3SubStates.Jumping]) {
+            if (InputHandler.RawMoveInput.magnitude < 0.5f) StateHandler.SetSubState(PX3SubStates.Walking);
+        }
     }
 
     private void EvaluateBrake(Vector3 fallbackVelocity) {

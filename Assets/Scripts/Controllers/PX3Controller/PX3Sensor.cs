@@ -14,4 +14,5 @@ public class PX3Sensor : MonoBehaviour {
     private void OnCollisionEnter(Collision collision) => OnSensorCollision?.Invoke(collision, type, PX3SensorStage.Enter);
     private void OnCollisionStay(Collision collision)  => OnSensorCollision?.Invoke(collision, type, PX3SensorStage.Stay);
     private void OnCollisionExit(Collision collision)  => OnSensorCollision?.Invoke(collision, type, PX3SensorStage.Exit);
+    
 }
