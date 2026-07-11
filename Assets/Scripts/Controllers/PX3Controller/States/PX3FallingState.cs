@@ -15,11 +15,23 @@ public class PX3FallingState : PX3BaseState {
     }
 
     public override void UpdateState() {
+        if (InputHandler.MoveInput.magnitude > .2f) {
+            if (Context.PhysicsData.Acceleration > 0f) {
+                Context.PhysicsData.Acceleration -= Context.PhysicsData.MaxAcceleration * Time.deltaTime;
+            } else Context.PhysicsData.Acceleration = 0f;
+        }
         
         CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
+        Vector3 direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
+        Vector3 targetVelocity = Context.PhysicsData.MaxSpeed * .85f * direction;
+        
+        if (direction != Vector3.zero) {
+            Context.Asset.transform.forward = direction;
+            PhysicsHandler.UpdateMovement(targetVelocity, Context.PhysicsData.Acceleration);  
+        }
 
     }
 

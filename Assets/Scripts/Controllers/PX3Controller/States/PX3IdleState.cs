@@ -18,6 +18,10 @@ public class PX3IdleState : PX3BaseState {
     }
 
     public override void UpdateState() {
+        if (Context.PhysicsData.Acceleration > 0f) {
+            Context.PhysicsData.Acceleration -= Context.PhysicsData.MaxAcceleration * Time.deltaTime;
+        } else Context.PhysicsData.Acceleration = 0f;
+        
         CheckSwitchStates();
     }
     
