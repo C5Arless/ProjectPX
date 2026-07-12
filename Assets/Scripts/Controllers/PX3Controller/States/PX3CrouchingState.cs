@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PX3CrouchingState : PX3BaseState {
     private PhysicsInfo physicsData;
+    private Vector3 previousVelocity;
+    private float dampFactor;
     
     public PX3CrouchingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
@@ -16,21 +18,32 @@ public class PX3CrouchingState : PX3BaseState {
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.IRC);
         StartCoroutine(LerpCrouchAnimation(-1f));
+        
+        previousVelocity = PhysicsHandler.PreviousHorizontalVelocity;
+        physicsData.Acceleration = .01f;
     }
 
     public override void UpdateState() {
         if (!InputHandler.CrouchInput) StartCoroutine(ExitRoutine());
         
+        dampFactor = physicsData.Acceleration / physicsData.MaxAcceleration;
+        
+        if (dampFactor < 1f) {
+            physicsData.Acceleration += physicsData.MaxAcceleration * (Time.deltaTime * Mathf.PI) ;
+        } else physicsData.Acceleration = physicsData.MaxAcceleration;
         
         CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
+        Vector3 dampVelocity = previousVelocity * (1 - dampFactor);
+        PhysicsHandler.UpdateMovement(dampVelocity, physicsData.Acceleration);
         
+        //if (physicsData.Acceleration >= physicsData.MaxAcceleration) StateHandler.SetSubState(PX3SubStates.Idle);
     }
     
     public override void ExitState() {
-        AnimHandler.SetIRCBlend(0f);
+        
     }
 
     public override void HandleSignal(int sig) {
@@ -41,17 +54,15 @@ public class PX3CrouchingState : PX3BaseState {
         if (StateHandler.SubStates[PX3SubStates.Falling]) SwitchState(StateHandler.GetState(PX3SubStates.Falling));
         else if (StateHandler.SubStates[PX3SubStates.Jumping]) SwitchState(StateHandler.GetState(PX3SubStates.Jumping));
         else if (StateHandler.SubStates[PX3SubStates.Idle]) SwitchState(StateHandler.GetState(PX3SubStates.Idle));
-        else if (StateHandler.SubStates[PX3SubStates.Running]) SwitchState(StateHandler.GetState(PX3SubStates.Running));
-        else if (StateHandler.SubStates[PX3SubStates.Sprinting]) SwitchState(StateHandler.GetState(PX3SubStates.Sprinting));
+        //else if (StateHandler.SubStates[PX3SubStates.Running]) SwitchState(StateHandler.GetState(PX3SubStates.Running));
+        //else if (StateHandler.SubStates[PX3SubStates.Sprinting]) SwitchState(StateHandler.GetState(PX3SubStates.Sprinting));
     }
 
     private void OnCrouch() {
         if (StateHandler.CurrentSubState == this) return;
         
         if (StateHandler.RootStates[PX3RootStates.Grounded]) {
-            if (StateHandler.SubStates[PX3SubStates.Running]) {
-                StateHandler.SetSubState(PX3SubStates.Thumbling);
-            } else StateHandler.SetSubState(PX3SubStates.Crouching);
+            StateHandler.SetSubState(PX3SubStates.Crouching);
         }
     }
     
@@ -63,7 +74,7 @@ public class PX3CrouchingState : PX3BaseState {
             
             while (value > -1f) {
                 AnimHandler.SetIRCBlend(value);
-                value -= .2f;
+                value -= .3f;
                 yield return null;
             }
 
@@ -74,7 +85,7 @@ public class PX3CrouchingState : PX3BaseState {
             
             while (value < 0) {
                 AnimHandler.SetIRCBlend(value);
-                value += .2f;
+                value += .3f;
                 yield return null;
             }
 

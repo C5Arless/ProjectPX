@@ -16,7 +16,6 @@ public class PhysicsInfo : ScriptableObject {
 
     [Header("Current Info")] 
     public float Acceleration;
-
     public int JumpCount = 2;
     
     
