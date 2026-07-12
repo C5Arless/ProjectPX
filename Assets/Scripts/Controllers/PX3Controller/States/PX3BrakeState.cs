@@ -1,39 +1,41 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.UI;
 
 public class PX3BrakeState : PX3BaseState {
     private Vector3 previousVelocity;
     private float dampFactor;
+    private PhysicsInfo physicsData;
+    
     public PX3BrakeState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         //
+        physicsData = Context.PhysicsData;
     }
 
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.Brake);
         previousVelocity = PhysicsHandler.PreviousHorizontalVelocity;
-        Context.PhysicsData.Acceleration = .01f;
+        physicsData.Acceleration = .01f;
     }
 
     public override void UpdateState() {
-        dampFactor = Context.PhysicsData.Acceleration / Context.PhysicsData.MaxAcceleration;
+        dampFactor = physicsData.Acceleration / physicsData.MaxAcceleration;
         
         if (dampFactor < 1f) {
-            Context.PhysicsData.Acceleration += Context.PhysicsData.MaxAcceleration * (Time.deltaTime * Mathf.PI) ;
-        } else Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration;
+            physicsData.Acceleration += physicsData.MaxAcceleration * (Time.deltaTime * Mathf.PI) ;
+        } else physicsData.Acceleration = physicsData.MaxAcceleration;
         
         CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
         Vector3 dampVelocity = previousVelocity * (1 - dampFactor);
-        PhysicsHandler.UpdateMovement(dampVelocity, Context.PhysicsData.Acceleration);
+        PhysicsHandler.UpdateMovement(dampVelocity, physicsData.Acceleration);
         
-        if (Context.PhysicsData.Acceleration >= Context.PhysicsData.MaxAcceleration) StateHandler.SetSubState(PX3SubStates.Idle);
+        if (physicsData.Acceleration >= physicsData.MaxAcceleration) StateHandler.SetSubState(PX3SubStates.Idle);
     }
     
     public override void ExitState() {

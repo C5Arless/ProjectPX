@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3SprintingState : PX3BaseState {
+    private PhysicsInfo physicsData;
     private bool windUp;
     
     public PX3SprintingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
-        
+
+        physicsData = Context.PhysicsData;
         InputHandler._onSprint += OnSprint;
     }
 

@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3FallingState : PX3BaseState {
+    private PhysicsInfo physicsData;
+    
     public PX3FallingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         //
+        physicsData = Context.PhysicsData;
     }
 
     public override void EnterState() {
@@ -16,9 +19,9 @@ public class PX3FallingState : PX3BaseState {
 
     public override void UpdateState() {
         if (InputHandler.MoveInput.magnitude > .2f) {
-            if (Context.PhysicsData.Acceleration > 0f) {
-                Context.PhysicsData.Acceleration -= Context.PhysicsData.MaxAcceleration * Time.deltaTime;
-            } else Context.PhysicsData.Acceleration = 0f;
+            if (physicsData.Acceleration > 0f) {
+                physicsData.Acceleration -= physicsData.MaxAcceleration * Time.deltaTime;
+            } else physicsData.Acceleration = 0f;
         }
         
         CheckSwitchStates();
@@ -26,11 +29,11 @@ public class PX3FallingState : PX3BaseState {
     
     public override void FixedUpdateState() {
         Vector3 direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
-        Vector3 targetVelocity = Context.PhysicsData.MaxSpeed * .85f * direction;
+        Vector3 targetVelocity = physicsData.MaxSpeed * .85f * direction;
         
         if (direction != Vector3.zero) {
             Context.Asset.transform.forward = direction;
-            PhysicsHandler.UpdateMovement(targetVelocity, Context.PhysicsData.Acceleration);  
+            PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration);  
         }
 
     }

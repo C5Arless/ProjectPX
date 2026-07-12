@@ -3,31 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3RunningState : PX3BaseState {
+    private PhysicsInfo physicsData;
+    
     public PX3RunningState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
-        
+
+        physicsData = Context.PhysicsData;
         InputHandler._onMove += OnMove;
     }
 
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.IRC);
-        Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration * .25f;
+        physicsData.Acceleration = physicsData.MaxAcceleration * .25f;
     }
 
     public override void UpdateState() {
         AnimHandler.SetIRCBlend(InputHandler.MoveInput.magnitude);
 
-        if (Context.PhysicsData.Acceleration < Context.PhysicsData.MaxAcceleration) {
-            Context.PhysicsData.Acceleration += Context.PhysicsData.MaxAcceleration * Time.deltaTime;
-        } else Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration;
+        if (physicsData.Acceleration < physicsData.MaxAcceleration) {
+            physicsData.Acceleration += physicsData.MaxAcceleration * Time.deltaTime;
+        } else physicsData.Acceleration = physicsData.MaxAcceleration;
         
         CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
         Vector3 direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
-        Vector3 targetVelocity = direction * Context.PhysicsData.MaxSpeed;
+        Vector3 targetVelocity = direction * physicsData.MaxSpeed;
         float dot = Vector3.Dot(PhysicsHandler.HorizontalVelocity, targetVelocity);
 
         if (direction != Vector3.zero) {
@@ -36,7 +39,7 @@ public class PX3RunningState : PX3BaseState {
             if (dot < -.5f) {
                 EvaluateBrake(targetVelocity);
             } else {
-                PhysicsHandler.UpdateMovement(targetVelocity, Context.PhysicsData.Acceleration);  
+                PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration);  
             }
         }
     }
@@ -71,12 +74,12 @@ public class PX3RunningState : PX3BaseState {
     }
 
     private void EvaluateBrake(Vector3 fallbackVelocity) {
-        if (Context.PhysicsData.Acceleration >= Context.PhysicsData.MaxAcceleration * .8f) {
+        if (physicsData.Acceleration >= physicsData.MaxAcceleration * .8f) {
             StateHandler.SetSubState(PX3SubStates.Brake);
         }
         else {
-            Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration * .25f;
-            PhysicsHandler.UpdateMovement(fallbackVelocity, Context.PhysicsData.Acceleration);
+            physicsData.Acceleration = physicsData.MaxAcceleration * .25f;
+            PhysicsHandler.UpdateMovement(fallbackVelocity, physicsData.Acceleration);
         }
     }
 }

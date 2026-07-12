@@ -6,7 +6,7 @@ public class PhysicsInfo : ScriptableObject {
     [SerializeField] 
     [Range(0, 50f)] public float SpeedCap; 
     [SerializeField] 
-    [Range(1, 50f)] public float JumpHeightCap;
+    [Range(1, 50f)] public float JumpHeight;
     [SerializeField] 
     [Range(0, 50f)] public float MaxSpeed;
     [SerializeField] 
@@ -16,4 +16,8 @@ public class PhysicsInfo : ScriptableObject {
 
     [Header("Current Info")] 
     public float Acceleration;
+
+    public int JumpCount = 2;
+    
+    
 }

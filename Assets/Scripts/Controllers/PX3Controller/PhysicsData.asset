@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: PhysicsData
   m_EditorClassIdentifier: 
   SpeedCap: 15
-  JumpHeightCap: 12.9
+  JumpHeight: 12
   MaxSpeed: 15
   MaxAcceleration: 6
   Gravity: 9.9
-  Acceleration: 0.5942818
+  Acceleration: 0
+  JumpCount: 2

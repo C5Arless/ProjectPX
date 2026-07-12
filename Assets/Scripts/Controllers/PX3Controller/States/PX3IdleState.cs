@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3IdleState : PX3BaseState {
+    private PhysicsInfo physicsData;
+    
     public PX3IdleState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
+        physicsData = Context.PhysicsData;
         SensorHandler.OnSensorsTrigger += OnGroundTrigger;
     }
 
@@ -18,9 +21,9 @@ public class PX3IdleState : PX3BaseState {
     }
 
     public override void UpdateState() {
-        if (Context.PhysicsData.Acceleration > 0f) {
-            Context.PhysicsData.Acceleration -= Context.PhysicsData.MaxAcceleration * Time.deltaTime;
-        } else Context.PhysicsData.Acceleration = 0f;
+        if (physicsData.Acceleration > 0f) {
+            physicsData.Acceleration -= physicsData.MaxAcceleration * Time.deltaTime;
+        } else physicsData.Acceleration = 0f;
         
         CheckSwitchStates();
     }
@@ -48,8 +51,11 @@ public class PX3IdleState : PX3BaseState {
     
     private void OnGroundTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
-        if (StateHandler.SubStates[PX3SubStates.Jumping]) return;
         if (InputHandler.MoveInput != Vector2.zero) return;
+        
+        if (StateHandler.SubStates[PX3SubStates.Jumping] ||
+            StateHandler.SubStates[PX3SubStates.Crouching]) return;
+        
         if (!other.CompareTag("Ground") && type != PX3SensorType.Ground) return;
         
         if (stage == PX3SensorStage.Stay) {
