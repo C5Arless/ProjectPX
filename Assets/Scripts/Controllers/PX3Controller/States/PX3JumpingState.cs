@@ -109,9 +109,9 @@ public class PX3JumpingState : PX3BaseState {
     private void OnJump() {
         if (physicsData.JumpCount <= 0) return;
         
-        if (StateHandler.SubStates[PX3SubStates.Thumbling]) mode = 1;
-        else if (StateHandler.SubStates[PX3SubStates.Crouching]) mode = 2;
-        else if (StateHandler.SubStates[PX3SubStates.Grabbing]) mode = 3;
+        if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Thumbling)) mode = 1;
+        else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Crouching)) mode = 2;
+        else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Grabbing)) mode = 3;
         else mode = 0;
         
         StateHandler.SetSubState(PX3SubStates.Jumping);

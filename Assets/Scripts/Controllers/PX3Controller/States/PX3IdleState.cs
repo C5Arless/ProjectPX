@@ -52,6 +52,7 @@ public class PX3IdleState : PX3BaseState {
     private void OnGroundTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
         if (InputHandler.MoveInput != Vector2.zero) return;
+        if (InputHandler.CrouchInput) return;
         
         if (StateHandler.SubStates[PX3SubStates.Jumping] ||
             StateHandler.SubStates[PX3SubStates.Crouching]) return;
