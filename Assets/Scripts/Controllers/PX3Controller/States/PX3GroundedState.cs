@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3GroundedState : PX3BaseState {
+    private PhysicsInfo physicsData;
     public PX3GroundedState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         IsRootState = true;
-
+        physicsData = Context.PhysicsData;
         SensorHandler.OnSensorsTrigger += OnGroundTrigger;
     }
 
     public override void EnterState() {
-        
+        physicsData.JumpCount = 2;
     }
 
     public override void UpdateState() {

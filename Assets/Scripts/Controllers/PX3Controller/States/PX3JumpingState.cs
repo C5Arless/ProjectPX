@@ -16,8 +16,9 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     public override void EnterState() {
+        physicsData.JumpCount--;
         phase = 0;
-
+        
         switch (mode) {
             case 0: {
                 AnimHandler.PlayClip(PX3A_AirSet.Jump1);
