@@ -17,17 +17,27 @@ public class PX3WalkingState : PX3BaseState {
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_GroundSet.IRC);
         AnimHandler.SetIRCBlend(InputHandler.MoveInput.magnitude);
-        
+        physicsData.Acceleration = 0;
     }
 
     public override void UpdateState() {
         AnimHandler.SetIRCBlend(InputHandler.MoveInput.magnitude);
         
+        if (physicsData.Acceleration < physicsData.MaxAcceleration * .25f) {
+            physicsData.Acceleration += physicsData.MaxAcceleration * Time.deltaTime;
+        } else physicsData.Acceleration = physicsData.MaxAcceleration * .25f;
+        
         CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
-
+        Vector3 direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
+        Vector3 targetVelocity = direction * physicsData.MaxSpeed;
+        
+        if (direction != Vector3.zero) {
+            Context.Asset.transform.forward = direction;
+            PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration);  
+        }
     }
     
     public override void ExitState() {
