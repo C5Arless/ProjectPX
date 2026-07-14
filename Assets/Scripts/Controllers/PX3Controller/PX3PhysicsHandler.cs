@@ -2,7 +2,7 @@
 
 public class PX3PhysicsHandler {
     private Rigidbody rb;
-    private PX3Controller context;
+    private PhysicsInfo physicsData;
 
     private bool isFrozen;
     private bool isBraking;
@@ -23,8 +23,7 @@ public class PX3PhysicsHandler {
 
     public PX3PhysicsHandler(Rigidbody _rb, PX3Controller _context) {
         rb = _rb;
-        context = _context;
-        
+        physicsData = _context.PhysicsData;
         rb.useGravity = false;
     }
 
@@ -40,10 +39,10 @@ public class PX3PhysicsHandler {
     public void UpdateGravity(float gravity) {
         if (isFrozen) return;
 
-        if (gravity >= 1) {
+        if (gravity >= physicsData.Gravity * .1f) {
             float verticalVelocity = currentVelocity.y - gravity * rb.mass * Time.deltaTime;
             proxyVelocity.y = verticalVelocity;
-        } else if (gravity > .025f) {
+        } else if (gravity > physicsData.Gravity * .025f) {
             proxyVelocity.y = -gravity;
         } else proxyVelocity.y = 0;
     }

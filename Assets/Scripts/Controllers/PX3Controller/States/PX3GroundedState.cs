@@ -25,7 +25,7 @@ public class PX3GroundedState : PX3BaseState {
     }
 
     public override void FixedUpdateState() {
-        PhysicsHandler.UpdateGravity(.05f);
+        PhysicsHandler.UpdateGravity(physicsData.Gravity * .05f);
     }
 
     public override void ExitState() {
