@@ -18,6 +18,13 @@ public class PX3AirborneState : PX3BaseState {
     }
 
     public override void UpdateState() {
+        if (StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Jumping) &&
+            StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Attacking) &&
+            StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Dashing) &&
+            StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Damaged) &&
+            StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Diving)) {
+            StateHandler.SetSubState(PX3SubStates.Falling);
+        }
         
         CheckSwitchStates();
     }

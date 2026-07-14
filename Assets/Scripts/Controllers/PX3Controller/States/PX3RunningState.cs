@@ -63,6 +63,7 @@ public class PX3RunningState : PX3BaseState {
         else if (StateHandler.SubStates[PX3SubStates.Sprinting]) SwitchState(StateHandler.GetState(PX3SubStates.Sprinting));
         else if (StateHandler.SubStates[PX3SubStates.Walking]) SwitchState(StateHandler.GetState(PX3SubStates.Walking));
         else if (StateHandler.SubStates[PX3SubStates.Brake]) SwitchState(StateHandler.GetState(PX3SubStates.Brake));
+        else if (StateHandler.SubStates[PX3SubStates.Falling]) SwitchState(StateHandler.GetState(PX3SubStates.Falling));
     }
 
     private void OnMove() {
