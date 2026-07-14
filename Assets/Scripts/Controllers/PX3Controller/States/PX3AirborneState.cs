@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3AirborneState : PX3BaseState {
+    private PhysicsInfo physicsData;
     public PX3AirborneState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
+        physicsData = Context.PhysicsData;
         IsRootState = true;
         SensorHandler.OnSensorsTrigger += OnGroundTrigger;
     }
@@ -22,7 +24,7 @@ public class PX3AirborneState : PX3BaseState {
     
     public override void FixedUpdateState() {
         if (!StateHandler.SubStates[PX3SubStates.Jumping]) {
-            PhysicsHandler.UpdateGravity(Context.PhysicsData.Gravity);
+            PhysicsHandler.UpdateGravity(physicsData.Gravity);
         }
     }
     

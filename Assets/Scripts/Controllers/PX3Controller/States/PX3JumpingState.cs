@@ -61,7 +61,7 @@ public class PX3JumpingState : PX3BaseState {
         
         switch (phase) {
             case 1: {
-                PhysicsHandler.UpdateGravity(.2f);
+                PhysicsHandler.UpdateGravity(1f);
                 break;
             }
             case 2: {

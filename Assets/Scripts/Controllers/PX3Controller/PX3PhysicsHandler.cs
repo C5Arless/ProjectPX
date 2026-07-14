@@ -40,10 +40,12 @@ public class PX3PhysicsHandler {
     public void UpdateGravity(float gravity) {
         if (isFrozen) return;
 
-        if (gravity > 0) {
+        if (gravity >= 1) {
             float verticalVelocity = currentVelocity.y - gravity * rb.mass * Time.deltaTime;
             proxyVelocity.y = verticalVelocity;
-        } else proxyVelocity.y = -.05f;
+        } else if (gravity > .025f) {
+            proxyVelocity.y = -gravity;
+        } else proxyVelocity.y = 0;
     }
 
     public void ApplyVerticalImpulse(float intensity) {
