@@ -10,8 +10,9 @@ public class PX3Controller : MonoBehaviour {
     [SerializeField] GameObject _forward;
     [SerializeField] GameObject _camera;
     [SerializeField] PX3AnimHandler _animHandler;
-    [SerializeField] PX3SensorHandler _sensorHandler;
     [SerializeField] PX3InputHandler _inputHandler;
+    [SerializeField] PX3SensorHandler _sensorHandler;
+    [SerializeField] PX3SensorForwarder _sensorForwarder;
     [Space] 
     [SerializeField] PlayerInput _playerInput;
     [SerializeField] PhysicsInfo _physicsData;
@@ -38,7 +39,8 @@ public class PX3Controller : MonoBehaviour {
     private void Awake() {
         _physicsHandler = new PX3PhysicsHandler(_rb, this);
         _stateHandler = new PX3StateHandler(this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
-        
+
+        _sensorHandler.Initialize(_sensorForwarder);
         _inputHandler.Initialize(_playerInput);
         _animHandler.Initialize(this, _stateHandler);
         _stateHandler.Initialize();

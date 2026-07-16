@@ -3,35 +3,38 @@ using UnityEngine;
 
 public class PX3SensorHandler : MonoBehaviour {
     private PX3Sensor[] sensors;
+    private PX3SensorForwarder sensorForwarder;
     
     public event Action<Collider, PX3SensorType, PX3SensorStage> OnSensorsTrigger;
     public event Action<Collision, PX3SensorType, PX3SensorStage> OnSensorsCollision;
 
-    public void DisableSensor(PX3SensorType sensorType) {
+    public void DisableCollisions(PX3SensorType sensorType) {
         foreach (var sensor in sensors) {
             if (sensor.type == sensorType) {
-                sensor.gameObject.SetActive(false);
+                sensor.Collider.isTrigger = true;
             }
         }
     }
     
-    public void EnableSensor(PX3SensorType sensorType) {
+    public void EnableCollisions(PX3SensorType sensorType) {
         foreach (var sensor in sensors) {
             if (sensor.type == sensorType) {
-                sensor.gameObject.SetActive(true);
+                sensor.Collider.isTrigger = false;
             }
         }
     }
     
-    private void Awake() {
+    public void Initialize(PX3SensorForwarder forwarder) {
+        sensorForwarder = forwarder;
         sensors = GetComponentsInChildren<PX3Sensor>();
     }
 
     private void Start() {
         foreach (var sensor in sensors) {
             sensor.OnSensorTrigger += HandleTrigger;
-            sensor.OnSensorCollision += HandleCollision;
         }
+        
+        sensorForwarder.OnSensorCollision += HandleCollision;
     }
     
     private void HandleTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {

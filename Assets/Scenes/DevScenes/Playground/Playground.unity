@@ -3650,6 +3650,7 @@ GameObject:
   - component: {fileID: 707121606}
   - component: {fileID: 707121612}
   - component: {fileID: 707121605}
+  - component: {fileID: 707121613}
   m_Layer: 0
   m_Name: PX-03
   m_TagString: Untagged
@@ -3808,8 +3809,9 @@ MonoBehaviour:
   _forward: {fileID: 1172501876}
   _camera: {fileID: 492253866}
   _animHandler: {fileID: 1051933825}
-  _sensorHandler: {fileID: 403018504}
   _inputHandler: {fileID: 707121612}
+  _sensorHandler: {fileID: 403018504}
+  _sensorForwarder: {fileID: 707121613}
   _playerInput: {fileID: 707121605}
   _physicsData: {fileID: 11400000, guid: 2e6a0277c4290b4448aa94b7be5194b6, type: 2}
 --- !u!54 &707121607
@@ -3867,6 +3869,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a43acc308cdb4aaab1d2fbe4f2fe98a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &707121613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 707121604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc28a5bb4af64204fa80635d710aa530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &729440665
@@ -38341,8 +38355,9 @@ MonoBehaviour:
   _forward: {fileID: 0}
   _camera: {fileID: 0}
   _animHandler: {fileID: 0}
-  _sensorHandler: {fileID: 0}
   _inputHandler: {fileID: 0}
+  _sensorHandler: {fileID: 0}
+  _sensorForwarder: {fileID: 0}
   _playerInput: {fileID: 0}
   _physicsData: {fileID: 0}
 --- !u!114 &8809352779333027468
