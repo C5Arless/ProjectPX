@@ -39,19 +39,23 @@ public class PX3HoldingState : PX3BaseState {
     }
 
     private void OnLedgeCollision(Collision collision, PX3SensorType type, PX3SensorStage stage) {
+        if (stage == PX3SensorStage.Exit) return;
         if (type != PX3SensorType.Ledge) return;
         if (StateHandler.RootStates[PX3RootStates.Holding]) return;
         
-        Debug.Log("Ledge collision detected");
         
         //if (StateHandler.RootStates[PX3RootStates.Grounded]) return;
         //if (StateHandler.SubStates[PX3SubStates.WallSliding] ||
         //    StateHandler.SubStates[PX3SubStates.Grabbing]) return;
         
         if (stage == PX3SensorStage.Enter) {
-            Vector3 freezePosition = Context.transform.position;
             PhysicsHandler.Freeze();
-            //Context.transform.position = freezePosition;
+            Vector3 contactPoint = collision.contacts[0].point;
+            Bounds bodyBounds = SensorHandler.GetSensor(PX3SensorType.Body).Collider.bounds;
+            Bounds ledgeBounds = SensorHandler.GetSensor(PX3SensorType.Ledge).Collider.bounds;
+            float targetY = contactPoint.y - (bodyBounds.size.y / 2) - (ledgeBounds.size.y / 2);
+            Vector3 freezePosition = new Vector3(Context.transform.position.x, targetY, Context.transform.position.z);
+            Context.transform.position = freezePosition;
             StateHandler.SetRootState(PX3RootStates.Holding);
             StateHandler.SetSubState(PX3SubStates.Grabbing);
             

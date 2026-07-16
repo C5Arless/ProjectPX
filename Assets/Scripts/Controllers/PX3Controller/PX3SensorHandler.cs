@@ -29,6 +29,16 @@ public class PX3SensorHandler : MonoBehaviour {
         sensors = GetComponentsInChildren<PX3Sensor>();
     }
 
+    public PX3Sensor GetSensor(PX3SensorType sensorType) {
+        PX3Sensor _sensor = null;
+        
+        foreach (var sensor in sensors) {
+            if (sensor.type == sensorType) _sensor = sensor;
+        }
+        
+        return _sensor;
+    }
+    
     private void Start() {
         foreach (var sensor in sensors) {
             sensor.OnSensorTrigger += HandleTrigger;
