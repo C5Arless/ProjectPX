@@ -58,7 +58,7 @@ public class PX3WalkingState : PX3BaseState {
     }
     
     private void OnMove() {
-        if (StateHandler.RootStates[PX3RootStates.Airborne]) return;
+        if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
         
         if (!StateHandler.SubStates[PX3SubStates.Jumping] || !StateHandler.SubStates[PX3SubStates.Crouching]) {
             if (InputHandler.MoveInput.magnitude >= 0.5f) StateHandler.SetSubState(PX3SubStates.Running);

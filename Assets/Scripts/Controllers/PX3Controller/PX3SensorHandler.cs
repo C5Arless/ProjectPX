@@ -6,8 +6,24 @@ public class PX3SensorHandler : MonoBehaviour {
     
     public event Action<Collider, PX3SensorType, PX3SensorStage> OnSensorsTrigger;
     public event Action<Collision, PX3SensorType, PX3SensorStage> OnSensorsCollision;
+
+    public void DisableSensor(PX3SensorType sensorType) {
+        foreach (var sensor in sensors) {
+            if (sensor.type == sensorType) {
+                sensor.gameObject.SetActive(false);
+            }
+        }
+    }
     
-    void Awake() {
+    public void EnableSensor(PX3SensorType sensorType) {
+        foreach (var sensor in sensors) {
+            if (sensor.type == sensorType) {
+                sensor.gameObject.SetActive(true);
+            }
+        }
+    }
+    
+    private void Awake() {
         sensors = GetComponentsInChildren<PX3Sensor>();
     }
 

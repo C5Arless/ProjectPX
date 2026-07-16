@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class PX3AirborneState : PX3BaseState {
@@ -14,17 +15,23 @@ public class PX3AirborneState : PX3BaseState {
     }
 
     public override void EnterState() {
-
+        SensorHandler.EnableSensor(PX3SensorType.Ledge);
     }
 
     public override void UpdateState() {
-        if (StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Jumping) &&
-            StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Attacking) &&
-            StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Dashing) &&
-            StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Damaged) &&
-            StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Diving)) {
-            StateHandler.SetSubState(PX3SubStates.Falling);
+        if (!StateHandler.SubStates[PX3SubStates.Falling] && StateHandler.RootStates[PX3RootStates.Airborne]) {
+            if (StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Jumping) &&
+                StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Attacking) &&
+                StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Dashing) &&
+                StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Damaged) &&
+                StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Diving) &&
+                StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Grabbing)) 
+            {
+                
+                StateHandler.SetSubState(PX3SubStates.Falling);
+            }
         }
+        
         
         CheckSwitchStates();
     }
@@ -36,7 +43,7 @@ public class PX3AirborneState : PX3BaseState {
     }
     
     public override void ExitState() {
-
+        SensorHandler.DisableSensor(PX3SensorType.Ledge);
     }
 
     public override void HandleSignal(int sig) {
@@ -50,6 +57,7 @@ public class PX3AirborneState : PX3BaseState {
     }
     
     private void OnGroundTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {
+        if (StateHandler.RootStates[PX3RootStates.Holding]) return;
         if (!other.CompareTag("Ground") && type != PX3SensorType.Ground) return;
         
         if (stage == PX3SensorStage.Enter) {

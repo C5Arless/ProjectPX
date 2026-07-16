@@ -11,10 +11,6 @@ public class PX3AnimHandler : MonoBehaviour {
     PX3A_RootSet currentRootset;
     private int currentSubset;
 
-    private void Awake() { 
-        //_animator = GetComponent<Animator>();
-    }
-
     public void Initialize(PX3Controller ctx, PX3StateHandler stateHandler) {
         _ctx = ctx;
         _stateHandler = stateHandler;
@@ -102,7 +98,7 @@ public class PX3AnimHandler : MonoBehaviour {
         }
         
         currentSubset = (int)target;
-        _animator.SetInteger("MixedSet", currentSubset);
+        _animator.SetInteger("MixSet", currentSubset);
     }
 
     private void SetSubset(PX3A_AirSet target) {

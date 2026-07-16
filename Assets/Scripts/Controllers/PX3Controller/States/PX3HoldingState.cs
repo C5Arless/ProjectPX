@@ -8,11 +8,11 @@ public class PX3HoldingState : PX3BaseState {
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         IsRootState = true;
-        SensorHandler.OnSensorsTrigger += OnLedgeTrigger;
+        SensorHandler.OnSensorsCollision += OnLedgeCollision;
     }
 
     public override void EnterState() {
-
+        
     }
 
     public override void UpdateState() {
@@ -21,7 +21,7 @@ public class PX3HoldingState : PX3BaseState {
     }
     
     public override void FixedUpdateState() {
-        
+        PhysicsHandler.UpdateGravity(0f);
     }
     
     public override void ExitState() {
@@ -38,17 +38,33 @@ public class PX3HoldingState : PX3BaseState {
         else if (StateHandler.RootStates[PX3RootStates.Dead]) SwitchState(StateHandler.GetState(PX3RootStates.Dead));
     }
 
-    public void OnLedgeTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {
-        if (StateHandler.RootStates[PX3RootStates.Grounded]) return;
+    private void OnLedgeCollision(Collision collision, PX3SensorType type, PX3SensorStage stage) {
+        if (type != PX3SensorType.Ledge) return;
+        if (StateHandler.RootStates[PX3RootStates.Holding]) return;
+        
+        Debug.Log("Ledge collision detected");
+        
+        //if (StateHandler.RootStates[PX3RootStates.Grounded]) return;
+        //if (StateHandler.SubStates[PX3SubStates.WallSliding] ||
+        //    StateHandler.SubStates[PX3SubStates.Grabbing]) return;
         
         if (stage == PX3SensorStage.Enter) {
+            Vector3 freezePosition = Context.transform.position;
+            PhysicsHandler.Freeze();
+            //Context.transform.position = freezePosition;
             StateHandler.SetRootState(PX3RootStates.Holding);
+            StateHandler.SetSubState(PX3SubStates.Grabbing);
             
-            if (other.CompareTag("Wall")) StateHandler.SetSubState(PX3SubStates.WallSliding);
-            else if (other.CompareTag("Ground")) StateHandler.SetSubState(PX3SubStates.Grabbing);
+            //Debug.Log(other.tag);
+            
+            //if (other.CompareTag("Ground")) StateHandler.SetSubState(PX3SubStates.Grabbing);
+            //else if (other.CompareTag("Wall")) StateHandler.SetSubState(PX3SubStates.WallSliding);
         }
+        
+        /*    
         else if (stage == PX3SensorStage.Exit) {
             StateHandler.SetRootState(PX3RootStates.Airborne);
         }
+        */
     }
 }

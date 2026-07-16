@@ -11,7 +11,8 @@ public class PX3GrabbingState : PX3BaseState {
     }
 
     public override void EnterState() {
-
+        AnimHandler.PlayClip(PX3A_MixedSet.Ledge_Grab);
+        //PhysicsHandler.Freeze();
     }
 
     public override void UpdateState() {
