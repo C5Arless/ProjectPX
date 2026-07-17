@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PX3Controller : MonoBehaviour {
     [SerializeField] Rigidbody _rb;
+    //[SerializeField] GameObject _avatar;
     [SerializeField] GameObject _asset;
     [SerializeField] GameObject _forward;
     [SerializeField] GameObject _camera;
@@ -29,6 +30,7 @@ public class PX3Controller : MonoBehaviour {
     public PX3PhysicsHandler PhysicsHandler { get => _physicsHandler; set => _physicsHandler = value; }
     
     public GameObject Camera { get => _camera; }
+    //public GameObject Avatar { get => _avatar; set => _avatar = value; }
     public GameObject Asset { get => _asset; set => _asset = value; }
     public GameObject Forward { get => _forward; set => _forward = value; }
     

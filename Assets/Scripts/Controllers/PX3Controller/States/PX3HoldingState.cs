@@ -49,6 +49,8 @@ public class PX3HoldingState : PX3BaseState {
         //    StateHandler.SubStates[PX3SubStates.Grabbing]) return;
         
         if (stage == PX3SensorStage.Enter) {
+            SensorHandler.DisableCollisions(PX3SensorType.Body);
+            SensorHandler.DisableCollisions(PX3SensorType.Ledge);
             PhysicsHandler.Freeze();
             Vector3 contactPoint = collision.contacts[0].point;
             Bounds bodyBounds = SensorHandler.GetSensor(PX3SensorType.Body).Collider.bounds;
@@ -64,11 +66,5 @@ public class PX3HoldingState : PX3BaseState {
             //if (other.CompareTag("Ground")) StateHandler.SetSubState(PX3SubStates.Grabbing);
             //else if (other.CompareTag("Wall")) StateHandler.SetSubState(PX3SubStates.WallSliding);
         }
-        
-        /*    
-        else if (stage == PX3SensorStage.Exit) {
-            StateHandler.SetRootState(PX3RootStates.Airborne);
-        }
-        */
     }
 }

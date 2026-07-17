@@ -43,7 +43,7 @@ public class PX3AirborneState : PX3BaseState {
     }
     
     public override void ExitState() {
-        SensorHandler.DisableCollisions(PX3SensorType.Ledge);
+
     }
 
     public override void HandleSignal(int sig) {
