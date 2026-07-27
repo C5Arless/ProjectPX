@@ -15,7 +15,7 @@ public class PX3AirborneState : PX3BaseState {
     }
 
     public override void EnterState() {
-        SensorHandler.EnableCollisions(PX3SensorType.Ledge);
+        //SensorHandler.EnableCollisions(PX3SensorType.Ledge);
     }
 
     public override void UpdateState() {
@@ -52,12 +52,12 @@ public class PX3AirborneState : PX3BaseState {
 
     public override void CheckSwitchStates() {
         if (StateHandler.RootStates[PX3RootStates.Grounded]) SwitchState(StateHandler.GetState(PX3RootStates.Grounded));
-        else if (StateHandler.RootStates[PX3RootStates.Holding]) SwitchState(StateHandler.GetState(PX3RootStates.Holding));
+        else if (StateHandler.RootStates[PX3RootStates.Mixed]) SwitchState(StateHandler.GetState(PX3RootStates.Mixed));
         else if (StateHandler.RootStates[PX3RootStates.Dead]) SwitchState(StateHandler.GetState(PX3RootStates.Dead));
     }
     
     private void OnGroundTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {
-        if (StateHandler.RootStates[PX3RootStates.Holding]) return;
+        if (StateHandler.RootStates[PX3RootStates.Mixed]) return;
         if (!other.CompareTag("Ground") && type != PX3SensorType.Ground) return;
         
         if (stage == PX3SensorStage.Enter) {

@@ -30,10 +30,8 @@ public class PX3Controller : MonoBehaviour {
     public PX3PhysicsHandler PhysicsHandler { get => _physicsHandler; set => _physicsHandler = value; }
     
     public GameObject Camera { get => _camera; }
-    //public GameObject Avatar { get => _avatar; set => _avatar = value; }
     public GameObject Asset { get => _asset; set => _asset = value; }
     public GameObject Forward { get => _forward; set => _forward = value; }
-    
     public PhysicsInfo PhysicsData { get => _physicsData; set => _physicsData = value; }
 
     #endregion

@@ -55,7 +55,7 @@ public class PX3StateHandler {
         rootMasks.Add(PX3RootStates.Dead, false);
         rootMasks.Add(PX3RootStates.Grounded, false);
         rootMasks.Add(PX3RootStates.Airborne, false);
-        rootMasks.Add(PX3RootStates.Holding, false);
+        rootMasks.Add(PX3RootStates.Mixed, false);
 
         subMasks.Add(PX3SubStates.Attacking, false);
         subMasks.Add(PX3SubStates.Dashing, false);
@@ -86,7 +86,7 @@ public class PX3StateHandler {
         rootStateList[PX3RootStates.Dead] = new PX3DeadState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         rootStateList[PX3RootStates.Grounded] = new PX3GroundedState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         rootStateList[PX3RootStates.Airborne] = new PX3AirborneState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
-        rootStateList[PX3RootStates.Holding] = new PX3HoldingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        rootStateList[PX3RootStates.Mixed] = new PX3MixedState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         
         subStateList[PX3SubStates.Attacking] = new PX3AttackingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         subStateList[PX3SubStates.Dashing] = new PX3DashingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd2858825c3c40ad9cc096d069166d80, type: 3}
   m_Name: PhysicsData
   m_EditorClassIdentifier: 
-  SpeedCap: 15
+  SpeedCap: 10
   JumpHeight: 10.2
-  MaxSpeed: 10.7
-  MaxAcceleration: 8.2
+  MaxSpeed: 8
+  MaxAcceleration: 10.6
   Gravity: 9.9
   Acceleration: 0
   JumpCount: 2

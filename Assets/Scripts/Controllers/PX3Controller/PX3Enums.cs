@@ -20,7 +20,7 @@ public enum PX3RootStates {
     Dead,
     Grounded,
     Airborne,
-    Holding
+    Mixed
 }
 
 public enum PX3A_RootSet {
