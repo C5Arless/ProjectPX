@@ -4,10 +4,13 @@ public class DrawGizmo : MonoBehaviour {
     [SerializeField] public Shapes shape;
     [SerializeField] public Color color;
     [SerializeField] public bool wireFrame;
+    [SerializeField] public bool hasLabel;
     [SerializeField] public Mesh mesh;
 
     private void OnDrawGizmos() {
         Gizmos.color = color;
+
+        if (hasLabel) UnityEditor.Handles.Label(transform.position, transform.name);
         
         switch (shape) {
             case Shapes.Sphere: {

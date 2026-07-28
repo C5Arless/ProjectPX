@@ -5,7 +5,11 @@ using UnityEngine;
 public class PX3JumpingState : PX3BaseState {
     private int phase;
     private int mode;
+    private bool isBusy;
     private PhysicsInfo physicsData;
+    private Vector3 startPosition;
+    private PX3Sensor bodySensor;
+    private PX3Sensor groundSensor;
     
     public PX3JumpingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
@@ -16,8 +20,15 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     public override void EnterState() {
-        physicsData.JumpCount--;
         phase = 0;
+
+        if (mode < 3) {
+            physicsData.JumpCount--;
+            
+            if (physicsData.Acceleration <= .5f) {
+                physicsData.Acceleration = physicsData.MaxAcceleration * .3f;
+            }
+        }
         
         switch (mode) {
             case 0: {
@@ -32,45 +43,55 @@ public class PX3JumpingState : PX3BaseState {
                 AnimHandler.PlayClip(PX3A_AirSet.Jump3);
                 break;
             }
-        }
-        
-        if (physicsData.Acceleration <= .5f) {
-            physicsData.Acceleration = physicsData.MaxAcceleration * .3f;
+            case 3: {
+                AnimHandler.PlayClip(PX3A_MixedSet.Ledge_Jump);
+                break;
+            }
         }
     }
 
     public override void UpdateState() {
-        if (InputHandler.MoveInput.magnitude > .2f) {
-            if (physicsData.Acceleration > 0f) {
-                physicsData.Acceleration -= physicsData.MaxAcceleration * Time.deltaTime;
-            } else physicsData.Acceleration = 0f;
+        if (mode < 3) {
+            if (InputHandler.MoveInput.magnitude > .2f) {
+                if (physicsData.Acceleration > 0f) {
+                    physicsData.Acceleration -= physicsData.MaxAcceleration * Time.deltaTime;
+                } else physicsData.Acceleration = 0f;
+            }
         }
         
-        
-        CheckSwitchStates();
+        if (!isBusy) CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
-        Vector3 direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
-        Vector3 targetVelocity = physicsData.MaxSpeed * .85f * direction;
-        
-        if (direction != Vector3.zero) {
-            Context.Asset.transform.forward = direction;
-            PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration);  
+        if (mode < 3) {
+            Vector3 direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
+            Vector3 targetVelocity = physicsData.MaxSpeed * .85f * direction;
+            
+            if (direction != Vector3.zero) {
+                Context.Asset.transform.forward = direction;
+                PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration);  
+            }
+            
+            switch (phase) {
+                case 1: {
+                    PhysicsHandler.UpdateGravity(physicsData.Gravity * .15f);
+                    break;
+                }
+                case 2: {
+                    PhysicsHandler.UpdateGravity(physicsData.Gravity / 2);
+                    break;
+                }
+                case 3: {
+                    PhysicsHandler.UpdateGravity(physicsData.Gravity * 2);
+                    break;
+                }
+            }
         }
-        
-        switch (phase) {
-            case 1: {
-                PhysicsHandler.UpdateGravity(physicsData.Gravity * .15f);
-                break;
-            }
-            case 2: {
-                PhysicsHandler.UpdateGravity(physicsData.Gravity / 2);
-                break;
-            }
-            case 3: {
-                PhysicsHandler.UpdateGravity(physicsData.Gravity * 2);
-                break;
+        else {
+            if (phase == 1) {
+                Vector3 targetVelocity = physicsData.MaxSpeed * .3f * Context.Asset.transform.forward;
+                PhysicsHandler.UpdateMovement(targetVelocity, physicsData.MaxAcceleration); 
+                PhysicsHandler.UpdateGravity(physicsData.Gravity);
             }
         }
     }
@@ -98,6 +119,36 @@ public class PX3JumpingState : PX3BaseState {
                 StateHandler.SetSubState(PX3SubStates.Falling);
                 break;
             }
+            case 4: {
+                PhysicsHandler.Unfreeze(false);
+                startPosition = Context.transform.position;
+                break;
+            }
+            case 5: {
+                float offset = bodySensor.Collider.bounds.extents.y + Mathf.Abs(Context.transform.position.y - groundSensor.transform.position.y); 
+                Vector3 targetPosition = startPosition + Vector3.up * offset;
+                Context.transform.position = targetPosition; //snaps only in the actual frame, then rubberbands back
+                break;
+            }
+            case 6: {
+                phase = 1;
+                SensorHandler.EnableCollisions(PX3SensorType.Body);
+                PhysicsHandler.ApplyVerticalImpulse(physicsData.JumpHeight * .85f);
+                break;
+            }
+            case 7: {
+                isBusy = false;
+                break;
+            }
+            case 8: {
+                phase = 2;
+                PhysicsHandler.ApplyStop();
+                break;
+            }
+            case 9: {
+                StateHandler.SetSubState(PX3SubStates.Idle);
+                break;
+            }
         }
     }
 
@@ -111,10 +162,16 @@ public class PX3JumpingState : PX3BaseState {
 
     private void OnJump() {
         if (physicsData.JumpCount <= 0) return;
+
+        bodySensor ??= SensorHandler.GetSensor(PX3SensorType.Body);
+        groundSensor ??= SensorHandler.GetSensor(PX3SensorType.Ground);
         
         if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Thumbling)) mode = 1;
         else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Crouching)) mode = 2;
-        else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Grabbing)) mode = 3;
+        else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Grabbing)) {
+            isBusy = true;
+            mode = 3;
+        }
         else mode = 0;
         
         StateHandler.SetSubState(PX3SubStates.Jumping);
@@ -137,5 +194,19 @@ public class PX3JumpingState : PX3BaseState {
                 break;
             }
         }
+    }
+
+    private IEnumerator LiftUp() {
+        float offset = bodySensor.Collider.bounds.extents.y + Mathf.Abs(Context.transform.position.y - groundSensor.transform.position.y); 
+        Vector3 targetPosition = startPosition + Vector3.up * offset;
+
+        while (Context.transform.position.y < targetPosition.y) {
+            float step = (targetPosition.y - startPosition.y) / 2;
+            Context.transform.position += step * Vector3.up;
+            yield return null;
+        }
+        
+        Context.transform.position = targetPosition;
+        yield return null;
     }
 }
