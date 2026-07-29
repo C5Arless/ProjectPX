@@ -681,8 +681,8 @@ Transform:
   m_GameObject: {fileID: 89923163}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.99, z: 0}
-  m_LocalScale: {x: 3.74, y: 0.05, z: 3.99}
+  m_LocalPosition: {x: 0, y: 0.965, z: 0}
+  m_LocalScale: {x: 3.74, y: 0.15, z: 3.99}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1349621584}
@@ -1825,9 +1825,9 @@ GameObject:
   - component: {fileID: 390888997}
   - component: {fileID: 390888996}
   - component: {fileID: 390888995}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Ground (1)
-  m_TagString: Enemy
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1841,7 +1841,7 @@ Transform:
   m_GameObject: {fileID: 390888992}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.1, y: 0, z: -22}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 7.58, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2609,9 +2609,9 @@ GameObject:
   - component: {fileID: 463670960}
   - component: {fileID: 463670959}
   - component: {fileID: 463670962}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4142,7 +4142,7 @@ Transform:
   m_GameObject: {fileID: 729440665}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.81, z: 6.78}
+  m_LocalPosition: {x: 5.72, y: 2.81, z: -3.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4525,9 +4525,9 @@ GameObject:
   - component: {fileID: 786629870}
   - component: {fileID: 786629869}
   - component: {fileID: 786629868}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Ground (1)
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4659,7 +4659,7 @@ GameObject:
   - component: {fileID: 792693326}
   - component: {fileID: 792693327}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Beam
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5327,9 +5327,9 @@ GameObject:
   - component: {fileID: 1012539848}
   - component: {fileID: 1012539847}
   - component: {fileID: 1012539846}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Cube
-  m_TagString: Slope
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6213,7 +6213,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1137416166}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Ground Obj (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6955,7 +6955,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1349621584}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Ground Obj (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7729,9 +7729,9 @@ GameObject:
   - component: {fileID: 1663940253}
   - component: {fileID: 1663940252}
   - component: {fileID: 1663940251}
-  m_Layer: 0
-  m_Name: Cube (1)
-  m_TagString: Death
+  m_Layer: 13
+  m_Name: WhiteWall
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8587,9 +8587,9 @@ GameObject:
   - component: {fileID: 1862841604}
   - component: {fileID: 1862841603}
   - component: {fileID: 1862841602}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8881,9 +8881,9 @@ GameObject:
   - component: {fileID: 1884096407}
   - component: {fileID: 1884096406}
   - component: {fileID: 1884096405}
-  m_Layer: 10
+  m_Layer: 13
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9896,7 +9896,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2071964043}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Ground Obj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10013,7 +10013,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2113209927}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Slope
   m_TagString: Untagged
   m_Icon: {fileID: 0}

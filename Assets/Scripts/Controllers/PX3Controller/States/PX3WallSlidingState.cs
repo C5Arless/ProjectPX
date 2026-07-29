@@ -32,6 +32,6 @@ public class PX3WallSlidingState : PX3BaseState {
     }
 
     public override void CheckSwitchStates() {
-
+        if (StateHandler.SubStates[PX3SubStates.Falling]) SwitchState(StateHandler.GetState(PX3SubStates.Falling));
     }
 }
