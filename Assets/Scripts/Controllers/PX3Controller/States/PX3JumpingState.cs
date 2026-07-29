@@ -7,7 +7,6 @@ public class PX3JumpingState : PX3BaseState {
     private int mode;
     private bool isBusy;
     private PhysicsInfo physicsData;
-    private Vector3 startPosition;
     private PX3Sensor bodySensor;
     private PX3Sensor groundSensor;
     
@@ -89,7 +88,7 @@ public class PX3JumpingState : PX3BaseState {
         }
         else {
             if (phase == 1) {
-                Vector3 targetVelocity = physicsData.MaxSpeed * .3f * Context.Asset.transform.forward;
+                Vector3 targetVelocity = physicsData.MaxSpeed * .4f * Context.Asset.transform.forward;
                 PhysicsHandler.UpdateMovement(targetVelocity, physicsData.MaxAcceleration); 
                 PhysicsHandler.UpdateGravity(physicsData.Gravity);
             }
@@ -121,18 +120,14 @@ public class PX3JumpingState : PX3BaseState {
             }
             case 4: {
                 PhysicsHandler.Unfreeze(false);
-                startPosition = Context.transform.position;
                 break;
             }
             case 5: {
-                float offset = bodySensor.Collider.bounds.extents.y + Mathf.Abs(Context.transform.position.y - groundSensor.transform.position.y); 
-                Vector3 targetPosition = startPosition + Vector3.up * offset;
-                Context.transform.position = targetPosition; //snaps only in the actual frame, then rubberbands back
+                SensorHandler.EnableCollisions(PX3SensorType.Body);
                 break;
             }
             case 6: {
                 phase = 1;
-                SensorHandler.EnableCollisions(PX3SensorType.Body);
                 PhysicsHandler.ApplyVerticalImpulse(physicsData.JumpHeight * .85f);
                 break;
             }
@@ -194,19 +189,5 @@ public class PX3JumpingState : PX3BaseState {
                 break;
             }
         }
-    }
-
-    private IEnumerator LiftUp() {
-        float offset = bodySensor.Collider.bounds.extents.y + Mathf.Abs(Context.transform.position.y - groundSensor.transform.position.y); 
-        Vector3 targetPosition = startPosition + Vector3.up * offset;
-
-        while (Context.transform.position.y < targetPosition.y) {
-            float step = (targetPosition.y - startPosition.y) / 2;
-            Context.transform.position += step * Vector3.up;
-            yield return null;
-        }
-        
-        Context.transform.position = targetPosition;
-        yield return null;
     }
 }

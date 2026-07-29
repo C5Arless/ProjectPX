@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3GrabbingState : PX3BaseState {
+    private PX3Sensor groundSensor;
     private PX3Sensor bodySensor;
     private PX3Sensor ledgeSensor;
     
@@ -49,9 +50,12 @@ public class PX3GrabbingState : PX3BaseState {
         if (StateHandler.RootStates[PX3RootStates.Grounded]) return;
    
         if (stage == PX3SensorStage.Enter) {
+            groundSensor ??= SensorHandler.GetSensor(PX3SensorType.Ground);
             bodySensor ??= SensorHandler.GetSensor(PX3SensorType.Body);
             ledgeSensor ??= SensorHandler.GetSensor(PX3SensorType.Ledge);
 
+            if (ValidateLedgeGrab()) return;
+            
             if (RetrieveSnapPoints(out Vector3 snapPosition, out Vector3 snapForward)) {
                 SensorHandler.DisableCollisions(PX3SensorType.Body);
                 PhysicsHandler.Freeze();
@@ -85,5 +89,11 @@ public class PX3GrabbingState : PX3BaseState {
         }
         
         return false;
+    }
+
+    private bool ValidateLedgeGrab() {
+        if (Physics.Raycast(groundSensor.transform.position, Vector3.down, out RaycastHit hit, 1f, LayerMask.GetMask("Ground"))) {
+            return true;
+        } return false;
     }
 }
