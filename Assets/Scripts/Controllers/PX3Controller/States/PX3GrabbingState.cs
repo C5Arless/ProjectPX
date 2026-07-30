@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3GrabbingState : PX3BaseState {
-    private PX3Sensor groundSensor;
-    private PX3Sensor bodySensor;
-    private PX3Sensor ledgeSensor;
     private bool isBusy;
     
     public PX3GrabbingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
@@ -14,10 +11,10 @@ public class PX3GrabbingState : PX3BaseState {
         
         //
         InputHandler._onMove += OnMove;
-        SensorHandler.OnSensorsTrigger += OnLedgeTrigger;
     }
 
     public override void EnterState() {
+        isBusy = true;
         AnimHandler.PlayClip(PX3A_MixedSet.Ledge_Grab);
     }
 
@@ -55,69 +52,5 @@ public class PX3GrabbingState : PX3BaseState {
             StateHandler.SetRootState(PX3RootStates.Airborne);
             StateHandler.SetSubState(PX3SubStates.Falling);
         }
-    }
-    
-    private void OnLedgeTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {
-        if (stage == PX3SensorStage.Exit) return;
-        if (type != PX3SensorType.Ledge) return;
-        if (!other.CompareTag("Ground") && !other.CompareTag("Wall")) return;
-        if (StateHandler.RootStates[PX3RootStates.Mixed]) return;
-        if (StateHandler.RootStates[PX3RootStates.Grounded]) return;
-   
-        if (stage == PX3SensorStage.Enter) {
-            groundSensor ??= SensorHandler.GetSensor(PX3SensorType.Ground);
-            bodySensor ??= SensorHandler.GetSensor(PX3SensorType.Body);
-            ledgeSensor ??= SensorHandler.GetSensor(PX3SensorType.Ledge);
-
-            if (ValidateLedgeGrab()) return;
-            
-            if (RetrieveSnapPoints(out Vector3 snapPosition, out Vector3 snapForward)) {
-                SensorHandler.DisableCollisions(PX3SensorType.Body);
-                PhysicsHandler.Freeze();
-                
-                Context.transform.position = snapPosition;
-                Context.Asset.transform.forward = snapForward;
-                
-                StateHandler.SetRootState(PX3RootStates.Mixed);
-                StateHandler.SetSubState(PX3SubStates.Grabbing);
-                isBusy = true;
-            }
-        }
-    }
-
-    private bool RetrieveSnapPoints(out Vector3 snapPosition, out Vector3 snapForward) {
-        snapPosition = Vector3.zero;
-        snapForward = Vector3.zero;
-        
-        if (Physics.Raycast(bodySensor.transform.position, Context.Asset.transform.forward, out RaycastHit wallHit, 1f, LayerMask.GetMask("Walls"))) {
-            Vector3 ledgePoint = wallHit.point - (wallHit.normal * 0.2f);
-            ledgePoint.y += bodySensor.Collider.bounds.extents.y;
-
-            if (Physics.Raycast(ledgePoint, Vector3.down, out RaycastHit groundHit, 1f, LayerMask.GetMask("Ground"))) {
-                float wallOffset = ((new Vector2(bodySensor.Collider.bounds.center.x, bodySensor.Collider.bounds.center.z)) -
-                                   (new Vector2(ledgeSensor.Collider.bounds.center.x, ledgeSensor.Collider.bounds.center.z))).magnitude;
-                snapPosition = wallHit.point + (wallHit.normal * wallOffset);
-                snapPosition.y = groundHit.point.y - bodySensor.Collider.bounds.extents.y;
-                snapForward = -wallHit.normal;
-
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
-    private bool ValidateLedgeGrab() {
-        Vector3 topPosition = groundSensor.transform.position;
-        topPosition.y += groundSensor.Collider.bounds.extents.y;
-        Ray sphereRay = new Ray(topPosition, Vector3.up);
-        
-        if (!Physics.Raycast(groundSensor.transform.position, Vector3.down, 1f, LayerMask.GetMask("Ground"))) {
-            if (!Physics.SphereCast(sphereRay, bodySensor.Collider.bounds.extents.x / 2, 2f, LayerMask.GetMask("Walls"))) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
