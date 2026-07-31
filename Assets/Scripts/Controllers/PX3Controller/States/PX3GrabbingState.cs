@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3GrabbingState : PX3BaseState {
+    private PX3Sensor groundSensor;
     private bool isBusy;
     
     public PX3GrabbingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
@@ -47,10 +48,27 @@ public class PX3GrabbingState : PX3BaseState {
         if (isBusy) return;
 
         if (InputHandler.MoveInput.y < -.9f) {
-            SensorHandler.EnableCollisions(PX3SensorType.Body);
-            PhysicsHandler.Unfreeze(false);
-            StateHandler.SetRootState(PX3RootStates.Airborne);
-            StateHandler.SetSubState(PX3SubStates.Falling);
+            groundSensor ??= SensorHandler.GetSensor(PX3SensorType.Ground);
+            
+            if (EvaluateWallHit()) {
+                PhysicsHandler.Unfreeze(false);
+                StateHandler.GetState(PX3SubStates.WallSliding).Mode = 1;
+                StateHandler.SetSubState(PX3SubStates.WallSliding);
+            }
+            else {
+                SensorHandler.EnableCollisions(PX3SensorType.Body);
+                PhysicsHandler.Unfreeze(false);
+                StateHandler.SetRootState(PX3RootStates.Airborne);
+                StateHandler.SetSubState(PX3SubStates.Falling);
+            }
         }
+    }
+
+    private bool EvaluateWallHit() {
+        if (Physics.Raycast(groundSensor.transform.position, Context.Asset.transform.forward, 1f, LayerMask.GetMask("Walls"))) {
+            return true;
+        }
+
+        return false;
     }
 }

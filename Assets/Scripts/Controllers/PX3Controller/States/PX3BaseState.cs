@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public abstract class PX3BaseState {
+    int _mode = 0;
+    private int _phase = 0;
     bool _isRootState = false;
 
     PX3Controller _ctx;
@@ -11,6 +13,8 @@ public abstract class PX3BaseState {
     PX3SensorHandler _sensorHandler;
     PX3PhysicsHandler _physicsHandler;
 
+    public int Mode { get => _mode; set => _mode = value; }
+    public int Phase { get => _phase; set => _phase = value; }
     protected bool IsRootState { get => _isRootState; set => _isRootState = value; }
     protected PX3Controller Context { get => _ctx; set => _ctx = value; }
     protected PX3StateHandler StateHandler { get => _stateHandler; set => _stateHandler = value; }

@@ -48,7 +48,8 @@ public enum PX3A_MixedSet {
     Ledge_Jump,
     Charged_E,
     Attack2,
-    Attack3
+    Attack3,
+    WallSlide_Loop
 }
 
 public enum PX3A_AirSet {
