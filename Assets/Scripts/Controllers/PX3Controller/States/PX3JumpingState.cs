@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3JumpingState : PX3BaseState {
-    //private int phase;
-    //private int mode;
     private bool isBusy;
     private PhysicsInfo physicsData;
     private PX3Sensor bodySensor;

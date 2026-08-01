@@ -35,7 +35,8 @@ public enum PX3A_GroundSet {
     Thumbling,
     Sprint_S,
     Sprint_Loop,
-    Brake
+    Brake,
+    Landing
 }
 
 public enum PX3A_MixedSet {

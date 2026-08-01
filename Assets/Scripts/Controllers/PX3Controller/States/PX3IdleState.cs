@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PX3IdleState : PX3BaseState {
     private PhysicsInfo physicsData;
+    private bool isBusy;
     
     public PX3IdleState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
@@ -14,9 +15,13 @@ public class PX3IdleState : PX3BaseState {
     }
 
     public override void EnterState() {
-        AnimHandler.PlayClip(PX3A_GroundSet.IRC);
-        AnimHandler.SetIRCBlend(0);
-
+        
+        if (Mode == 1) StartCoroutine(FlipForward());
+        else {
+            AnimHandler.PlayClip(PX3A_GroundSet.IRC);
+            AnimHandler.SetIRCBlend(0);
+        }
+        
         PhysicsHandler.ApplyStop();
     }
 
@@ -25,7 +30,7 @@ public class PX3IdleState : PX3BaseState {
             physicsData.Acceleration -= physicsData.MaxAcceleration * Time.deltaTime;
         } else physicsData.Acceleration = 0f;
         
-        CheckSwitchStates();
+        if (!isBusy) CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
@@ -33,11 +38,15 @@ public class PX3IdleState : PX3BaseState {
     }
     
     public override void ExitState() {
-        
+        Mode = 0;
     }
 
     public override void HandleSignal(int sig) {
-        
+        if (sig == 0) {
+            isBusy = false;
+            AnimHandler.PlayClip(PX3A_GroundSet.IRC);
+            AnimHandler.SetIRCBlend(0);
+        }
     }
 
     public override void CheckSwitchStates() {
@@ -62,5 +71,20 @@ public class PX3IdleState : PX3BaseState {
         if (stage == PX3SensorStage.Stay) {
             StateHandler.SetSubState(PX3SubStates.Idle);
         }
+    }
+
+    private IEnumerator FlipForward() {
+        isBusy = true;
+        Vector3 target = -Context.Asset.transform.forward;
+        AnimHandler.PlayClip(PX3A_GroundSet.Landing);
+
+        while (Vector3.Angle(Context.Asset.transform.forward, target) > 1f) {
+            Vector3 current = Context.Asset.transform.forward;
+            Vector3 lerp = Vector3.Slerp(current, target, 15f * Time.deltaTime);
+            Context.Asset.transform.forward = lerp;
+            yield return null;
+        }
+        
+        Context.Asset.transform.forward = target;
     }
 }

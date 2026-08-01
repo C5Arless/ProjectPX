@@ -64,7 +64,7 @@ public class PX3MixedState : PX3BaseState {
                     PhysicsHandler.Freeze();
                     StateHandler.SetSubState(PX3SubStates.Grabbing);
                 } else {
-                    PhysicsHandler.ApplyStop();
+                    PhysicsHandler.Freeze();
                     StateHandler.SetSubState(PX3SubStates.WallSliding);
                 }
                 
@@ -84,6 +84,8 @@ public class PX3MixedState : PX3BaseState {
                            (new Vector2(ledgeSensor.Collider.bounds.center.x, ledgeSensor.Collider.bounds.center.z))).magnitude;
         
         if (Physics.Raycast(bodySensor.transform.position, Context.Asset.transform.forward, out RaycastHit wallHit, 1f, LayerMask.GetMask("Walls"))) {
+            //if (Vector3.Dot(Context.Asset.transform.forward, -wallHit.normal) < 1) return false; 
+            
             Vector3 ledgePoint = wallHit.point - (wallHit.normal * wallOffset);
             ledgePoint.y += bodySensor.Collider.bounds.extents.y;
 
