@@ -33,11 +33,11 @@ public class PX3JumpingState : PX3BaseState {
                 break;
             }
             case 1: {
-                AnimHandler.PlayClip(PX3A_AirSet.Jump2);
+                AnimHandler.PlayClip(PX3A_AirSet.Jump3);
                 break;
             }
             case 2: {
-                AnimHandler.PlayClip(PX3A_AirSet.Jump3);
+                AnimHandler.PlayClip(PX3A_AirSet.Jump2);
                 break;
             }
             case 3: {
@@ -60,7 +60,7 @@ public class PX3JumpingState : PX3BaseState {
     }
     
     public override void FixedUpdateState() {
-        if (Mode < 3) {
+        if (Mode < 2) {
             Vector3 direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
             Vector3 targetVelocity = physicsData.MaxSpeed * .85f * direction;
             
@@ -83,8 +83,30 @@ public class PX3JumpingState : PX3BaseState {
                     break;
                 }
             }
-        }
-        else {
+        } else if (Mode == 2) {
+            //WallJump behaviour
+            if (Phase > 0) {
+                Vector3 targetVelocity = physicsData.MaxSpeed * .85f * Context.Asset.transform.forward;
+                PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration); 
+            }
+            
+            switch (Phase) {
+                case 1: {
+                    PhysicsHandler.UpdateGravity(physicsData.Gravity * .15f);
+                    break;
+                }
+                case 2: {
+                    PhysicsHandler.UpdateGravity(physicsData.Gravity / 2);
+                    break;
+                }
+                case 3: {
+                    PhysicsHandler.UpdateGravity(physicsData.Gravity * 2);
+                    break;
+                }
+            }
+            
+        } else if (Mode == 3) {
+            //LedgeJump behaviour
             if (Phase == 1) {
                 Vector3 targetVelocity = physicsData.MaxSpeed * .4f * Context.Asset.transform.forward;
                 PhysicsHandler.UpdateMovement(targetVelocity, physicsData.MaxAcceleration); 
@@ -94,14 +116,15 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     public override void ExitState() {
+        Mode = 0;
         Phase = 0;
     }
 
     public override void HandleSignal(int sig) {
         switch (sig) {
             case 0: {
-                Phase = 1;
                 HandleJump();
+                Phase = 1;
                 break;
             }
             case 1: {
@@ -154,13 +177,15 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     private void OnJump() {
+        if (Mode == 3) return;
         if (physicsData.JumpCount <= 0) return;
 
         bodySensor ??= SensorHandler.GetSensor(PX3SensorType.Body);
         groundSensor ??= SensorHandler.GetSensor(PX3SensorType.Ground);
         
-        if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Thumbling)) Mode = 1;
-        else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Crouching)) Mode = 2;
+        if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Crouching) ||
+                StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Thumbling)) Mode = 1;
+        else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.WallSliding)) Mode = 2;
         else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Grabbing)) {
             isBusy = true;
             Mode = 3;
@@ -179,13 +204,28 @@ public class PX3JumpingState : PX3BaseState {
                 break;
             }
             case 1: {
-                PhysicsHandler.ApplyVerticalImpulse(physicsData.JumpHeight * 1.1f);
-                break;
-            }
-            case 2: {
                 PhysicsHandler.ApplyVerticalImpulse(physicsData.JumpHeight * 1.25f);
                 break;
             }
+            case 2: {
+                if (RetrieveHorizontalDirection(out Vector3 direction)) {
+                    Context.Asset.transform.forward = direction;
+                    //PhysicsHandler.ApplyHorizontalImpulse(new Vector2(direction.x, direction.z), physicsData.JumpHeight * .5f);
+                }
+                PhysicsHandler.ApplyVerticalImpulse(physicsData.JumpHeight * 1.1f);
+                break;
+            }
         }
+    }
+
+    private bool RetrieveHorizontalDirection(out Vector3 direction) {
+        direction = Vector3.zero;
+
+        if (Physics.Raycast(bodySensor.transform.position, Context.Asset.transform.forward, out RaycastHit hit,
+                2f, LayerMask.GetMask("Walls"))) {
+            direction = hit.normal;
+            return true;
+        }
+        return false;
     }
 }

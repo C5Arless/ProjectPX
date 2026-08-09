@@ -15,10 +15,11 @@ public class PX3GroundedState : PX3BaseState {
 
     public override void EnterState() {
         //SensorHandler.DisableCollisions(PX3SensorType.Ledge);
-        physicsData.JumpCount = 2;
+        //physicsData.JumpCount = 2;
     }
 
     public override void UpdateState() {
+        physicsData.JumpCount = 2;
         
         CheckSwitchStates();
         //CheckMove();

@@ -112,7 +112,7 @@ public class PX3MixedState : PX3BaseState {
         topPosition.y += groundSensor.Collider.bounds.extents.y;
         Ray sphereRay = new Ray(topPosition, Vector3.up);
         
-        if (!Physics.Raycast(groundSensor.transform.position, Vector3.down, 1f, LayerMask.GetMask("Ground"))) {
+        if (!Physics.Raycast(groundSensor.transform.position, Vector3.down, 1.2f, LayerMask.GetMask("Ground"))) {
             if (!Physics.SphereCast(sphereRay, bodySensor.Collider.bounds.extents.x / 2, 2f, LayerMask.GetMask("Walls"))) {
                 return false;
             }

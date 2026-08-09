@@ -59,6 +59,7 @@ public class PX3IdleState : PX3BaseState {
     }
     
     private void OnGroundTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {
+        if (isBusy) return;
         if (!other.CompareTag("Ground") && type != PX3SensorType.Ground) return;
         
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
@@ -77,6 +78,7 @@ public class PX3IdleState : PX3BaseState {
         isBusy = true;
         Vector3 target = -Context.Asset.transform.forward;
         AnimHandler.PlayClip(PX3A_GroundSet.Landing);
+        yield return null;
 
         while (Vector3.Angle(Context.Asset.transform.forward, target) > 1f) {
             Vector3 current = Context.Asset.transform.forward;

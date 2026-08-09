@@ -11,7 +11,6 @@ public class PX3WallSlidingState : PX3BaseState {
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         //
-        //SensorHandler.OnSensorsTrigger += OnGroundTrigger;
         physicsData = Context.PhysicsData;
     }
 
@@ -76,24 +75,7 @@ public class PX3WallSlidingState : PX3BaseState {
     public override void CheckSwitchStates() {
         if (StateHandler.SubStates[PX3SubStates.Falling]) SwitchState(StateHandler.GetState(PX3SubStates.Falling));
         else if (StateHandler.SubStates[PX3SubStates.Idle]) SwitchState(StateHandler.GetState(PX3SubStates.Idle));
-    }
-    
-    private void OnGroundTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {
-        if (!StateHandler.SubStates[PX3SubStates.WallSliding]) return;
-        if (type != PX3SensorType.Ground) return;
-        
-        if (stage == PX3SensorStage.Enter && other.CompareTag("Ground")) {
-            SensorHandler.EnableCollisions(PX3SensorType.Body);
-            PhysicsHandler.ApplyStop();
-            StateHandler.SetRootState(PX3RootStates.Grounded);
-            StateHandler.SetSubState(PX3SubStates.Idle);
-        }
-        
-        if (stage == PX3SensorStage.Exit && other.CompareTag("Wall")) {
-            SensorHandler.EnableCollisions(PX3SensorType.Body);
-            StateHandler.SetRootState(PX3RootStates.Airborne);
-            StateHandler.SetSubState(PX3SubStates.Falling);
-        }
+        else if (StateHandler.SubStates[PX3SubStates.Jumping]) SwitchState(StateHandler.GetState(PX3SubStates.Jumping));
     }
 
     private bool EvaluateWallSlide(out PX3SubStates state) {
