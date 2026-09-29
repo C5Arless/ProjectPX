@@ -39,6 +39,7 @@ public class PX3IdleState : PX3BaseState {
     
     public override void ExitState() {
         Mode = 0;
+        StopCoroutine(FlipForward());
     }
 
     public override void HandleSignal(int sig) {
