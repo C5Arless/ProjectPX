@@ -66,6 +66,7 @@ public class PX3IdleState : PX3BaseState {
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
         if (InputHandler.MoveInput != Vector2.zero) return;
         if (InputHandler.CrouchInput) return;
+        if (InputHandler.SprintInput) return;
         
         if (StateHandler.SubStates[PX3SubStates.Jumping] ||
             StateHandler.SubStates[PX3SubStates.Crouching]) return;

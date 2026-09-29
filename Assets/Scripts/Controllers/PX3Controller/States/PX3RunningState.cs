@@ -49,9 +49,6 @@ public class PX3RunningState : PX3BaseState {
     }
 
     public override void HandleSignal(int sig) {
-        if (sig == 0) {
-            
-        }
         
     }
 
@@ -68,6 +65,7 @@ public class PX3RunningState : PX3BaseState {
 
     private void OnMove() {
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
+        if (InputHandler.SprintInput) return;
         
         if (!StateHandler.SubStates[PX3SubStates.Jumping] || !StateHandler.SubStates[PX3SubStates.Crouching]) {
             if (InputHandler.RawMoveInput.magnitude < 0.5f) StateHandler.SetSubState(PX3SubStates.Walking);

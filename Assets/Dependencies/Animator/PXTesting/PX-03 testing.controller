@@ -1404,9 +1404,9 @@ AnimatorStateMachine:
   m_StateMachineTransitions:
   - first: {fileID: -1350979277197611405}
     second: []
-  - first: {fileID: 6794578407086510019}
-    second: []
   - first: {fileID: -7817108564900517938}
+    second: []
+  - first: {fileID: 6794578407086510019}
     second: []
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 320, y: 680, z: 0}
@@ -2597,7 +2597,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Sprinting
-  m_Speed: 1.2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -777037697384462627}
@@ -2614,7 +2614,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 59c950c36123c4d44852e50db87b1490, type: 2}
   m_Tag: 
-  m_SpeedParameter: 
+  m_SpeedParameter: IRCBlend
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 

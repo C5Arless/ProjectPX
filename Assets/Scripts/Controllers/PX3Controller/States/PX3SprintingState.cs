@@ -5,6 +5,7 @@ using UnityEngine;
 public class PX3SprintingState : PX3BaseState {
     private PhysicsInfo physicsData;
     private bool windUp;
+    private Vector3 direction;
     
     public PX3SprintingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
@@ -26,7 +27,21 @@ public class PX3SprintingState : PX3BaseState {
     }
     
     public override void FixedUpdateState() {
+        if (windUp) return;
         
+        direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
+        Vector3 targetVelocity = physicsData.MaxSpeed * 1.5f * direction;
+        float dot = Vector3.Dot(PhysicsHandler.HorizontalVelocity, targetVelocity);
+
+        if (direction != Vector3.zero) {
+            Context.Asset.transform.forward = direction;
+            
+            if (dot < -.5f) {
+                StateHandler.SetSubState(PX3SubStates.Brake);
+            } else {
+                PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration);  
+            }
+        }
     }
     
     public override void ExitState() {
@@ -34,7 +49,10 @@ public class PX3SprintingState : PX3BaseState {
     }
 
     public override void HandleSignal(int sig) {
-        if (sig == 0) AnimHandler.PlayClip(PX3A_GroundSet.Sprint_Loop);
+        if (sig == 0) {
+            windUp = false;
+            AnimHandler.PlayClip(PX3A_GroundSet.Sprint_Loop);
+        }
     }
 
     public override void CheckSwitchStates() {
@@ -46,10 +64,9 @@ public class PX3SprintingState : PX3BaseState {
 
     private void OnSprint() {
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
-        
-        if (!StateHandler.SubStates[PX3SubStates.Running]) {
-            windUp = true;
-        }
+        if (InputHandler.MoveInput == Vector2.zero) return;
+
+        windUp = !StateHandler.SubStates[PX3SubStates.Running];
         
         StateHandler.SetSubState(PX3SubStates.Sprinting);
     }
