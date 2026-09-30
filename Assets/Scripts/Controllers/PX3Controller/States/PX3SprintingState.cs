@@ -13,6 +13,7 @@ public class PX3SprintingState : PX3BaseState {
 
         physicsData = Context.PhysicsData;
         InputHandler._onSprint += OnSprint;
+        InputHandler._onMove += OnMove;
     }
 
     public override void EnterState() {
@@ -35,11 +36,12 @@ public class PX3SprintingState : PX3BaseState {
 
         if (direction != Vector3.zero) {
             Context.Asset.transform.forward = direction;
-            
+
             if (dot < -.5f) {
                 StateHandler.SetSubState(PX3SubStates.Brake);
-            } else {
-                PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration);  
+            }
+            else {
+                PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration);
             }
         }
     }
@@ -50,8 +52,7 @@ public class PX3SprintingState : PX3BaseState {
 
     public override void HandleSignal(int sig) {
         if (sig == 0) {
-            windUp = false;
-            AnimHandler.PlayClip(PX3A_GroundSet.Sprint_Loop);
+            StartCoroutine(ExitWindUp());
         }
     }
 
@@ -64,11 +65,17 @@ public class PX3SprintingState : PX3BaseState {
 
     private void OnSprint() {
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
-        if (InputHandler.MoveInput == Vector2.zero) return;
 
-        windUp = !StateHandler.SubStates[PX3SubStates.Running];
+        if (!StateHandler.SubStates[PX3SubStates.Running]) windUp = true;
+    }
+    
+    private void OnMove() {
+        if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
+        if (!InputHandler.SprintInput) return;
         
-        StateHandler.SetSubState(PX3SubStates.Sprinting);
+        if (!StateHandler.SubStates[PX3SubStates.Jumping] || !StateHandler.SubStates[PX3SubStates.Crouching]) {
+            StateHandler.SetSubState(PX3SubStates.Sprinting);
+        }
     }
 
     private void WindUpEnter() {
@@ -76,6 +83,14 @@ public class PX3SprintingState : PX3BaseState {
     }
 
     private void LoopEnter() {
+        AnimHandler.PlayClip(PX3A_GroundSet.Sprint_Loop);
+    }
+
+    private IEnumerator ExitWindUp() {
+        windUp = false;
+        yield return null;
+
+        Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration;
         AnimHandler.PlayClip(PX3A_GroundSet.Sprint_Loop);
     }
 }

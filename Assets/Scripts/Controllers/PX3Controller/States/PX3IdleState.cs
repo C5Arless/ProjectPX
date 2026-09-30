@@ -64,9 +64,16 @@ public class PX3IdleState : PX3BaseState {
         if (!other.CompareTag("Ground") && type != PX3SensorType.Ground) return;
         
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
-        if (InputHandler.MoveInput != Vector2.zero) return;
-        if (InputHandler.CrouchInput) return;
-        if (InputHandler.SprintInput) return;
+        //if (InputHandler.MoveInput != Vector2.zero) return;
+        //if (InputHandler.CrouchInput) return;
+        //if (InputHandler.SprintInput) return;
+        
+        if (StateHandler.SubStates[PX3SubStates.Walking] ||
+            StateHandler.SubStates[PX3SubStates.Running] ||
+            StateHandler.SubStates[PX3SubStates.Sprinting]) {
+            
+            if (InputHandler.MoveInput != Vector2.zero) return;
+        }
         
         if (StateHandler.SubStates[PX3SubStates.Jumping] ||
             StateHandler.SubStates[PX3SubStates.Crouching]) return;
