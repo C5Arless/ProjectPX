@@ -17,8 +17,10 @@ public class PX3SprintingState : PX3BaseState {
     }
 
     public override void EnterState() {
-        if (windUp) WindUpEnter();
-        else LoopEnter();
+        Mode = windUp ? 1 : 0;
+
+        if (Mode == 1) WindUpEnter();
+        else StartCoroutine(LoopEnter());
     }
 
     public override void UpdateState() {
@@ -28,7 +30,7 @@ public class PX3SprintingState : PX3BaseState {
     }
     
     public override void FixedUpdateState() {
-        if (windUp) return;
+        if (Mode == 1) return;
         
         direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
         Vector3 targetVelocity = physicsData.MaxSpeed * 1.5f * direction;
@@ -47,12 +49,13 @@ public class PX3SprintingState : PX3BaseState {
     }
     
     public override void ExitState() {
+        Mode = 0;
         windUp = false;
     }
 
     public override void HandleSignal(int sig) {
         if (sig == 0) {
-            StartCoroutine(ExitWindUp());
+            StartCoroutine(LoopEnter());
         }
     }
 
@@ -65,31 +68,30 @@ public class PX3SprintingState : PX3BaseState {
 
     private void OnSprint() {
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
+        if (!StateHandler.SubStates[PX3SubStates.Idle]) return;
+        if (windUp) return;
 
         if (!StateHandler.SubStates[PX3SubStates.Running]) windUp = true;
     }
     
     private void OnMove() {
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
-        if (!InputHandler.SprintInput) return;
+        if (StateHandler.SubStates[PX3SubStates.Jumping] || 
+            StateHandler.SubStates[PX3SubStates.Crouching] || 
+            StateHandler.SubStates[PX3SubStates.Falling]) return;
         
-        if (!StateHandler.SubStates[PX3SubStates.Jumping] || !StateHandler.SubStates[PX3SubStates.Crouching]) {
-            StateHandler.SetSubState(PX3SubStates.Sprinting);
-        }
+        if (InputHandler.SprintInput) StateHandler.SetSubState(PX3SubStates.Sprinting);
     }
 
     private void WindUpEnter() {
         AnimHandler.PlayClip(PX3A_GroundSet.Sprint_S);
     }
 
-    private void LoopEnter() {
-        AnimHandler.PlayClip(PX3A_GroundSet.Sprint_Loop);
-    }
-
-    private IEnumerator ExitWindUp() {
+    private IEnumerator LoopEnter() {
         windUp = false;
         yield return null;
 
+        Mode = 0;
         Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration;
         AnimHandler.PlayClip(PX3A_GroundSet.Sprint_Loop);
     }
