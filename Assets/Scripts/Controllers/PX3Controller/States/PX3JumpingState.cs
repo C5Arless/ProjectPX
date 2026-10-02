@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PX3JumpingState : PX3BaseState {
     private bool isBusy;
+    private float jumpSpeed;
     private PhysicsInfo physicsData;
     private PX3Sensor bodySensor;
     private PX3Sensor groundSensor;
@@ -62,11 +63,11 @@ public class PX3JumpingState : PX3BaseState {
     public override void FixedUpdateState() {
         if (Mode < 2) {
             Vector3 direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
-            Vector3 targetVelocity = physicsData.MaxSpeed * .85f * direction;
+            Vector3 targetVelocity = jumpSpeed * direction;
             
             if (direction != Vector3.zero) {
                 Context.Asset.transform.forward = direction;
-                PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration);  
+                PhysicsHandler.UpdateMovement(targetVelocity, physicsData.Acceleration);
             }
             
             switch (Phase) {
@@ -184,7 +185,7 @@ public class PX3JumpingState : PX3BaseState {
         groundSensor ??= SensorHandler.GetSensor(PX3SensorType.Ground);
         
         if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Crouching) ||
-                StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Thumbling)) Mode = 1;
+            StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Thumbling)) Mode = 1;
         else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.WallSliding)) Mode = 2;
         else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Grabbing)) {
             isBusy = true;
@@ -192,6 +193,7 @@ public class PX3JumpingState : PX3BaseState {
         }
         else Mode = 0;
         
+        if (Mode < 2) jumpSpeed = PhysicsHandler.PreviousVelocity.magnitude;
         StateHandler.SetSubState(PX3SubStates.Jumping);
     }
 
