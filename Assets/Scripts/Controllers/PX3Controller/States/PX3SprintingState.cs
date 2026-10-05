@@ -30,9 +30,13 @@ public class PX3SprintingState : PX3BaseState {
     }
     
     public override void FixedUpdateState() {
-        if (Mode == 1) return;
-        
         direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
+
+        if (Mode == 1) {
+            if (direction != Vector3.zero) Context.Asset.transform.forward = direction;
+            return;
+        }
+        
         Vector3 targetVelocity = physicsData.MaxSpeed * 1.5f * direction;
         float dot = Vector3.Dot(PhysicsHandler.HorizontalVelocity, targetVelocity);
 
@@ -60,9 +64,12 @@ public class PX3SprintingState : PX3BaseState {
     }
 
     public override void CheckSwitchStates() {
+        if (Mode == 1) return;
+        
         if (StateHandler.SubStates[PX3SubStates.Falling]) SwitchState(StateHandler.GetState(PX3SubStates.Falling));
         else if (StateHandler.SubStates[PX3SubStates.Jumping]) SwitchState(StateHandler.GetState(PX3SubStates.Jumping));
         else if (StateHandler.SubStates[PX3SubStates.Idle]) SwitchState(StateHandler.GetState(PX3SubStates.Idle));
+        else if (StateHandler.SubStates[PX3SubStates.Crouching]) SwitchState(StateHandler.GetState(PX3SubStates.Crouching));
         else if (StateHandler.SubStates[PX3SubStates.Running]) SwitchState(StateHandler.GetState(PX3SubStates.Running));
     }
 
@@ -78,7 +85,8 @@ public class PX3SprintingState : PX3BaseState {
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
         if (StateHandler.SubStates[PX3SubStates.Jumping] || 
             StateHandler.SubStates[PX3SubStates.Crouching] || 
-            StateHandler.SubStates[PX3SubStates.Falling]) return;
+            StateHandler.SubStates[PX3SubStates.Falling] || 
+            StateHandler.SubStates[PX3SubStates.WallSliding]) return;
         
         if (InputHandler.SprintInput) StateHandler.SetSubState(PX3SubStates.Sprinting);
     }

@@ -192,8 +192,11 @@ public class PX3JumpingState : PX3BaseState {
             Mode = 3;
         }
         else Mode = 0;
-        
-        if (Mode < 2) jumpSpeed = PhysicsHandler.PreviousVelocity.magnitude;
+
+        if (Mode < 2) {
+            Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration * .6f;
+            jumpSpeed = PhysicsHandler.PreviousVelocity.magnitude;
+        }
         StateHandler.SetSubState(PX3SubStates.Jumping);
     }
 
