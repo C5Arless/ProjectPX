@@ -13,7 +13,8 @@ public enum PX3SubStates {
     WallSliding,
     Thumbling,
     Crouching,
-    Brake
+    Brake,
+    Landing
 }
 
 public enum PX3RootStates {

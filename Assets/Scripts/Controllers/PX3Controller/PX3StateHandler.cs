@@ -14,10 +14,10 @@ public class PX3StateHandler {
     Dictionary<PX3SubStates, PX3BaseState> subStateList = new Dictionary<PX3SubStates, PX3BaseState>(15);
     
     Dictionary<PX3RootStates, bool> rootMasks = new Dictionary<PX3RootStates, bool>(4); 
-    Dictionary<PX3SubStates, bool> subMasks = new Dictionary<PX3SubStates, bool>(15);
+    Dictionary<PX3SubStates, bool> subMasks = new Dictionary<PX3SubStates, bool>(16);
     
     Dictionary<PX3RootStates, bool> rootStates = new Dictionary<PX3RootStates, bool>(4); 
-    Dictionary<PX3SubStates, bool> subStates = new Dictionary<PX3SubStates, bool>(15);
+    Dictionary<PX3SubStates, bool> subStates = new Dictionary<PX3SubStates, bool>(16);
     
     public Dictionary<PX3RootStates, bool> RootStates { get { return rootStates; } }
     public Dictionary<PX3SubStates, bool> SubStates { get { return subStates; } }
@@ -72,6 +72,7 @@ public class PX3StateHandler {
         subMasks.Add(PX3SubStates.Thumbling, false);
         subMasks.Add(PX3SubStates.Crouching, false);
         subMasks.Add(PX3SubStates.Brake, false);
+        subMasks.Add(PX3SubStates.Landing, false);
     }
     private void InitializeStates() {
         foreach (var root in rootMasks) {
@@ -103,6 +104,7 @@ public class PX3StateHandler {
         subStateList[PX3SubStates.Thumbling] = new PX3ThumblingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         subStateList[PX3SubStates.Crouching] = new PX3CrouchingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
         subStateList[PX3SubStates.Brake] = new PX3BrakeState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
+        subStateList[PX3SubStates.Landing] = new PX3LandingState(_ctx, this, _animHandler, _inputHandler, _sensorHandler, _physicsHandler);
     }
     
     public PX3BaseState GetState(PX3SubStates state) {

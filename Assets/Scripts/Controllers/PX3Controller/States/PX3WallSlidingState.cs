@@ -34,8 +34,9 @@ public class PX3WallSlidingState : PX3BaseState {
                 SensorHandler.EnableCollisions(PX3SensorType.Body);
                 PhysicsHandler.ApplyStop();
                 StateHandler.SetRootState(PX3RootStates.Grounded);
-                StateHandler.GetState(PX3SubStates.Idle).Mode = 1;
-                StateHandler.SetSubState(PX3SubStates.Idle);
+                //StateHandler.GetState(PX3SubStates.Idle).Mode = 1;
+                //StateHandler.SetSubState(PX3SubStates.Idle);
+                StateHandler.SetSubState(PX3SubStates.Landing);
             } else {
                 SensorHandler.EnableCollisions(PX3SensorType.Body);
                 StateHandler.SetRootState(PX3RootStates.Airborne);
@@ -76,6 +77,7 @@ public class PX3WallSlidingState : PX3BaseState {
         if (StateHandler.SubStates[PX3SubStates.Falling]) SwitchState(StateHandler.GetState(PX3SubStates.Falling));
         else if (StateHandler.SubStates[PX3SubStates.Idle]) SwitchState(StateHandler.GetState(PX3SubStates.Idle));
         else if (StateHandler.SubStates[PX3SubStates.Jumping]) SwitchState(StateHandler.GetState(PX3SubStates.Jumping));
+        else if (StateHandler.SubStates[PX3SubStates.Landing]) SwitchState(StateHandler.GetState(PX3SubStates.Landing));
     }
 
     private bool EvaluateWallSlide(out PX3SubStates state) {

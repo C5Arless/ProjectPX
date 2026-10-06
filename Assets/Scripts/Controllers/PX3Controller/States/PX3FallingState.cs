@@ -55,6 +55,7 @@ public class PX3FallingState : PX3BaseState {
         else if (StateHandler.SubStates[PX3SubStates.Sprinting]) SwitchState(StateHandler.GetState(PX3SubStates.Sprinting));
         else if (StateHandler.SubStates[PX3SubStates.Grabbing]) SwitchState(StateHandler.GetState(PX3SubStates.Grabbing));
         else if (StateHandler.SubStates[PX3SubStates.WallSliding]) SwitchState(StateHandler.GetState(PX3SubStates.WallSliding));
+        else if (StateHandler.SubStates[PX3SubStates.Landing]) SwitchState(StateHandler.GetState(PX3SubStates.Landing));
     }
     
 }

@@ -175,6 +175,7 @@ public class PX3JumpingState : PX3BaseState {
         else if (StateHandler.SubStates[PX3SubStates.Idle]) SwitchState(StateHandler.GetState(PX3SubStates.Idle));
         else if (StateHandler.SubStates[PX3SubStates.Grabbing]) SwitchState(StateHandler.GetState(PX3SubStates.Grabbing));
         else if (StateHandler.SubStates[PX3SubStates.WallSliding]) SwitchState(StateHandler.GetState(PX3SubStates.WallSliding));
+        else if (StateHandler.SubStates[PX3SubStates.Landing]) SwitchState(StateHandler.GetState(PX3SubStates.Landing));
     }
 
     private void OnJump() {
