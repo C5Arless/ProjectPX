@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PX3JumpingState : PX3BaseState {
     private bool isBusy;
-    private float jumpSpeed;
+    private float horizontalSpeed;
     private PhysicsInfo physicsData;
     private PX3Sensor bodySensor;
     private PX3Sensor groundSensor;
@@ -25,7 +25,7 @@ public class PX3JumpingState : PX3BaseState {
             
             if (physicsData.Acceleration <= .5f) {
                 physicsData.Acceleration = physicsData.MaxAcceleration * .3f;
-            }
+            }                                                                                                                                                                                                                                                                                        
         }
         
         switch (Mode) {
@@ -63,7 +63,7 @@ public class PX3JumpingState : PX3BaseState {
     public override void FixedUpdateState() {
         if (Mode < 2) {
             Vector3 direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
-            Vector3 targetVelocity = jumpSpeed * direction;
+            Vector3 targetVelocity = horizontalSpeed * direction;
             
             if (direction != Vector3.zero) {
                 Context.Asset.transform.forward = direction;
@@ -196,7 +196,7 @@ public class PX3JumpingState : PX3BaseState {
 
         if (Mode < 2) {
             Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration * .6f;
-            jumpSpeed = PhysicsHandler.PreviousVelocity.magnitude;
+            horizontalSpeed = PhysicsHandler.PreviousVelocity.magnitude;
         }
         StateHandler.SetSubState(PX3SubStates.Jumping);
     }

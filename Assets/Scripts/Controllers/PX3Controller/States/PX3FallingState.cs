@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PX3FallingState : PX3BaseState {
     private PhysicsInfo physicsData;
+    private float horizontalSpeed;
     
     public PX3FallingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
@@ -15,6 +16,7 @@ public class PX3FallingState : PX3BaseState {
 
     public override void EnterState() {
         AnimHandler.PlayClip(PX3A_AirSet.Falling);
+        horizontalSpeed = PhysicsHandler.PreviousVelocity.magnitude;
     }
 
     public override void UpdateState() {
@@ -29,7 +31,7 @@ public class PX3FallingState : PX3BaseState {
     
     public override void FixedUpdateState() {
         Vector3 direction = Context.Forward.transform.forward * InputHandler.MoveInput.y + Context.Forward.transform.right * InputHandler.MoveInput.x;
-        Vector3 targetVelocity = physicsData.MaxSpeed * .85f * direction;
+        Vector3 targetVelocity = horizontalSpeed * .85f * direction;
         
         if (direction != Vector3.zero) {
             Context.Asset.transform.forward = direction;
