@@ -10,7 +10,8 @@ public class PX3RunningState : PX3BaseState {
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
 
         physicsData = Context.PhysicsData;
-        InputHandler._onMove += OnMove;
+        InputHandler.OnMoveAction += OnMove;
+        //InputHandler._onMove += OnMove;
     }
 
     public override void EnterState() {
@@ -63,7 +64,7 @@ public class PX3RunningState : PX3BaseState {
         else if (StateHandler.SubStates[PX3SubStates.Falling]) SwitchState(StateHandler.GetState(PX3SubStates.Falling));
     }
 
-    private void OnMove() {
+    private void OnMove(PX3InputPhase phase) {
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
         if (InputHandler.SprintInput) return;
         

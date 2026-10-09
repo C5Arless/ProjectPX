@@ -26,6 +26,15 @@ public class PX3InputHandler : MonoBehaviour {
     
     private bool onMoveInput;
 
+    public event Action<PX3InputPhase> OnLookAction;
+    public event Action<PX3InputPhase> OnMoveAction;
+    public event Action<PX3InputPhase> OnJumpAction;
+    public event Action<PX3InputPhase> OnAttackAction;
+    public event Action<PX3InputPhase> OnDashAction;
+    public event Action<PX3InputPhase> OnCrouchAction;
+    public event Action<PX3InputPhase> OnSprintAction;
+    
+    /*
     public delegate void OnCamAction();
     public delegate void OnMoveAction();
     public delegate void OnJumpAction();
@@ -41,6 +50,7 @@ public class PX3InputHandler : MonoBehaviour {
     public OnDashAction _onDash = () => { };
     public OnCrouchAction _onCrouch = () => { };
     public OnSprintAction _onSprint = () => { };
+    */
     
     public Vector2 CamInput { get => camInput; }
     public Vector2 RawMoveInput { get => rawMoveInput; }
@@ -130,8 +140,8 @@ public class PX3InputHandler : MonoBehaviour {
     private void Update() {
         if (onMoveInput) {
             moveInput = Vector2.MoveTowards(moveInput, rawMoveInput, 15f * Time.deltaTime);
-
-            _onMove?.Invoke();
+            OnMoveAction?.Invoke(PX3InputPhase.performing); //NEW
+            //_onMove?.Invoke();
         }
         else {
             if (moveInput != Vector2.zero) {
@@ -142,9 +152,11 @@ public class PX3InputHandler : MonoBehaviour {
 
     public void OnLook(InputAction.CallbackContext input) {
         if (input.ReadValue<Vector2>() != Vector2.zero) {
-            camInput = input.ReadValue<Vector2>();            
+            camInput = input.ReadValue<Vector2>();
+            OnLookAction?.Invoke(PX3InputPhase.performing); //NEW
         } else {
             camInput = Vector2.zero;
+            OnLookAction?.Invoke(PX3InputPhase.canceled); //NEW
         }
     }
     
@@ -152,69 +164,88 @@ public class PX3InputHandler : MonoBehaviour {
         if (input.performed) {
             rawMoveInput = input.ReadValue<Vector2>();
             onMoveInput = true;
+            OnMoveAction?.Invoke(PX3InputPhase.performing); //NEW
         } else if (input.canceled) {
             rawMoveInput = Vector2.zero;
             onMoveInput = false;
+            OnMoveAction?.Invoke(PX3InputPhase.canceled); //NEW
         }
     }
     
     public void OnJump(InputAction.CallbackContext input) {
         if (input.started) {
             jumpInput = true;
+            
+            OnJumpAction?.Invoke(PX3InputPhase.started); //NEW
         } else if (input.canceled) {
             jumpInput = false;
+            
+            OnJumpAction?.Invoke(PX3InputPhase.canceled); //NEW
         }
         
         if (input.performed) {
-            _onJump?.Invoke();
+            OnJumpAction?.Invoke(PX3InputPhase.performing); //NEW
+            //_onJump?.Invoke();
         }
     }
     
     public void OnAttack(InputAction.CallbackContext input) {
         if (input.started) {
             attackInput = true;
+            OnAttackAction?.Invoke(PX3InputPhase.started); //NEW
         } else if (input.canceled) {
             attackInput = false;
+            OnAttackAction?.Invoke(PX3InputPhase.canceled); //NEW
         }
         
         if (input.performed) {
-            _onAttack?.Invoke();
+            OnAttackAction?.Invoke(PX3InputPhase.performing); //NEW
+            //_onAttack?.Invoke();
         }
     }
     
     public void OnDash(InputAction.CallbackContext input) {
         if (input.started) {
             dashInput = true;
+            OnDashAction?.Invoke(PX3InputPhase.started); //NEW
         } else if (input.canceled) {
             dashInput = false;
+            OnDashAction?.Invoke(PX3InputPhase.canceled); //NEW
         }
         
         if (input.performed) {
-            _onDash?.Invoke();
+            OnDashAction?.Invoke(PX3InputPhase.performing); //NEW
+            //_onDash?.Invoke();
         }
     }
     
     public void OnCrouch(InputAction.CallbackContext input) {
         if (input.started) {
             crouchInput = true;
+            OnCrouchAction?.Invoke(PX3InputPhase.started); //NEW
         } else if (input.canceled) {
             crouchInput = false;
+            OnCrouchAction?.Invoke(PX3InputPhase.canceled); //NEW
         }
         
         if (input.performed) {
-            _onCrouch?.Invoke();
+            OnCrouchAction?.Invoke(PX3InputPhase.performing); //NEW
+            //_onCrouch?.Invoke();
         }
     }
     
     public void OnSprint(InputAction.CallbackContext input) {
         if (input.started) {
             sprintInput = true;
+            OnSprintAction?.Invoke(PX3InputPhase.started); //NEW
         } else if (input.canceled) {
             sprintInput = false;
+            OnSprintAction?.Invoke(PX3InputPhase.canceled); //NEW
         }
         
         if (input.performed) {
-            _onSprint?.Invoke();
+            OnSprintAction?.Invoke(PX3InputPhase.performing); //NEW
+            //_onSprint?.Invoke();
         }
     }
 }

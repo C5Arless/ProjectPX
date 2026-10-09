@@ -10,8 +10,8 @@ public class PX3GrabbingState : PX3BaseState {
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
-        //
-        InputHandler._onMove += OnMove;
+        //InputHandler._onMove += OnMove;
+        InputHandler.OnMoveAction += OnMove;
     }
 
     public override void EnterState() {
@@ -43,7 +43,7 @@ public class PX3GrabbingState : PX3BaseState {
         else if (StateHandler.SubStates[PX3SubStates.Falling]) SwitchState(StateHandler.GetState(PX3SubStates.Falling));
     }
 
-    private void OnMove() {
+    private void OnMove(PX3InputPhase phase) {
         if (!StateHandler.SubStates[PX3SubStates.Grabbing]) return;
         if (isBusy) return;
 

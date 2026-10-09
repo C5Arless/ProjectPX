@@ -12,7 +12,8 @@ public class PX3CrouchingState : PX3BaseState {
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
         
         physicsData = Context.PhysicsData;
-        InputHandler._onCrouch += OnCrouch;
+        InputHandler.OnCrouchAction += OnCrouch;
+        //InputHandler._onCrouch += OnCrouch;
     }
 
     public override void EnterState() {
@@ -58,7 +59,8 @@ public class PX3CrouchingState : PX3BaseState {
         //else if (StateHandler.SubStates[PX3SubStates.Sprinting]) SwitchState(StateHandler.GetState(PX3SubStates.Sprinting));
     }
 
-    private void OnCrouch() {
+    private void OnCrouch(PX3InputPhase phase) {
+        if (phase != PX3InputPhase.started) return;
         if (StateHandler.CurrentSubState == this) return;
         
         if (StateHandler.RootStates[PX3RootStates.Grounded]) {

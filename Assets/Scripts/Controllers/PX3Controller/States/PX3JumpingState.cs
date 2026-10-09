@@ -14,7 +14,8 @@ public class PX3JumpingState : PX3BaseState {
         base (currentContext, stateHandler, animHandler, inputHandler, sensorHandler, physicsHandler) {
 
         physicsData = Context.PhysicsData;
-        InputHandler._onJump += OnJump;
+        InputHandler.OnJumpAction += OnJump;
+        //InputHandler._onJump += OnJump;
     }
 
     public override void EnterState() {
@@ -178,7 +179,7 @@ public class PX3JumpingState : PX3BaseState {
         else if (StateHandler.SubStates[PX3SubStates.Landing]) SwitchState(StateHandler.GetState(PX3SubStates.Landing));
     }
 
-    private void OnJump() {
+    private void OnJump(PX3InputPhase phase) {
         if (Mode == 3) return;
         if (physicsData.JumpCount <= 0) return;
 

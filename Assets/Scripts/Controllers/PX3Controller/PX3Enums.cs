@@ -72,3 +72,9 @@ public enum PX3SensorStage {
     Stay,
     Exit
 }
+
+public enum PX3InputPhase {
+    started,
+    performing,
+    canceled
+}
