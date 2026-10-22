@@ -20,6 +20,8 @@ public class PX3Controller : MonoBehaviour {
     
     PX3StateHandler _stateHandler;
     PX3PhysicsHandler _physicsHandler;
+
+    public bool IsBusy;
     
     #region GetSet
 

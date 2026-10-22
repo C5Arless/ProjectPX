@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PX3GrabbingState : PX3BaseState {
     private PX3Sensor groundSensor;
-    private bool isBusy;
     
     public PX3GrabbingState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
@@ -15,13 +14,13 @@ public class PX3GrabbingState : PX3BaseState {
     }
 
     public override void EnterState() {
-        isBusy = true;
+        Context.IsBusy = true;
         AnimHandler.PlayClip(PX3A_MixedSet.Ledge_Grab);
     }
 
     public override void UpdateState() {
         
-        if (!isBusy) CheckSwitchStates();
+        if (!Context.IsBusy) CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
@@ -33,7 +32,7 @@ public class PX3GrabbingState : PX3BaseState {
     }
 
     public override void HandleSignal(int sig) {
-        if (sig == 0) isBusy = false;
+        if (sig == 0) Context.IsBusy = false;
 
     }
 
@@ -45,7 +44,7 @@ public class PX3GrabbingState : PX3BaseState {
 
     private void OnMove(PX3InputPhase phase) {
         if (!StateHandler.SubStates[PX3SubStates.Grabbing]) return;
-        if (isBusy) return;
+        if (Context.IsBusy) return;
 
         if (InputHandler.MoveInput.y < -.9f) {
             groundSensor ??= SensorHandler.GetSensor(PX3SensorType.Ground);

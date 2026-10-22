@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PX3JumpingState : PX3BaseState {
-    private bool isBusy;
     private float horizontalSpeed;
     private PhysicsInfo physicsData;
     private PX3Sensor bodySensor;
@@ -58,7 +57,7 @@ public class PX3JumpingState : PX3BaseState {
             }
         }
         
-        if (!isBusy) CheckSwitchStates();
+        if (!Context.IsBusy) CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
@@ -155,7 +154,7 @@ public class PX3JumpingState : PX3BaseState {
                 break;
             }
             case 7: {
-                isBusy = false;
+                Context.IsBusy = false;
                 break;
             }
             case 8: {
@@ -180,6 +179,8 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     private void OnJump(PX3InputPhase phase) {
+        
+        
         if (Mode == 3) return;
         if (physicsData.JumpCount <= 0) return;
 
@@ -190,7 +191,7 @@ public class PX3JumpingState : PX3BaseState {
             StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Thumbling)) Mode = 1;
         else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.WallSliding)) Mode = 2;
         else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Grabbing)) {
-            isBusy = true;
+            Context.IsBusy = true;
             Mode = 3;
         }
         else Mode = 0;

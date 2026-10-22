@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PX3IdleState : PX3BaseState {
     private PhysicsInfo physicsData;
-    private bool isBusy;
     
     public PX3IdleState(PX3Controller currentContext, PX3StateHandler stateHandler, 
         PX3AnimHandler animHandler, PX3InputHandler inputHandler, PX3SensorHandler sensorHandler, PX3PhysicsHandler physicsHandler) : 
@@ -30,7 +29,7 @@ public class PX3IdleState : PX3BaseState {
             physicsData.Acceleration -= physicsData.MaxAcceleration * Time.deltaTime;
         } else physicsData.Acceleration = 0f;
         
-        if (!isBusy) CheckSwitchStates();
+        if (!Context.IsBusy) CheckSwitchStates();
     }
     
     public override void FixedUpdateState() {
@@ -44,7 +43,7 @@ public class PX3IdleState : PX3BaseState {
 
     public override void HandleSignal(int sig) {
         if (sig == 0) {
-            isBusy = false;
+            Context.IsBusy = false;
             AnimHandler.PlayClip(PX3A_GroundSet.IRC);
             AnimHandler.SetIRCBlend(0);
         }
@@ -60,7 +59,7 @@ public class PX3IdleState : PX3BaseState {
     }
     
     private void OnGroundTrigger(Collider other, PX3SensorType type, PX3SensorStage stage) {
-        if (isBusy) return;
+        if (Context.IsBusy) return;
         if (!other.CompareTag("Ground") && type != PX3SensorType.Ground) return;
         
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
@@ -84,7 +83,7 @@ public class PX3IdleState : PX3BaseState {
     }
 
     private IEnumerator FlipForward() {
-        isBusy = true;
+        Context.IsBusy = true;
         Vector3 target = -Context.Asset.transform.forward;
         AnimHandler.PlayClip(PX3A_GroundSet.Landing);
         yield return null;
