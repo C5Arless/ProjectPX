@@ -42,6 +42,7 @@ public class PX3JumpingState : PX3BaseState {
                 break;
             }
             case 3: {
+                //Context.IsBusy = true;
                 AnimHandler.PlayClip(PX3A_MixedSet.Ledge_Jump);
                 break;
             }
@@ -179,7 +180,7 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     private void OnJump(PX3InputPhase phase) {
-        
+        if (phase != PX3InputPhase.started) return;
         
         if (Mode == 3) return;
         if (physicsData.JumpCount <= 0) return;
@@ -191,7 +192,7 @@ public class PX3JumpingState : PX3BaseState {
             StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Thumbling)) Mode = 1;
         else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.WallSliding)) Mode = 2;
         else if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Grabbing)) {
-            Context.IsBusy = true;
+            //Context.IsBusy = true;
             Mode = 3;
         }
         else Mode = 0;
@@ -201,6 +202,7 @@ public class PX3JumpingState : PX3BaseState {
             horizontalSpeed = PhysicsHandler.PreviousVelocity.magnitude;
         }
         StateHandler.SetSubState(PX3SubStates.Jumping);
+        //if (Mode == 3) Context.IsBusy = true;
     }
 
     private void HandleJump() {

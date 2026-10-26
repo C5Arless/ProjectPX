@@ -76,6 +76,7 @@ public class PX3SprintingState : PX3BaseState {
     }
 
     private void OnSprint(PX3InputPhase phase) {
+        if (phase != PX3InputPhase.started) return;
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
         if (!StateHandler.SubStates[PX3SubStates.Idle]) return;
         if (windUp) return;
@@ -84,6 +85,7 @@ public class PX3SprintingState : PX3BaseState {
     }
     
     private void OnMove(PX3InputPhase phase) {
+        if (phase != PX3InputPhase.performing) return;
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
         if (StateHandler.SubStates[PX3SubStates.Jumping] || 
             StateHandler.SubStates[PX3SubStates.Crouching] || 

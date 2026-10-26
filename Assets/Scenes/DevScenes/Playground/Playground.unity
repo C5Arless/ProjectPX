@@ -4181,6 +4181,7 @@ MonoBehaviour:
   _sensorForwarder: {fileID: 707121613}
   _playerInput: {fileID: 707121605}
   _physicsData: {fileID: 11400000, guid: 2e6a0277c4290b4448aa94b7be5194b6, type: 2}
+  IsBusy: 0
 --- !u!54 &707121607
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -41294,6 +41295,7 @@ MonoBehaviour:
   _sensorForwarder: {fileID: 0}
   _playerInput: {fileID: 0}
   _physicsData: {fileID: 0}
+  IsBusy: 0
 --- !u!114 &8809352779333027468
 MonoBehaviour:
   m_ObjectHideFlags: 0
