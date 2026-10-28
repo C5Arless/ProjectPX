@@ -19,7 +19,8 @@ public class PX3JumpingState : PX3BaseState {
 
     public override void EnterState() {
         Phase = 0;
-
+        Debug.Log(Mode);
+        
         if (Mode < 3) {
             physicsData.JumpCount--;
             
@@ -198,7 +199,7 @@ public class PX3JumpingState : PX3BaseState {
         else Mode = 0;
 
         if (Mode < 2) {
-            Context.PhysicsData.Acceleration = Context.PhysicsData.MaxAcceleration * .6f;
+            physicsData.Acceleration = physicsData.MaxAcceleration * .6f;
             horizontalSpeed = PhysicsHandler.PreviousVelocity.magnitude;
         }
         StateHandler.SetSubState(PX3SubStates.Jumping);
