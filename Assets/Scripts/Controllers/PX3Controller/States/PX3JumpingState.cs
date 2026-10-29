@@ -19,7 +19,6 @@ public class PX3JumpingState : PX3BaseState {
 
     public override void EnterState() {
         Phase = 0;
-        Debug.Log(Mode);
         
         if (Mode < 3) {
             physicsData.JumpCount--;
@@ -43,7 +42,7 @@ public class PX3JumpingState : PX3BaseState {
                 break;
             }
             case 3: {
-                //Context.IsBusy = true;
+                Context.IsBusy = true;
                 AnimHandler.PlayClip(PX3A_MixedSet.Ledge_Jump);
                 break;
             }
@@ -181,7 +180,8 @@ public class PX3JumpingState : PX3BaseState {
     }
 
     private void OnJump(PX3InputPhase phase) {
-        if (phase != PX3InputPhase.started) return;
+        if (phase == PX3InputPhase.canceled) return;
+        if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Jumping)) return;
         
         if (Mode == 3) return;
         if (physicsData.JumpCount <= 0) return;

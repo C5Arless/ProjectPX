@@ -60,6 +60,7 @@ public class PX3WalkingState : PX3BaseState {
     
     private void OnMove(PX3InputPhase phase) {
         if (phase != PX3InputPhase.performing) return;
+        if (Context.IsBusy) return;
         
         if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
         if (InputHandler.SprintInput) return;
