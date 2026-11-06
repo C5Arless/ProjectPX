@@ -23,9 +23,11 @@ public class PX3JumpingState : PX3BaseState {
         if (Mode < 3) {
             physicsData.JumpCount--;
             
+            /*
             if (physicsData.Acceleration <= .5f) {
                 physicsData.Acceleration = physicsData.MaxAcceleration * .3f;
-            }                                                                                                                                                                                                                                                                                        
+            }
+            */
         }
         
         switch (Mode) {

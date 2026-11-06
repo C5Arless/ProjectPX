@@ -56,13 +56,14 @@ public class PX3WalkingState : PX3BaseState {
         else if (StateHandler.SubStates[PX3SubStates.Thumbling]) SwitchState(StateHandler.GetState(PX3SubStates.Thumbling));
         else if (StateHandler.SubStates[PX3SubStates.Sprinting]) SwitchState(StateHandler.GetState(PX3SubStates.Sprinting));
         else if (StateHandler.SubStates[PX3SubStates.Running]) SwitchState(StateHandler.GetState(PX3SubStates.Running));
+        else if (StateHandler.SubStates[PX3SubStates.Falling]) SwitchState(StateHandler.GetState(PX3SubStates.Falling));
     }
     
     private void OnMove(PX3InputPhase phase) {
         if (phase != PX3InputPhase.performing) return;
         if (Context.IsBusy) return;
         
-        if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
+        if (StateHandler.CurrentRootState == StateHandler.GetState(PX3RootStates.Airborne)) return;
         if (InputHandler.SprintInput) return;
         
         if (!StateHandler.SubStates[PX3SubStates.Jumping] || !StateHandler.SubStates[PX3SubStates.Crouching]) {

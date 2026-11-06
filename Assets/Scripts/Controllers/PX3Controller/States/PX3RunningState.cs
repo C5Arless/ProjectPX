@@ -68,7 +68,7 @@ public class PX3RunningState : PX3BaseState {
         if (phase != PX3InputPhase.performing) return;
         if (Context.IsBusy) return;
         
-        if (!StateHandler.RootStates[PX3RootStates.Grounded]) return;
+        if (StateHandler.CurrentRootState == StateHandler.GetState(PX3RootStates.Airborne)) return;
         if (InputHandler.SprintInput) return;
         
         if (!StateHandler.SubStates[PX3SubStates.Jumping] || !StateHandler.SubStates[PX3SubStates.Crouching]) {

@@ -19,19 +19,14 @@ public class PX3AirborneState : PX3BaseState {
     }
 
     public override void UpdateState() {
-        if (!StateHandler.SubStates[PX3SubStates.Falling] && StateHandler.RootStates[PX3RootStates.Airborne]) {
-            if (StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Jumping) &&
-                StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Attacking) &&
-                StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Dashing) &&
-                StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Damaged) &&
-                StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Diving) &&
-                StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Grabbing)) 
+        if (!StateHandler.SubStates[PX3SubStates.Falling]) {
+            if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Idle) ||
+                StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Running) ||
+                StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Walking))
             {
-                
                 StateHandler.SetSubState(PX3SubStates.Falling);
             }
         }
-        
         
         CheckSwitchStates();
     }
