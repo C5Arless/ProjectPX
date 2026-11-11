@@ -202,7 +202,8 @@ public class PX3JumpingState : PX3BaseState {
 
         if (Mode < 2) {
             physicsData.Acceleration = physicsData.MaxAcceleration * .6f;
-            horizontalSpeed = PhysicsHandler.PreviousVelocity.magnitude;
+            horizontalSpeed = physicsData.MaxSpeed * InputHandler.RawMoveInput.magnitude; //NEW
+            //horizontalSpeed = PhysicsHandler.PreviousVelocity.magnitude; //REPLACE
         }
         StateHandler.SetSubState(PX3SubStates.Jumping);
         //if (Mode == 3) Context.IsBusy = true;
