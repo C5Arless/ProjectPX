@@ -43,9 +43,9 @@ public class PX3GrabbingState : PX3BaseState {
     }
 
     private void OnMove(PX3InputPhase phase) {
-        if (phase != PX3InputPhase.started) return;
+        if (phase == PX3InputPhase.canceled) return;
         
-        if (!StateHandler.SubStates[PX3SubStates.Grabbing]) return;
+        if (StateHandler.CurrentSubState != StateHandler.GetState(PX3SubStates.Grabbing)) return;
         if (Context.IsBusy) return;
 
         if (InputHandler.MoveInput.y < -.9f) {

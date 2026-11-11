@@ -185,8 +185,8 @@ public class PX3JumpingState : PX3BaseState {
         if (phase == PX3InputPhase.canceled) return;
         if (StateHandler.CurrentSubState == StateHandler.GetState(PX3SubStates.Jumping)) return;
         
-        if (Mode == 3) return;
-        if (physicsData.JumpCount <= 0) return;
+        //if (Mode == 3) return;
+        if (physicsData.JumpCount <= 0 && Mode < 3) return;
 
         bodySensor ??= SensorHandler.GetSensor(PX3SensorType.Body);
         groundSensor ??= SensorHandler.GetSensor(PX3SensorType.Ground);
