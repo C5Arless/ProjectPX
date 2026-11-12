@@ -71,7 +71,9 @@ public class PX3RunningState : PX3BaseState {
         if (StateHandler.CurrentRootState == StateHandler.GetState(PX3RootStates.Airborne)) return;
         if (InputHandler.SprintInput) return;
         
-        if (!StateHandler.SubStates[PX3SubStates.Jumping] || !StateHandler.SubStates[PX3SubStates.Crouching]) {
+        if (!StateHandler.SubStates[PX3SubStates.Jumping] || 
+            !StateHandler.SubStates[PX3SubStates.Crouching] ||
+            !StateHandler.SubStates[PX3SubStates.Diving]) {
             if (InputHandler.RawMoveInput.magnitude < 0.5f) StateHandler.SetSubState(PX3SubStates.Walking);
         }
     }
