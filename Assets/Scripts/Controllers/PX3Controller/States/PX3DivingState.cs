@@ -58,7 +58,7 @@ public class PX3DivingState : PX3BaseState {
             }
             case 2: {
                 Phase = 2;
-                AnimHandler.Stop();
+                //AnimHandler.Stop();
                 break;
             }
             case 3: {
@@ -88,6 +88,8 @@ public class PX3DivingState : PX3BaseState {
     }
 
     private void OnLanding(Collider other, PX3SensorType type, PX3SensorStage stage) {
+        if (type != PX3SensorType.Ground) return;
+        if (stage != PX3SensorStage.Enter) return;
         if (StateHandler.CurrentSubState != this) return;
         
         StartCoroutine(LandRoutine());
@@ -103,16 +105,19 @@ public class PX3DivingState : PX3BaseState {
         PhysicsHandler.ApplyVerticalImpulse(physicsData.JumpHeight * .85f);
         physicsData.Acceleration = physicsData.MaxAcceleration;
 
-        while (Phase < 3) yield return null;
-        StateHandler.SetSubState(PX3SubStates.Idle);
+        yield return new WaitForSeconds(.25f);
+        AnimHandler.Stop();
     }
 
     private IEnumerator LandRoutine() {
-        AnimHandler.Resume();
-        yield return null;
-        
-        Phase = 3;
         PhysicsHandler.ApplyStop();
+        PhysicsHandler.Freeze();
+        AnimHandler.Resume();
+        Phase = 3;
+
+        while (Context.IsBusy) yield return null;
+        PhysicsHandler.Unfreeze(false);
+        StateHandler.SetSubState(PX3SubStates.Idle);
     }
     
 }
